@@ -2,6 +2,7 @@ import { Geist, Geist_Mono, DM_Sans } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { TooltipProvider } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils";
 
 const dmSans = DM_Sans({subsets:['latin'],variable:'--font-sans'})
@@ -22,8 +23,10 @@ export default function RootLayout({
       suppressHydrationWarning
       className={cn("antialiased", fontMono.variable, "font-sans", dmSans.variable)}
     >
-      <body>
-        <ThemeProvider>{children}</ThemeProvider>
+      <body suppressHydrationWarning>
+        <ThemeProvider>
+          <TooltipProvider delayDuration={0}>{children}</TooltipProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
