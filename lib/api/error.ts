@@ -31,3 +31,9 @@ export class ApiClientError extends Error {
     )
   }
 }
+
+export function parseRetryAfter(header: string | null): number | undefined {
+  if (!header) return undefined
+  const seconds = Number(header)
+  return Number.isFinite(seconds) ? seconds : undefined
+}

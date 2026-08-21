@@ -1,4 +1,4 @@
-import { ApiClientError } from "@/lib/api/error"
+import { ApiClientError, parseRetryAfter } from "@/lib/api/error"
 import { API_BASE_PATH, config } from "@/lib/config"
 import type { ApiError } from "@/types/api"
 
@@ -49,10 +49,4 @@ export async function serverFetch<T>(
   }
 
   return (await response.json()) as T
-}
-
-function parseRetryAfter(header: string | null): number | undefined {
-  if (!header) return undefined
-  const seconds = Number(header)
-  return Number.isFinite(seconds) ? seconds : undefined
 }
