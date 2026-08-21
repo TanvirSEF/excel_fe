@@ -1,9 +1,9 @@
 "use client"
 
-import Link from "next/link"
-
 import { Skeleton } from "@/components/ui/skeleton"
 import { can, useAuthStore } from "@/lib/auth"
+
+import { WriterOverview } from "./writer-overview"
 
 export function OverviewView() {
   const user = useAuthStore((state) => state.user)
@@ -39,57 +39,33 @@ export function OverviewView() {
         </p>
       </div>
 
+      {analyticsView ? <AnalyticsOverviewSkeleton /> : <WriterOverview />}
+    </div>
+  )
+}
+
+function AnalyticsOverviewSkeleton() {
+  return (
+    <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {analyticsView ? (
-          <>
-            <StatSkeleton label="Total views" />
-            <StatSkeleton label="Views (7 days)" />
-            <StatSkeleton label="Published posts" />
-            <StatSkeleton label="Drafts" />
-          </>
-        ) : (
-          <>
-            <StatSkeleton label="My posts" />
-            <StatSkeleton label="Drafts" />
-            <StatSkeleton label="In review" />
-            <StatSkeleton label="Published" />
-          </>
-        )}
+        <StatSkeleton label="Total views" />
+        <StatSkeleton label="Views (7 days)" />
+        <StatSkeleton label="Published posts" />
+        <StatSkeleton label="Drafts" />
       </div>
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div className="space-y-3 rounded-xl border p-5">
-          <p className="text-sm font-medium">
-            {analyticsView ? "Views, last 7 days" : "Recent drafts"}
-          </p>
+          <p className="text-sm font-medium">Views, last 7 days</p>
           <Skeleton className="h-56" />
         </div>
         <div className="space-y-3 rounded-xl border p-5">
-          <p className="text-sm font-medium">
-            {analyticsView ? "Trending now" : "Quick actions"}
-          </p>
-          {analyticsView ? (
-            <div className="space-y-2">
-              {Array.from({ length: 5 }).map((_, index) => (
-                <Skeleton key={index} className="h-9" />
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col gap-2">
-              <Link
-                href="/dashboard/posts/new"
-                className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-              >
-                New post
-              </Link>
-              <Link
-                href="/dashboard/posts"
-                className="inline-flex h-9 items-center justify-center rounded-md border px-4 text-sm font-medium transition-colors hover:bg-accent"
-              >
-                My posts
-              </Link>
-            </div>
-          )}
+          <p className="text-sm font-medium">Trending now</p>
+          <div className="space-y-2">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <Skeleton key={index} className="h-9" />
+            ))}
+          </div>
         </div>
       </div>
     </div>
