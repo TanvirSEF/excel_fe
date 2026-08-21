@@ -1,5 +1,5 @@
 import { serverFetch } from "@/lib/api/server-fetch"
-import type { Page, PostDetail, PostListItem } from "@/types/api"
+import type { Comment, Page, PostDetail, PostListItem } from "@/types/api"
 
 export interface PostListParams {
   page?: number
@@ -28,5 +28,12 @@ export function getPostBySlug(slug: string, revalidate = 60) {
   return serverFetch<PostDetail>(`/posts/${encodeURIComponent(slug)}`, {
     revalidate,
     tags: ["post", slug],
+  })
+}
+
+export function getPostComments(postId: string, revalidate = 60) {
+  return serverFetch<Comment[]>(`/posts/${postId}/comments`, {
+    revalidate,
+    tags: ["post", postId, "comments"],
   })
 }

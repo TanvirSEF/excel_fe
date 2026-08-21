@@ -6,8 +6,9 @@ import { Toc } from "@/components/blocks/toc"
 import { ArticleHeader } from "@/components/site/article-header"
 import { ArticleTags } from "@/components/site/article-tags"
 import { Breadcrumb } from "@/components/site/breadcrumb"
+import { CommentsSection } from "@/components/site/comments-section"
 import { ApiClientError } from "@/lib/api/error"
-import { getPostBySlug } from "@/lib/api/posts"
+import { getPostBySlug, getPostComments } from "@/lib/api/posts"
 import { extractToc } from "@/lib/blocks"
 import { buildArticleJsonLd } from "@/lib/seo"
 import { config } from "@/lib/config"
@@ -65,6 +66,7 @@ export async function generateMetadata({
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params
   const post = await loadPost(slug)
+  const comments = await getPostComments(post.id).catch(() => [])
 
   const toc = extractToc(post.content_json?.blocks ?? [])
 
@@ -83,6 +85,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         <ArticleHeader post={post} />
         <BlockRenderer blocks={post.content_json?.blocks ?? []} />
         <ArticleTags tags={post.tags} />
+        <CommentsSection postId={post.id} comments={comments} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: buildArticleJsonLd(post) }}

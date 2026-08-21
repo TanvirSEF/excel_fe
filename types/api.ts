@@ -170,6 +170,14 @@ export interface CommentCreateInput {
   parent_id?: string | null
 }
 
+export interface CommentAdminItem extends Comment {
+  user_email: string
+  status: CommentStatus
+  ip_address: string | null
+  post_title: string
+  post_slug: string
+}
+
 export interface MediaItem {
   id: string
   file_url: string
