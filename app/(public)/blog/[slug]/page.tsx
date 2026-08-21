@@ -1,14 +1,15 @@
 import type { Metadata } from "next"
-import Image from "next/image"
-import Link from "next/link"
 import { notFound } from "next/navigation"
 
 import { BlockRenderer } from "@/components/blocks/block-renderer"
 import { Toc } from "@/components/blocks/toc"
-import { Time } from "@/components/shared/time"
+import { ArticleHeader } from "@/components/site/article-header"
+import { ArticleTags } from "@/components/site/article-tags"
+import { Breadcrumb } from "@/components/site/breadcrumb"
 import { ApiClientError } from "@/lib/api/error"
 import { getPostBySlug } from "@/lib/api/posts"
 import { extractToc } from "@/lib/blocks"
+import { buildArticleJsonLd } from "@/lib/seo"
 import { config } from "@/lib/config"
 import type { PostDetail } from "@/types/api"
 
@@ -61,114 +62,30 @@ export async function generateMetadata({
   }
 }
 
-function buildJsonLd(post: PostDetail) {
-  const image = post.og_image_url ?? post.featured_image_url
-  const data: Record<string, unknown> = {
-    "@context": "https://schema.org",
-    "@type": post.schema_type || "TechArticle",
-    headline: post.title,
-    description: post.meta_description ?? post.excerpt,
-    datePublished: post.published_at,
-    dateModified: post.updated_at,
-    author: { "@type": "Person", name: post.author_name },
-    publisher: {
-      "@type": "Organization",
-      name: "Excel Insider",
-      url: config.siteUrl,
-    },
-    mainEntityOfPage: `${config.siteUrl}/blog/${post.slug}`,
-  }
-  if (image) data.image = [image]
-
-  return JSON.stringify(data)
-}
-
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params
   const post = await loadPost(slug)
 
   const toc = extractToc(post.content_json?.blocks ?? [])
 
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    ...(post.category_slug
+      ? [{ label: post.category_name ?? "", href: `/categories/${post.category_slug}` }]
+      : []),
+    { label: post.title },
+  ]
+
   return (
     <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-10 px-4 py-10 sm:py-12 xl:grid-cols-[minmax(0,1fr)_220px]">
       <article className="mx-auto w-full max-w-3xl xl:mx-0">
-        <nav
-          aria-label="Breadcrumb"
-          className="mb-6 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground"
-        >
-          <Link href="/" className="transition-colors hover:text-foreground">
-            Home
-          </Link>
-          <span aria-hidden>/</span>
-          {post.category_slug ? (
-            <>
-              <Link
-                href={`/categories/${post.category_slug}`}
-                className="transition-colors hover:text-foreground"
-              >
-                {post.category_name}
-              </Link>
-              <span aria-hidden>/</span>
-            </>
-          ) : null}
-          <span className="line-clamp-1 text-foreground/70">{post.title}</span>
-        </nav>
-
-        <header className="mb-8">
-          <h1 className="text-balance text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
-            {post.title}
-          </h1>
-          <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
-            <span className="font-medium text-foreground/80">
-              {post.author_name}
-            </span>
-            {post.published_at ? (
-              <>
-                <span aria-hidden>·</span>
-                <Time date={post.published_at} variant="full" />
-              </>
-            ) : null}
-            {post.reading_time_minutes ? (
-              <>
-                <span aria-hidden>·</span>
-                <span>{post.reading_time_minutes} min read</span>
-              </>
-            ) : null}
-          </div>
-        </header>
-
-        {post.featured_image_url ? (
-          <div className="relative mb-8 aspect-video overflow-hidden rounded-xl border">
-            <Image
-              src={post.featured_image_url}
-              alt=""
-              fill
-              priority
-              sizes="(max-width: 768px) 100vw, 768px"
-              className="object-cover"
-            />
-          </div>
-        ) : null}
-
+        <Breadcrumb items={breadcrumbItems} />
+        <ArticleHeader post={post} />
         <BlockRenderer blocks={post.content_json?.blocks ?? []} />
-
-        {post.tags.length > 0 ? (
-          <footer className="mt-10 flex flex-wrap items-center gap-2 border-t pt-6">
-            {post.tags.map((tag) => (
-              <Link
-                key={tag}
-                href={`/tags/${tag}`}
-                className="rounded-full border px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
-              >
-                #{tag}
-              </Link>
-            ))}
-          </footer>
-        ) : null}
-
+        <ArticleTags tags={post.tags} />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: buildJsonLd(post) }}
+          dangerouslySetInnerHTML={{ __html: buildArticleJsonLd(post) }}
         />
       </article>
 

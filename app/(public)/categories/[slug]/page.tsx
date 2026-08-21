@@ -1,10 +1,10 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { notFound } from "next/navigation"
 
-import { EmptyState } from "@/components/shared/empty-state"
 import { Pagination } from "@/components/shared/pagination"
-import { PostCard } from "@/components/site/post-card"
+import { Breadcrumb } from "@/components/site/breadcrumb"
+import { PageHeader } from "@/components/site/page-header"
+import { PostGrid } from "@/components/site/post-grid"
 import { getCategoryWithPosts } from "@/lib/api/categories"
 import { ApiClientError } from "@/lib/api/error"
 import { clamp, firstParam } from "@/lib/utils"
@@ -52,64 +52,44 @@ export default async function CategoryPage({
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:py-14">
-      <nav
-        aria-label="Breadcrumb"
-        className="mb-6 flex items-center gap-1.5 text-xs text-muted-foreground"
-      >
-        <Link
-          href="/categories"
-          className="transition-colors hover:text-foreground"
-        >
-          Categories
-        </Link>
-        <span aria-hidden>/</span>
-        <span className="text-foreground/70">{category.name}</span>
-      </nav>
+      <Breadcrumb
+        items={[
+          { label: "Categories", href: "/categories" },
+          { label: category.name },
+        ]}
+      />
 
-      <header className="mb-8 border-b pb-8">
-        <div className="flex items-center gap-3">
-          {category.color_hex ? (
-            <span
-              className="size-3 rounded-full"
-              style={{ backgroundColor: category.color_hex }}
-              aria-hidden
-            />
-          ) : null}
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+      <PageHeader
+        bordered
+        title={
+          <>
+            {category.color_hex ? (
+              <span
+                className="size-3 rounded-full"
+                style={{ backgroundColor: category.color_hex }}
+                aria-hidden
+              />
+            ) : null}
             {category.name}
-          </h1>
-        </div>
-        {category.description ? (
-          <p className="mt-3 max-w-2xl text-balance text-sm text-muted-foreground sm:text-base">
-            {category.description}
-          </p>
-        ) : null}
-        <p className="mt-3 text-sm text-muted-foreground">
-          {posts.total} {posts.total === 1 ? "article" : "articles"}
-        </p>
-      </header>
+          </>
+        }
+        description={category.description ?? undefined}
+        meta={`${posts.total} ${posts.total === 1 ? "article" : "articles"}`}
+      />
 
-      {posts.items.length > 0 ? (
-        <>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {posts.items.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
-          <div className="mt-10">
-            <Pagination
-              page={page}
-              totalPages={posts.total_pages}
-              pathname={`/categories/${category.slug}`}
-            />
-          </div>
-        </>
-      ) : (
-        <EmptyState
-          title="No articles in this category yet"
-          description="Once posts are published here they'll show up in this list."
+      <PostGrid
+        posts={posts.items}
+        emptyTitle="No articles in this category yet"
+        emptyDescription="Once posts are published here they'll show up in this list."
+      />
+
+      <div className="mt-10">
+        <Pagination
+          page={page}
+          totalPages={posts.total_pages}
+          pathname={`/categories/${category.slug}`}
         />
-      )}
+      </div>
     </div>
   )
 }

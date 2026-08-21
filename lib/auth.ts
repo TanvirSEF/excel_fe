@@ -53,22 +53,35 @@ export const useAuthStore = create<AuthState>((set) => ({
 const PERMISSIONS: Record<UserRole, readonly string[]> = {
   super_admin: ["*"],
   senior_editor: [
+    "overview:view",
+    "posts:view",
     "posts:manage",
     "seo:edit",
     "comments:moderate",
+    "media:view",
     "media:manage",
     "categories:manage",
+    "tags:view",
     "tags:manage",
     "analytics:view",
     "settings:view",
   ],
   technical_writer: [
+    "overview:view",
+    "posts:view",
     "posts:manage",
+    "media:view",
     "media:upload",
+    "tags:view",
     "tags:create",
     "settings:view",
   ],
-  seo_specialist: ["seo:edit", "analytics:view", "settings:view"],
+  seo_specialist: [
+    "overview:view",
+    "seo:edit",
+    "analytics:view",
+    "settings:view",
+  ],
 }
 
 export function can(

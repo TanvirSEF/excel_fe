@@ -1,7 +1,7 @@
 import Link from "next/link"
 
 import { NavLink } from "@/components/site/nav-link"
-import { ThemeToggle } from "@/components/site/theme-toggle"
+import { ThemeToggle } from "@/components/shared/theme-toggle"
 
 const NAV_ITEMS = [
   { href: "/", label: "Home" },
