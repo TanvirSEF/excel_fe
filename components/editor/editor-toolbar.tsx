@@ -3,6 +3,7 @@
 import { useState } from "react"
 import type { Editor } from "@tiptap/react"
 
+import { MediaPicker } from "@/components/editor/media-picker"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
@@ -18,6 +19,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
   const [imageUrl, setImageUrl] = useState("")
   const [imageAlt, setImageAlt] = useState("")
   const [html, setHtml] = useState("")
+  const [pickerOpen, setPickerOpen] = useState(false)
 
   const inCodeBlock = editor.isActive("codeBlock")
 
@@ -136,6 +138,14 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
           />
           <Button
             type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setPickerOpen(true)}
+          >
+            Library
+          </Button>
+          <Button
+            type="button"
             size="sm"
             disabled={!imageUrl}
             onClick={() => {
@@ -147,6 +157,18 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
           >
             Insert
           </Button>
+          <MediaPicker
+            open={pickerOpen}
+            onOpenChange={setPickerOpen}
+            onSelect={(item) => {
+              editor
+                .chain()
+                .focus()
+                .setImage({ src: item.file_url, alt: item.alt_text ?? "" })
+                .run()
+              setPanel(null)
+            }}
+          />
         </div>
       ) : null}
 

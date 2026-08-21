@@ -1,8 +1,11 @@
 "use client"
 
+import { useState } from "react"
 import slugify from "slugify"
 
+import { MediaPicker } from "@/components/editor/media-picker"
 import { TagInput } from "@/components/editor/tag-input"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useCategories } from "@/lib/queries/categories"
@@ -44,6 +47,7 @@ export function PostForm({
   existingTags,
 }: PostFormProps) {
   const { data: categories } = useCategories()
+  const [pickerOpen, setPickerOpen] = useState(false)
 
   const onTitleChange = (title: string) => {
     onChange(
@@ -169,14 +173,30 @@ export function PostForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="post-image">Featured image URL</Label>
-        <Input
-          id="post-image"
-          value={fields.featuredImageUrl}
-          onChange={(event) =>
-            onChange({ featuredImageUrl: event.target.value })
-          }
-          placeholder="https://…"
+        <Label htmlFor="post-image">Featured image</Label>
+        <div className="flex gap-2">
+          <Input
+            id="post-image"
+            value={fields.featuredImageUrl}
+            onChange={(event) =>
+              onChange({ featuredImageUrl: event.target.value })
+            }
+            placeholder="https://…"
+          />
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="shrink-0"
+            onClick={() => setPickerOpen(true)}
+          >
+            Library
+          </Button>
+        </div>
+        <MediaPicker
+          open={pickerOpen}
+          onOpenChange={setPickerOpen}
+          onSelect={(item) => onChange({ featuredImageUrl: item.file_url })}
         />
       </div>
     </div>

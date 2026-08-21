@@ -1,5 +1,9 @@
 "use client"
 
+import { useState } from "react"
+
+import { MediaPicker } from "@/components/editor/media-picker"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -79,6 +83,8 @@ export function SeoFields({
   disabled,
   onChange,
 }: SeoFieldsProps) {
+  const [pickerOpen, setPickerOpen] = useState(false)
+
   return (
     <div className="space-y-5">
       <div className="space-y-2">
@@ -136,13 +142,30 @@ export function SeoFields({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="seo-og-image">OG image URL</Label>
-        <Input
-          id="seo-og-image"
-          value={fields.ogImageUrl}
-          disabled={disabled}
-          onChange={(event) => onChange({ ogImageUrl: event.target.value })}
-          placeholder="https://… (leave empty to use featured image)"
+        <Label htmlFor="seo-og-image">OG image</Label>
+        <div className="flex gap-2">
+          <Input
+            id="seo-og-image"
+            value={fields.ogImageUrl}
+            disabled={disabled}
+            onChange={(event) => onChange({ ogImageUrl: event.target.value })}
+            placeholder="https://… (leave empty to use featured image)"
+          />
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="shrink-0"
+            disabled={disabled}
+            onClick={() => setPickerOpen(true)}
+          >
+            Library
+          </Button>
+        </div>
+        <MediaPicker
+          open={pickerOpen}
+          onOpenChange={setPickerOpen}
+          onSelect={(item) => onChange({ ogImageUrl: item.file_url })}
         />
       </div>
 
