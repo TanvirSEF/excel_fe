@@ -6,21 +6,20 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { useTheme } from "next-themes"
 import { Toaster, type ToasterProps } from "sonner"
 
+import { useAuthStore } from "@/lib/auth"
+
 let browserQueryClient: QueryClient | undefined
 
 function getQueryClient() {
-  if (typeof window === "undefined") {
-    return new QueryClient({
-      defaultOptions: {
-        queries: { staleTime: 60_000, retry: 1, refetchOnWindowFocus: false },
-      },
-    })
-  }
-  browserQueryClient ??= new QueryClient({
+  const options = {
     defaultOptions: {
       queries: { staleTime: 60_000, retry: 1, refetchOnWindowFocus: false },
     },
-  })
+  }
+  if (typeof window === "undefined") {
+    return new QueryClient(options)
+  }
+  browserQueryClient ??= new QueryClient(options)
   return browserQueryClient
 }
 
@@ -35,11 +34,22 @@ function ThemedToaster() {
   )
 }
 
+function SessionHydration() {
+  const hydrate = useAuthStore((state) => state.hydrate)
+
+  React.useEffect(() => {
+    hydrate()
+  }, [hydrate])
+
+  return null
+}
+
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = React.useState(getQueryClient)
 
   return (
     <QueryClientProvider client={queryClient}>
+      <SessionHydration />
       {children}
       <ThemedToaster />
       {process.env.NODE_ENV === "development" ? (

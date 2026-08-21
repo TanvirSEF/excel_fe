@@ -1,19 +1,53 @@
 import { create } from "zustand"
 
+import * as authApi from "@/lib/api/auth"
 import type { User, UserRole } from "@/types/api"
+
+export type AuthStatus = "loading" | "authenticated" | "unauthenticated"
 
 interface AuthState {
   accessToken: string | null
   user: User | null
+  status: AuthStatus
   setSession: (accessToken: string, user: User) => void
   clear: () => void
+  hydrate: () => Promise<void>
+  login: (email: string, password: string) => Promise<void>
+  logout: () => Promise<void>
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   accessToken: null,
   user: null,
-  setSession: (accessToken, user) => set({ accessToken, user }),
-  clear: () => set({ accessToken: null, user: null }),
+  status: "loading",
+
+  setSession: (accessToken, user) =>
+    set({ accessToken, user, status: "authenticated" }),
+
+  clear: () =>
+    set({ accessToken: null, user: null, status: "unauthenticated" }),
+
+  hydrate: async () => {
+    try {
+      const session = await authApi.refreshSession()
+      set({ accessToken: session.access_token, user: session.user, status: "authenticated" })
+    } catch {
+      set({ accessToken: null, user: null, status: "unauthenticated" })
+    }
+  },
+
+  login: async (email, password) => {
+    const session = await authApi.login(email, password)
+    set({ accessToken: session.access_token, user: session.user, status: "authenticated" })
+  },
+
+  logout: async () => {
+    try {
+      await authApi.logout()
+    } finally {
+      set({ accessToken: null, user: null, status: "unauthenticated" })
+    }
+  },
 }))
 
 const PERMISSIONS: Record<UserRole, readonly string[]> = {

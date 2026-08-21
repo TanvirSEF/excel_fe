@@ -8,6 +8,7 @@ interface LoginResponse {
 
 interface SessionResponse {
   access_token: string
+  user: User
 }
 
 async function request<T>(path: string, body?: unknown): Promise<T> {
@@ -40,6 +41,6 @@ export function refreshSession() {
   return request<SessionResponse>("/api/auth/session")
 }
 
-export function logout(refreshToken: string) {
-  return request<void>("/api/auth/logout", { refresh_token: refreshToken })
+export function logout() {
+  return request<{ message: string }>("/api/auth/logout")
 }
