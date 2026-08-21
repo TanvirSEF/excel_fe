@@ -34,10 +34,12 @@ export function LoginForm() {
   })
 
   const nextParam = searchParams.get("next")
-  const redirectTo =
-    nextParam && nextParam.startsWith("/") && !nextParam.startsWith("//")
-      ? nextParam
-      : "/dashboard"
+  const isSafeRedirect =
+    nextParam !== null &&
+    nextParam.startsWith("/") &&
+    !nextParam.startsWith("//") &&
+    !nextParam.startsWith("/login")
+  const redirectTo = isSafeRedirect ? nextParam : "/dashboard"
 
   async function onSubmit(values: LoginForm) {
     try {

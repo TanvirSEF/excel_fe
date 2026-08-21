@@ -79,7 +79,10 @@ export async function apiFetch<T>(
       response = await execute()
     } else {
       useAuthStore.getState().clear()
-      if (typeof window !== "undefined") {
+      if (
+        typeof window !== "undefined" &&
+        window.location.pathname !== "/login"
+      ) {
         const next = encodeURIComponent(
           window.location.pathname + window.location.search
         )
