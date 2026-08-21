@@ -139,3 +139,79 @@
   font-weight: var(--shiki-dark-font-weight) !important;
   text-decoration: var(--shiki-dark-text-decoration) !important;
 }
+
+.post-editor .tiptap {
+  outline: none;
+}
+.post-editor .tiptap > * + * {
+  margin-top: 0.75em;
+}
+.post-editor .tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--muted-foreground);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+.post-editor .tiptap h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 1.25em;
+}
+.post-editor .tiptap h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1em;
+}
+.post-editor .tiptap h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 1em;
+}
+.post-editor .tiptap ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+.post-editor .tiptap ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+}
+.post-editor .tiptap blockquote {
+  border-left: 2px solid var(--primary);
+  padding-left: 1rem;
+  font-style: italic;
+  color: var(--muted-foreground);
+}
+.post-editor .tiptap pre {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  background: var(--muted);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+}
+.post-editor .tiptap img {
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  max-width: 100%;
+}
+.post-editor .tiptap table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+.post-editor .tiptap td,
+.post-editor .tiptap th {
+  border: 1px solid var(--border);
+  padding: 0.375rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+.post-editor .tiptap th {
+  background: var(--muted);
+  font-weight: 600;
+}
+.post-editor .tiptap .selectedNode {
+  outline: 2px solid var(--primary);
+  border-radius: 0.5rem;
+}

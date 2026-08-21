@@ -82,6 +82,8 @@ export function jsonError(
   )
 }
 
+const LEGACY_REFRESH_COOKIE_CLEAR = `${REFRESH_COOKIE}=; Path=/api/auth; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT`
+
 export function setRefreshCookie(response: NextResponse, token: string) {
   response.cookies.set({
     name: REFRESH_COOKIE,
@@ -89,9 +91,10 @@ export function setRefreshCookie(response: NextResponse, token: string) {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    path: "/api/auth",
+    path: "/",
     maxAge: REFRESH_COOKIE_MAX_AGE,
   })
+  response.headers.append("set-cookie", LEGACY_REFRESH_COOKIE_CLEAR)
 }
 
 export function clearRefreshCookie(response: NextResponse) {
@@ -101,7 +104,8 @@ export function clearRefreshCookie(response: NextResponse) {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    path: "/api/auth",
+    path: "/",
     maxAge: 0,
   })
+  response.headers.append("set-cookie", LEGACY_REFRESH_COOKIE_CLEAR)
 }
