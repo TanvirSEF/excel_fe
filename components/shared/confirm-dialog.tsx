@@ -11,12 +11,14 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { cn } from "@/lib/utils"
 
 interface ConfirmDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+  trigger?: React.ReactNode
   title: string
   description?: string
   confirmLabel?: string
@@ -29,6 +31,7 @@ interface ConfirmDialogProps {
 export function ConfirmDialog({
   open,
   onOpenChange,
+  trigger,
   title,
   description,
   confirmLabel = "Confirm",
@@ -38,19 +41,27 @@ export function ConfirmDialog({
   className,
 }: ConfirmDialogProps) {
   const [pending, setPending] = React.useState(false)
+  const [internalOpen, setInternalOpen] = React.useState(false)
+
+  const isOpen = trigger ? internalOpen : (open ?? false)
+  const setOpen = (next: boolean) => {
+    setInternalOpen(next)
+    onOpenChange?.(next)
+  }
 
   async function handleConfirm() {
     setPending(true)
     try {
       await onConfirm()
-      onOpenChange(false)
+      setOpen(false)
     } finally {
       setPending(false)
     }
   }
 
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
+    <AlertDialog open={isOpen} onOpenChange={setOpen}>
+      {trigger ? <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger> : null}
       <AlertDialogContent className={cn(className)}>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>

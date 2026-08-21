@@ -1,5 +1,6 @@
 "use client"
 
+import { SeoWorkspace } from "@/components/dashboard/seo-workspace"
 import { Skeleton } from "@/components/ui/skeleton"
 import { can, useAuthStore } from "@/lib/auth"
 
@@ -24,6 +25,7 @@ export function OverviewView() {
   }
 
   const firstName = user?.name.split(" ")[0] ?? "there"
+  const isSeoRole = user?.role === "seo_specialist"
   const analyticsView = can(user, "analytics:view")
 
   return (
@@ -33,13 +35,21 @@ export function OverviewView() {
           Welcome back, {firstName}
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          {analyticsView
-            ? "Site overview across all content."
-            : "Your posts and activity."}
+          {isSeoRole
+            ? "Search appearance of published posts."
+            : analyticsView
+              ? "Site overview across all content."
+              : "Your posts and activity."}
         </p>
       </div>
 
-      {analyticsView ? <AnalyticsOverviewSkeleton /> : <WriterOverview />}
+      {isSeoRole ? (
+        <SeoWorkspace />
+      ) : analyticsView ? (
+        <AnalyticsOverviewSkeleton />
+      ) : (
+        <WriterOverview />
+      )}
     </div>
   )
 }

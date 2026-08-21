@@ -57,6 +57,7 @@ const PERMISSIONS: Record<UserRole, readonly string[]> = {
     "posts:view",
     "posts:manage",
     "posts:delete",
+    "posts:publish",
     "seo:edit",
     "comments:moderate",
     "media:view",
