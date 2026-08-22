@@ -1,5 +1,6 @@
 "use client"
 
+import { AnalyticsOverview } from "@/components/dashboard/analytics/analytics-overview"
 import { SeoWorkspace } from "@/components/dashboard/seo-workspace"
 import { Skeleton } from "@/components/ui/skeleton"
 import { can, useAuthStore } from "@/lib/auth"
@@ -46,47 +47,10 @@ export function OverviewView() {
       {isSeoRole ? (
         <SeoWorkspace />
       ) : analyticsView ? (
-        <AnalyticsOverviewSkeleton />
+        <AnalyticsOverview />
       ) : (
         <WriterOverview />
       )}
-    </div>
-  )
-}
-
-function AnalyticsOverviewSkeleton() {
-  return (
-    <div className="space-y-6">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatSkeleton label="Total views" />
-        <StatSkeleton label="Views (7 days)" />
-        <StatSkeleton label="Published posts" />
-        <StatSkeleton label="Drafts" />
-      </div>
-
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-        <div className="space-y-3 rounded-xl border p-5">
-          <p className="text-sm font-medium">Views, last 7 days</p>
-          <Skeleton className="h-56" />
-        </div>
-        <div className="space-y-3 rounded-xl border p-5">
-          <p className="text-sm font-medium">Trending now</p>
-          <div className="space-y-2">
-            {Array.from({ length: 5 }).map((_, index) => (
-              <Skeleton key={index} className="h-9" />
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function StatSkeleton({ label }: { label: string }) {
-  return (
-    <div className="space-y-2 rounded-xl border p-5">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <Skeleton className="h-8 w-20" />
     </div>
   )
 }

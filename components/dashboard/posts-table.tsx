@@ -92,6 +92,12 @@ export function PostsTable({ posts, canDelete, onDelete }: PostsTableProps) {
                   View public
                 </Link>
               ) : null}
+              <Link
+                href={`/dashboard/analytics?post=${row.original.id}`}
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+              >
+                Stats
+              </Link>
               {canDelete ? (
                 <button
                   type="button"
