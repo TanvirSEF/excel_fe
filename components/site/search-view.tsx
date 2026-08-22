@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 
 import { EmptyState } from "@/components/shared/empty-state"
@@ -14,46 +14,48 @@ import type { Page, PostListItem } from "@/types/api"
 const PAGE_SIZE = 9
 const DEBOUNCE_MS = 400
 
-export function SearchView() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const q = searchParams.get("q") ?? ""
-  const page = Number(searchParams.get("page") ?? "1") || 1
+interface SearchViewProps {
+  query: string
+  page: number
+}
 
-  const [input, setInput] = useState(q)
-  const [lastQ, setLastQ] = useState(q)
+export function SearchView({ query, page }: SearchViewProps) {
+  const router = useRouter()
+
+  const [input, setInput] = useState(query)
+  const [lastQuery, setLastQuery] = useState(query)
   const [results, setResults] = useState<Page<PostListItem> | null>(null)
   const [loading, setLoading] = useState(false)
   const [failed, setFailed] = useState(false)
 
-  if (q !== lastQ) {
-    setLastQ(q)
-    setInput(q)
+  if (query !== lastQuery) {
+    setLastQuery(query)
+    setInput(query)
   }
 
   useEffect(() => {
     const trimmed = input.trim()
-    if (trimmed === q) return
+    if (trimmed === query) return
     const timer = setTimeout(() => {
       const params = new URLSearchParams()
       if (trimmed.length >= 2) params.set("q", trimmed)
-      const query = params.toString()
-      router.replace(query ? `/search?${query}` : "/search", {
+      const search = params.toString()
+      router.replace(search ? `/search?${search}` : "/search", {
         scroll: false,
       })
     }, DEBOUNCE_MS)
     return () => clearTimeout(timer)
-  }, [input, q, router])
+  }, [input, query, router])
 
   useEffect(() => {
-    if (q.trim().length < 2) return
+    if (query.trim().length < 2) return
     let cancelled = false
     async function load() {
       setLoading(true)
       setFailed(false)
       try {
         const data = await apiFetch<Page<PostListItem>>("/search", {
-          searchParams: { q, page, page_size: PAGE_SIZE },
+          searchParams: { q: query, page, page_size: PAGE_SIZE },
         })
         if (!cancelled) setResults(data)
       } catch {
@@ -66,10 +68,10 @@ export function SearchView() {
     return () => {
       cancelled = true
     }
-  }, [q, page])
+  }, [query, page])
 
   const tooShort = input.trim().length > 0 && input.trim().length < 2
-  const showResults = q.trim().length >= 2
+  const showResults = query.trim().length >= 2
 
   return (
     <div className="space-y-8">
@@ -120,7 +122,7 @@ export function SearchView() {
         <>
           <p className="text-sm text-muted-foreground">
             {results.total.toLocaleString()} result
-            {results.total === 1 ? "" : "s"} for “{q}”
+            {results.total === 1 ? "" : "s"} for “{query}”
           </p>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {results.items.map((post) => (
@@ -131,12 +133,12 @@ export function SearchView() {
             page={page}
             totalPages={results.total_pages}
             pathname="/search"
-            searchParams={{ q }}
+            searchParams={{ q: query }}
           />
         </>
       ) : (
         <EmptyState
-          title={`No results for “${q}”`}
+          title={`No results for “${query}”`}
           description="Try a different keyword, or browse the blog instead."
           action={
             <Link
