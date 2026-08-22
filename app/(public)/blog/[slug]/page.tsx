@@ -7,6 +7,7 @@ import { ArticleHeader } from "@/components/site/article-header"
 import { ArticleTags } from "@/components/site/article-tags"
 import { Breadcrumb } from "@/components/site/breadcrumb"
 import { CommentsSection } from "@/components/site/comments-section"
+import { NewsletterForm } from "@/components/site/newsletter/newsletter-form"
 import { ApiClientError } from "@/lib/api/error"
 import { getPostBySlug, getPostComments } from "@/lib/api/posts"
 import { extractToc } from "@/lib/blocks"
@@ -85,6 +86,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         <ArticleHeader post={post} />
         <BlockRenderer blocks={post.content_json?.blocks ?? []} />
         <ArticleTags tags={post.tags} />
+        <div className="mt-10 rounded-xl border bg-muted/30 p-5">
+          <p className="text-sm font-semibold">
+            Liked this? Get one practical Excel tip every week.
+          </p>
+          <div className="mt-3">
+            <NewsletterForm source="article-footer" />
+          </div>
+        </div>
         <CommentsSection postId={post.id} comments={comments} />
         <script
           type="application/ld+json"

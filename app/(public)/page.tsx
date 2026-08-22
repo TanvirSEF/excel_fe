@@ -1,4 +1,5 @@
 import { HomeHero } from "@/components/site/home-hero"
+import { NewsletterBand } from "@/components/site/newsletter/newsletter-band"
 import { PostSection } from "@/components/site/post-section"
 import { getCategories } from "@/lib/api/categories"
 import { getPosts } from "@/lib/api/posts"
@@ -29,6 +30,7 @@ export default async function HomePage() {
         emptyDescription="The first ones are on their way."
         className="py-10"
       />
+      <NewsletterBand />
     </div>
   )
 }
