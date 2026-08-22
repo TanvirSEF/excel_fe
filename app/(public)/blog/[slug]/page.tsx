@@ -38,7 +38,7 @@ export async function generateMetadata({
 
   const title = post.meta_title ?? post.title
   const description = post.meta_description ?? post.excerpt ?? undefined
-  const image = post.og_image_url ?? post.featured_image_url ?? undefined
+  const image = post.og_image_url ?? post.featured_image_url ?? "/og-default.png"
 
   return {
     title,
@@ -56,7 +56,7 @@ export async function generateMetadata({
       images: image,
     },
     twitter: {
-      card: image ? "summary_large_image" : "summary",
+      card: "summary_large_image",
       title,
       description,
       images: image,

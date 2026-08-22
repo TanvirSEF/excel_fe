@@ -9,11 +9,22 @@ import { getPosts } from "@/lib/api/posts"
 import { getTags } from "@/lib/api/tags"
 import { clamp, firstParam } from "@/lib/utils"
 
-export const metadata: Metadata = {
-  title: "Blog",
-  description:
-    "All Excel Insider articles — formulas, shortcuts, Power Query, VBA and more.",
-  alternates: { canonical: "/blog" },
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}): Promise<Metadata> {
+  const params = await searchParams
+  const page = clamp(Number(firstParam(params.page) ?? 1) || 1, 1, 10_000)
+
+  return {
+    title: "Blog",
+    description:
+      "All Excel Insider articles — formulas, shortcuts, Power Query, VBA and more.",
+    alternates: {
+      canonical: page > 1 ? `/blog?page=${page}` : "/blog",
+    },
+  }
 }
 
 export default async function BlogPage({
