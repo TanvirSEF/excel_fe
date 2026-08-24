@@ -5,6 +5,7 @@ const apiUrl = process.env.API_URL ?? "https://api.excelinsider.com"
 const nextConfig: NextConfig = {
   output: "standalone",
   images: {
+    unoptimized: true,
     remotePatterns: [{ protocol: "https", hostname: "**" }],
   },
   async rewrites() {
