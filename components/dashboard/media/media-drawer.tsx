@@ -115,6 +115,7 @@ export function MediaDrawer({ item, onClose, onDeleted }: MediaDrawerProps) {
                     src={item.file_url}
                     alt={item.alt_text ?? ""}
                     fill
+                    unoptimized
                     sizes="(max-width: 640px) 100vw, 448px"
                     className="object-contain"
                   />

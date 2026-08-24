@@ -50,6 +50,7 @@ export function MediaGrid({ items, isPending, onSelect }: MediaGridProps) {
                 alt={item.alt_text ?? item.file_url}
                 fill
                 priority={index < 4}
+                unoptimized
                 sizes="(max-width: 640px) 50vw, (max-width: 1280px) 33vw, 25vw"
                 className="object-cover"
               />
