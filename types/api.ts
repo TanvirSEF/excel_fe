@@ -242,3 +242,16 @@ export interface AuditLog {
   metadata: Record<string, unknown> | null
   created_at: string
 }
+
+export interface WpImportResult {
+  dry_run: boolean
+  site_title: string
+  total_posts: number
+  posts_created: number
+  posts_updated: number
+  categories: number
+  tags: number
+  redirects: number
+  images_uploaded: number
+  images_failed: number
+}

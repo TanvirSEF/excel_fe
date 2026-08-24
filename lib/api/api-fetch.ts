@@ -1,3 +1,4 @@
+import * as authApi from "@/lib/api/auth"
 import { ApiClientError, parseRetryAfter } from "@/lib/api/error"
 import { useAuthStore } from "@/lib/auth"
 import { API_BASE_PATH, config } from "@/lib/config"
@@ -13,8 +14,14 @@ let refreshPromise: Promise<boolean> | null = null
 
 async function refreshAccessToken() {
   if (!refreshPromise) {
-    refreshPromise = fetch("/api/auth/session", { method: "POST" })
-      .then((response) => response.ok)
+    refreshPromise = authApi
+      .refreshSession()
+      .then((session) => {
+        useAuthStore
+          .getState()
+          .setSession(session.access_token, session.user)
+        return true
+      })
       .catch(() => false)
       .finally(() => {
         refreshPromise = null

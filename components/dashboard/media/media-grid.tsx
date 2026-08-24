@@ -36,7 +36,7 @@ export function MediaGrid({ items, isPending, onSelect }: MediaGridProps) {
 
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
-      {items.map((item) => (
+      {items.map((item, index) => (
         <button
           key={item.id}
           type="button"
@@ -49,6 +49,7 @@ export function MediaGrid({ items, isPending, onSelect }: MediaGridProps) {
                 src={item.file_url}
                 alt={item.alt_text ?? item.file_url}
                 fill
+                priority={index < 4}
                 sizes="(max-width: 640px) 50vw, (max-width: 1280px) 33vw, 25vw"
                 className="object-cover"
               />

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
 import { RoleBadge } from "@/components/dashboard/users/role-badge"
+import { WpImportPanel } from "@/components/dashboard/settings/wp-import-panel"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -253,6 +254,8 @@ export function SettingsView() {
           {changePassword.isPending ? "Changing…" : "Change password"}
         </Button>
       </section>
+
+      {user.role === "super_admin" && <WpImportPanel />}
     </div>
   )
 }

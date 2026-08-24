@@ -9,6 +9,7 @@ import {
   IconHistory,
   IconMessage,
   IconPhoto,
+  IconSettings,
   IconTags,
   IconUsers,
 } from "@tabler/icons-react"
@@ -46,6 +47,7 @@ const INSIGHT_ITEMS: NavItem[] = [
 const ADMIN_ITEMS: NavItem[] = [
   { title: "Users", url: "/dashboard/users", icon: IconUsers, permission: "users:manage" },
   { title: "Audit logs", url: "/dashboard/audit-logs", icon: IconHistory, permission: "audit:view" },
+  { title: "Settings", url: "/dashboard/settings", icon: IconSettings, permission: "settings:view" },
 ]
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
