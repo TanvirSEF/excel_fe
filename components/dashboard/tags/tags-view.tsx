@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import slugify from "slugify"
 import { toast } from "sonner"
 
@@ -24,16 +24,36 @@ import {
   useTags,
 } from "@/lib/queries/categories"
 
+const PAGE_SIZE = 20
+
 export function TagsView() {
   const user = useAuthStore((state) => state.user)
   const { data: tags, isPending, isError, refetch } = useTags()
   const createTag = useCreateTag()
   const [sheetOpen, setSheetOpen] = useState(false)
+  const [search, setSearch] = useState("")
+  const [page, setPage] = useState(1)
   const [name, setName] = useState("")
   const [slug, setSlug] = useState("")
   const [autoSlug, setAutoSlug] = useState(true)
 
   const canCreate = can(user, "tags:create") || can(user, "tags:manage")
+
+  const filteredTags = useMemo(() => {
+    const list = tags ?? []
+    if (!search.trim()) return list
+    const q = search.trim().toLowerCase()
+    return list.filter(
+      (t) =>
+        t.name.toLowerCase().includes(q) || t.slug.toLowerCase().includes(q)
+    )
+  }, [tags, search])
+
+  const totalPages = Math.ceil(filteredTags.length / PAGE_SIZE)
+  const paginatedTags = useMemo(() => {
+    const start = (page - 1) * PAGE_SIZE
+    return filteredTags.slice(start, start + PAGE_SIZE)
+  }, [filteredTags, page])
 
   async function onCreate() {
     if (!name.trim()) {
@@ -65,8 +85,7 @@ export function TagsView() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Tags</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {(tags ?? []).length} tag{(tags ?? []).length === 1 ? "" : "s"} in
-            use
+            {(tags ?? []).length} tag{(tags ?? []).length === 1 ? "" : "s"} in use
           </p>
         </div>
         {canCreate ? (
@@ -74,6 +93,18 @@ export function TagsView() {
             New tag
           </Button>
         ) : null}
+      </div>
+
+      <div className="flex items-center gap-3">
+        <Input
+          placeholder="Search tags by name or slug…"
+          value={search}
+          onChange={(event) => {
+            setSearch(event.target.value)
+            setPage(1)
+          }}
+          className="max-w-sm text-sm"
+        />
       </div>
 
       {isError ? (
@@ -92,42 +123,83 @@ export function TagsView() {
             <Skeleton key={index} className="h-12" />
           ))}
         </div>
-      ) : (tags ?? []).length === 0 ? (
+      ) : filteredTags.length === 0 ? (
         <EmptyState
-          title="No tags yet"
-          description="Tags are created here or directly from the post editor."
+          title={search ? "No matching tags found" : "No tags yet"}
+          description={
+            search
+              ? `No tags matched "${search}". Try another keyword.`
+              : "Tags are created here or directly from the post editor."
+          }
         />
       ) : (
-        <div className="overflow-x-auto rounded-xl border">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b bg-muted/40 text-left text-xs text-muted-foreground">
-                <th className="px-4 py-2.5 font-medium">Name</th>
-                <th className="px-4 py-2.5 font-medium">Slug</th>
-                <th className="px-4 py-2.5 text-right font-medium">
-                  Public page
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {(tags ?? []).map((tag) => (
-                <tr key={tag.id} className="border-b last:border-b-0">
-                  <td className="px-4 py-2.5 font-medium">{tag.name}</td>
-                  <td className="px-4 py-2.5 font-mono text-xs text-muted-foreground">
-                    {tag.slug}
-                  </td>
-                  <td className="px-4 py-2.5 text-right">
-                    <a
-                      href={`/tags/${tag.slug}`}
-                      className="text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
-                    >
-                      View
-                    </a>
-                  </td>
+        <div className="space-y-4">
+          <div className="overflow-x-auto rounded-xl border">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b bg-muted/40 text-left text-xs text-muted-foreground">
+                  <th className="px-4 py-2.5 font-medium">Name</th>
+                  <th className="px-4 py-2.5 font-medium">Slug</th>
+                  <th className="px-4 py-2.5 text-right font-medium">
+                    Public page
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {paginatedTags.map((tag) => (
+                  <tr key={tag.id} className="border-b last:border-b-0 hover:bg-muted/20">
+                    <td className="px-4 py-2.5 font-medium">{tag.name}</td>
+                    <td className="px-4 py-2.5 font-mono text-xs text-muted-foreground">
+                      {tag.slug}
+                    </td>
+                    <td className="px-4 py-2.5 text-right">
+                      <a
+                        href={`/tags/${tag.slug}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+                      >
+                        View
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {totalPages > 1 ? (
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted-foreground text-xs sm:text-sm">
+                Showing {(page - 1) * PAGE_SIZE + 1}–
+                {Math.min(page * PAGE_SIZE, filteredTags.length)} of{" "}
+                {filteredTags.length} tags
+              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground">
+                  Page {page} of {totalPages}
+                </span>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={page <= 1}
+                  onClick={() => setPage((current) => current - 1)}
+                >
+                  Previous
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={page >= totalPages}
+                  onClick={() => setPage((current) => current + 1)}
+                >
+                  Next
+                </Button>
+              </div>
+            </div>
+          ) : null}
         </div>
       )}
 
