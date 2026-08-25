@@ -90,6 +90,7 @@ export interface PostAdminItem {
   author_name: string
   category_name: string | null
   rejection_reason: string | null
+  is_trending?: boolean
   updated_at: string
   published_at: string | null
 }
@@ -102,6 +103,7 @@ export interface PostCreateInput {
   featured_image_url?: string | null
   category_id?: string | null
   tags?: string[]
+  is_trending?: boolean
   meta_title?: string
   meta_description?: string
   canonical_url?: string | null

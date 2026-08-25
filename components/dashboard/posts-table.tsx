@@ -39,12 +39,19 @@ export function PostsTable({ posts, canDelete, onDelete }: PostsTableProps) {
         columnHelper.accessor("title", {
           header: "Title",
           cell: ({ row }) => (
-            <Link
-              href={`/dashboard/posts/${row.original.id}`}
-              className="font-medium hover:text-primary"
-            >
-              <span className="line-clamp-1">{row.original.title}</span>
-            </Link>
+            <div className="flex items-center gap-2">
+              <Link
+                href={`/dashboard/posts/${row.original.id}`}
+                className="font-medium hover:text-primary"
+              >
+                <span className="line-clamp-1">{row.original.title}</span>
+              </Link>
+              {row.original.is_trending ? (
+                <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+                  Trending
+                </span>
+              ) : null}
+            </div>
           ),
         }),
         columnHelper.accessor("status", {

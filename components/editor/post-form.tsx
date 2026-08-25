@@ -6,6 +6,7 @@ import slugify from "slugify"
 import { MediaPicker } from "@/components/editor/media-picker"
 import { TagInput } from "@/components/editor/tag-input"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useCategories } from "@/lib/queries/categories"
@@ -19,6 +20,7 @@ export interface PostFormFields {
   categoryId: string
   tags: string[]
   featuredImageUrl: string
+  isTrending: boolean
 }
 
 interface PostFormProps {
@@ -198,6 +200,28 @@ export function PostForm({
           onOpenChange={setPickerOpen}
           onSelect={(item) => onChange({ featuredImageUrl: item.file_url })}
         />
+      </div>
+
+      <div className="flex items-start gap-3 rounded-lg border border-border/80 bg-muted/30 p-3.5 shadow-2xs">
+        <Checkbox
+          id="post-trending"
+          checked={fields.isTrending}
+          onCheckedChange={(checked) =>
+            onChange({ isTrending: checked === true })
+          }
+          className="mt-0.5"
+        />
+        <div className="space-y-0.5">
+          <Label
+            htmlFor="post-trending"
+            className="cursor-pointer text-sm font-medium text-foreground"
+          >
+            Mark as Trending
+          </Label>
+          <p className="text-xs text-muted-foreground">
+            Feature this article in the homepage &ldquo;Trending now&rdquo; section.
+          </p>
+        </div>
       </div>
     </div>
   )

@@ -39,6 +39,7 @@ const EMPTY_FIELDS: PostFormFields = {
   categoryId: "",
   tags: [],
   featuredImageUrl: "",
+  isTrending: false,
 }
 
 const EMPTY_SEO: SeoFormFields = {
@@ -94,6 +95,7 @@ export function EditorView({ postId }: EditorViewProps) {
       categoryId: post.category_id ?? "",
       tags: post.tags,
       featuredImageUrl: post.featured_image_url ?? "",
+      isTrending: post.is_trending ?? false,
     })
     setSeo({
       metaTitle: post.meta_title ?? "",
@@ -156,6 +158,7 @@ export function EditorView({ postId }: EditorViewProps) {
           featured_image_url: fields.featuredImageUrl || null,
           category_id: fields.categoryId || null,
           tags: fields.tags,
+          is_trending: fields.isTrending,
         }
 
         if (postId) {
