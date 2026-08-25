@@ -1,143 +1,95 @@
 import Link from "next/link"
 import Image from "next/image"
-import {
-  IconArrowRight,
-  IconUsers,
-  IconFileSpreadsheet,
-  IconMathFunction,
-  IconTable,
-  IconCode,
-  IconChartBar,
-  IconCalculator,
-} from "@tabler/icons-react"
+import { IconArrowRight, IconFileSpreadsheet } from "@tabler/icons-react"
 
 import type { Category } from "@/types/api"
 import { Button } from "@/components/ui/button"
 
-const FALLBACK_PILLS = [
-  { label: "Excel Formulas", href: "/blog", icon: IconMathFunction },
-  { label: "Google Sheets", href: "/blog", icon: IconTable },
-  { label: "VBA & Macros", href: "/blog", icon: IconCode },
-  { label: "Charts & Dashboards", href: "/blog", icon: IconChartBar },
-  { label: "Free Calculators", href: "/calculators", icon: IconCalculator },
-]
-
 export function HomeHero({ categories }: { categories: Category[] }) {
-  const pills =
-    categories.length > 0
-      ? categories.slice(0, 5).map((c) => ({
-          label: c.name,
-          href: `/categories/${c.slug}`,
-          icon: IconMathFunction,
-        }))
-      : FALLBACK_PILLS
+  const topCategories = categories.slice(0, 5)
 
   return (
-    <section className="relative py-16 sm:py-20 lg:py-24">
-      {/* Subtle background grid — very restrained */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.035] dark:opacity-[0.06]"
-        style={{
-          backgroundImage:
-            "linear-gradient(hsl(var(--border)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border)) 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
-        }}
-      />
+    <section className="mx-auto max-w-5xl px-4 pt-16 pb-0 text-center sm:pt-24">
 
-      <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-2 lg:gap-16">
+      {/* Eyebrow */}
+      <p className="mb-6 text-sm font-medium text-muted-foreground">
+        1,600+ free tutorials for Excel &amp; Google Sheets
+      </p>
 
-        {/* ─── Left: Content ─── */}
-        <div className="space-y-7">
+      {/* H1 — let typography do the work */}
+      <h1 className="mx-auto max-w-3xl text-[2.75rem] font-extrabold leading-[1.08] tracking-tight text-foreground sm:text-6xl lg:text-7xl">
+        Spreadsheets, finally{" "}
+        <em className="not-italic text-emerald-600 dark:text-emerald-400">
+          made simple.
+        </em>
+      </h1>
 
-          {/* Social proof — small, understated */}
-          <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-            <IconUsers className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-            <span>Trusted by <strong className="font-semibold text-foreground">40,000+</strong> spreadsheet learners</span>
-          </div>
+      {/* Subtitle */}
+      <p className="mx-auto mt-6 max-w-xl text-base text-muted-foreground sm:text-lg leading-relaxed">
+        Step-by-step formula guides, VBA automation, Pivot Tables, and ready-to-use business templates — written by practitioners, not bots.
+      </p>
 
-          {/* H1 — clean, no gradient */}
-          <h1 className="text-[2.6rem] font-extrabold leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-[3.2rem]">
-            Learn Excel &amp; Google Sheets.{" "}
-            <span className="text-emerald-600 dark:text-emerald-400">
-              The practical way.
-            </span>
-          </h1>
+      {/* CTA Row */}
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <Button
+          asChild
+          size="lg"
+          className="rounded-lg bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-semibold h-11 px-6 text-sm shadow-none"
+        >
+          <Link href="/blog" className="flex items-center gap-2">
+            Start Learning
+            <IconArrowRight className="h-4 w-4" />
+          </Link>
+        </Button>
 
-          {/* Subtitle */}
-          <p className="text-base text-muted-foreground sm:text-lg leading-relaxed max-w-lg">
-            1,600+ step-by-step guides on formulas, shortcuts, VBA automation, Pivot Tables, and business templates. Built for people who actually use spreadsheets.
-          </p>
-
-          {/* CTAs */}
-          <div className="flex flex-wrap items-center gap-3">
-            <Button
-              asChild
-              size="lg"
-              className="rounded-lg bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-semibold h-11 px-5 text-sm"
-            >
-              <Link href="/blog" className="flex items-center gap-2">
-                Browse All Tutorials
-                <IconArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
-
-            <Button
-              asChild
-              variant="ghost"
-              size="lg"
-              className="rounded-lg h-11 px-5 text-sm font-medium text-foreground hover:bg-muted"
-            >
-              <Link href="/pricing" className="flex items-center gap-2">
-                <IconFileSpreadsheet className="h-4 w-4 text-muted-foreground" />
-                Free Templates
-              </Link>
-            </Button>
-          </div>
-
-          {/* Topic pills — editorial, not decorative */}
-          <div className="border-t border-border/60 pt-6 space-y-3">
-            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground/70">
-              What you&apos;ll find here
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {pills.map((pill) => {
-                const Icon = pill.icon
-                return (
-                  <Link
-                    key={pill.label}
-                    href={pill.href}
-                    className="flex items-center gap-1.5 rounded-md border border-border/70 bg-background px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-emerald-500/50 hover:bg-emerald-500/5 hover:text-emerald-700 dark:hover:text-emerald-300"
-                  >
-                    <Icon className="h-3.5 w-3.5 shrink-0" />
-                    {pill.label}
-                  </Link>
-                )
-              })}
-            </div>
-          </div>
-        </div>
-
-        {/* ─── Right: Screenshot ─── */}
-        <div className="relative hidden lg:flex items-center justify-center">
-          {/* Soft ambient hue — barely visible */}
-          <div
-            aria-hidden
-            className="absolute inset-0 -z-10 rounded-3xl bg-emerald-500/5 blur-3xl"
-          />
-          <div className="w-full overflow-hidden rounded-xl border border-border/60 shadow-lg">
-            <Image
-              src="/hero-spreadsheet.jpg"
-              alt="Excel spreadsheet showing XLOOKUP formula in action"
-              width={1200}
-              height={900}
-              className="w-full h-auto object-cover"
-              priority
-            />
-          </div>
-        </div>
-
+        <Button
+          asChild
+          variant="ghost"
+          size="lg"
+          className="rounded-lg h-11 px-5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted"
+        >
+          <Link href="/pricing" className="flex items-center gap-2">
+            <IconFileSpreadsheet className="h-4 w-4" />
+            Free Templates
+          </Link>
+        </Button>
       </div>
+
+      {/* Category tags — minimal underlined links */}
+      {topCategories.length > 0 && (
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+          <span className="text-xs text-muted-foreground/60 font-medium">Topics:</span>
+          {topCategories.map((c) => (
+            <Link
+              key={c.id}
+              href={`/categories/${c.slug}`}
+              className="text-xs font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline transition-colors"
+            >
+              {c.name}
+            </Link>
+          ))}
+        </div>
+      )}
+
+      {/* Product Screenshot — anchored below, full-bleed feel */}
+      <div className="relative mt-14 sm:mt-16">
+        {/* Soft fade at bottom so it blends into page */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-28 bg-gradient-to-t from-background to-transparent"
+        />
+        <div className="overflow-hidden rounded-t-2xl border border-b-0 border-border/60 shadow-[0_-4px_40px_-8px_hsl(var(--emerald-500)/0.08)] ring-1 ring-border/40">
+          <Image
+            src="/hero-screenshot.jpg"
+            alt="Excel formula guide — XLOOKUP in action"
+            width={1400}
+            height={788}
+            className="w-full h-auto select-none"
+            priority
+          />
+        </div>
+      </div>
+
     </section>
   )
 }

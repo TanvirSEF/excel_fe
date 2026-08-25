@@ -33,21 +33,24 @@ export default async function HomePage() {
   const featuredCategories = categories.filter((c) => c.is_featured)
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4">
+    <>
       <HomeHero categories={featuredCategories} />
-      <PostSection
-        title="Trending now"
-        posts={trending.items}
-        hideIfEmpty
-        className="pb-4"
-      />
-      <PostSection
-        title="Latest articles"
-        posts={latest.items}
-        emptyDescription="The first ones are on their way."
-        className="py-10"
-      />
-      <NewsletterBand />
-    </div>
+      <div className="mx-auto w-full max-w-6xl px-4">
+        <PostSection
+          title="Trending now"
+          posts={trending.items}
+          hideIfEmpty
+          className="pb-4"
+        />
+        <PostSection
+          title="Latest articles"
+          posts={latest.items}
+          emptyDescription="The first ones are on their way."
+          className="py-10"
+        />
+        <NewsletterBand />
+      </div>
+    </>
   )
+
 }
