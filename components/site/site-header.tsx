@@ -1,43 +1,53 @@
 import Link from "next/link"
+import Image from "next/image"
 
-import { NavLink } from "@/components/site/nav-link"
+import { MainNav } from "@/components/site/main-nav"
+import { MobileNav } from "@/components/site/mobile-nav"
+import { SearchDialog } from "@/components/site/search-dialog"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
-
-const NAV_ITEMS = [
-  { href: "/", label: "Home" },
-  { href: "/blog", label: "Blog" },
-  { href: "/categories", label: "Categories" },
-]
+import { Button } from "@/components/ui/button"
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur">
-      <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between gap-4 px-4">
-        <Link href="/" className="text-lg font-bold tracking-tight">
-          Excel Insider
-        </Link>
-
-        <div className="flex items-center gap-4">
-          <form action="/search" className="hidden md:block">
-            <input
-              type="search"
-              name="q"
-              placeholder="Search…"
-              minLength={2}
-              aria-label="Search articles"
-              className="h-8 w-36 rounded-md border border-input bg-background px-3 text-sm transition-all focus:w-52 focus:outline-none focus:ring-2 focus:ring-ring/50"
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/85 backdrop-blur-md supports-[backdrop-filter]:bg-background/70 shadow-2xs transition-all">
+      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+        {/* Brand Logo */}
+        <div className="flex items-center gap-6">
+          <Link
+            href="/"
+            className="flex items-center gap-2 transition-transform duration-200 hover:scale-[1.02]"
+            aria-label="Excel Insider Home"
+          >
+            <Image
+              src="/logo.png"
+              alt="Excel Insider"
+              width={160}
+              height={42}
+              priority
+              className="h-9 w-auto object-contain dark:brightness-110"
             />
-          </form>
+          </Link>
+        </div>
 
-          <nav className="flex items-center gap-1" aria-label="Main">
-            {NAV_ITEMS.map((item) => (
-              <NavLink key={item.href} href={item.href}>
-                {item.label}
-              </NavLink>
-            ))}
-            <span className="mx-1 hidden h-5 w-px bg-border sm:block" />
+        {/* Center Desktop Navigation */}
+        <MainNav />
+
+        {/* Right Actions Area */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <SearchDialog />
+
+          <div className="hidden sm:flex items-center gap-2 border-l border-border/60 pl-3">
             <ThemeToggle />
-          </nav>
+            <Button
+              asChild
+              size="sm"
+              className="hidden xl:inline-flex rounded-full bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white font-medium shadow-xs text-xs px-4 h-8.5 transition-all hover:shadow-sm"
+            >
+              <Link href="/pricing">Free Templates</Link>
+            </Button>
+          </div>
+
+          <MobileNav />
         </div>
       </div>
     </header>

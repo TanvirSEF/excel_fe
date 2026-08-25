@@ -36,7 +36,7 @@ export function MediaGrid({ items, isPending, onSelect }: MediaGridProps) {
 
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
-      {items.map((item, index) => (
+      {items.map((item) => (
         <button
           key={item.id}
           type="button"
