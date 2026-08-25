@@ -115,11 +115,11 @@ export function HomeHero({ categories }: { categories: Category[] }) {
   return (
     <section className="relative w-full overflow-hidden bg-gradient-to-br from-chart-2 via-primary to-chart-5">
       {/* Large glow — top right */}
-      <div aria-hidden className="pointer-events-none absolute -right-40 -top-40 h-[580px] w-[580px] rounded-full bg-white/10 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute -right-40 -top-40 hidden h-[580px] w-[580px] rounded-full bg-white/10 blur-3xl sm:block" />
       {/* Medium glow — center left */}
-      <div aria-hidden className="pointer-events-none absolute left-1/4 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-white/6 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute left-1/4 top-1/2 hidden h-72 w-72 -translate-y-1/2 rounded-full bg-white/6 blur-3xl sm:block" />
       {/* Small glow — bottom right */}
-      <div aria-hidden className="pointer-events-none absolute -bottom-16 right-1/4 h-48 w-48 rounded-full bg-white/8 blur-2xl" />
+      <div aria-hidden className="pointer-events-none absolute -bottom-16 right-1/4 hidden h-48 w-48 rounded-full bg-white/8 blur-2xl sm:block" />
       {/* Diagonal shine streak */}
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/8 via-transparent to-transparent" />
       {/* Bottom fade into page */}
