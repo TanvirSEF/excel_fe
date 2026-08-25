@@ -15,7 +15,7 @@ import {
   IconTools,
   IconFileSpreadsheet,
   IconUserCheck,
-  IconSparkles,
+  IconArrowRight,
 } from "@tabler/icons-react"
 
 import {
@@ -88,7 +88,7 @@ export function MainNav() {
           <DropdownMenuItem asChild>
             <Link href="/pricing" className="flex items-center justify-between p-2 rounded-lg text-xs font-medium text-primary hover:text-primary cursor-pointer">
               <span>View All Pricing & Plans</span>
-              <IconSparkles className="h-3.5 w-3.5" />
+              <IconArrowRight className="h-3.5 w-3.5" />
             </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>

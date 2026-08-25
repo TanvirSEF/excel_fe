@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation"
 import {
   IconSearch,
   IconArrowRight,
-  IconSparkles,
   IconTrendingUp,
 } from "@tabler/icons-react"
 
@@ -111,7 +110,6 @@ export function SearchDialog() {
                   onClick={() => handleSelectTopic(topic)}
                   className="flex items-center gap-1.5 rounded-lg border border-border/60 bg-muted/40 px-2.5 py-1.5 text-xs font-medium text-foreground transition-all duration-150 hover:border-emerald-500/40 hover:bg-emerald-500/10 hover:text-emerald-700 dark:hover:text-emerald-300"
                 >
-                  <IconSparkles className="h-3 w-3 text-muted-foreground/70" />
                   <span>{topic}</span>
                   <IconArrowRight className="h-3 w-3 opacity-40" />
                 </button>
