@@ -113,11 +113,17 @@ export function HomeHero({ categories }: { categories: Category[] }) {
       : FALLBACK_PILLS
 
   return (
-    <section className="relative w-full overflow-hidden bg-primary">
-      {/* Soft glow — top right */}
-      <div aria-hidden className="pointer-events-none absolute -right-32 -top-32 h-[500px] w-[500px] rounded-full bg-primary-foreground/10 blur-3xl" />
-      {/* Soft glow — bottom left */}
-      <div aria-hidden className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-primary-foreground/8 blur-3xl" />
+    <section className="relative w-full overflow-hidden bg-gradient-to-br from-chart-2 via-primary to-chart-5">
+      {/* Large glow — top right */}
+      <div aria-hidden className="pointer-events-none absolute -right-40 -top-40 h-[580px] w-[580px] rounded-full bg-white/10 blur-3xl" />
+      {/* Medium glow — center left */}
+      <div aria-hidden className="pointer-events-none absolute left-1/4 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-white/6 blur-3xl" />
+      {/* Small glow — bottom right */}
+      <div aria-hidden className="pointer-events-none absolute -bottom-16 right-1/4 h-48 w-48 rounded-full bg-white/8 blur-2xl" />
+      {/* Diagonal shine streak */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/8 via-transparent to-transparent" />
+      {/* Bottom fade into page */}
+      <div aria-hidden className="pointer-events-none absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-background/15 to-transparent" />
 
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 py-16 sm:py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-24">
 
