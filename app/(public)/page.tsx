@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const [trending, latest, categories] = await Promise.all([
-    getPosts({ trending: true, page_size: 6 }, 300),
+    getPosts({ trending: true, page_size: 3 }, 300),
     getPosts({ page_size: 9 }, 300),
     getCategories(300),
   ])
@@ -37,22 +37,28 @@ export default async function HomePage() {
     <>
       <HomeHero categories={featuredCategories} />
       <HeroStatsBand />
-      <div className="mx-auto w-full max-w-6xl px-4">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <PostSection
-          title="Trending now"
-          posts={trending.items}
+          title="Trending Tutorials"
+          subtitle="Top formula breakdowns and spreadsheet guides most read this week."
+          badge="Popular this week"
+          action={{ label: "View all tutorials", href: "/blog" }}
+          posts={trending.items.slice(0, 3)}
           hideIfEmpty
-          className="pb-4"
+          className="py-12 sm:py-16"
         />
         <PostSection
-          title="Latest articles"
+          title="Latest Articles"
+          subtitle="Fresh spreadsheet tips, VBA automations, and downloadable templates."
+          action={{ label: "Browse archive", href: "/blog" }}
           posts={latest.items}
           emptyDescription="The first ones are on their way."
-          className="py-10"
+          className="border-t border-border/60 py-12 sm:py-16"
         />
-        <NewsletterBand />
+        <div className="pb-16">
+          <NewsletterBand />
+        </div>
       </div>
     </>
   )
-
 }
