@@ -80,16 +80,6 @@
     --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
     --sidebar-border: oklch(0.92 0.004 286.32);
     --sidebar-ring: oklch(0.705 0.015 286.067);
-
-    /* Hero section — always dark regardless of light/dark mode */
-    --hero-bg: oklch(0.17 0.075 155);
-    --hero-surface: oklch(0.22 0.065 155);
-    --hero-surface-raised: oklch(0.26 0.058 155);
-    --hero-foreground: oklch(0.97 0.012 155);
-    --hero-muted: oklch(0.97 0.01 155 / 0.65);
-    --hero-border: oklch(0.97 0.01 155 / 0.13);
-    --hero-accent: oklch(0.74 0.24 148);
-    --hero-accent-muted: oklch(0.74 0.24 148 / 0.18);
 }
 
 .dark {

@@ -30,38 +30,38 @@ const SPREADSHEET_ROWS = [
 
 function ExcelWindowMockup() {
   return (
-    <div className="w-full overflow-hidden rounded-xl border border-[var(--hero-border)] bg-[var(--hero-surface)] text-xs shadow-2xl">
+    <div className="w-full overflow-hidden rounded-xl border border-border bg-card text-xs shadow-sm">
       {/* Window chrome */}
-      <div className="flex items-center gap-2 border-b border-[var(--hero-border)] bg-[var(--hero-surface-raised)] px-4 py-3">
-        <span className="h-2.5 w-2.5 rounded-full bg-red-500/80" />
-        <span className="h-2.5 w-2.5 rounded-full bg-amber-400/80" />
-        <span className="h-2.5 w-2.5 rounded-full bg-[var(--hero-accent)]" />
-        <span className="ml-3 truncate font-mono text-[10px] text-[var(--hero-muted)]">
+      <div className="flex items-center gap-2 border-b border-border bg-muted/60 px-4 py-3">
+        <span className="h-2.5 w-2.5 rounded-full bg-destructive/60" />
+        <span className="h-2.5 w-2.5 rounded-full bg-chart-1/80" />
+        <span className="h-2.5 w-2.5 rounded-full bg-primary/80" />
+        <span className="ml-3 truncate font-mono text-[10px] text-muted-foreground">
           Revenue_Analysis_2025.xlsx
         </span>
       </div>
 
       {/* Formula bar */}
-      <div className="flex items-center gap-1.5 border-b border-[var(--hero-border)] bg-[var(--hero-bg)] px-3 py-2">
-        <div className="flex w-10 shrink-0 items-center justify-center rounded border border-[var(--hero-border)] bg-[var(--hero-surface)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--hero-muted)]">
+      <div className="flex items-center gap-1.5 border-b border-border bg-background px-3 py-2">
+        <div className="flex w-10 shrink-0 items-center justify-center rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
           B4
         </div>
-        <span className="font-mono text-[11px] font-bold text-[var(--hero-accent)]">fx</span>
-        <span className="font-mono text-[11px] text-[var(--hero-foreground)]/80">
-          =<span className="text-[var(--hero-accent)]">XLOOKUP</span>
-          <span className="text-[var(--hero-muted)]">(A4, </span>
-          <span className="text-amber-400/90">Months</span>
-          <span className="text-[var(--hero-muted)]">, </span>
-          <span className="text-amber-400/90">Revenue</span>
-          <span className="text-[var(--hero-muted)]">)</span>
+        <span className="font-mono text-[11px] font-bold text-primary">fx</span>
+        <span className="font-mono text-[11px] text-foreground/80">
+          =<span className="text-primary">XLOOKUP</span>
+          <span className="text-muted-foreground">(A4, </span>
+          <span className="text-chart-2">Months</span>
+          <span className="text-muted-foreground">, </span>
+          <span className="text-chart-2">Revenue</span>
+          <span className="text-muted-foreground">)</span>
         </span>
       </div>
 
       {/* Column headers */}
-      <div className="grid grid-cols-[32px_1fr_96px_72px] border-b border-[var(--hero-border)] bg-[var(--hero-surface-raised)] text-[10px] font-semibold tracking-wide text-[var(--hero-muted)]">
-        <div className="border-r border-[var(--hero-border)] py-1.5 text-center">#</div>
-        <div className="border-r border-[var(--hero-border)] px-3 py-1.5">Month</div>
-        <div className="border-r border-[var(--hero-border)] px-3 py-1.5 text-right">Revenue</div>
+      <div className="grid grid-cols-[32px_1fr_96px_72px] border-b border-border bg-muted/40 text-[10px] font-semibold tracking-wide text-muted-foreground">
+        <div className="border-r border-border py-1.5 text-center">#</div>
+        <div className="border-r border-border px-3 py-1.5">Month</div>
+        <div className="border-r border-border px-3 py-1.5 text-right">Revenue</div>
         <div className="px-3 py-1.5 text-right">Growth</div>
       </div>
 
@@ -69,36 +69,34 @@ function ExcelWindowMockup() {
       {SPREADSHEET_ROWS.map((row) => (
         <div
           key={row.id}
-          className={`grid grid-cols-[32px_1fr_96px_72px] border-b border-[var(--hero-border)] text-[11px] last:border-0 transition-colors ${
-            row.active
-              ? "bg-[var(--hero-accent-muted)]"
-              : "bg-transparent hover:bg-[var(--hero-surface-raised)]/60"
+          className={`grid grid-cols-[32px_1fr_96px_72px] border-b border-border/50 text-[11px] last:border-0 transition-colors ${
+            row.active ? "bg-primary/8 font-medium" : "bg-transparent hover:bg-muted/30"
           }`}
         >
-          <div className={`border-r border-[var(--hero-border)] py-2.5 text-center font-mono text-[10px] ${row.active ? "font-bold text-[var(--hero-accent)]" : "text-[var(--hero-muted)]"}`}>
+          <div className={`border-r border-border/50 py-2.5 text-center font-mono text-[10px] ${row.active ? "font-bold text-primary" : "text-muted-foreground/40"}`}>
             {row.id}
           </div>
-          <div className={`border-r border-[var(--hero-border)] px-3 py-2.5 ${row.active ? "font-semibold text-[var(--hero-foreground)]" : "text-[var(--hero-foreground)]/70"}`}>
+          <div className={`border-r border-border/50 px-3 py-2.5 ${row.active ? "font-semibold text-foreground" : "text-foreground/80"}`}>
             {row.month}
             {row.active && (
-              <span className="ml-2 inline-flex items-center rounded bg-[var(--hero-accent-muted)] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[var(--hero-accent)]">
+              <span className="ml-2 inline-flex items-center rounded bg-primary/12 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-primary">
                 active
               </span>
             )}
           </div>
-          <div className={`border-r border-[var(--hero-border)] px-3 py-2.5 text-right font-mono ${row.active ? "font-bold text-[var(--hero-accent)]" : "text-[var(--hero-foreground)]/70"}`}>
+          <div className={`border-r border-border/50 px-3 py-2.5 text-right font-mono ${row.active ? "font-bold text-primary" : "text-foreground/80"}`}>
             {row.revenue}
           </div>
-          <div className={`px-3 py-2.5 text-right font-mono font-medium ${row.negative ? "text-red-400" : row.active ? "font-bold text-[var(--hero-accent)]" : "text-[var(--hero-accent)]/60"}`}>
+          <div className={`px-3 py-2.5 text-right font-mono font-medium ${row.negative ? "text-destructive" : row.active ? "font-bold text-primary" : "text-chart-2"}`}>
             {row.growth}
           </div>
         </div>
       ))}
 
       {/* Status bar */}
-      <div className="flex items-center justify-between border-t border-[var(--hero-border)] bg-[var(--hero-bg)] px-4 py-2 text-[10px] text-[var(--hero-muted)]">
+      <div className="flex items-center justify-between border-t border-border bg-muted/30 px-4 py-2 text-[10px] text-muted-foreground">
         <span>Sheet1 · 5 rows · Formula verified</span>
-        <span className="font-semibold text-[var(--hero-accent)]">Excel 365</span>
+        <span className="font-semibold text-primary">Excel 365</span>
       </div>
     </div>
   )
@@ -115,11 +113,11 @@ export function HomeHero({ categories }: { categories: Category[] }) {
       : FALLBACK_PILLS
 
   return (
-    <section className="relative w-full overflow-hidden bg-[var(--hero-bg)]">
+    <section className="relative w-full overflow-hidden border-b border-border bg-muted/30">
       {/* Subtle dot grid */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.08] [background-image:radial-gradient(var(--hero-border)_1px,transparent_1px)] [background-size:28px_28px]"
+        className="pointer-events-none absolute inset-0 opacity-[0.04] [background-image:radial-gradient(var(--color-border)_1px,transparent_1px)] [background-size:28px_28px]"
       />
 
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 py-16 sm:py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-24">
@@ -128,42 +126,33 @@ export function HomeHero({ categories }: { categories: Category[] }) {
         <div className="space-y-8">
 
           {/* Trust line */}
-          <p className="text-sm font-medium text-[var(--hero-muted)]">
+          <p className="text-sm font-medium text-muted-foreground">
             Trusted by{" "}
-            <span className="font-bold text-[var(--hero-foreground)]">40,000+</span>{" "}
+            <span className="font-bold text-foreground">40,000+</span>{" "}
             spreadsheet learners every month
           </p>
 
           {/* H1 */}
-          <h1 className="text-[2.6rem] font-bold leading-[1.1] tracking-tight text-[var(--hero-foreground)] sm:text-5xl lg:text-[3rem]">
+          <h1 className="text-[2.6rem] font-bold leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-[3rem]">
             Excel &amp; Google Sheets
             <br />
-            <span className="text-[var(--hero-accent)]">done right.</span>
+            <span className="text-primary">done right.</span>
           </h1>
 
           {/* Subtitle */}
-          <p className="max-w-md text-base leading-relaxed text-[var(--hero-muted)] sm:text-lg">
+          <p className="max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg">
             1,600+ practical formula guides, VBA automation tutorials, Pivot Table deep-dives, and free business templates — all written for real spreadsheet work.
           </p>
 
           {/* CTAs */}
           <div className="flex flex-wrap items-center gap-3 pt-1">
-            <Button
-              asChild
-              size="lg"
-              className="h-11 rounded-lg bg-[var(--hero-accent)] px-6 text-sm font-semibold text-[var(--hero-bg)] hover:bg-[var(--hero-accent)]/90 shadow-none"
-            >
+            <Button asChild size="lg" className="h-11 rounded-lg px-6 text-sm font-semibold shadow-none">
               <Link href="/blog" className="flex items-center gap-2">
                 Browse Tutorials
                 <IconArrowRight className="h-4 w-4" />
               </Link>
             </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="h-11 rounded-lg border-[var(--hero-border)] bg-transparent px-5 text-sm font-medium text-[var(--hero-muted)] hover:border-[var(--hero-accent)]/40 hover:bg-[var(--hero-accent-muted)] hover:text-[var(--hero-foreground)] shadow-none"
-            >
+            <Button asChild variant="outline" size="lg" className="h-11 rounded-lg px-5 text-sm font-medium shadow-none">
               <Link href="/pricing" className="flex items-center gap-2">
                 <IconFileSpreadsheet className="h-4 w-4" />
                 Free Templates
@@ -172,8 +161,8 @@ export function HomeHero({ categories }: { categories: Category[] }) {
           </div>
 
           {/* Topic chips */}
-          <div className="border-t border-[var(--hero-border)] pt-6 space-y-3">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-[var(--hero-muted)]">
+          <div className="border-t border-border pt-6 space-y-3">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/60">
               Topics
             </p>
             <div className="flex flex-wrap gap-2">
@@ -183,7 +172,7 @@ export function HomeHero({ categories }: { categories: Category[] }) {
                   <Link
                     key={pill.label}
                     href={pill.href}
-                    className="flex items-center gap-1.5 rounded-md border border-[var(--hero-border)] bg-[var(--hero-surface)] px-3 py-1.5 text-[11px] font-medium text-[var(--hero-muted)] transition-colors hover:border-[var(--hero-accent)]/40 hover:bg-[var(--hero-accent-muted)] hover:text-[var(--hero-accent)]"
+                    className="flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
                   >
                     <Icon className="h-3.5 w-3.5 shrink-0" />
                     {pill.label}
