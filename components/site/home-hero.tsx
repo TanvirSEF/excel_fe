@@ -164,7 +164,7 @@ export function HomeHero({ categories }: { categories: Category[] }) {
               asChild
               variant="outline"
               size="lg"
-              className="h-11 rounded-lg border-primary-foreground/30 bg-transparent px-5 text-sm font-medium text-primary-foreground hover:bg-primary-foreground/10 hover:border-primary-foreground/50 shadow-none"
+              className="h-11 rounded-lg border-primary-foreground/35 bg-primary-foreground/5 px-5 text-sm font-medium text-primary-foreground shadow-none hover:border-primary-foreground/60 hover:bg-primary-foreground/15 hover:text-primary-foreground"
             >
               <Link href="/pricing" className="flex items-center gap-2">
                 <IconFileSpreadsheet className="h-4 w-4" />
