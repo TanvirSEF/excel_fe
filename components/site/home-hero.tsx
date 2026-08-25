@@ -218,8 +218,8 @@ export function HomeHero({ categories }: { categories: Category[] }) {
           </div>
         </div>
 
-        {/* ── Right: Excel Window ── */}
-        <div className="relative">
+        {/* ── Right: Excel Mockup — hidden on mobile ── */}
+        <div className="hidden lg:block">
           <ExcelWindowMockup />
         </div>
       </div>
