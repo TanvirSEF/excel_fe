@@ -8,6 +8,7 @@ import { ServicesSection } from "@/components/site/services-section"
 import { CalculatorsShowcase } from "@/components/site/calculators-showcase"
 import { TopicsExplorer } from "@/components/site/topics-explorer"
 import { FaqSection } from "@/components/site/faq-section"
+import { YoutubePlaylists } from "@/components/site/youtube-playlists"
 import { NewsletterBand } from "@/components/site/newsletter/newsletter-band"
 import { getCategories } from "@/lib/api/categories"
 import { getPosts } from "@/lib/api/posts"
@@ -96,7 +97,12 @@ export default async function HomePage() {
           <FaqSection />
         </div>
 
-        {/* 10. Newsletter Lead Magnet & Subscription */}
+        {/* 10. YouTube Playlists & Video Masterclasses */}
+        <div className="border-t border-border/60">
+          <YoutubePlaylists />
+        </div>
+
+        {/* 11. Newsletter Lead Magnet & Subscription */}
         <div className="pb-16 pt-4">
           <NewsletterBand />
         </div>
