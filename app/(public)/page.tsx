@@ -4,6 +4,7 @@ import { HomeHero } from "@/components/site/home-hero"
 import { HeroStatsBand } from "@/components/site/hero-stats-band"
 import { NewsletterBand } from "@/components/site/newsletter/newsletter-band"
 import { PostSection } from "@/components/site/post-section"
+import { ServicesSection } from "@/components/site/services-section"
 import { getCategories } from "@/lib/api/categories"
 import { getPosts } from "@/lib/api/posts"
 
@@ -47,6 +48,11 @@ export default async function HomePage() {
           hideIfEmpty
           className="py-12 sm:py-16"
         />
+
+        <div className="border-t border-border/60">
+          <ServicesSection />
+        </div>
+
         <PostSection
           title="Latest Articles"
           subtitle="Fresh spreadsheet tips, VBA automations, and downloadable templates."
@@ -55,6 +61,7 @@ export default async function HomePage() {
           emptyDescription="The first ones are on their way."
           className="border-t border-border/60 py-12 sm:py-16"
         />
+
         <div className="pb-16">
           <NewsletterBand />
         </div>
