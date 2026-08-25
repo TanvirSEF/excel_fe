@@ -173,6 +173,22 @@ export function usePublishedPosts(page: number) {
   })
 }
 
+export function usePostsByCategory(
+  categorySlug: string | undefined,
+  pageSize = 6,
+  initialData?: Page<PostListItem>
+) {
+  return useQuery({
+    queryKey: ["posts", "by-category", categorySlug, pageSize],
+    enabled: Boolean(categorySlug),
+    initialData,
+    queryFn: () =>
+      apiFetch<Page<PostListItem>>("/posts", {
+        searchParams: { category: categorySlug, page_size: pageSize },
+      }),
+  })
+}
+
 export function usePostAssets(postId: string | undefined) {
   return useQuery({
     queryKey: ["post-assets", postId],
