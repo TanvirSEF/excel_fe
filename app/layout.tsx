@@ -11,11 +11,15 @@ import { cn } from "@/lib/utils"
 const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
+  preload: true,
 })
 
 const fontMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
+  display: "swap",
+  preload: true,
 })
 
 export const metadata: Metadata = {
