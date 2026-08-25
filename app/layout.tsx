@@ -13,7 +13,6 @@ const dmSans = DM_Sans({
   variable: "--font-sans",
   display: "swap",
   preload: true,
-  fallback: ["system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
 })
 
 const fontMono = Geist_Mono({
@@ -21,7 +20,6 @@ const fontMono = Geist_Mono({
   variable: "--font-mono",
   display: "swap",
   preload: true,
-  fallback: ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"],
 })
 
 export const metadata: Metadata = {

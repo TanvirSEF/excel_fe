@@ -38,17 +38,7 @@ function SessionHydration() {
   const hydrate = useAuthStore((state) => state.hydrate)
 
   React.useEffect(() => {
-    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
-      const handle = window.requestIdleCallback(() => {
-        hydrate()
-      })
-      return () => window.cancelIdleCallback(handle)
-    } else {
-      const timer = setTimeout(() => {
-        hydrate()
-      }, 50)
-      return () => clearTimeout(timer)
-    }
+    hydrate()
   }, [hydrate])
 
   return null
