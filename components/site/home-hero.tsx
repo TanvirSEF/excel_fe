@@ -30,10 +30,10 @@ const SPREADSHEET_ROWS = [
 
 function ExcelWindowMockup() {
   return (
-    <div className="w-full overflow-hidden rounded-xl border border-border bg-card text-xs shadow-sm">
+    <div className="w-full overflow-hidden rounded-xl border border-primary-foreground/20 bg-primary-foreground text-xs shadow-xl">
       {/* Window chrome */}
       <div className="flex items-center gap-2 border-b border-border bg-muted/60 px-4 py-3">
-        <span className="h-2.5 w-2.5 rounded-full bg-destructive/60" />
+        <span className="h-2.5 w-2.5 rounded-full bg-destructive/70" />
         <span className="h-2.5 w-2.5 rounded-full bg-chart-1/80" />
         <span className="h-2.5 w-2.5 rounded-full bg-primary/80" />
         <span className="ml-3 truncate font-mono text-[10px] text-muted-foreground">
@@ -70,7 +70,7 @@ function ExcelWindowMockup() {
         <div
           key={row.id}
           className={`grid grid-cols-[32px_1fr_96px_72px] border-b border-border/50 text-[11px] last:border-0 transition-colors ${
-            row.active ? "bg-primary/8 font-medium" : "bg-transparent hover:bg-muted/30"
+            row.active ? "bg-primary/8 font-medium" : "bg-background hover:bg-muted/30"
           }`}
         >
           <div className={`border-r border-border/50 py-2.5 text-center font-mono text-[10px] ${row.active ? "font-bold text-primary" : "text-muted-foreground/40"}`}>
@@ -113,46 +113,53 @@ export function HomeHero({ categories }: { categories: Category[] }) {
       : FALLBACK_PILLS
 
   return (
-    <section className="relative w-full overflow-hidden border-b border-border bg-muted/30">
-      {/* Subtle dot grid */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.04] [background-image:radial-gradient(var(--color-border)_1px,transparent_1px)] [background-size:28px_28px]"
-      />
+    <section className="relative w-full overflow-hidden bg-primary">
+      {/* Soft glow — top right */}
+      <div aria-hidden className="pointer-events-none absolute -right-32 -top-32 h-[500px] w-[500px] rounded-full bg-primary-foreground/10 blur-3xl" />
+      {/* Soft glow — bottom left */}
+      <div aria-hidden className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-primary-foreground/8 blur-3xl" />
 
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 py-16 sm:py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-24">
 
         {/* ── Left: Content ── */}
         <div className="space-y-8">
 
-          {/* Trust line */}
-          <p className="text-sm font-medium text-muted-foreground">
-            Trusted by{" "}
-            <span className="font-bold text-foreground">40,000+</span>{" "}
-            spreadsheet learners every month
-          </p>
+          {/* Trust badge */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-3.5 py-1.5 text-xs font-medium text-primary-foreground/90">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary-foreground/70" />
+            Trusted by 40,000+ spreadsheet learners
+          </div>
 
           {/* H1 */}
-          <h1 className="text-[2.6rem] font-bold leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-[3rem]">
+          <h1 className="text-[2.6rem] font-bold leading-[1.1] tracking-tight text-primary-foreground sm:text-5xl lg:text-[3rem]">
             Excel &amp; Google Sheets
             <br />
-            <span className="text-primary">done right.</span>
+            <span className="opacity-90">done right.</span>
           </h1>
 
           {/* Subtitle */}
-          <p className="max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg">
+          <p className="max-w-md text-base leading-relaxed text-primary-foreground/75 sm:text-lg">
             1,600+ practical formula guides, VBA automation tutorials, Pivot Table deep-dives, and free business templates — all written for real spreadsheet work.
           </p>
 
           {/* CTAs */}
           <div className="flex flex-wrap items-center gap-3 pt-1">
-            <Button asChild size="lg" className="h-11 rounded-lg px-6 text-sm font-semibold shadow-none">
+            <Button
+              asChild
+              size="lg"
+              className="h-11 rounded-lg bg-primary-foreground px-6 text-sm font-semibold text-primary hover:bg-primary-foreground/90 shadow-none"
+            >
               <Link href="/blog" className="flex items-center gap-2">
                 Browse Tutorials
                 <IconArrowRight className="h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="h-11 rounded-lg px-5 text-sm font-medium shadow-none">
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="h-11 rounded-lg border-primary-foreground/30 bg-transparent px-5 text-sm font-medium text-primary-foreground hover:bg-primary-foreground/10 hover:border-primary-foreground/50 shadow-none"
+            >
               <Link href="/pricing" className="flex items-center gap-2">
                 <IconFileSpreadsheet className="h-4 w-4" />
                 Free Templates
@@ -161,8 +168,8 @@ export function HomeHero({ categories }: { categories: Category[] }) {
           </div>
 
           {/* Topic chips */}
-          <div className="border-t border-border pt-6 space-y-3">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/60">
+          <div className="border-t border-primary-foreground/15 pt-6 space-y-3">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-primary-foreground/50">
               Topics
             </p>
             <div className="flex flex-wrap gap-2">
@@ -172,7 +179,7 @@ export function HomeHero({ categories }: { categories: Category[] }) {
                   <Link
                     key={pill.label}
                     href={pill.href}
-                    className="flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
+                    className="flex items-center gap-1.5 rounded-md border border-primary-foreground/20 bg-primary-foreground/8 px-3 py-1.5 text-[11px] font-medium text-primary-foreground/75 transition-colors hover:border-primary-foreground/40 hover:bg-primary-foreground/15 hover:text-primary-foreground"
                   >
                     <Icon className="h-3.5 w-3.5 shrink-0" />
                     {pill.label}

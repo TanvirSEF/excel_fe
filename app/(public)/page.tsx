@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 
 import { HomeHero } from "@/components/site/home-hero"
+import { HeroStatsBand } from "@/components/site/hero-stats-band"
 import { NewsletterBand } from "@/components/site/newsletter/newsletter-band"
 import { PostSection } from "@/components/site/post-section"
 import { getCategories } from "@/lib/api/categories"
@@ -35,6 +36,7 @@ export default async function HomePage() {
   return (
     <>
       <HomeHero categories={featuredCategories} />
+      <HeroStatsBand />
       <div className="mx-auto w-full max-w-6xl px-4">
         <PostSection
           title="Trending now"
