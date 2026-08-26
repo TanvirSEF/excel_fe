@@ -1,208 +1,44 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import {
-  IconSearch,
-  IconArrowRight,
-  IconMathFunction,
-  IconTable,
-  IconCode,
-  IconChartBar,
-  IconCalculator,
-  IconX,
-  IconCornerDownLeft,
-} from "@tabler/icons-react"
+import dynamic from "next/dynamic"
+import { IconSearch } from "@tabler/icons-react"
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-
-const QUICK_CATEGORIES = [
-  { label: "Excel Formulas", href: "/blog", icon: IconMathFunction, color: "text-emerald-500 bg-emerald-500/10" },
-  { label: "Google Sheets", href: "/blog", icon: IconTable, color: "text-green-500 bg-green-500/10" },
-  { label: "VBA & Macros", href: "/blog", icon: IconCode, color: "text-amber-500 bg-amber-500/10" },
-  { label: "Charts & Visuals", href: "/blog", icon: IconChartBar, color: "text-purple-500 bg-purple-500/10" },
-  { label: "Calculators", href: "/calculators", icon: IconCalculator, color: "text-indigo-500 bg-indigo-500/10" },
-]
-
-const POPULAR_SEARCHES = [
-  "VLOOKUP Formula",
-  "XLOOKUP vs VLOOKUP",
-  "INDEX MATCH Tutorial",
-  "Conditional Formatting",
-  "Google Sheets QUERY",
-  "Excel Pivot Tables",
-  "SUMIFS Multiple Criteria",
-  "VBA Macro Loop",
-]
+const SearchDialogContent = dynamic(
+  () => import("./search-dialog-content").then((m) => m.SearchDialogContent),
+  { ssr: false }
+)
 
 export function SearchDialog() {
   const [open, setOpen] = useState(false)
-  const [query, setQuery] = useState("")
-  const router = useRouter()
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
-      if ((event.metaKey || event.ctrlKey) && event.key === "k") {
+      if (event.key === "k" && (event.metaKey || event.ctrlKey)) {
         event.preventDefault()
         setOpen((prev) => !prev)
       }
     }
-    window.addEventListener("keydown", onKeyDown)
-    return () => window.removeEventListener("keydown", onKeyDown)
+    document.addEventListener("keydown", onKeyDown)
+    return () => document.removeEventListener("keydown", onKeyDown)
   }, [])
-
-  function handleSubmit(event: React.FormEvent) {
-    event.preventDefault()
-    if (!query.trim()) return
-    setOpen(false)
-    router.push(`/search?q=${encodeURIComponent(query.trim())}`)
-    setQuery("")
-  }
-
-  function handleNavigate(href: string) {
-    setOpen(false)
-    router.push(href)
-  }
-
-  function handleSelectTopic(topic: string) {
-    setOpen(false)
-    router.push(`/search?q=${encodeURIComponent(topic)}`)
-  }
 
   return (
     <>
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="group relative flex h-9.5 items-center justify-between gap-3 rounded-full border border-border/70 bg-muted/30 px-3.5 text-xs text-muted-foreground transition-all duration-200 hover:border-emerald-500/40 hover:bg-muted/70 hover:text-foreground w-40 sm:w-52 lg:w-60 shadow-2xs"
-        aria-label="Search articles"
+        className="group flex h-9 items-center gap-2 rounded-full border border-border/70 bg-muted/30 px-3.5 text-sm text-muted-foreground transition-colors hover:border-border hover:bg-muted/60 hover:text-foreground"
+        aria-label="Open search"
       >
-        <span className="flex items-center gap-2 truncate">
-          <IconSearch className="h-3.5 w-3.5 text-muted-foreground transition-colors group-hover:text-emerald-600 dark:group-hover:text-emerald-400 shrink-0" />
-          <span className="truncate">Search tutorials…</span>
-        </span>
-        <kbd className="pointer-events-none hidden items-center gap-0.5 rounded border border-border/70 bg-background px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground shadow-2xs group-hover:text-foreground sm:inline-flex">
-          <span className="text-[10px]">Ctrl</span> K
+        <IconSearch className="h-4 w-4" />
+        <span className="hidden sm:inline">Search</span>
+        <kbd className="hidden sm:inline-flex items-center rounded border border-border/80 bg-background px-1.5 py-0.5 font-mono text-[10px] font-medium text-muted-foreground">
+          Ctrl K
         </kbd>
       </button>
 
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent
-          hideCloseButton
-          className="overflow-hidden p-0 sm:max-w-2xl rounded-2xl border-border/70 bg-background/95 backdrop-blur-xl shadow-2xl"
-        >
-          <DialogHeader className="sr-only">
-            <DialogTitle>Search Excel Insider</DialogTitle>
-          </DialogHeader>
-
-          {/* Search Input Bar */}
-          <form onSubmit={handleSubmit} className="relative flex items-center border-b border-border/60 px-4">
-            <IconSearch className="h-5 w-5 text-muted-foreground shrink-0" />
-            <input
-              type="search"
-              placeholder="Search 1,600+ Excel formulas, tips, tutorials & templates…"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="h-14 w-full bg-transparent px-3.5 text-sm font-medium placeholder:text-muted-foreground/60 focus:outline-none"
-              autoFocus
-            />
-            <div className="flex items-center gap-2 shrink-0">
-              {query && (
-                <button
-                  type="button"
-                  onClick={() => setQuery("")}
-                  className="rounded-md p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
-                  aria-label="Clear query"
-                >
-                  <IconX className="h-4 w-4" />
-                </button>
-              )}
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="rounded-md border border-border/80 bg-muted/40 px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
-              >
-                ESC
-              </button>
-            </div>
-          </form>
-
-          {/* Content Area */}
-          <div className="max-h-[60vh] overflow-y-auto p-5 space-y-6">
-            {/* Quick Category Navigation */}
-            <div className="space-y-2.5">
-              <p className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
-                Browse Categories
-              </p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {QUICK_CATEGORIES.map((cat) => {
-                  const Icon = cat.icon
-                  return (
-                    <button
-                      key={cat.label}
-                      type="button"
-                      onClick={() => handleNavigate(cat.href)}
-                      className="group flex items-center gap-2.5 rounded-xl border border-border/50 bg-muted/20 p-2.5 text-left text-xs font-medium text-foreground transition-all duration-150 hover:border-border hover:bg-muted/60"
-                    >
-                      <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${cat.color}`}>
-                        <Icon className="h-4 w-4" />
-                      </div>
-                      <span className="truncate">{cat.label}</span>
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-
-            {/* Popular Searches */}
-            <div className="space-y-2.5">
-              <p className="text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
-                Popular Searches
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                {POPULAR_SEARCHES.map((topic) => (
-                  <button
-                    key={topic}
-                    type="button"
-                    onClick={() => handleSelectTopic(topic)}
-                    className="group flex items-center justify-between rounded-lg px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted/70 hover:text-foreground"
-                  >
-                    <div className="flex items-center gap-2 truncate">
-                      <IconSearch className="h-3.5 w-3.5 text-muted-foreground/60 group-hover:text-emerald-600 dark:group-hover:text-emerald-400" />
-                      <span className="truncate">{topic}</span>
-                    </div>
-                    <IconArrowRight className="h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-100 text-muted-foreground" />
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Footer Bar */}
-          <div className="flex items-center justify-between border-t border-border/50 bg-muted/20 px-5 py-2.5 text-[11px] text-muted-foreground">
-            <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1">
-                <kbd className="rounded border border-border/80 bg-background px-1 py-0.5 font-mono text-[10px]">
-                  <IconCornerDownLeft className="inline h-2.5 w-2.5" />
-                </kbd>
-                <span>to search</span>
-              </span>
-              <span className="flex items-center gap-1">
-                <kbd className="rounded border border-border/80 bg-background px-1 py-0.5 font-mono text-[10px]">
-                  ESC
-                </kbd>
-                <span>to close</span>
-              </span>
-            </div>
-            <span className="font-medium text-emerald-600 dark:text-emerald-400">Excel Insider Search</span>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {open && <SearchDialogContent open={open} onOpenChange={setOpen} />}
     </>
   )
 }
