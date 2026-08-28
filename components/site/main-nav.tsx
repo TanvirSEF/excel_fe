@@ -60,25 +60,37 @@ export function MainNav() {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-72 p-2 rounded-xl shadow-xl border-border/70 backdrop-blur-md bg-background/95">
           <DropdownMenuItem asChild>
-            <Link href="/pricing" className="flex items-start gap-3 p-2.5 rounded-lg cursor-pointer">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-                <IconFileSpreadsheet className="h-4 w-4" />
+            <Link href="/contact?service=troubleshooting" className="flex items-start gap-3 p-2.5 rounded-lg cursor-pointer">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                <IconUserCheck className="h-4 w-4" />
               </div>
               <div className="space-y-0.5">
-                <p className="text-xs font-semibold text-foreground">Excel Templates Pack</p>
-                <p className="text-[11px] text-muted-foreground">Ready-to-use business & financial models</p>
+                <p className="text-xs font-semibold text-foreground">Services & Solutions</p>
+                <p className="text-[11px] text-muted-foreground">Expert consulting, troubleshooting & optimization</p>
               </div>
             </Link>
           </DropdownMenuItem>
 
           <DropdownMenuItem asChild>
-            <Link href="/pricing" className="flex items-start gap-3 p-2.5 rounded-lg cursor-pointer">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
-                <IconUserCheck className="h-4 w-4" />
+            <Link href="/contact?service=custom-template" className="flex items-start gap-3 p-2.5 rounded-lg cursor-pointer">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                <IconFileSpreadsheet className="h-4 w-4" />
               </div>
               <div className="space-y-0.5">
-                <p className="text-xs font-semibold text-foreground">Pro Consultation</p>
-                <p className="text-[11px] text-muted-foreground">1-on-1 spreadsheet audit & custom macros</p>
+                <p className="text-xs font-semibold text-foreground">Custom Templates</p>
+                <p className="text-[11px] text-muted-foreground">Bespoke dashboards & financial models</p>
+              </div>
+            </Link>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem asChild>
+            <Link href="/contact?service=automation" className="flex items-start gap-3 p-2.5 rounded-lg cursor-pointer">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                <IconCode className="h-4 w-4" />
+              </div>
+              <div className="space-y-0.5">
+                <p className="text-xs font-semibold text-foreground">Custom Spreadsheet Tools</p>
+                <p className="text-[11px] text-muted-foreground">VBA macros, Apps Script & automations</p>
               </div>
             </Link>
           </DropdownMenuItem>

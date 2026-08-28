@@ -157,20 +157,28 @@ export function MobileNav() {
               {pricingExpanded && (
                 <div className="space-y-1 px-2 pb-2.5 pt-1 text-xs border-t border-border/40">
                   <Link
-                    href="/pricing"
-                    onClick={handleLinkClick}
-                    className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
-                  >
-                    <IconFileSpreadsheet className="h-3.5 w-3.5 text-emerald-500" />
-                    <span>Excel Templates Pack</span>
-                  </Link>
-                  <Link
-                    href="/pricing"
+                    href="/contact?service=troubleshooting"
                     onClick={handleLinkClick}
                     className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
                   >
                     <IconUserCheck className="h-3.5 w-3.5 text-blue-500" />
-                    <span>Pro Consultation</span>
+                    <span>Services & Solutions</span>
+                  </Link>
+                  <Link
+                    href="/contact?service=custom-template"
+                    onClick={handleLinkClick}
+                    className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
+                  >
+                    <IconFileSpreadsheet className="h-3.5 w-3.5 text-emerald-500" />
+                    <span>Custom Templates</span>
+                  </Link>
+                  <Link
+                    href="/contact?service=automation"
+                    onClick={handleLinkClick}
+                    className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
+                  >
+                    <IconCode className="h-3.5 w-3.5 text-amber-500" />
+                    <span>Custom Spreadsheet Tools</span>
                   </Link>
                 </div>
               )}
