@@ -3,7 +3,7 @@ import { EditorView } from "@/components/editor/editor-view"
 
 export default function NewPostPage() {
   return (
-    <PageGuard permission="posts:view" title="New post">
+    <PageGuard permission="posts:manage" title="New post">
       <EditorView />
     </PageGuard>
   )

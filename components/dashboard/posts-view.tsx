@@ -1,12 +1,15 @@
 "use client"
 
+import Link from "next/link"
 import { useState } from "react"
+import { IconPlus } from "@tabler/icons-react"
 import { toast } from "sonner"
 
 import { ConfirmDialog } from "@/components/shared/confirm-dialog"
 import { EmptyState } from "@/components/shared/empty-state"
 import { ErrorState } from "@/components/shared/error-state"
 import { PostsTable } from "@/components/dashboard/posts-table"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { can, useAuthStore } from "@/lib/auth"
@@ -35,6 +38,7 @@ export function PostsView() {
 
   const user = useAuthStore((state) => state.user)
   const canDelete = can(user, "posts:delete")
+  const canCreate = can(user, "posts:manage")
 
   const { data, isPending, isError, error, refetch } = useAdminPosts({
     status,
@@ -86,13 +90,23 @@ export function PostsView() {
             </button>
           ))}
         </div>
-        <Input
-          type="search"
-          placeholder="Filter by title…"
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          className="h-9 w-full sm:w-64"
-        />
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
+          <Input
+            type="search"
+            placeholder="Filter by title…"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            className="h-9 sm:w-64"
+          />
+          {canCreate ? (
+            <Button asChild size="sm" className="h-9">
+              <Link href="/dashboard/posts/new">
+                <IconPlus className="h-4 w-4" />
+                New post
+              </Link>
+            </Button>
+          ) : null}
+        </div>
       </div>
 
       {isPending ? (
@@ -126,6 +140,16 @@ export function PostsView() {
             search
               ? "Try a different search term."
               : "Posts will appear here once they're created."
+          }
+          action={
+            !search && canCreate ? (
+              <Button asChild size="sm">
+                <Link href="/dashboard/posts/new">
+                  <IconPlus className="h-4 w-4" />
+                  Create a post
+                </Link>
+              </Button>
+            ) : undefined
           }
         />
       ) : (
