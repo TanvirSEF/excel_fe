@@ -1,8 +1,9 @@
 import Image from "next/image"
+import { Fragment, type ReactNode } from "react"
 
 import { clampHeadingLevel, headingId } from "@/lib/blocks"
 import { cn } from "@/lib/utils"
-import type { Block } from "@/types/api"
+import type { Block, InlineMark, RichText, TextAlign } from "@/types/api"
 
 import { CodeBlock } from "./code-block"
 
@@ -17,12 +18,83 @@ const HEADING_CLASSES: Record<2 | 3 | 4, string> = {
   4: "mt-1 text-lg font-semibold tracking-tight",
 }
 
+const SAFE_HREF = /^(https?:\/\/|mailto:|\/|#)/i
+
+function withMarks(content: ReactNode, marks?: InlineMark[]): ReactNode {
+  let node = content
+  for (const mark of marks ?? []) {
+    switch (mark.type) {
+      case "bold":
+        node = <strong>{node}</strong>
+        break
+      case "italic":
+        node = <em>{node}</em>
+        break
+      case "strike":
+        node = <del>{node}</del>
+        break
+      case "code":
+        node = (
+          <code className="rounded-md bg-muted px-1.5 py-0.5 font-mono text-[0.85em]">
+            {node}
+          </code>
+        )
+        break
+      case "link": {
+        const href = mark.href ?? ""
+        if (!SAFE_HREF.test(href)) break
+        const isInternal = href.startsWith("/") || href.startsWith("#")
+        node = (
+          <a
+            href={href}
+            className="font-medium text-primary underline underline-offset-2 hover:text-primary/80"
+            {...(isInternal ? {} : { target: "_blank", rel: "noopener noreferrer" })}
+          >
+            {node}
+          </a>
+        )
+        break
+      }
+    }
+  }
+  return node
+}
+
+function InlineRuns({ value }: { value: RichText }) {
+  if (typeof value === "string") return <>{value}</>
+
+  return (
+    <>
+      {value.map((inline, index) => {
+        const parts = inline.text.split("\n").map((part, partIndex) => (
+          <Fragment key={partIndex}>
+            {partIndex > 0 ? <br /> : null}
+            {part}
+          </Fragment>
+        ))
+        return <Fragment key={index}>{withMarks(parts, inline.marks)}</Fragment>
+      })}
+    </>
+  )
+}
+
+function alignClass(align: TextAlign | undefined) {
+  if (align === "center") return "text-center"
+  if (align === "right") return "text-right"
+  return null
+}
+
 function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
   switch (block.type) {
     case "paragraph":
       return (
-        <p className="text-[0.975rem] leading-7 text-foreground/90 sm:text-base">
-          {block.text}
+        <p
+          className={cn(
+            "text-[0.975rem] leading-7 text-foreground/90 sm:text-base",
+            alignClass(block.align)
+          )}
+        >
+          <InlineRuns value={block.content ?? block.text} />
         </p>
       )
 
@@ -31,8 +103,11 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
       const id = headingId(block.text, usedIds)
       const Tag = `h${level}` as "h2" | "h3" | "h4"
       return (
-        <Tag id={id} className={cn("scroll-mt-20", HEADING_CLASSES[level])}>
-          {block.text}
+        <Tag
+          id={id}
+          className={cn("scroll-mt-20", HEADING_CLASSES[level], alignClass(block.align))}
+        >
+          <InlineRuns value={block.content ?? block.text} />
         </Tag>
       )
     }
@@ -40,7 +115,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
     case "quote":
       return (
         <blockquote className="border-l-2 border-primary pl-4 text-[1.05rem] italic leading-7 text-muted-foreground">
-          {block.text}
+          <InlineRuns value={block.content ?? block.text} />
         </blockquote>
       )
 
@@ -57,7 +132,9 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
           )}
         >
           {block.items.map((item, index) => (
-            <li key={index}>{item}</li>
+            <li key={index}>
+              <InlineRuns value={item} />
+            </li>
           ))}
         </ListTag>
       )
@@ -103,7 +180,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
                       key={index}
                       className="border-b px-3 py-2 text-left font-semibold"
                     >
-                      {cell}
+                      <InlineRuns value={cell} />
                     </th>
                   ))}
                 </tr>
@@ -114,7 +191,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
                 <tr key={rowIndex} className="odd:bg-muted/20 hover:bg-muted/40">
                   {row.map((cell, cellIndex) => (
                     <td key={cellIndex} className="px-3 py-2 align-top">
-                      {cell}
+                      <InlineRuns value={cell} />
                     </td>
                   ))}
                 </tr>
@@ -124,6 +201,9 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
         </div>
       )
     }
+
+    case "hr":
+      return <hr className="border-border" />
 
     default:
       return null

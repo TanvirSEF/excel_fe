@@ -1,6 +1,16 @@
 import type { JSONContent } from "@tiptap/react"
 
-import type { Block } from "@/types/api"
+import type {
+  Block,
+  InlineMark,
+  InlineText,
+  MarkType,
+  RichText,
+  TextAlign,
+} from "@/types/api"
+
+const MARK_TYPES = new Set(["bold", "italic", "strike", "code", "link"])
+const ALIGNMENTS = new Set(["left", "center", "right"])
 
 function textOf(node: JSONContent | undefined): string {
   if (!node) return ""
@@ -9,17 +19,81 @@ function textOf(node: JSONContent | undefined): string {
   return ""
 }
 
-function textNode(text: string): JSONContent | undefined {
-  return text ? { type: "text", text } : undefined
+function markOf(mark: NonNullable<JSONContent["marks"]>[number]): InlineMark | null {
+  if (!MARK_TYPES.has(mark.type)) return null
+  if (mark.type === "link") {
+    const href = typeof mark.attrs?.href === "string" ? mark.attrs.href : ""
+    return href ? { type: "link", href } : null
+  }
+  return { type: mark.type as MarkType }
 }
 
-function withText(node: Omit<JSONContent, "content">, text: string): JSONContent {
-  const content = textNode(text)
-  return content ? { ...node, content: [content] } : { ...node }
+function inlineOf(nodes: JSONContent[] | undefined): InlineText[] {
+  const inlines: InlineText[] = []
+  for (const node of nodes ?? []) {
+    if (node.type === "hardBreak") {
+      inlines.push({ text: "\n" })
+    } else if (node.type === "text") {
+      const marks = (node.marks ?? [])
+        .map(markOf)
+        .filter((mark): mark is InlineMark => mark !== null)
+      inlines.push(marks.length ? { text: node.text ?? "", marks } : { text: node.text ?? "" })
+    } else if (node.content) {
+      inlines.push(...inlineOf(node.content))
+    }
+  }
+  return inlines
 }
 
-function paragraph(text: string): JSONContent {
-  return withText({ type: "paragraph" }, text)
+function richOf(nodes: JSONContent[] | undefined): RichText {
+  const inlines = inlineOf(nodes)
+  const isPlain = inlines.every(
+    (inline) => !inline.marks && !inline.text.includes("\n")
+  )
+  return isPlain ? inlines.map((inline) => inline.text).join("") : inlines
+}
+
+function plainOf(rich: RichText): string {
+  return typeof rich === "string" ? rich : rich.map((inline) => inline.text).join("")
+}
+
+function docMarks(inline: InlineText): JSONContent["marks"] {
+  if (!inline.marks?.length) return undefined
+  return inline.marks.map((mark) =>
+    mark.type === "link"
+      ? { type: "link", attrs: { href: mark.href ?? "" } }
+      : { type: mark.type }
+  )
+}
+
+function inlineNodes(rich: RichText): JSONContent[] {
+  if (typeof rich === "string") {
+    return rich ? [{ type: "text", text: rich }] : []
+  }
+  const nodes: JSONContent[] = []
+  for (const inline of rich) {
+    const marks = docMarks(inline)
+    const parts = inline.text.split("\n")
+    parts.forEach((part, index) => {
+      if (index > 0) nodes.push({ type: "hardBreak" })
+      if (part) nodes.push({ type: "text", text: part, ...(marks ? { marks } : {}) })
+    })
+  }
+  return nodes
+}
+
+function blockOf(
+  rich: RichText
+): { text: string; content?: InlineText[] } {
+  return typeof rich === "string"
+    ? { text: rich }
+    : { text: plainOf(rich), content: rich }
+}
+
+function alignOf(value: unknown): TextAlign | undefined {
+  return typeof value === "string" && ALIGNMENTS.has(value)
+    ? (value as TextAlign)
+    : undefined
 }
 
 function clampLevel(level: number): number {
@@ -28,28 +102,44 @@ function clampLevel(level: number): number {
   return level
 }
 
+function paragraph(rich: RichText, align?: TextAlign): JSONContent {
+  const content = inlineNodes(rich)
+  return {
+    type: "paragraph",
+    ...(align ? { attrs: { textAlign: align } } : {}),
+    ...(content.length ? { content } : {}),
+  }
+}
+
 export function blocksToDoc(blocks: Block[]): JSONContent {
   return {
     type: "doc",
     content: blocks.map((block): JSONContent => {
       switch (block.type) {
         case "paragraph":
-          return paragraph(block.text)
-        case "heading":
-          return withText(
-            { type: "heading", attrs: { level: clampLevel(block.level) } },
-            block.text
-          )
+          return paragraph(block.content ?? block.text, block.align)
+        case "heading": {
+          const content = inlineNodes(block.content ?? block.text)
+          return {
+            type: "heading",
+            attrs: {
+              level: clampLevel(block.level),
+              ...(block.align ? { textAlign: block.align } : {}),
+            },
+            ...(content.length ? { content } : {}),
+          }
+        }
         case "quote":
           return {
             type: "blockquote",
-            content: [paragraph(block.text)],
+            content: [paragraph(block.content ?? block.text)],
           }
         case "code":
-          return withText(
-            { type: "codeBlock", attrs: { language: block.language ?? "plaintext" } },
-            block.text
-          )
+          return {
+            type: "codeBlock",
+            attrs: { language: block.language ?? "plaintext" },
+            content: block.text ? [{ type: "text", text: block.text }] : [],
+          }
         case "list":
           return {
             type: block.ordered ? "orderedList" : "bulletList",
@@ -77,6 +167,8 @@ export function blocksToDoc(blocks: Block[]): JSONContent {
               })),
             })),
           }
+        case "hr":
+          return { type: "horizontalRule" }
         default:
           return paragraph("")
       }
@@ -91,19 +183,34 @@ export function docToBlocks(doc: JSONContent | null | undefined): Block[] {
 
   for (const node of doc.content) {
     switch (node.type) {
-      case "paragraph":
-        blocks.push({ type: "paragraph", text: textOf(node) })
-        break
-      case "heading":
+      case "paragraph": {
+        const { text, content } = blockOf(richOf(node.content))
         blocks.push({
-          type: "heading",
-          text: textOf(node),
-          level: clampLevel(Number(node.attrs?.level ?? 2)),
+          type: "paragraph",
+          text,
+          ...(content ? { content } : {}),
+          ...(alignOf(node.attrs?.textAlign)
+            ? { align: alignOf(node.attrs?.textAlign) }
+            : {}),
         })
         break
+      }
+      case "heading": {
+        const { text, content } = blockOf(richOf(node.content))
+        blocks.push({
+          type: "heading",
+          text,
+          level: clampLevel(Number(node.attrs?.level ?? 2)),
+          ...(content ? { content } : {}),
+          ...(alignOf(node.attrs?.textAlign)
+            ? { align: alignOf(node.attrs?.textAlign) }
+            : {}),
+        })
+        break
+      }
       case "blockquote": {
-        const text = textOf(node)
-        if (text) blocks.push({ type: "quote", text })
+        const { text, content } = blockOf(richOf(node.content))
+        if (text) blocks.push({ type: "quote", text, ...(content ? { content } : {}) })
         break
       }
       case "codeBlock":
@@ -116,10 +223,8 @@ export function docToBlocks(doc: JSONContent | null | undefined): Block[] {
       case "bulletList":
       case "orderedList": {
         const items = (node.content ?? [])
-          .map((listItem) =>
-            textOf({ type: "doc", content: listItem.content ?? [] })
-          )
-          .filter((item) => item.length > 0)
+          .map((listItem) => richOf(listItem.content))
+          .filter((item) => (typeof item === "string" ? item.length > 0 : true))
         if (items.length > 0) {
           blocks.push({
             type: "list",
@@ -142,23 +247,20 @@ export function docToBlocks(doc: JSONContent | null | undefined): Block[] {
         }
         break
       case "table": {
-        const rows = (node.content ?? []).map(
-          (row) => row.content ?? []
-        )
+        const rows = (node.content ?? []).map((row) => row.content ?? [])
         const hasHeader =
           rows.length > 0 &&
           (rows[0]?.[0]?.type ?? "tableCell") === "tableHeader"
         blocks.push({
           type: "table",
-          rows: rows.map((row) =>
-            row.map((cell) =>
-              textOf({ type: "doc", content: cell.content ?? [] })
-            )
-          ),
+          rows: rows.map((row) => row.map((cell) => richOf(cell.content))),
           header: hasHeader,
         })
         break
       }
+      case "horizontalRule":
+        blocks.push({ type: "hr" })
+        break
       default:
         break
     }

@@ -122,15 +122,33 @@ export interface SeoUpdateInput {
 export interface ContentDoc {
   blocks: Block[]
 }
+
+export type MarkType = "bold" | "italic" | "strike" | "code" | "link"
+
+export interface InlineMark {
+  type: MarkType
+  href?: string
+}
+
+export interface InlineText {
+  text: string
+  marks?: InlineMark[]
+}
+
+export type RichText = string | InlineText[]
+
+export type TextAlign = "left" | "center" | "right"
+
 export type Block =
-  | { type: "paragraph"; text: string }
-  | { type: "heading"; text: string; level: number }
-  | { type: "quote"; text: string }
+  | { type: "paragraph"; text: string; content?: InlineText[]; align?: TextAlign }
+  | { type: "heading"; text: string; level: number; content?: InlineText[]; align?: TextAlign }
+  | { type: "quote"; text: string; content?: InlineText[] }
   | { type: "code"; text: string; language?: string }
-  | { type: "list"; items: string[]; ordered?: boolean }
+  | { type: "list"; items: RichText[]; ordered?: boolean }
   | { type: "html"; html: string }
   | { type: "image"; url: string; alt?: string }
-  | { type: "table"; rows: string[][]; header?: boolean }
+  | { type: "table"; rows: RichText[][]; header?: boolean }
+  | { type: "hr" }
 
 export interface Category {
   id: string
