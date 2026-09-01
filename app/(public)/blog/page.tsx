@@ -6,7 +6,6 @@ import { PageHeader } from "@/components/site/page-header"
 import { PostGrid } from "@/components/site/post-grid"
 import { getCategories } from "@/lib/api/categories"
 import { getPosts } from "@/lib/api/posts"
-import { getTags } from "@/lib/api/tags"
 import { clamp, firstParam } from "@/lib/utils"
 
 export async function generateMetadata({
@@ -37,10 +36,9 @@ export default async function BlogPage({
   const tag = firstParam(params.tag)
   const page = clamp(Number(firstParam(params.page) ?? 1) || 1, 1, 10_000)
 
-  const [posts, categories, tags] = await Promise.all([
+  const [posts, categories] = await Promise.all([
     getPosts({ page, page_size: 12, category, tag }),
     getCategories(),
-    getTags(),
   ])
 
   return (
@@ -50,12 +48,7 @@ export default async function BlogPage({
         meta={`${posts.total} ${posts.total === 1 ? "article" : "articles"}`}
       />
 
-      <BlogFilters
-        categories={categories}
-        tags={tags}
-        category={category}
-        tag={tag}
-      />
+      <BlogFilters categories={categories} category={category} tag={tag} />
 
       <PostGrid
         posts={posts.items}
