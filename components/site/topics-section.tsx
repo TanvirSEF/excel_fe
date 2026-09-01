@@ -19,7 +19,7 @@ interface TopicsSectionProps {
 const DEFAULT_TOPICS = [
   {
     title: "Excel Formulas & Functions",
-    slug: "excel-formulas",
+    slug: "excel-functions-formulas",
     description:
       "Master modern dynamic formulas from XLOOKUP, INDEX/MATCH to advanced LAMBDA and array calculations.",
     icon: IconMathFunction,
@@ -28,7 +28,7 @@ const DEFAULT_TOPICS = [
   },
   {
     title: "VBA, Macros & Automation",
-    slug: "vba-macros",
+    slug: "excel-vba",
     description:
       "Automate repetitive daily tasks, build custom functions, and write fast, production-ready spreadsheet macros.",
     icon: IconCode,
@@ -37,7 +37,7 @@ const DEFAULT_TOPICS = [
   },
   {
     title: "Dashboards & Visualizations",
-    slug: "dashboards",
+    slug: "excel-pivot-table",
     description:
       "Design executive-ready KPI summary cards, interactive Pivot Tables, and dynamic presentation charts.",
     icon: IconChartBar,
@@ -46,7 +46,7 @@ const DEFAULT_TOPICS = [
   },
   {
     title: "Google Sheets & Apps Script",
-    slug: "google-sheets",
+    slug: "google-sheets-basics",
     description:
       "Harness the power of cloud spreadsheets with QUERY, IMPORTRANGE, and custom Apps Script automations.",
     icon: IconTable,
@@ -55,7 +55,7 @@ const DEFAULT_TOPICS = [
   },
   {
     title: "Financial Modeling & Budgeting",
-    slug: "financial-modeling",
+    slug: "excel-for-finance",
     description:
       "Build valuation models, 3-statement forecasts, cash flow analyses, and automated budget trackers.",
     icon: IconReportMoney,
