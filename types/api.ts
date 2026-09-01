@@ -49,6 +49,11 @@ export interface TokenResponse {
   token_type: "bearer"
 }
 
+export interface CategoryMini {
+  name: string
+  slug: string
+}
+
 export interface PostListItem {
   id: string
   title: string
@@ -59,6 +64,7 @@ export interface PostListItem {
   is_trending: boolean
   view_count: number
   published_at: string | null
+  category?: CategoryMini | null
 }
 
 export interface PostDetail extends PostListItem {

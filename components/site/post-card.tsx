@@ -54,8 +54,27 @@ export function PostCard({ post, className }: PostCardProps) {
         {/* Card Content */}
         <div className="flex flex-1 flex-col justify-between pt-4">
           <div className="space-y-2">
+            {/* Category kicker */}
+            {post.category ? (
+              <span className="inline-flex line-clamp-1 text-[11px] font-semibold uppercase tracking-wider text-primary">
+                {post.category.name}
+              </span>
+            ) : null}
+
+            {/* Title */}
+            <h3 className="text-base font-bold leading-snug tracking-tight text-foreground transition-colors group-hover:text-primary sm:text-lg">
+              {post.title}
+            </h3>
+
+            {/* Excerpt */}
+            {post.excerpt ? (
+              <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+                {post.excerpt}
+              </p>
+            ) : null}
+
             {/* Meta Row */}
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <div className="flex items-center gap-2 pt-1 text-xs text-muted-foreground">
               {post.reading_time_minutes ? (
                 <span className="inline-flex items-center gap-1">
                   <IconClock className="h-3 w-3 shrink-0" />
@@ -74,18 +93,6 @@ export function PostCard({ post, className }: PostCardProps) {
                 </>
               ) : null}
             </div>
-
-            {/* Title */}
-            <h3 className="text-base font-bold leading-snug tracking-tight text-foreground transition-colors group-hover:text-primary sm:text-lg">
-              {post.title}
-            </h3>
-
-            {/* Excerpt */}
-            {post.excerpt ? (
-              <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-                {post.excerpt}
-              </p>
-            ) : null}
           </div>
 
           {/* Read article arrow indicator */}

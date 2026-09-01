@@ -1,6 +1,7 @@
 import Image from "next/image"
 
 import { Time } from "@/components/shared/time"
+import { ShareButtons } from "@/components/site/share-buttons"
 import type { PostDetail } from "@/types/api"
 
 export function ArticleHeader({ post }: { post: PostDetail }) {
@@ -26,6 +27,9 @@ export function ArticleHeader({ post }: { post: PostDetail }) {
               <span>{post.reading_time_minutes} min read</span>
             </>
           ) : null}
+        </div>
+        <div className="mt-5 border-t border-border/60 pt-4">
+          <ShareButtons title={post.title} />
         </div>
       </header>
 
