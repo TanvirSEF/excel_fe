@@ -113,15 +113,18 @@ export function HomeHero({ categories }: { categories: Category[] }) {
       : FALLBACK_PILLS
 
   return (
-    <section className="relative w-full overflow-hidden bg-gradient-to-br from-chart-2 via-primary to-chart-5">
-      {/* Large glow — top right */}
-      <div aria-hidden className="pointer-events-none absolute -right-40 -top-40 h-[580px] w-[580px] rounded-full bg-white/10 blur-3xl" />
+    <section className="relative w-full overflow-hidden bg-gradient-to-bl from-chart-2 via-primary to-chart-5">
+      {/* Large glow — top right, cyan tinted */}
+      <div aria-hidden className="pointer-events-none absolute -right-40 -top-40 h-[580px] w-[580px] rounded-full bg-teal-300/12 blur-3xl" />
       {/* Medium glow — center left */}
       <div aria-hidden className="pointer-events-none absolute left-1/4 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-white/6 blur-3xl" />
       {/* Small glow — bottom right */}
       <div aria-hidden className="pointer-events-none absolute -bottom-16 right-1/4 h-48 w-48 rounded-full bg-white/8 blur-2xl" />
+      {/* Angular aurora ribbons */}
+      <div aria-hidden className="pointer-events-none absolute -left-24 -top-1/3 h-[170%] w-64 rotate-[20deg] bg-gradient-to-b from-teal-300/10 via-teal-300/4 to-transparent" />
+      <div aria-hidden className="pointer-events-none absolute left-1/4 -top-1/3 h-[170%] w-44 rotate-[20deg] bg-gradient-to-b from-white/6 to-transparent" />
       {/* Diagonal shine streak */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/8 via-transparent to-transparent" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-bl from-white/8 via-transparent to-transparent" />
       {/* Bottom fade into page */}
       <div aria-hidden className="pointer-events-none absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-background/15 to-transparent" />
 
@@ -140,7 +143,7 @@ export function HomeHero({ categories }: { categories: Category[] }) {
           <h1 className="text-[2.6rem] font-bold leading-[1.1] tracking-tight text-primary-foreground sm:text-5xl lg:text-[3rem]">
             Excel &amp; Google Sheets
             <br />
-            <span className="opacity-90">done right.</span>
+            <span className="text-teal-400">done right.</span>
           </h1>
 
           {/* Subtitle */}
