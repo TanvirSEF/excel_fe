@@ -26,8 +26,61 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
+import type { NavCategory } from "@/types/api"
 
-export function MainNav() {
+const BLOG_ITEM_STYLES = [
+  {
+    icon: IconMathFunction,
+    box: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+    plain: "text-emerald-500",
+  },
+  {
+    icon: IconTable,
+    box: "bg-green-500/10 text-green-600 dark:text-green-400",
+    plain: "text-green-500",
+  },
+  {
+    icon: IconCode,
+    box: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+    plain: "text-amber-500",
+  },
+  {
+    icon: IconChartBar,
+    box: "bg-purple-500/10 text-purple-600 dark:text-purple-400",
+    plain: "text-purple-500",
+  },
+]
+
+const FALLBACK_BLOG_ITEMS: NavCategory[] = [
+  {
+    name: "Excel Formulas & Functions",
+    slug: "",
+    description: "VLOOKUP, XLOOKUP, INDEX MATCH & more",
+  },
+  {
+    name: "Google Sheets Guides",
+    slug: "",
+    description: "Cloud functions, QUERY, ARRAYFORMULA",
+  },
+  {
+    name: "VBA & Macro Automation",
+    slug: "",
+    description: "Automate repetitive spreadsheet workflows",
+  },
+  {
+    name: "Charts & Dashboards",
+    slug: "",
+    description: "Professional visualizations & reporting",
+  },
+]
+
+interface MainNavProps {
+  categories?: NavCategory[]
+}
+
+export function MainNav({ categories = [] }: MainNavProps) {
+  const blogItems =
+    categories.length > 0 ? categories : FALLBACK_BLOG_ITEMS
   const pathname = usePathname()
 
   const isBlogActive = pathname.startsWith("/blog") || pathname.startsWith("/categories")
@@ -118,63 +171,37 @@ export function MainNav() {
           <IconChevronDown className="h-3.5 w-3.5 transition-transform duration-200 group-data-[state=open]:rotate-180 opacity-70" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-80 p-2 rounded-xl shadow-xl border-border/70 backdrop-blur-md bg-background/95">
-          <DropdownMenuItem asChild>
-            <Link href="/blog" className="flex items-start gap-3 p-2.5 rounded-lg cursor-pointer">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-                <IconMathFunction className="h-4 w-4" />
-              </div>
-              <div className="space-y-0.5">
-                <p className="text-xs font-semibold text-foreground">Excel Formulas & Functions</p>
-                <p className="text-[11px] text-muted-foreground">VLOOKUP, XLOOKUP, INDEX MATCH & more</p>
-              </div>
-            </Link>
-          </DropdownMenuItem>
-
-          <DropdownMenuItem asChild>
-            <Link href="/blog" className="flex items-start gap-3 p-2.5 rounded-lg cursor-pointer">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-500/10 text-green-600 dark:text-green-400">
-                <IconTable className="h-4 w-4" />
-              </div>
-              <div className="space-y-0.5">
-                <p className="text-xs font-semibold text-foreground">Google Sheets Guides</p>
-                <p className="text-[11px] text-muted-foreground">Cloud functions, QUERY, ARRAYFORMULA</p>
-              </div>
-            </Link>
-          </DropdownMenuItem>
-
-          <DropdownMenuItem asChild>
-            <Link href="/blog" className="flex items-start gap-3 p-2.5 rounded-lg cursor-pointer">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
-                <IconCode className="h-4 w-4" />
-              </div>
-              <div className="space-y-0.5">
-                <p className="text-xs font-semibold text-foreground">VBA & Macro Automation</p>
-                <p className="text-[11px] text-muted-foreground">Automate repetitive spreadsheet workflows</p>
-              </div>
-            </Link>
-          </DropdownMenuItem>
-
-          <DropdownMenuItem asChild>
-            <Link href="/blog" className="flex items-start gap-3 p-2.5 rounded-lg cursor-pointer">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400">
-                <IconChartBar className="h-4 w-4" />
-              </div>
-              <div className="space-y-0.5">
-                <p className="text-xs font-semibold text-foreground">Charts & Dashboards</p>
-                <p className="text-[11px] text-muted-foreground">Professional visualizations & reporting</p>
-              </div>
-            </Link>
-          </DropdownMenuItem>
+          {blogItems.map((item, index) => {
+            const style = BLOG_ITEM_STYLES[index % BLOG_ITEM_STYLES.length]
+            const Icon = style.icon
+            return (
+              <DropdownMenuItem key={item.slug || item.name} asChild>
+                <Link
+                  href={item.slug ? `/categories/${item.slug}` : "/blog"}
+                  className="flex items-start gap-3 p-2.5 rounded-lg cursor-pointer"
+                >
+                  <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", style.box)}>
+                    <Icon className="h-4 w-4" />
+                  </div>
+                  <div className="min-w-0 space-y-0.5">
+                    <p className="truncate text-xs font-semibold text-foreground">{item.name}</p>
+                    {item.description ? (
+                      <p className="line-clamp-1 text-[11px] text-muted-foreground">{item.description}</p>
+                    ) : null}
+                  </div>
+                </Link>
+              </DropdownMenuItem>
+            )
+          })}
 
           <DropdownMenuSeparator />
 
           <DropdownMenuItem asChild>
-            <Link href="/blog" className="flex items-center justify-between p-2 rounded-lg text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 cursor-pointer">
+            <Link href="/categories" className="flex items-center justify-between p-2 rounded-lg text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 cursor-pointer">
               <span className="flex items-center gap-1.5">
                 <IconBook2 className="h-3.5 w-3.5" />
-                <span>Explore All 1,600+ Articles</span>
+                <span>Browse All Categories</span>
               </span>
-              <span className="text-[10px] bg-emerald-500/10 px-1.5 py-0.5 rounded font-mono">1.6k+</span>
             </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>

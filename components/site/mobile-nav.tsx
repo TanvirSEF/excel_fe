@@ -18,6 +18,7 @@ import {
   IconUserCheck,
   IconMail,
   IconInfoCircle,
+  IconBook2,
 } from "@tabler/icons-react"
 
 import {
@@ -30,8 +31,29 @@ import {
 import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import type { NavCategory } from "@/types/api"
 
-export function MobileNav() {
+const BLOG_ITEM_ICONS = [
+  { icon: IconMathFunction, color: "text-emerald-500" },
+  { icon: IconTable, color: "text-green-500" },
+  { icon: IconCode, color: "text-amber-500" },
+  { icon: IconChartBar, color: "text-purple-500" },
+]
+
+const FALLBACK_BLOG_ITEMS: NavCategory[] = [
+  { name: "Excel Formulas & Functions", slug: "", description: null },
+  { name: "Google Sheets Guides", slug: "", description: null },
+  { name: "VBA & Macro Automation", slug: "", description: null },
+  { name: "Charts & Dashboards", slug: "", description: null },
+]
+
+interface MobileNavProps {
+  categories?: NavCategory[]
+}
+
+export function MobileNav({ categories = [] }: MobileNavProps) {
+  const blogItems =
+    categories.length > 0 ? categories : FALLBACK_BLOG_ITEMS
   const [open, setOpen] = useState(false)
   const [blogsExpanded, setBlogsExpanded] = useState(true)
   const [pricingExpanded, setPricingExpanded] = useState(false)
@@ -102,37 +124,28 @@ export function MobileNav() {
 
               {blogsExpanded && (
                 <div className="space-y-1 px-2 pb-2.5 pt-1 text-xs border-t border-border/40">
+                  {blogItems.map((item, index) => {
+                    const style = BLOG_ITEM_ICONS[index % BLOG_ITEM_ICONS.length]
+                    const Icon = style.icon
+                    return (
+                      <Link
+                        key={item.slug || item.name}
+                        href={item.slug ? `/categories/${item.slug}` : "/blog"}
+                        onClick={handleLinkClick}
+                        className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
+                      >
+                        <Icon className={cn("h-3.5 w-3.5 shrink-0", style.color)} />
+                        <span className="truncate">{item.name}</span>
+                      </Link>
+                    )
+                  })}
                   <Link
-                    href="/blog"
+                    href="/categories"
                     onClick={handleLinkClick}
-                    className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
+                    className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 font-medium text-emerald-600 dark:text-emerald-400 hover:bg-background"
                   >
-                    <IconMathFunction className="h-3.5 w-3.5 text-emerald-500" />
-                    <span>Excel Formulas & Functions</span>
-                  </Link>
-                  <Link
-                    href="/blog"
-                    onClick={handleLinkClick}
-                    className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
-                  >
-                    <IconTable className="h-3.5 w-3.5 text-green-500" />
-                    <span>Google Sheets Guides</span>
-                  </Link>
-                  <Link
-                    href="/blog"
-                    onClick={handleLinkClick}
-                    className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
-                  >
-                    <IconCode className="h-3.5 w-3.5 text-amber-500" />
-                    <span>VBA & Macro Automation</span>
-                  </Link>
-                  <Link
-                    href="/blog"
-                    onClick={handleLinkClick}
-                    className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
-                  >
-                    <IconChartBar className="h-3.5 w-3.5 text-purple-500" />
-                    <span>Charts & Dashboards</span>
+                    <IconBook2 className="h-3.5 w-3.5 shrink-0" />
+                    <span>Browse All Categories</span>
                   </Link>
                 </div>
               )}

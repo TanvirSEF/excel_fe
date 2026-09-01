@@ -169,6 +169,12 @@ export interface CategoryWithPosts {
   posts: Page<PostListItem>
 }
 
+export interface NavCategory {
+  name: string
+  slug: string
+  description: string | null
+}
+
 export interface Tag {
   id: string
   name: string
