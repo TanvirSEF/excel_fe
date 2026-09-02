@@ -1,6 +1,5 @@
 "use client"
 
-import { useMemo } from "react"
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
 
 import {
@@ -17,14 +16,10 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function ProjectionChart({ projection }: { projection: ProjectionRow[] }) {
-  const data = useMemo(
-    () =>
-      projection.map((row) => ({
-        year: row.year,
-        value: row.value,
-      })),
-    [projection]
-  )
+  const data = projection.map((row) => ({
+    year: row.year,
+    value: row.value,
+  }))
 
   return (
     <ChartContainer

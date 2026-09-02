@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import { IconAlertTriangle, IconRotate } from "@tabler/icons-react"
 
 import { NumberField } from "@/components/site/calculators/field"
@@ -42,25 +42,23 @@ export function ProfitMarginCalculator() {
   const [price, setPrice] = useState(DEFAULTS.price)
   const [targetMargin, setTargetMargin] = useState(DEFAULTS.targetMargin)
 
-  const costInput = useMemo(() => parseNumericInput(cost, { min: 0 }), [cost])
-  const priceInput = useMemo(
-    () => parseNumericInput(price, { min: 0.01 }),
-    [price]
-  )
-  const targetMarginInput = useMemo(
-    () => parseNumericInput(targetMargin, { min: 0.01, max: 99.99 }),
-    [targetMargin]
-  )
+  const costInput = parseNumericInput(cost, { min: 0 })
+  const priceInput = parseNumericInput(price, { min: 0.01 })
+  const targetMarginInput = parseNumericInput(targetMargin, {
+    min: 0.01,
+    max: 99.99,
+  })
 
-  const result = useMemo(() => {
-    if (costInput.value === null) return null
-    if (mode === "forward") {
-      if (priceInput.value === null) return null
-      return calculateMargin(costInput.value, priceInput.value)
-    }
-    if (targetMarginInput.value === null) return null
-    return calculateRequiredPrice(costInput.value, targetMarginInput.value)
-  }, [mode, costInput, priceInput, targetMarginInput])
+  const result =
+    costInput.value === null
+      ? null
+      : mode === "forward"
+        ? priceInput.value === null
+          ? null
+          : calculateMargin(costInput.value, priceInput.value)
+        : targetMarginInput.value === null
+          ? null
+          : calculateRequiredPrice(costInput.value, targetMarginInput.value)
 
   const invalid =
     costInput.error !== null ||

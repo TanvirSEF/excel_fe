@@ -1,7 +1,10 @@
 import {
   IconBuildingBank,
   IconCalendarTime,
+  IconChartDots,
+  IconCoin,
   IconPercentage,
+  IconScale,
   IconTrendingUp,
   type TablerIcon,
 } from "@tabler/icons-react"
@@ -11,6 +14,9 @@ export type CalculatorSlug =
   | "date-difference"
   | "cagr-calculator"
   | "profit-margin"
+  | "compound-interest"
+  | "pv-fv"
+  | "npv-irr"
 
 export interface CalculatorDefinition {
   slug: CalculatorSlug
@@ -81,6 +87,48 @@ export const CALCULATORS: CalculatorDefinition[] = [
     formulaSnippet: "Margin = (Price - Cost) / Price",
     excelFunction: "(Price-Cost)/Price",
     excelTip: "Margin and markup are not the same: a 40% margin equals a 66.7% markup. To price for a target margin use =Cost/(1-Margin).",
+  },
+  {
+    slug: "compound-interest",
+    title: "Compound Interest & Savings Growth Calculator",
+    shortTitle: "Compound Interest",
+    description:
+      "Project savings growth with an initial deposit plus recurring monthly contributions, compounded every month.",
+    metaDescription:
+      "Free compound interest calculator with monthly contributions. See future value, total interest and a year-by-year growth table — the Excel FV function brought to life.",
+    badge: "Financial",
+    icon: IconCoin,
+    formulaSnippet: "=FV(rate/12, nper, -pmt, -pv)",
+    excelFunction: "FV",
+    excelTip: "Excel's FV uses the same convention as this tool: end-of-period deposits. =FV(8%/12, 120, -500, -10000) grows $10k plus $500/month at 8% for 10 years.",
+  },
+  {
+    slug: "pv-fv",
+    title: "Present & Future Value Calculator",
+    shortTitle: "PV & FV",
+    description:
+      "Convert between money today and money tomorrow — compound a present value forward or discount a future value back.",
+    metaDescription:
+      "Present value and future value calculator with discount factors and effective annual rate. Mirrors Excel's PV and FV functions for time-value-of-money math.",
+    badge: "Financial",
+    icon: IconScale,
+    formulaSnippet: "FV = PV × (1 + r)^n",
+    excelFunction: "PV / FV",
+    excelTip: "=FV(8%, 10, 0, -10000) compounds $10,000 for 10 years; =PV(8%, 10, 0, 21589) discounts it back. The middle argument is the payment, zero for lump sums.",
+  },
+  {
+    slug: "npv-irr",
+    title: "NPV & IRR Calculator",
+    shortTitle: "NPV & IRR",
+    description:
+      "Evaluate an investment from its cash flows — net present value at your discount rate and the internal rate of return.",
+    metaDescription:
+      "Calculate NPV and IRR from a series of yearly cash flows, with discounted and cumulative breakdowns. Matches Excel's NPV and IRR functions exactly.",
+    badge: "Financial",
+    icon: IconChartDots,
+    formulaSnippet: "=NPV(rate, flows) - C0",
+    excelFunction: "NPV / IRR",
+    excelTip: "Excel's NPV discounts its first argument at t = 1, so the initial investment stays outside: =NPV(10%, B2:B5) - B1. =IRR(B1:B5) finds the rate where the whole series breaks even.",
   },
 ]
 

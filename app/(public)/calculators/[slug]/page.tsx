@@ -3,9 +3,12 @@ import { notFound } from "next/navigation"
 
 import { Breadcrumb } from "@/components/site/breadcrumb"
 import { CagrCalculator } from "@/components/site/calculators/cagr-calculator"
+import { CompoundInterestCalculator } from "@/components/site/calculators/compound-interest-calculator"
 import { DateDifferenceCalculator } from "@/components/site/calculators/date-difference-calculator"
 import { LoanEmiCalculator } from "@/components/site/calculators/loan-emi-calculator"
+import { NpvIrrCalculator } from "@/components/site/calculators/npv-irr-calculator"
 import { ProfitMarginCalculator } from "@/components/site/calculators/profit-margin-calculator"
+import { PvFvCalculator } from "@/components/site/calculators/pv-fv-calculator"
 import {
   CALCULATOR_SLUGS,
   getCalculator,
@@ -26,6 +29,9 @@ const CALCULATOR_COMPONENTS: Record<
   "date-difference": DateDifferenceCalculator,
   "cagr-calculator": CagrCalculator,
   "profit-margin": ProfitMarginCalculator,
+  "compound-interest": CompoundInterestCalculator,
+  "pv-fv": PvFvCalculator,
+  "npv-irr": NpvIrrCalculator,
 }
 
 export async function generateMetadata({

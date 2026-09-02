@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import { IconRotate } from "@tabler/icons-react"
 
 import { AmortizationChart } from "@/components/site/calculators/amortization-chart"
@@ -58,46 +58,32 @@ export function LoanEmiCalculator() {
   const [tenureUnit, setTenureUnit] = useState(DEFAULTS.tenureUnit)
   const [scheduleView, setScheduleView] = useState<"yearly" | "monthly">("yearly")
 
-  const amountInput = useMemo(
-    () => parseNumericInput(amount, { min: 1 }),
-    [amount]
-  )
-  const rateInput = useMemo(
-    () => parseNumericInput(rate, { min: 0, max: 100 }),
-    [rate]
-  )
-  const tenureInput = useMemo(
-    () =>
-      parseNumericInput(tenure, {
-        min: 1,
-        max: tenureUnit === "years" ? 50 : 600,
-        integer: true,
-      }),
-    [tenure, tenureUnit]
-  )
+  const amountInput = parseNumericInput(amount, { min: 1 })
+  const rateInput = parseNumericInput(rate, { min: 0, max: 100 })
+  const tenureInput = parseNumericInput(tenure, {
+    min: 1,
+    max: tenureUnit === "years" ? 50 : 600,
+    integer: true,
+  })
 
-  const result = useMemo(() => {
-    if (!amountInput.value || rateInput.value === null || !tenureInput.value) {
-      return null
-    }
-    const months =
-      tenureUnit === "years" ? tenureInput.value * 12 : tenureInput.value
-    if (months < 1) return null
-    return calculateLoan({
-      principal: amountInput.value,
-      annualRatePercent: rateInput.value,
-      months,
-    })
-  }, [amountInput, rateInput, tenureInput, tenureUnit])
+  const result =
+    !amountInput.value || rateInput.value === null || !tenureInput.value
+      ? null
+      : calculateLoan({
+          principal: amountInput.value,
+          annualRatePercent: rateInput.value,
+          months:
+            tenureUnit === "years" ? tenureInput.value * 12 : tenureInput.value,
+        })
 
   const invalid =
     Boolean(amountInput.error) ||
     Boolean(rateInput.error) ||
     Boolean(tenureInput.error)
 
-  const scheduleRows = useMemo(() => {
-    if (!result) return []
-    return scheduleView === "yearly"
+  const scheduleRows = !result
+    ? []
+    : scheduleView === "yearly"
       ? result.yearly.map((row) => ({
           period: row.year,
           payment: row.payment,
@@ -112,23 +98,21 @@ export function LoanEmiCalculator() {
           principal: row.principal,
           balance: row.balance,
         }))
-  }, [result, scheduleView])
 
-  const copyRows = useMemo(() => {
-    if (!result) return []
-    const header =
-      scheduleView === "yearly"
-        ? ["Year", "Payment", "Interest", "Principal", "Balance"]
-        : ["Month", "Payment", "Interest", "Principal", "Balance"]
-    const rows = scheduleRows.map((row) => [
-      String(row.period),
-      row.payment.toFixed(2),
-      row.interest.toFixed(2),
-      row.principal.toFixed(2),
-      row.balance.toFixed(2),
-    ])
-    return [header, ...rows]
-  }, [result, scheduleRows, scheduleView])
+  const copyRows = result
+    ? [
+        scheduleView === "yearly"
+          ? ["Year", "Payment", "Interest", "Principal", "Balance"]
+          : ["Month", "Payment", "Interest", "Principal", "Balance"],
+        ...scheduleRows.map((row) => [
+          String(row.period),
+          row.payment.toFixed(2),
+          row.interest.toFixed(2),
+          row.principal.toFixed(2),
+          row.balance.toFixed(2),
+        ]),
+      ]
+    : []
 
   function reset() {
     setAmount(DEFAULTS.amount)

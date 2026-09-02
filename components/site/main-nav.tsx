@@ -236,7 +236,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
           <IconChevronDown className="h-3.5 w-3.5 transition-transform duration-200 group-data-[state=open]:rotate-180 opacity-70" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-72 p-2 rounded-xl shadow-xl border-border/70 backdrop-blur-md bg-background/95">
-          {CALCULATORS.map((calc, index) => {
+          {CALCULATORS.slice(0, 5).map((calc, index) => {
             const Icon = calc.icon
             const style = CALCULATOR_ITEM_STYLES[index % CALCULATOR_ITEM_STYLES.length]
             return (

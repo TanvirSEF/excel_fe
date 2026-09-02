@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import { IconRotate } from "@tabler/icons-react"
 
 import { CopyTableButton } from "@/components/site/calculators/copy-table-button"
@@ -56,39 +56,31 @@ export function CagrCalculator() {
   const [startDate, setStartDate] = useState(DEFAULTS.startDate)
   const [endDate, setEndDate] = useState(DEFAULTS.endDate)
 
-  const startInput = useMemo(
-    () => parseNumericInput(startValue, { min: 0.01 }),
-    [startValue]
-  )
-  const endInput = useMemo(
-    () => parseNumericInput(endValue, { min: 0.01 }),
-    [endValue]
-  )
-  const yearsInput = useMemo(
-    () => parseNumericInput(years, { min: 0.01, max: 100 }),
-    [years]
-  )
-  const startDateParsed = useMemo(() => parseDateInput(startDate), [startDate])
-  const endDateParsed = useMemo(() => parseDateInput(endDate), [endDate])
+  const startInput = parseNumericInput(startValue, { min: 0.01 })
+  const endInput = parseNumericInput(endValue, { min: 0.01 })
+  const yearsInput = parseNumericInput(years, { min: 0.01, max: 100 })
+  const startDateParsed = parseDateInput(startDate)
+  const endDateParsed = parseDateInput(endDate)
 
-  const effectiveYears = useMemo(() => {
-    if (mode === "years") return yearsInput.value
-    if (!startDateParsed || !endDateParsed) return null
-    const span = yearsBetweenDates(
-      startDateParsed <= endDateParsed ? startDateParsed : endDateParsed,
-      startDateParsed <= endDateParsed ? endDateParsed : startDateParsed
-    )
-    return span > 0 ? span : null
-  }, [mode, yearsInput, startDateParsed, endDateParsed])
+  const span =
+    startDateParsed && endDateParsed
+      ? yearsBetweenDates(
+          startDateParsed <= endDateParsed ? startDateParsed : endDateParsed,
+          startDateParsed <= endDateParsed ? endDateParsed : startDateParsed
+        )
+      : null
 
-  const result = useMemo(() => {
-    if (!startInput.value || !endInput.value || !effectiveYears) return null
-    return calculateCagr({
-      startValue: startInput.value,
-      endValue: endInput.value,
-      years: effectiveYears,
-    })
-  }, [startInput, endInput, effectiveYears])
+  const effectiveYears =
+    mode === "years" ? yearsInput.value : span && span > 0 ? span : null
+
+  const result =
+    !startInput.value || !endInput.value || !effectiveYears
+      ? null
+      : calculateCagr({
+          startValue: startInput.value,
+          endValue: endInput.value,
+          years: effectiveYears,
+        })
 
   const invalid =
     Boolean(startInput.error) ||
@@ -96,17 +88,16 @@ export function CagrCalculator() {
     (mode === "years" && Boolean(yearsInput.error)) ||
     (mode === "dates" && ((startDate !== "" && !startDateParsed) || (endDate !== "" && !endDateParsed)))
 
-  const copyRows = useMemo(() => {
-    if (!result) return []
-    return [
-      ["Year", "Projected value", "Growth from start"],
-      ...result.projection.map((row) => [
-        String(row.year),
-        row.value.toFixed(2),
-        `${row.growthFromStart.toFixed(2)}%`,
-      ]),
-    ]
-  }, [result])
+  const copyRows = result
+    ? [
+        ["Year", "Projected value", "Growth from start"],
+        ...result.projection.map((row) => [
+          String(row.year),
+          row.value.toFixed(2),
+          `${row.growthFromStart.toFixed(2)}%`,
+        ]),
+      ]
+    : []
 
   function reset() {
     setStartValue(DEFAULTS.startValue)

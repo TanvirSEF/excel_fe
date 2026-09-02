@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import { IconRotate } from "@tabler/icons-react"
 
 import { DateField, NumberField } from "@/components/site/calculators/field"
@@ -37,21 +37,22 @@ export function DateDifferenceCalculator() {
   const [end, setEnd] = useState(DEFAULTS.end)
   const [holidays, setHolidays] = useState(DEFAULTS.holidays)
 
-  const startDate = useMemo(() => parseDateInput(start), [start])
-  const endDate = useMemo(() => parseDateInput(end), [end])
-  const holidaysInput = useMemo(
-    () => parseNumericInput(holidays, { min: 0, max: 100000, integer: true }),
-    [holidays]
-  )
+  const startDate = parseDateInput(start)
+  const endDate = parseDateInput(end)
+  const holidaysInput = parseNumericInput(holidays, {
+    min: 0,
+    max: 100000,
+    integer: true,
+  })
 
-  const result = useMemo(() => {
-    if (!startDate || !endDate || holidaysInput.value === null) return null
-    return calculateDateDifference({
-      start: startDate,
-      end: endDate,
-      holidayCount: holidaysInput.value,
-    })
-  }, [startDate, endDate, holidaysInput])
+  const result =
+    !startDate || !endDate || holidaysInput.value === null
+      ? null
+      : calculateDateDifference({
+          start: startDate,
+          end: endDate,
+          holidayCount: holidaysInput.value,
+        })
 
   const invalid =
     (start !== "" && !startDate) ||

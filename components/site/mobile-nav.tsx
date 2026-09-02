@@ -221,7 +221,7 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
 
               {calcExpanded && (
                 <div className="space-y-1 px-2 pb-2.5 pt-1 text-xs border-t border-border/40">
-                  {CALCULATORS.map((calc, index) => {
+                  {CALCULATORS.slice(0, 5).map((calc, index) => {
                     const Icon = calc.icon
                     return (
                       <Link

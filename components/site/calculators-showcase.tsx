@@ -13,7 +13,7 @@ export function CalculatorsShowcase() {
       />
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {CALCULATORS.map((calculator) => (
+        {CALCULATORS.slice(0, 4).map((calculator) => (
           <CalculatorCard key={calculator.slug} calculator={calculator} variant="compact" />
         ))}
       </div>

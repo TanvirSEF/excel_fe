@@ -1,6 +1,5 @@
 "use client"
 
-import { useMemo } from "react"
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
 
 import {
@@ -33,16 +32,12 @@ interface AmortizationChartProps {
 }
 
 export function AmortizationChart({ schedule }: AmortizationChartProps) {
-  const data = useMemo(
-    () =>
-      schedule.map((row) => ({
-        month: row.month,
-        balance: row.balance,
-        interest: row.interest,
-        principal: row.principal,
-      })),
-    [schedule]
-  )
+  const data = schedule.map((row) => ({
+    month: row.month,
+    balance: row.balance,
+    interest: row.interest,
+    principal: row.principal,
+  }))
 
   return (
     <Card>
