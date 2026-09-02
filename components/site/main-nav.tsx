@@ -9,9 +9,6 @@ import {
   IconCode,
   IconChartBar,
   IconBook2,
-  IconCalculator,
-  IconPercentage,
-  IconCalendarEvent,
   IconTools,
   IconFileSpreadsheet,
   IconUserCheck,
@@ -25,8 +22,28 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { CALCULATORS } from "@/lib/calculators"
 import { cn } from "@/lib/utils"
 import type { NavCategory } from "@/types/api"
+
+const CALCULATOR_ITEM_STYLES = [
+  {
+    box: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400",
+    plain: "text-indigo-500",
+  },
+  {
+    box: "bg-orange-500/10 text-orange-600 dark:text-orange-400",
+    plain: "text-orange-500",
+  },
+  {
+    box: "bg-teal-500/10 text-teal-600 dark:text-teal-400",
+    plain: "text-teal-500",
+  },
+  {
+    box: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+    plain: "text-emerald-500",
+  },
+]
 
 const BLOG_ITEM_STYLES = [
   {
@@ -219,41 +236,23 @@ export function MainNav({ categories = [] }: MainNavProps) {
           <IconChevronDown className="h-3.5 w-3.5 transition-transform duration-200 group-data-[state=open]:rotate-180 opacity-70" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-72 p-2 rounded-xl shadow-xl border-border/70 backdrop-blur-md bg-background/95">
-          <DropdownMenuItem asChild>
-            <Link href="/calculators" className="flex items-start gap-3 p-2.5 rounded-lg cursor-pointer">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
-                <IconCalculator className="h-4 w-4" />
-              </div>
-              <div className="space-y-0.5">
-                <p className="text-xs font-semibold text-foreground">Loan & Mortgage</p>
-                <p className="text-[11px] text-muted-foreground">Monthly payment & interest schedule</p>
-              </div>
-            </Link>
-          </DropdownMenuItem>
-
-          <DropdownMenuItem asChild>
-            <Link href="/calculators" className="flex items-start gap-3 p-2.5 rounded-lg cursor-pointer">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-teal-500/10 text-teal-600 dark:text-teal-400">
-                <IconPercentage className="h-4 w-4" />
-              </div>
-              <div className="space-y-0.5">
-                <p className="text-xs font-semibold text-foreground">Compound Interest</p>
-                <p className="text-[11px] text-muted-foreground">Investment growth & wealth projection</p>
-              </div>
-            </Link>
-          </DropdownMenuItem>
-
-          <DropdownMenuItem asChild>
-            <Link href="/calculators" className="flex items-start gap-3 p-2.5 rounded-lg cursor-pointer">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-500/10 text-orange-600 dark:text-orange-400">
-                <IconCalendarEvent className="h-4 w-4" />
-              </div>
-              <div className="space-y-0.5">
-                <p className="text-xs font-semibold text-foreground">Date & Working Days</p>
-                <p className="text-[11px] text-muted-foreground">Calculate workdays and date ranges</p>
-              </div>
-            </Link>
-          </DropdownMenuItem>
+          {CALCULATORS.map((calc, index) => {
+            const Icon = calc.icon
+            const style = CALCULATOR_ITEM_STYLES[index % CALCULATOR_ITEM_STYLES.length]
+            return (
+              <DropdownMenuItem key={calc.slug} asChild>
+                <Link href={`/calculators/${calc.slug}`} className="flex items-start gap-3 p-2.5 rounded-lg cursor-pointer">
+                  <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${style.box}`}>
+                    <Icon className="h-4 w-4" />
+                  </div>
+                  <div className="space-y-0.5">
+                    <p className="text-xs font-semibold text-foreground">{calc.shortTitle}</p>
+                    <p className="line-clamp-1 text-[11px] text-muted-foreground">{calc.description}</p>
+                  </div>
+                </Link>
+              </DropdownMenuItem>
+            )
+          })}
 
           <DropdownMenuSeparator />
 

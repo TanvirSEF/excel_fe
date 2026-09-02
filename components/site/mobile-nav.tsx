@@ -12,8 +12,6 @@ import {
   IconCode,
   IconChartBar,
   IconCalculator,
-  IconPercentage,
-  IconCalendarEvent,
   IconFileSpreadsheet,
   IconUserCheck,
   IconMail,
@@ -30,6 +28,7 @@ import {
 } from "@/components/ui/sheet"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { Button } from "@/components/ui/button"
+import { CALCULATORS } from "@/lib/calculators"
 import { cn } from "@/lib/utils"
 import type { NavCategory } from "@/types/api"
 
@@ -38,6 +37,13 @@ const BLOG_ITEM_ICONS = [
   { icon: IconTable, color: "text-green-500" },
   { icon: IconCode, color: "text-amber-500" },
   { icon: IconChartBar, color: "text-purple-500" },
+]
+
+const CALCULATOR_ITEM_COLORS = [
+  "text-indigo-500",
+  "text-orange-500",
+  "text-teal-500",
+  "text-emerald-500",
 ]
 
 const FALLBACK_BLOG_ITEMS: NavCategory[] = [
@@ -215,29 +221,33 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
 
               {calcExpanded && (
                 <div className="space-y-1 px-2 pb-2.5 pt-1 text-xs border-t border-border/40">
+                  {CALCULATORS.map((calc, index) => {
+                    const Icon = calc.icon
+                    return (
+                      <Link
+                        key={calc.slug}
+                        href={`/calculators/${calc.slug}`}
+                        onClick={handleLinkClick}
+                        className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
+                      >
+                        <Icon
+                          className={`h-3.5 w-3.5 ${
+                            CALCULATOR_ITEM_COLORS[
+                              index % CALCULATOR_ITEM_COLORS.length
+                            ]
+                          }`}
+                        />
+                        <span>{calc.shortTitle}</span>
+                      </Link>
+                    )
+                  })}
                   <Link
                     href="/calculators"
                     onClick={handleLinkClick}
-                    className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
+                    className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 font-medium text-primary hover:bg-background"
                   >
-                    <IconCalculator className="h-3.5 w-3.5 text-indigo-500" />
-                    <span>Loan & Mortgage Calculator</span>
-                  </Link>
-                  <Link
-                    href="/calculators"
-                    onClick={handleLinkClick}
-                    className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
-                  >
-                    <IconPercentage className="h-3.5 w-3.5 text-teal-500" />
-                    <span>Compound Interest</span>
-                  </Link>
-                  <Link
-                    href="/calculators"
-                    onClick={handleLinkClick}
-                    className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
-                  >
-                    <IconCalendarEvent className="h-3.5 w-3.5 text-orange-500" />
-                    <span>Date & Working Days</span>
+                    <IconCalculator className="h-3.5 w-3.5" />
+                    <span>All Free Tools</span>
                   </Link>
                 </div>
               )}

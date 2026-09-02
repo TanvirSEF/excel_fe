@@ -26,7 +26,7 @@ const QUICK_CATEGORIES = [
   { label: "Google Sheets", href: "/categories/google-sheets-basics", icon: IconTable, color: "text-green-500 bg-green-500/10" },
   { label: "VBA & Macros", href: "/categories/excel-vba", icon: IconCode, color: "text-amber-500 bg-amber-500/10" },
   { label: "Charts & Visuals", href: "/categories/excel-charts", icon: IconChartBar, color: "text-purple-500 bg-purple-500/10" },
-  { label: "Calculators", href: "/#calculators", icon: IconCalculator, color: "text-indigo-500 bg-indigo-500/10" },
+  { label: "Calculators", href: "/calculators", icon: IconCalculator, color: "text-indigo-500 bg-indigo-500/10" },
 ]
 
 const POPULAR_SEARCHES = [
