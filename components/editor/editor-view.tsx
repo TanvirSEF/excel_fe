@@ -12,6 +12,7 @@ import {
   PostForm,
   type PostFormFields,
 } from "@/components/editor/post-form"
+import { SeoAnalysisPanel } from "@/components/editor/seo-analysis-panel"
 import {
   SeoFields,
   type SeoFormFields,
@@ -66,6 +67,7 @@ export function EditorView({ postId }: EditorViewProps) {
 
   const [fields, setFields] = useState<PostFormFields>(EMPTY_FIELDS)
   const [seo, setSeo] = useState<SeoFormFields>(EMPTY_SEO)
+  const [keyphrase, setKeyphrase] = useState("")
   const [schemaType, setSchemaType] = useState(DEFAULT_SCHEMA_TYPE)
   const [doc, setDoc] = useState<JSONContent | null>(null)
   const [initialDoc, setInitialDoc] = useState<JSONContent | null>(null)
@@ -103,6 +105,7 @@ export function EditorView({ postId }: EditorViewProps) {
       canonicalUrl: post.canonical_url ?? "",
       ogImageUrl: post.og_image_url ?? "",
     })
+    setKeyphrase(post.focus_keyphrase ?? "")
     setSchemaType(post.schema_type || DEFAULT_SCHEMA_TYPE)
   }, [postId, post])
 
@@ -133,6 +136,14 @@ export function EditorView({ postId }: EditorViewProps) {
     setSeoDirty(true)
   }, [])
 
+  const onKeyphraseChange = useCallback(
+    (value: string) => {
+      setKeyphrase(value)
+      markDirty()
+    },
+    [markDirty]
+  )
+
   const onSchemaTypeChange = useCallback((value: string) => {
     setSchemaType(value)
     seoDirtyRef.current = true
@@ -159,6 +170,7 @@ export function EditorView({ postId }: EditorViewProps) {
           category_id: fields.categoryId || null,
           tags: fields.tags,
           is_trending: fields.isTrending,
+          focus_keyphrase: keyphrase.trim() || null,
         }
 
         if (postId) {
@@ -199,6 +211,7 @@ export function EditorView({ postId }: EditorViewProps) {
       createPost,
       doc,
       fields,
+      keyphrase,
       postId,
       router,
       updatePost,
@@ -393,6 +406,18 @@ export function EditorView({ postId }: EditorViewProps) {
               />
             </div>
           )}
+
+          <SeoAnalysisPanel
+            title={fields.title}
+            slug={fields.slug}
+            excerpt={fields.excerpt}
+            metaTitle={seo.metaTitle}
+            metaDescription={seo.metaDescription}
+            canonicalUrl={seo.canonicalUrl}
+            keyphrase={keyphrase}
+            doc={doc}
+            onKeyphraseChange={onKeyphraseChange}
+          />
         </aside>
       </div>
     </div>

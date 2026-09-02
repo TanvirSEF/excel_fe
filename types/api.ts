@@ -79,6 +79,7 @@ export interface PostDetail extends PostListItem {
   tags: string[]
   meta_title: string | null
   meta_description: string | null
+  focus_keyphrase: string | null
   canonical_url: string | null
   og_image_url: string | null
   schema_type: string
@@ -112,6 +113,7 @@ export interface PostCreateInput {
   is_trending?: boolean
   meta_title?: string
   meta_description?: string
+  focus_keyphrase?: string | null
   canonical_url?: string | null
   og_image_url?: string | null
   schema_type?: string
