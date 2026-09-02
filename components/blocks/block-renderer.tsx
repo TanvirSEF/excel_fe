@@ -214,7 +214,7 @@ export function BlockRenderer({ blocks, className }: BlockRendererProps) {
   const usedIds = new Set<string>()
 
   return (
-    <div className={cn("space-y-6", className)}>
+    <div className={cn("space-y-7", className)}>
       {blocks.map((block, index) => (
         <BlockNode key={index} block={block} usedIds={usedIds} />
       ))}
