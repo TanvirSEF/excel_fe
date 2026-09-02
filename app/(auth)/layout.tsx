@@ -14,7 +14,7 @@ export default function AuthLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div className="grid w-full lg:grid-cols-2 lg:min-h-[75svh]">
+    <div className="grid min-h-svh w-full lg:grid-cols-2">
       <aside className="relative hidden overflow-hidden bg-gradient-to-bl from-chart-2 via-primary to-chart-5 p-10 text-primary-foreground lg:flex lg:flex-col lg:justify-between lg:p-14">
         <div
           aria-hidden
@@ -26,6 +26,14 @@ export default function AuthLayout({
         />
         <div
           aria-hidden
+          className="pointer-events-none absolute -left-24 -top-1/3 h-[170%] w-64 rotate-[20deg] bg-gradient-to-b from-teal-300/10 via-teal-300/4 to-transparent"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/4 -top-1/3 h-[170%] w-44 rotate-[20deg] bg-gradient-to-b from-white/6 to-transparent"
+        />
+        <div
+          aria-hidden
           className="pointer-events-none absolute inset-0 bg-gradient-to-bl from-white/8 via-transparent to-transparent"
         />
 
@@ -33,9 +41,10 @@ export default function AuthLayout({
           <Image
             src="/logo.png"
             alt="Excel Insider"
-            width={52}
-            height={52}
-            className="rounded-xl"
+            width={233}
+            height={60}
+            priority
+            className="h-14 w-auto"
           />
         </Link>
 
@@ -75,9 +84,9 @@ export default function AuthLayout({
             <Image
               src="/logo.png"
               alt="Excel Insider"
-              width={44}
-              height={44}
-              className="rounded-xl"
+              width={233}
+              height={60}
+              className="h-11 w-auto"
             />
           </div>
           {children}
