@@ -9,7 +9,11 @@ const BENEFITS = [
   "Free downloadable business templates & VBA shortcuts",
 ]
 
-export function NewsletterBand() {
+export function NewsletterBand({
+  source = "home-band",
+}: {
+  source?: string
+}) {
   return (
     <section className="relative my-8 overflow-hidden rounded-3xl bg-gradient-to-br from-chart-2 via-primary to-chart-5 p-8 text-primary-foreground shadow-xl sm:p-12 lg:p-14">
       {/* Decorative ambient glow orbs */}
@@ -63,7 +67,7 @@ export function NewsletterBand() {
 
           {/* Form */}
           <div className="pt-2">
-            <NewsletterForm source="home-band" variant="band" />
+            <NewsletterForm source={source} variant="band" />
           </div>
         </div>
 

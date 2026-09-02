@@ -106,7 +106,7 @@ export default function CalculatorsPage() {
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <section id="tools" className="scroll-mt-20 py-14 sm:py-18">
           <SectionHeading
-            badge="4 Free Tools"
+            badge="7 Free Tools"
             title="Pick a calculator"
             subtitle="Every tool recalculates as you type and pairs its numbers with the worksheet formula that produces them."
           />
