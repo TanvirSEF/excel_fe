@@ -4,6 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { IconEye, IconEyeOff } from "@tabler/icons-react"
 import { toast } from "sonner"
 import { z } from "zod"
 
@@ -28,6 +29,8 @@ type ResetForm = z.infer<typeof schema>
 export function ResetPasswordForm({ token }: { token: string }) {
   const [done, setDone] = useState(false)
   const [failed, setFailed] = useState(false)
+  const [showNew, setShowNew] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
   const {
     register,
     handleSubmit,
@@ -89,25 +92,57 @@ export function ResetPasswordForm({ token }: { token: string }) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
       <div className="space-y-2">
         <Label htmlFor="reset-password">New password</Label>
-        <Input
-          id="reset-password"
-          type="password"
-          autoComplete="new-password"
-          placeholder="At least 10 characters"
-          {...register("password")}
-        />
+        <div className="relative">
+          <Input
+            id="reset-password"
+            type={showNew ? "text" : "password"}
+            autoComplete="new-password"
+            placeholder="At least 10 characters"
+            className="pr-10"
+            {...register("password")}
+          />
+          <button
+            type="button"
+            onClick={() => setShowNew((visible) => !visible)}
+            aria-label={showNew ? "Hide password" : "Show password"}
+            aria-pressed={showNew}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+          >
+            {showNew ? (
+              <IconEyeOff className="h-4 w-4" />
+            ) : (
+              <IconEye className="h-4 w-4" />
+            )}
+          </button>
+        </div>
         {errors.password ? (
           <p className="text-xs text-destructive">{errors.password.message}</p>
         ) : null}
       </div>
       <div className="space-y-2">
         <Label htmlFor="reset-confirm">Confirm new password</Label>
-        <Input
-          id="reset-confirm"
-          type="password"
-          autoComplete="new-password"
-          {...register("confirm")}
-        />
+        <div className="relative">
+          <Input
+            id="reset-confirm"
+            type={showConfirm ? "text" : "password"}
+            autoComplete="new-password"
+            className="pr-10"
+            {...register("confirm")}
+          />
+          <button
+            type="button"
+            onClick={() => setShowConfirm((visible) => !visible)}
+            aria-label={showConfirm ? "Hide password" : "Show password"}
+            aria-pressed={showConfirm}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+          >
+            {showConfirm ? (
+              <IconEyeOff className="h-4 w-4" />
+            ) : (
+              <IconEye className="h-4 w-4" />
+            )}
+          </button>
+        </div>
         {errors.confirm ? (
           <p className="text-xs text-destructive">{errors.confirm.message}</p>
         ) : null}
