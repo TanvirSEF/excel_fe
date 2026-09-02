@@ -255,3 +255,27 @@
   outline: 2px solid var(--primary);
   border-radius: 0.5rem;
 }
+
+.post-editor .tiptap mark {
+  border-radius: 0.125rem;
+  padding: 0 0.125rem;
+}
+
+.post-editor .tiptap .callout-content > * + *,
+.post-editor .tiptap .accordion-content > * + * {
+  margin-top: 0.5em;
+}
+
+.post-editor .tiptap .callout-content > *:last-child,
+.post-editor .tiptap .accordion-content > *:last-child {
+  margin-bottom: 0;
+}
+
+.post-editor .tiptap .callout-content p.is-editor-empty:first-child::before,
+.post-editor .tiptap .accordion-content p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--muted-foreground);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}

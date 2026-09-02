@@ -11,10 +11,12 @@ import {
   IconBold,
   IconCode,
   IconEraser,
+  IconHighlight,
   IconItalic,
   IconLink,
   IconLinkOff,
   IconMinus,
+  IconPalette,
   IconStrikethrough,
 } from "@tabler/icons-react"
 
@@ -22,14 +24,53 @@ import { MediaPicker } from "@/components/editor/media-picker"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
+import type { ButtonVariant } from "@/types/api"
 
 const LANGUAGES = ["plaintext", "excel", "vba", "python", "sql"]
+
+const FONT_SIZES = [
+  { value: "", label: "Normal" },
+  { value: "14px", label: "Small 14" },
+  { value: "20px", label: "Large 20" },
+  { value: "28px", label: "Huge 28" },
+]
+
+const TEXT_COLORS = [
+  "#0d9488",
+  "#2563eb",
+  "#7c3aed",
+  "#db2777",
+  "#dc2626",
+  "#ea580c",
+  "#d97706",
+  "#16a34a",
+  "#0ea5e9",
+  "#334155",
+]
+
+const HIGHLIGHT_COLORS = [
+  "#fef9c3",
+  "#dcfce7",
+  "#dbeafe",
+  "#fee2e2",
+  "#f3e8ff",
+  "#e2e8f0",
+]
 
 interface EditorToolbarProps {
   editor: Editor
 }
 
-type Panel = "image" | "html" | "link" | null
+type Panel =
+  | "image"
+  | "html"
+  | "link"
+  | "fontsize"
+  | "color"
+  | "highlight"
+  | "button"
+  | "embed"
+  | null
 
 export function EditorToolbar({ editor }: EditorToolbarProps) {
   const [panel, setPanel] = useState<Panel>(null)
@@ -38,8 +79,19 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
   const [html, setHtml] = useState("")
   const [linkUrl, setLinkUrl] = useState("")
   const [pickerOpen, setPickerOpen] = useState(false)
+  const [customFontSize, setCustomFontSize] = useState("")
+  const [customColor, setCustomColor] = useState("")
+  const [buttonLabel, setButtonLabel] = useState("")
+  const [buttonHref, setButtonHref] = useState("")
+  const [buttonVariant, setButtonVariant] = useState<ButtonVariant>("primary")
+  const [embedUrl, setEmbedUrl] = useState("")
+  const [embedCaption, setEmbedCaption] = useState("")
 
   const inCodeBlock = editor.isActive("codeBlock")
+  const currentFontSize =
+    (editor.getAttributes("textStyle").fontSize as string | undefined) ?? ""
+  const currentColor =
+    (editor.getAttributes("textStyle").color as string | undefined) ?? ""
 
   function openPanel(next: Panel, prefetch?: () => void) {
     if (panel === next) {
@@ -48,6 +100,44 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
     }
     prefetch?.()
     setPanel(next)
+  }
+
+  function applyFontSize(value: string) {
+    const chain = editor.chain().focus()
+    if (!value) {
+      chain.unsetFontSize().run()
+      return
+    }
+    if (value === "custom") {
+      openPanel("fontsize")
+      return
+    }
+    chain.setFontSize(value).run()
+  }
+
+  function applyCustomFontSize() {
+    const raw = customFontSize.trim()
+    if (!raw) return
+    const value = /^\d+(\.\d+)?$/.test(raw) ? `${raw}px` : raw
+    if (!/^\d{1,3}(\.\d+)?(px|pt|rem|em|%)$/.test(value)) return
+    editor.chain().focus().setFontSize(value).run()
+    setCustomFontSize("")
+    setPanel(null)
+  }
+
+  function applyColor(hex: string) {
+    editor.chain().focus().setColor(hex).run()
+    setPanel(null)
+  }
+
+  function applyHighlight(hex: string | null) {
+    const chain = editor.chain().focus()
+    if (hex) {
+      chain.setHighlight({ color: hex }).run()
+    } else {
+      chain.unsetHighlight().run()
+    }
+    setPanel(null)
   }
 
   function applyLink() {
@@ -157,6 +247,46 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
           </ToolbarButton>
         ) : null}
         <ToolbarButton
+          active={panel === "color" || Boolean(currentColor)}
+          disabled={inCodeBlock}
+          title="Text color"
+          onClick={() => openPanel("color", () => setCustomColor(""))}
+        >
+          <IconPalette className="h-4 w-4" />
+        </ToolbarButton>
+        <ToolbarButton
+          active={panel === "highlight" || editor.isActive("highlight")}
+          disabled={inCodeBlock}
+          title="Highlight"
+          onClick={() => openPanel("highlight")}
+        >
+          <IconHighlight className="h-4 w-4" />
+        </ToolbarButton>
+        <select
+          value={
+            FONT_SIZES.some((size) => size.value === currentFontSize)
+              ? currentFontSize
+              : currentFontSize
+                ? "custom"
+                : ""
+          }
+          disabled={inCodeBlock}
+          onChange={(event) => applyFontSize(event.target.value)}
+          title="Font size"
+          className="h-8 rounded-md border border-input bg-background px-2 text-xs disabled:pointer-events-none disabled:opacity-40"
+        >
+          {FONT_SIZES.map((size) => (
+            <option key={size.value} value={size.value}>
+              {size.label}
+            </option>
+          ))}
+          <option value="custom">
+            {currentFontSize && !FONT_SIZES.some((s) => s.value === currentFontSize)
+              ? `Custom ${currentFontSize}`
+              : "Custom…"}
+          </option>
+        </select>
+        <ToolbarButton
           active={false}
           disabled={inCodeBlock}
           title="Clear formatting"
@@ -249,6 +379,54 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
           }
         >
           Table
+        </ToolbarButton>
+        <ToolbarButton
+          active={false}
+          title="Info / tip / warning / danger box"
+          onClick={() =>
+            editor
+              .chain()
+              .focus()
+              .insertContent({
+                type: "callout",
+                attrs: { variant: "info", title: "" },
+                content: [{ type: "paragraph" }],
+              })
+              .run()
+          }
+        >
+          Callout
+        </ToolbarButton>
+        <ToolbarButton
+          active={panel === "button"}
+          title="Styled link button"
+          onClick={() => openPanel("button")}
+        >
+          Button
+        </ToolbarButton>
+        <ToolbarButton
+          active={panel === "embed"}
+          title="YouTube / Vimeo video"
+          onClick={() => openPanel("embed")}
+        >
+          Embed
+        </ToolbarButton>
+        <ToolbarButton
+          active={false}
+          title="Collapsible FAQ section"
+          onClick={() =>
+            editor
+              .chain()
+              .focus()
+              .insertContent({
+                type: "accordion",
+                attrs: { title: "" },
+                content: [{ type: "paragraph" }],
+              })
+              .run()
+          }
+        >
+          Accordion
         </ToolbarButton>
 
         {inCodeBlock ? (
@@ -389,6 +567,196 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
             }}
           >
             Insert HTML block
+          </Button>
+        </div>
+      ) : null}
+
+      {panel === "fontsize" ? (
+        <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-background p-2">
+          <Input
+            type="text"
+            inputMode="decimal"
+            value={customFontSize}
+            onChange={(event) => setCustomFontSize(event.target.value)}
+            placeholder="Custom size — e.g. 18 or 1.2rem"
+            className="h-8 w-56"
+            autoFocus
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault()
+                applyCustomFontSize()
+              }
+            }}
+          />
+          <Button type="button" size="sm" onClick={applyCustomFontSize}>
+            Apply size
+          </Button>
+        </div>
+      ) : null}
+
+      {panel === "color" ? (
+        <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-background p-2">
+          <div className="flex flex-wrap items-center gap-1.5">
+            {TEXT_COLORS.map((hex) => (
+              <button
+                key={hex}
+                type="button"
+                title={hex}
+                onClick={() => applyColor(hex)}
+                className="h-6 w-6 rounded-md border border-border/60 transition-transform hover:scale-110"
+                style={{ backgroundColor: hex }}
+              />
+            ))}
+          </div>
+          <Input
+            type="text"
+            value={customColor}
+            onChange={(event) => setCustomColor(event.target.value)}
+            placeholder="#hex"
+            className="h-8 w-28 font-mono"
+          />
+          <Button
+            type="button"
+            size="sm"
+            disabled={!/^#[0-9a-fA-F]{3,8}$/.test(customColor.trim())}
+            onClick={() => applyColor(customColor.trim())}
+          >
+            Apply
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              editor.chain().focus().unsetColor().run()
+              setPanel(null)
+            }}
+          >
+            Reset
+          </Button>
+        </div>
+      ) : null}
+
+      {panel === "highlight" ? (
+        <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-background p-2">
+          <div className="flex flex-wrap items-center gap-1.5">
+            {HIGHLIGHT_COLORS.map((hex) => (
+              <button
+                key={hex}
+                type="button"
+                title={hex}
+                onClick={() => applyHighlight(hex)}
+                className="h-6 w-6 rounded-md border border-border/60 transition-transform hover:scale-110"
+                style={{ backgroundColor: hex }}
+              />
+            ))}
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => applyHighlight(null)}
+          >
+            Remove highlight
+          </Button>
+        </div>
+      ) : null}
+
+      {panel === "button" ? (
+        <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-background p-2">
+          <Input
+            value={buttonLabel}
+            onChange={(event) => setButtonLabel(event.target.value)}
+            placeholder="Button label"
+            className="h-8 flex-1 min-w-40"
+            autoFocus
+          />
+          <Input
+            type="url"
+            value={buttonHref}
+            onChange={(event) => setButtonHref(event.target.value)}
+            placeholder="https://link"
+            className="h-8 flex-1 min-w-48"
+          />
+          <select
+            value={buttonVariant}
+            onChange={(event) =>
+              setButtonVariant(event.target.value as ButtonVariant)
+            }
+            className="h-8 rounded-md border border-input bg-background px-2 text-xs"
+          >
+            <option value="primary">Primary</option>
+            <option value="outline">Outline</option>
+          </select>
+          <Button
+            type="button"
+            size="sm"
+            disabled={!buttonLabel.trim() || !buttonHref.trim()}
+            onClick={() => {
+              const href = /^(https?:\/\/|mailto:|\/|#)/i.test(buttonHref.trim())
+                ? buttonHref.trim()
+                : `https://${buttonHref.trim()}`
+              editor
+                .chain()
+                .focus()
+                .insertContent({
+                  type: "ctaButton",
+                  attrs: {
+                    label: buttonLabel.trim(),
+                    href,
+                    variant: buttonVariant,
+                  },
+                })
+                .run()
+              setButtonLabel("")
+              setButtonHref("")
+              setButtonVariant("primary")
+              setPanel(null)
+            }}
+          >
+            Insert button
+          </Button>
+        </div>
+      ) : null}
+
+      {panel === "embed" ? (
+        <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-background p-2">
+          <Input
+            type="url"
+            value={embedUrl}
+            onChange={(event) => setEmbedUrl(event.target.value)}
+            placeholder="https://www.youtube.com/watch?v=…"
+            className="h-8 flex-1 min-w-48"
+            autoFocus
+          />
+          <Input
+            value={embedCaption}
+            onChange={(event) => setEmbedCaption(event.target.value)}
+            placeholder="Caption (optional)"
+            className="h-8 flex-1 min-w-40"
+          />
+          <Button
+            type="button"
+            size="sm"
+            disabled={!embedUrl.trim().startsWith("https://")}
+            onClick={() => {
+              editor
+                .chain()
+                .focus()
+                .insertContent({
+                  type: "embed",
+                  attrs: {
+                    url: embedUrl.trim(),
+                    caption: embedCaption.trim(),
+                  },
+                })
+                .run()
+              setEmbedUrl("")
+              setEmbedCaption("")
+              setPanel(null)
+            }}
+          >
+            Insert video
           </Button>
         </div>
       ) : null}

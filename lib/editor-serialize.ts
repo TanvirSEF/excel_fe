@@ -9,7 +9,15 @@ import type {
   TextAlign,
 } from "@/types/api"
 
-const MARK_TYPES = new Set(["bold", "italic", "strike", "code", "link"])
+const MARK_TYPES = new Set([
+  "bold",
+  "italic",
+  "strike",
+  "code",
+  "link",
+  "textStyle",
+  "highlight",
+])
 const ALIGNMENTS = new Set(["left", "center", "right"])
 
 function textOf(node: JSONContent | undefined): string {
@@ -19,11 +27,24 @@ function textOf(node: JSONContent | undefined): string {
   return ""
 }
 
+function stringAttr(value: unknown): string | undefined {
+  return typeof value === "string" && value.length > 0 ? value : undefined
+}
+
 function markOf(mark: NonNullable<JSONContent["marks"]>[number]): InlineMark | null {
   if (!MARK_TYPES.has(mark.type)) return null
   if (mark.type === "link") {
-    const href = typeof mark.attrs?.href === "string" ? mark.attrs.href : ""
+    const href = stringAttr(mark.attrs?.href)
     return href ? { type: "link", href } : null
+  }
+  if (mark.type === "textStyle") {
+    const fontSize = stringAttr(mark.attrs?.fontSize)
+    const color = stringAttr(mark.attrs?.color)
+    return fontSize || color ? { type: "textStyle", ...(fontSize ? { fontSize } : {}), ...(color ? { color } : {}) } : null
+  }
+  if (mark.type === "highlight") {
+    const color = stringAttr(mark.attrs?.color)
+    return { type: "highlight", ...(color ? { color } : {}) }
   }
   return { type: mark.type as MarkType }
 }
@@ -59,11 +80,25 @@ function plainOf(rich: RichText): string {
 
 function docMarks(inline: InlineText): JSONContent["marks"] {
   if (!inline.marks?.length) return undefined
-  return inline.marks.map((mark) =>
-    mark.type === "link"
-      ? { type: "link", attrs: { href: mark.href ?? "" } }
-      : { type: mark.type }
-  )
+  return inline.marks.map((mark) => {
+    if (mark.type === "link") {
+      return { type: "link", attrs: { href: mark.href ?? "" } }
+    }
+    if (mark.type === "textStyle") {
+      const attrs: Record<string, string> = {}
+      if (mark.fontSize) attrs.fontSize = mark.fontSize
+      if (mark.color) attrs.color = mark.color
+      return Object.keys(attrs).length
+        ? { type: "textStyle", attrs }
+        : { type: "textStyle" }
+    }
+    if (mark.type === "highlight") {
+      return mark.color
+        ? { type: "highlight", attrs: { color: mark.color } }
+        : { type: "highlight" }
+    }
+    return { type: mark.type }
+  })
 }
 
 function inlineNodes(rich: RichText): JSONContent[] {
@@ -133,6 +168,42 @@ export function blocksToDoc(blocks: Block[]): JSONContent {
           return {
             type: "blockquote",
             content: [paragraph(block.content ?? block.text)],
+          }
+        case "callout": {
+          const content = inlineNodes(block.content ?? block.text)
+          return {
+            type: "callout",
+            attrs: {
+              variant: block.variant,
+              ...(block.title ? { title: block.title } : {}),
+            },
+            ...(content.length ? { content: [{ type: "paragraph", content }] } : {}),
+          }
+        }
+        case "accordion": {
+          const content = inlineNodes(block.content ?? block.text)
+          return {
+            type: "accordion",
+            attrs: { title: block.title },
+            ...(content.length ? { content: [{ type: "paragraph", content }] } : {}),
+          }
+        }
+        case "button":
+          return {
+            type: "ctaButton",
+            attrs: {
+              label: block.label,
+              href: block.href,
+              variant: block.variant,
+            },
+          }
+        case "embed":
+          return {
+            type: "embed",
+            attrs: {
+              url: block.url,
+              ...(block.caption ? { caption: block.caption } : {}),
+            },
           }
         case "code":
           return {
@@ -211,6 +282,56 @@ export function docToBlocks(doc: JSONContent | null | undefined): Block[] {
       case "blockquote": {
         const { text, content } = blockOf(richOf(node.content))
         if (text) blocks.push({ type: "quote", text, ...(content ? { content } : {}) })
+        break
+      }
+      case "callout": {
+        const { text, content } = blockOf(richOf(node.content))
+        const variant = node.attrs?.variant
+        if (
+          variant === "info" ||
+          variant === "tip" ||
+          variant === "warning" ||
+          variant === "danger"
+        ) {
+          const title = stringAttr(node.attrs?.title)
+          blocks.push({
+            type: "callout",
+            variant,
+            ...(title ? { title } : {}),
+            text,
+            ...(content ? { content } : {}),
+          })
+        }
+        break
+      }
+      case "accordion": {
+        const { text, content } = blockOf(richOf(node.content))
+        const title = stringAttr(node.attrs?.title)
+        if (title) {
+          blocks.push({
+            type: "accordion",
+            title,
+            text,
+            ...(content ? { content } : {}),
+          })
+        }
+        break
+      }
+      case "ctaButton": {
+        const label = stringAttr(node.attrs?.label)
+        const href = stringAttr(node.attrs?.href)
+        const variant = node.attrs?.variant === "outline" ? "outline" : "primary"
+        if (label && href) {
+          blocks.push({ type: "button", label, href, variant })
+        }
+        break
+      }
+      case "embed": {
+        const url = stringAttr(node.attrs?.url)
+        if (url) {
+          const caption = stringAttr(node.attrs?.caption)
+          blocks.push({ type: "embed", url, ...(caption ? { caption } : {}) })
+        }
         break
       }
       case "codeBlock":

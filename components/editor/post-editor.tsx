@@ -1,10 +1,13 @@
 "use client"
 
 import { EditorContent, useEditor, useEditorState, type JSONContent } from "@tiptap/react"
+import Color from "@tiptap/extension-color"
+import Highlight from "@tiptap/extension-highlight"
 import Image from "@tiptap/extension-image"
 import Placeholder from "@tiptap/extension-placeholder"
 import StarterKit from "@tiptap/starter-kit"
 import TextAlign from "@tiptap/extension-text-align"
+import { FontSize, TextStyle } from "@tiptap/extension-text-style"
 import {
   Table,
   TableCell,
@@ -12,8 +15,12 @@ import {
   TableRow,
 } from "@tiptap/extension-table"
 
+import { AccordionNode } from "@/components/editor/accordion-node"
+import { CtaButtonNode } from "@/components/editor/button-node"
+import { CalloutNode } from "@/components/editor/callout-node"
 import { CodeBlockLanguage } from "@/components/editor/code-block-language"
 import { EditorToolbar } from "@/components/editor/editor-toolbar"
+import { EmbedNode } from "@/components/editor/embed-node"
 import { HtmlBlock } from "@/components/editor/html-block"
 
 interface PostEditorProps {
@@ -40,11 +47,19 @@ export function PostEditor({ initialDoc, onDocChange }: PostEditorProps) {
         placeholder: "Write your article… use the toolbar to add blocks.",
       }),
       TextAlign.configure({ types: ["paragraph", "heading"] }),
+      TextStyle,
+      FontSize,
+      Color,
+      Highlight.configure({ multicolor: true }),
       Table.configure({ resizable: false }),
       TableRow,
       TableHeader,
       TableCell,
       HtmlBlock,
+      CalloutNode,
+      CtaButtonNode,
+      EmbedNode,
+      AccordionNode,
     ],
     content: initialDoc ?? { type: "doc", content: [{ type: "paragraph" }] },
     onUpdate: ({ editor }) => {

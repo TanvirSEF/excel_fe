@@ -1,9 +1,23 @@
 import Image from "next/image"
 import { Fragment, type ReactNode } from "react"
+import {
+  IconAlertTriangle,
+  IconBulb,
+  IconChevronDown,
+  IconInfoCircle,
+  IconAlertOctagon,
+} from "@tabler/icons-react"
 
+import { toEmbedUrl } from "@/lib/embed"
 import { clampHeadingLevel, headingId } from "@/lib/blocks"
 import { cn } from "@/lib/utils"
-import type { Block, InlineMark, RichText, TextAlign } from "@/types/api"
+import type {
+  Block,
+  CalloutVariant,
+  InlineMark,
+  RichText,
+  TextAlign,
+} from "@/types/api"
 
 import { CodeBlock } from "./code-block"
 
@@ -19,6 +33,32 @@ const HEADING_CLASSES: Record<2 | 3 | 4, string> = {
 }
 
 const SAFE_HREF = /^(https?:\/\/|mailto:|\/|#)/i
+
+const CALLOUT_STYLES: Record<
+  CalloutVariant,
+  { icon: typeof IconInfoCircle; box: string; iconClass: string }
+> = {
+  info: {
+    icon: IconInfoCircle,
+    box: "border-sky-500/30 bg-sky-500/5",
+    iconClass: "text-sky-600 dark:text-sky-400",
+  },
+  tip: {
+    icon: IconBulb,
+    box: "border-emerald-500/30 bg-emerald-500/5",
+    iconClass: "text-emerald-600 dark:text-emerald-400",
+  },
+  warning: {
+    icon: IconAlertTriangle,
+    box: "border-amber-500/30 bg-amber-500/5",
+    iconClass: "text-amber-600 dark:text-amber-400",
+  },
+  danger: {
+    icon: IconAlertOctagon,
+    box: "border-red-500/30 bg-red-500/5",
+    iconClass: "text-red-600 dark:text-red-400",
+  },
+}
 
 function withMarks(content: ReactNode, marks?: InlineMark[]): ReactNode {
   let node = content
@@ -55,6 +95,25 @@ function withMarks(content: ReactNode, marks?: InlineMark[]): ReactNode {
         )
         break
       }
+      case "textStyle": {
+        const style = {
+          ...(mark.fontSize ? { fontSize: mark.fontSize } : {}),
+          ...(mark.color ? { color: mark.color } : {}),
+        }
+        if (Object.keys(style).length === 0) break
+        node = <span style={style}>{node}</span>
+        break
+      }
+      case "highlight":
+        node = (
+          <mark
+            className="rounded-sm bg-primary/15 px-0.5"
+            {...(mark.color ? { style: { backgroundColor: mark.color } } : {})}
+          >
+            {node}
+          </mark>
+        )
+        break
     }
   }
   return node
@@ -201,6 +260,86 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
         </div>
       )
     }
+
+    case "callout": {
+      const meta = CALLOUT_STYLES[block.variant] ?? CALLOUT_STYLES.info
+      const Icon = meta.icon
+      return (
+        <div className={cn("rounded-xl border p-4 sm:p-5", meta.box)}>
+          <div className="flex items-start gap-3">
+            <Icon className={cn("mt-0.5 h-5 w-5 shrink-0", meta.iconClass)} />
+            <div className="min-w-0">
+              {block.title ? (
+                <p className={cn("text-sm font-bold", meta.iconClass)}>
+                  {block.title}
+                </p>
+              ) : null}
+              <div className="text-[0.95rem] leading-7 text-foreground/90">
+                <InlineRuns value={block.content ?? block.text} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    case "button": {
+      if (!SAFE_HREF.test(block.href)) return null
+      const isInternal = block.href.startsWith("/") || block.href.startsWith("#")
+      return (
+        <div className="py-1">
+          <a
+            href={block.href}
+            className={cn(
+              "inline-flex items-center rounded-lg px-5 py-2.5 text-sm font-semibold transition-colors",
+              block.variant === "primary"
+                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                : "border border-primary/40 text-primary hover:bg-primary/10"
+            )}
+            {...(isInternal ? {} : { target: "_blank", rel: "noopener noreferrer" })}
+          >
+            {block.label}
+          </a>
+        </div>
+      )
+    }
+
+    case "embed": {
+      const embedUrl = toEmbedUrl(block.url)
+      if (!embedUrl) return null
+      return (
+        <figure>
+          <div className="overflow-hidden rounded-xl border">
+            <iframe
+              src={embedUrl}
+              title={block.caption || "Embedded video"}
+              className="aspect-video w-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              loading="lazy"
+            />
+          </div>
+          {block.caption ? (
+            <figcaption className="mt-2 text-center text-xs text-muted-foreground">
+              {block.caption}
+            </figcaption>
+          ) : null}
+        </figure>
+      )
+    }
+
+    case "accordion":
+      return (
+        <details className="group rounded-xl border border-border/80 bg-card shadow-2xs">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-foreground [&::-webkit-details-marker]:hidden">
+            {block.title}
+            <IconChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-180" />
+          </summary>
+          <div className="border-t border-border/60 px-4 py-3 text-[0.95rem] leading-7 text-foreground/90">
+            <InlineRuns value={block.content ?? block.text} />
+          </div>
+        </details>
+      )
 
     case "hr":
       return <hr className="border-border" />

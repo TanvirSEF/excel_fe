@@ -129,11 +129,23 @@ export interface ContentDoc {
   blocks: Block[]
 }
 
-export type MarkType = "bold" | "italic" | "strike" | "code" | "link"
+export type MarkType =
+  | "bold"
+  | "italic"
+  | "strike"
+  | "code"
+  | "link"
+  | "textStyle"
+  | "highlight"
+
+export type CalloutVariant = "info" | "tip" | "warning" | "danger"
+export type ButtonVariant = "primary" | "outline"
 
 export interface InlineMark {
   type: MarkType
   href?: string
+  fontSize?: string
+  color?: string
 }
 
 export interface InlineText {
@@ -154,6 +166,10 @@ export type Block =
   | { type: "html"; html: string }
   | { type: "image"; url: string; alt?: string }
   | { type: "table"; rows: RichText[][]; header?: boolean }
+  | { type: "callout"; variant: CalloutVariant; text: string; title?: string; content?: RichText }
+  | { type: "button"; label: string; href: string; variant: ButtonVariant }
+  | { type: "embed"; url: string; caption?: string }
+  | { type: "accordion"; title: string; text: string; content?: RichText }
   | { type: "hr" }
 
 export interface Category {
