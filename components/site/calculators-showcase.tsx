@@ -54,7 +54,7 @@ const CALCULATORS = [
 
 export function CalculatorsShowcase() {
   return (
-    <section className="py-12 sm:py-16">
+    <section id="calculators" className="scroll-mt-20 py-12 sm:py-16">
       <SectionHeading
         badge="Instant Free Tools"
         title="Interactive Spreadsheet Calculators"
