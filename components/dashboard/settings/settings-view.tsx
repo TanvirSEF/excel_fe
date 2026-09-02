@@ -1,11 +1,17 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { useRouter } from "next/navigation"
+import {
+  IconLoader2,
+  IconTrash,
+  IconUpload,
+} from "@tabler/icons-react"
 import { toast } from "sonner"
 
 import { RoleBadge } from "@/components/dashboard/users/role-badge"
 import { WpImportPanel } from "@/components/dashboard/settings/wp-import-panel"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -16,16 +22,37 @@ import {
   useChangePassword,
   useRequestVerification,
 } from "@/lib/queries/account"
+import { useUploadMedia } from "@/lib/queries/media"
 import { useUpdateUser } from "@/lib/queries/users"
+
+const AVATAR_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+])
+const AVATAR_MAX_BYTES = 10 * 1024 * 1024
+
+function initials(name: string) {
+  return name
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase() ?? "")
+    .join("")
+}
 
 export function SettingsView() {
   const router = useRouter()
   const user = useAuthStore((state) => state.user)
   const status = useAuthStore((state) => state.status)
   const logout = useAuthStore((state) => state.logout)
+  const setUser = useAuthStore((state) => state.setUser)
   const updateUser = useUpdateUser()
+  const uploadMedia = useUploadMedia()
   const changePassword = useChangePassword()
   const requestVerification = useRequestVerification()
+
+  const avatarInputRef = useRef<HTMLInputElement>(null)
 
   const [name, setName] = useState("")
   const [bio, setBio] = useState("")
@@ -36,12 +63,71 @@ export function SettingsView() {
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [savingProfile, setSavingProfile] = useState(false)
+  const [avatarBusy, setAvatarBusy] = useState(false)
 
   if (user && loadedFor !== user.id) {
     setLoadedFor(user.id)
     setName(user.name)
     setBio(user.bio ?? "")
     setAvatarUrl(user.avatar_url ?? "")
+  }
+
+  async function persistAvatar(url: string | null) {
+    if (!user) return
+    const updated = await updateUser.mutateAsync({
+      userId: user.id,
+      input: { avatar_url: url },
+    })
+    setUser(updated)
+  }
+
+  async function onPickAvatar(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+    event.target.value = ""
+    if (!file || !user) return
+    if (!AVATAR_TYPES.has(file.type)) {
+      toast.error("Only JPG, PNG, WebP or GIF images are allowed.")
+      return
+    }
+    if (file.size > AVATAR_MAX_BYTES) {
+      toast.error("Image must be under 10MB.")
+      return
+    }
+    setAvatarBusy(true)
+    try {
+      const media = await uploadMedia.mutateAsync({
+        file,
+        folder: "avatars",
+      })
+      await persistAvatar(media.file_url)
+      setAvatarUrl(media.file_url)
+      toast.success("Avatar updated.")
+    } catch (error) {
+      toast.error(
+        error instanceof ApiClientError
+          ? error.message
+          : "Could not upload the image. Please try again."
+      )
+    } finally {
+      setAvatarBusy(false)
+    }
+  }
+
+  async function onRemoveAvatar() {
+    setAvatarBusy(true)
+    try {
+      await persistAvatar(null)
+      setAvatarUrl("")
+      toast.success("Avatar removed.")
+    } catch (error) {
+      toast.error(
+        error instanceof ApiClientError
+          ? error.message
+          : "Could not remove the avatar. Please try again."
+      )
+    } finally {
+      setAvatarBusy(false)
+    }
   }
 
   async function onSaveProfile() {
@@ -56,7 +142,6 @@ export function SettingsView() {
         input: {
           name: name.trim(),
           bio: bio.trim() || null,
-          avatar_url: avatarUrl.trim() || null,
         },
       })
       toast.success("Profile saved.")
@@ -157,13 +242,54 @@ export function SettingsView() {
             className="w-full rounded-md border border-input bg-background p-2 text-sm shadow-xs focus:outline-none focus:ring-2 focus:ring-ring/50"
           />
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="settings-avatar">Avatar URL</Label>
-          <Input
-            id="settings-avatar"
-            value={avatarUrl}
-            onChange={(event) => setAvatarUrl(event.target.value)}
-            placeholder="https://…"
+        <div className="flex flex-wrap items-center gap-4">
+          <Avatar className="h-20 w-20 rounded-full border">
+            {avatarUrl ? (
+              <AvatarImage src={avatarUrl} alt={user.name} />
+            ) : null}
+            <AvatarFallback className="text-xl font-bold">
+              {initials(user.name)}
+            </AvatarFallback>
+          </Avatar>
+          <div className="space-y-2">
+            <div className="flex flex-wrap gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => avatarInputRef.current?.click()}
+                disabled={avatarBusy}
+              >
+                {avatarBusy ? (
+                  <IconLoader2 className="animate-spin" />
+                ) : (
+                  <IconUpload />
+                )}
+                {avatarBusy ? "Uploading…" : "Upload photo"}
+              </Button>
+              {avatarUrl ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={onRemoveAvatar}
+                  disabled={avatarBusy}
+                >
+                  <IconTrash />
+                  Remove
+                </Button>
+              ) : null}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              JPG, PNG, WebP or GIF — up to 10MB.
+            </p>
+          </div>
+          <input
+            ref={avatarInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            className="hidden"
+            onChange={onPickAvatar}
           />
         </div>
         <Button

@@ -10,6 +10,7 @@ interface AuthState {
   user: User | null
   status: AuthStatus
   setSession: (accessToken: string, user: User) => void
+  setUser: (user: User) => void
   clear: () => void
   hydrate: () => Promise<void>
   login: (email: string, password: string) => Promise<void>
@@ -23,6 +24,8 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   setSession: (accessToken, user) =>
     set({ accessToken, user, status: "authenticated" }),
+
+  setUser: (user) => set({ user }),
 
   clear: () =>
     set({ accessToken: null, user: null, status: "unauthenticated" }),
