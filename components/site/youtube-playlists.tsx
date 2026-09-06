@@ -77,7 +77,7 @@ export function YoutubePlaylists() {
 
                 {/* Floating YouTube Play Button */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/90 text-white shadow-xl backdrop-blur-xs transition-all duration-300 group-hover:scale-115 group-hover:bg-primary group-hover:shadow-2xl">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-600/90 text-white shadow-xl backdrop-blur-xs transition-all duration-300 group-hover:scale-115 group-hover:bg-red-600 group-hover:shadow-2xl">
                     <IconPlayerPlayFilled className="h-6 w-6 translate-x-0.5" />
                   </div>
                 </div>
