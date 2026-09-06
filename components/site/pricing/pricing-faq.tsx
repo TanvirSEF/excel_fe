@@ -9,17 +9,17 @@ const FAQS = [
   {
     question: "How much does a custom template or dashboard cost?",
     answer:
-      "Simple trackers start at $149. Multi-sheet executive dashboards and financial models are quoted by scope — you always get a fixed, upfront quote before any work starts, so there are no surprises.",
+      "Most quick fixes and edits fall under Basic ($19) or Premium ($49). Full templates and dynamic dashboards fall under the Advanced plan, which starts at $99 — and you always get a fixed, upfront quote before any work starts, so there are no surprises.",
   },
   {
     question: "How is VBA or Apps Script automation priced?",
     answer:
-      "Automation projects start at $199 and scale with complexity. Tell us what the tool should do through the contact form, we scope it together, and nothing is billed until you agree on the scope and the quote.",
+      "Automation and macro work falls under the Advanced plan, starting at $99 and scaling with complexity. Tell us what the tool should do, we scope it together, and nothing is billed until you agree on the scope and the quote.",
   },
   {
     question: "How does consulting work?",
     answer:
-      "Consulting runs from $45 per hour. Send us the broken formula, the slow workbook or the model you are stuck on — we troubleshoot asynchronously or walk you through the fix live, usually within 24–48 hours.",
+      "Pick a plan, email us your workbook and describe the issue. We troubleshoot asynchronously or walk you through the fix live, and most jobs are delivered within 1–5 days depending on the plan.",
   },
   {
     question: "Do I need coding knowledge to use your templates?",

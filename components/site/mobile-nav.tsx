@@ -176,7 +176,7 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
               {pricingExpanded && (
                 <div className="space-y-1 px-2 pb-2.5 pt-1 text-xs border-t border-border/40">
                   <Link
-                    href="/contact?service=troubleshooting"
+                    href="/pricing"
                     onClick={handleLinkClick}
                     className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
                   >
@@ -184,7 +184,7 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
                     <span>Services & Solutions</span>
                   </Link>
                   <Link
-                    href="/contact?service=custom-template"
+                    href="/services/custom-templates"
                     onClick={handleLinkClick}
                     className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
                   >
@@ -192,7 +192,7 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
                     <span>Custom Templates</span>
                   </Link>
                   <Link
-                    href="/contact?service=automation"
+                    href="/services/custom-tools"
                     onClick={handleLinkClick}
                     className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
                   >

@@ -12,12 +12,21 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { ApiClientError } from "@/lib/api/error"
 import { submitContactMessage } from "@/lib/api/contact"
+import { cn } from "@/lib/utils"
 
 const SERVICE_LABELS: Record<string, string> = {
   troubleshooting: "Spreadsheet Troubleshooting",
   "custom-template": "Custom Executive Dashboards",
-  automation: "VBA & Macro Automations",
+  automation: "Custom Spreadsheet Tools",
   modeling: "Financial Modeling Services",
+  basic: "Basic Plan — Quick Fixes",
+  premium: "Premium Plan — Custom Features",
+  advanced: "Advanced Plan — Automation & Templates",
+  "template-basic": "Basic Template Plan",
+  "template-premium": "Premium Template Plan",
+  "template-advanced": "Advanced Template Plan",
+  "tool-professional": "Professional Tool Plan",
+  "tool-advanced": "Advanced Tool Plan — Add-on/Extension",
 }
 
 const contactSchema = z.object({
@@ -33,9 +42,11 @@ type ContactForm = z.infer<typeof contactSchema>
 
 interface ContactFormProps {
   service?: string | null
+  className?: string
+  onSuccess?: () => void
 }
 
-export function ContactForm({ service = null }: ContactFormProps) {
+export function ContactForm({ service = null, className, onSuccess }: ContactFormProps) {
   const serviceLabel = service ? SERVICE_LABELS[service] : undefined
 
   const {
@@ -56,6 +67,7 @@ export function ContactForm({ service = null }: ContactFormProps) {
       })
       toast.success("Message sent! We usually respond within 24–48 hours.")
       reset()
+      onSuccess?.()
     } catch (error) {
       if (error instanceof ApiClientError) {
         toast.error(error.message)
@@ -68,7 +80,10 @@ export function ContactForm({ service = null }: ContactFormProps) {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="rounded-2xl border border-border/80 bg-card p-6 shadow-2xs sm:p-8"
+      className={cn(
+        "rounded-2xl border border-border/80 bg-card p-6 shadow-2xs sm:p-8",
+        className
+      )}
       noValidate
     >
       <div className="space-y-1">

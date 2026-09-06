@@ -1,7 +1,6 @@
-import Link from "next/link"
-import { IconArrowRight, IconCheck, IconSparkles } from "@tabler/icons-react"
+import { IconCheck, IconSparkles } from "@tabler/icons-react"
 
-import { Button } from "@/components/ui/button"
+import { RequestDialog } from "@/components/site/pricing/request-dialog"
 import type { PaidPlan } from "@/lib/pricing"
 import { cn } from "@/lib/utils"
 
@@ -52,15 +51,11 @@ export function PricingPlanCard({ plan }: { plan: PaidPlan }) {
       </ul>
 
       <div className="mt-auto pt-6">
-        <Button
-          asChild
+        <RequestDialog
+          label={plan.ctaLabel}
+          service={plan.id}
           className="w-full rounded-xl bg-primary font-semibold shadow-xs hover:bg-primary/90"
-        >
-          <Link href={plan.cta.href} className="gap-1">
-            {plan.cta.label}
-            <IconArrowRight className="h-4 w-4" />
-          </Link>
-        </Button>
+        />
       </div>
     </div>
   )

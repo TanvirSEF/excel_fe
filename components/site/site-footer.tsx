@@ -12,10 +12,9 @@ import {
 } from "@tabler/icons-react"
 
 const SERVICES_LINKS = [
-  { label: "Spreadsheet Troubleshooting", href: "/contact?service=troubleshooting" },
-  { label: "Custom Executive Dashboards", href: "/contact?service=custom-template" },
-  { label: "VBA & Macro Automations", href: "/contact?service=automation" },
-  { label: "Financial Modeling Services", href: "/contact?service=modeling" },
+  { label: "Services & Solutions", href: "/pricing" },
+  { label: "Custom Spreadsheet Templates", href: "/services/custom-templates" },
+  { label: "Custom Spreadsheet Tools", href: "/services/custom-tools" },
   { label: "Request a Custom Quote", href: "/contact" },
 ]
 

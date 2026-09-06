@@ -1,24 +1,53 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { IconArrowRight, IconCheck } from "@tabler/icons-react"
+import {
+  IconArrowRight,
+  IconCheck,
+  IconCircleCheck,
+  IconFileUpload,
+  IconListCheck,
+} from "@tabler/icons-react"
 
+import { CtaBand } from "@/components/site/cta-band"
+import { HowItWorks, type HowItWorksStep } from "@/components/site/how-it-works"
 import { NewsletterBand } from "@/components/site/newsletter/newsletter-band"
 import { PricingFaq } from "@/components/site/pricing/pricing-faq"
 import { PricingPlanCard } from "@/components/site/pricing/pricing-plan-card"
 import { TemplateCard } from "@/components/site/pricing/template-card"
 import { SectionHeading } from "@/components/site/section-heading"
 import { Button } from "@/components/ui/button"
-import { FREE_PLAN, FREE_TEMPLATES, PAID_PLANS } from "@/lib/pricing"
+import { FREE_PLAN, FREE_TEMPLATES, HELP_PLANS } from "@/lib/pricing"
+
+const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
+  {
+    step: "01",
+    title: "Choose a Plan",
+    description: "Select from Basic, Premium, or Advanced spreadsheet support.",
+    icon: IconListCheck,
+  },
+  {
+    step: "02",
+    title: "Send Your File",
+    description: "Email us your spreadsheet and describe the issue.",
+    icon: IconFileUpload,
+  },
+  {
+    step: "03",
+    title: "Get It Solved",
+    description: "We'll fix, build, or optimize your sheet and send it back ASAP.",
+    icon: IconCircleCheck,
+  },
+]
 
 export const metadata: Metadata = {
   title: "Pricing & Free Templates | Excel Insider",
   description:
-    "Every tutorial, calculator and template on Excel Insider is free. Custom dashboards from $149, VBA & Apps Script automation from $199, expert consulting from $45/hour — always quoted upfront.",
+    "Every tutorial, calculator and template on Excel Insider is free. Expert spreadsheet help from $19 — quick fixes, custom features and full automation, delivered in days.",
   alternates: { canonical: "/pricing" },
   openGraph: {
     title: "Pricing & Free Templates | Excel Insider",
     description:
-      "One free library, three custom services — custom templates, automation and consulting, always quoted upfront.",
+      "Free templates plus three expert-help plans — Basic $19, Premium $49, Advanced $99+ — always quoted upfront.",
     url: "/pricing",
     images: ["/og-default.png"],
   },
@@ -44,18 +73,18 @@ export default function PricingPage() {
         <div className="relative mx-auto w-full max-w-6xl px-4 py-16 text-center sm:px-6 sm:py-24">
           <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-3 py-1 text-xs font-semibold text-primary-foreground/90 backdrop-blur-xs">
             <span className="h-1.5 w-1.5 rounded-full bg-primary-foreground/80" />
-            Free Templates · No Paywall
+            Expert Spreadsheet Help · Free Templates
           </span>
 
           <h1 className="mx-auto mt-5 max-w-3xl text-balance text-3xl font-bold leading-tight tracking-tight text-primary-foreground sm:text-5xl">
-            Free Templates.{" "}
-            <span className="text-teal-300">Simple Pricing.</span>
+            Solve Your Spreadsheet Problems{" "}
+            <span className="text-teal-300">Fast.</span>
           </h1>
 
           <p className="mx-auto mt-4 max-w-2xl text-pretty text-sm leading-relaxed text-primary-foreground/80 sm:text-base">
-            Everything to read, calculate and download is free — no account, no
-            paywall. When you need something bespoke, custom work starts at $45
-            and is always quoted upfront.
+            Get expert help with Excel and Google Sheets. Whether it&apos;s
+            fixing errors, building formulas, or customizing templates — choose
+            a plan and send us your file. We&apos;ll take care of the rest.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -63,8 +92,8 @@ export default function PricingPage() {
               asChild
               className="bg-primary-foreground text-primary hover:bg-primary-foreground/90"
             >
-              <a href="#templates">
-                Browse free templates
+              <a href="#plans">
+                Get Started
                 <IconArrowRight className="h-4 w-4" />
               </a>
             </Button>
@@ -73,7 +102,7 @@ export default function PricingPage() {
               variant="outline"
               className="border-primary-foreground/35 bg-primary-foreground/5 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
             >
-              <Link href="/contact">Get a custom quote</Link>
+              <a href="#templates">Browse free templates</a>
             </Button>
           </div>
         </div>
@@ -83,8 +112,8 @@ export default function PricingPage() {
         <section id="plans" className="scroll-mt-20 py-14 sm:py-18">
           <SectionHeading
             badge="Pricing & Plans"
-            title="One free library, three custom services"
-            subtitle="Everything to read and download is free. When you need something bespoke, pick a package — every project gets an upfront fixed quote."
+            title="Pick the plan that fits your task"
+            subtitle="Everything to read and download stays free. When you need an expert, choose a plan — clear deliverables, upfront pricing, no surprises."
           />
 
           <div className="rounded-2xl border border-primary/25 bg-primary/5 p-6 shadow-2xs sm:p-8">
@@ -141,11 +170,16 @@ export default function PricingPage() {
           </div>
 
           <div className="mt-8 grid gap-6 pt-3 md:grid-cols-3">
-            {PAID_PLANS.map((plan) => (
+            {HELP_PLANS.map((plan) => (
               <PricingPlanCard key={plan.id} plan={plan} />
             ))}
           </div>
         </section>
+
+        <HowItWorks
+          steps={HOW_IT_WORKS_STEPS}
+          subtitle="From broken formula to finished fix in three straightforward steps."
+        />
 
         <section
           id="templates"
@@ -172,6 +206,8 @@ export default function PricingPage() {
           />
           <PricingFaq />
         </section>
+
+        <CtaBand />
 
         <section className="pb-14 pt-2 sm:pb-18">
           <div id="newsletter" className="scroll-mt-20">

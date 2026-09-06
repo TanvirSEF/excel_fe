@@ -1,4 +1,7 @@
 import {
+  IconApps,
+  IconBolt,
+  IconChartBar,
   IconChartDonut4,
   IconClockHour2,
   IconCode,
@@ -8,7 +11,7 @@ import {
   IconPigMoney,
   IconScale,
   IconTimeline,
-  IconUserCheck,
+  IconTools,
   IconUsers,
   type TablerIcon,
 } from "@tabler/icons-react"
@@ -29,9 +32,14 @@ export interface FreePlan {
 }
 
 export type PaidPlanId =
-  | "custom-template"
-  | "automation"
-  | "consulting"
+  | "basic"
+  | "premium"
+  | "advanced"
+  | "template-basic"
+  | "template-premium"
+  | "template-advanced"
+  | "tool-professional"
+  | "tool-advanced"
 
 export interface PaidPlan {
   id: PaidPlanId
@@ -41,7 +49,7 @@ export interface PaidPlan {
   unit: string
   icon: TablerIcon
   popular: boolean
-  cta: PricingCta
+  ctaLabel: string
   features: string[]
 }
 
@@ -67,62 +75,153 @@ export const FREE_PLAN: FreePlan = {
   secondaryCta: { label: "Try the Calculators", href: "/calculators" },
 }
 
-export const PAID_PLANS: PaidPlan[] = [
+export const HELP_PLANS: PaidPlan[] = [
   {
-    id: "custom-template",
-    name: "Custom Templates",
-    tagline: "Bespoke dashboards & financial models",
-    priceLabel: "from $149",
-    unit: "per template",
-    icon: IconFileSpreadsheet,
-    popular: true,
-    cta: {
-      label: "Order Custom Template",
-      href: "/contact?service=custom-template",
-    },
+    id: "basic",
+    name: "Basic",
+    tagline: "Perfect for quick fixes & small edits",
+    priceLabel: "$19",
+    unit: "one-time",
+    icon: IconBolt,
+    popular: false,
+    ctaLabel: "Get Started",
     features: [
-      "Executive KPI & revenue dashboards",
-      "Automated budgeting & financial models",
-      "Interactive Pivot Tables & smart slicers",
-      "Brand colors, clean layout & setup docs included",
+      "Up to 2 tasks",
+      "Formula corrections",
+      "Chart edits",
+      "Delivery in 1–2 days",
     ],
   },
   {
-    id: "automation",
-    name: "Custom Spreadsheet Tools",
-    tagline: "VBA macros, Apps Script & automations",
-    priceLabel: "from $199",
+    id: "premium",
+    name: "Premium",
+    tagline: "For custom features & sheet optimization",
+    priceLabel: "$49",
+    unit: "one-time",
+    icon: IconChartBar,
+    popular: true,
+    ctaLabel: "Get Started",
+    features: [
+      "Up to 5 tasks",
+      "Advanced formulas",
+      "Sheet structuring",
+      "Charts & visuals",
+      "Delivery in 2–3 days",
+    ],
+  },
+  {
+    id: "advanced",
+    name: "Advanced",
+    tagline: "Best for complex automation & full templates",
+    priceLabel: "$99+",
     unit: "per project",
     icon: IconCode,
     popular: false,
-    cta: {
-      label: "Build Custom Tool",
-      href: "/contact?service=automation",
-    },
+    ctaLabel: "Get Started",
     features: [
-      "One-click VBA macro automations",
-      "Google Apps Script & API integrations",
-      "Multi-sheet data consolidation pipelines",
-      "Scheduled reports & email automations",
+      "Unlimited tasks",
+      "Macros & VBA (optional)",
+      "Dynamic dashboards",
+      "Google Sheets support",
+      "Delivery in 3–5 days",
+    ],
+  },
+]
+
+export const TEMPLATE_PLANS: PaidPlan[] = [
+  {
+    id: "template-basic",
+    name: "Basic",
+    tagline: "Starter custom template",
+    priceLabel: "$25+",
+    unit: "one-time",
+    icon: IconFileSpreadsheet,
+    popular: false,
+    ctaLabel: "Get Started",
+    features: [
+      "1 clean worksheet",
+      "Basic formulas",
+      "Organized layout",
+      "Data validation",
+      "1 revision",
+      "Delivery in 2–3 days",
     ],
   },
   {
-    id: "consulting",
-    name: "Services & Solutions",
-    tagline: "Expert consulting, troubleshooting & optimization",
-    priceLabel: "from $45",
-    unit: "per hour",
-    icon: IconUserCheck,
-    popular: false,
-    cta: {
-      label: "Request Solution",
-      href: "/contact?service=troubleshooting",
-    },
+    id: "template-premium",
+    name: "Premium",
+    tagline: "Business-ready multi-sheet template",
+    priceLabel: "$75+",
+    unit: "one-time",
+    icon: IconLayoutDashboard,
+    popular: true,
+    ctaLabel: "Get Started",
     features: [
-      "Fix #VALUE!, #N/A & circular reference errors",
-      "Optimize heavy & laggy workbooks",
-      "Advanced lookup & dynamic array models",
-      "Async reviews or live walkthrough sessions",
+      "2–4 interlinked sheets",
+      "Formulas with smart logic",
+      "Charts & dashboards",
+      "Custom branding",
+      "2 revisions",
+      "Delivery in 4–5 days",
+    ],
+  },
+  {
+    id: "template-advanced",
+    name: "Advanced",
+    tagline: "Best for complex automation",
+    priceLabel: "$175+",
+    unit: "per project",
+    icon: IconCode,
+    popular: false,
+    ctaLabel: "Get Started",
+    features: [
+      "Unlimited sheets & logic",
+      "All advanced formulas",
+      "Power Query / VBA / Pivot Tables",
+      "Real-time data visualization",
+      "5 revisions",
+      "Delivery in 6–8 days",
+    ],
+  },
+]
+
+export const TOOL_PLANS: PaidPlan[] = [
+  {
+    id: "tool-professional",
+    name: "Professional",
+    tagline: "Custom spreadsheet tool",
+    priceLabel: "$500+",
+    unit: "per project",
+    icon: IconTools,
+    popular: true,
+    ctaLabel: "Get Started",
+    features: [
+      "Complex Excel or Google Sheets tools",
+      "Multi-sheet automation",
+      "Advanced formulas, Power Query or VBA",
+      "Interactive dashboards",
+      "Custom branding (logos, colors)",
+      "3 revisions",
+      "Delivery in 7–10 days",
+    ],
+  },
+  {
+    id: "tool-advanced",
+    name: "Advanced",
+    tagline: "Google Workspace add-on / extension",
+    priceLabel: "$1200+",
+    unit: "per project",
+    icon: IconApps,
+    popular: false,
+    ctaLabel: "Get Started",
+    features: [
+      "Fully functional Google Sheets/Docs add-on or Chrome extension",
+      "Published on Google Workspace Marketplace (optional)",
+      "API integrations & advanced automation",
+      "User-friendly UI with custom menus & buttons",
+      "Documentation & usage guide",
+      "5 revisions",
+      "Delivery in 15–20 days",
     ],
   },
 ]
