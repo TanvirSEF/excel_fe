@@ -106,7 +106,7 @@ export default async function CalculatorPage({
         <Calculator />
       </div>
 
-      <section className="mt-12 rounded-2xl border border-border/80 bg-card p-6 shadow-2xs">
+      <section className="mt-12 rounded-2xl border border-primary/50 bg-card p-6 shadow-2xs">
         <h2 className="text-base font-bold tracking-tight text-foreground">
           How this maps to Excel
         </h2>

@@ -104,7 +104,7 @@ export function TopicsSection({ categories }: TopicsSectionProps) {
             <Link
               key={topic.title}
               href={topic.href}
-              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border/80 bg-card p-6 shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg"
+              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-primary/50 bg-card p-6 shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/80 hover:shadow-lg"
             >
               <div className="space-y-4">
                 {/* Header Row: Icon + Badge */}

@@ -12,8 +12,8 @@ export function PricingPlanCard({ plan }: { plan: PaidPlan }) {
       className={cn(
         "relative flex flex-col rounded-2xl border bg-card p-6 shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:shadow-lg",
         plan.popular
-          ? "border-primary/60 shadow-lg"
-          : "border-border/80 hover:border-primary/50"
+          ? "border-primary/70 shadow-lg"
+          : "border-primary/50 hover:border-primary/80"
       )}
     >
       {plan.popular ? (

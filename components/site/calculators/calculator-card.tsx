@@ -19,7 +19,7 @@ export function CalculatorCard({
     <Link
       href={`/calculators/${calculator.slug}`}
       className={cn(
-        "group flex flex-col justify-between overflow-hidden rounded-2xl border border-border/80 bg-card shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg",
+        "group flex flex-col justify-between overflow-hidden rounded-2xl border border-primary/50 bg-card shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/80 hover:shadow-lg",
         variant === "compact" ? "p-5" : "p-6"
       )}
     >

@@ -82,7 +82,7 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
               </>
             )
             const cardClass =
-              "group flex items-start gap-4 rounded-2xl border border-border/80 bg-card p-5 shadow-2xs transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md"
+              "group flex items-start gap-4 rounded-2xl border border-primary/50 bg-card p-5 shadow-2xs transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/80 hover:shadow-md"
 
             return item.href ? (
               <a key={item.label} href={item.href} className={cardClass}>

@@ -15,7 +15,7 @@ export function PostCard({ post, className }: PostCardProps) {
   return (
     <article
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-2xl border border-border/80 bg-card p-3.5 shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg",
+        "group relative flex flex-col overflow-hidden rounded-2xl border border-primary/50 bg-card p-3.5 shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/80 hover:shadow-lg",
         className
       )}
     >

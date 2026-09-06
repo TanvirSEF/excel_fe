@@ -59,7 +59,7 @@ export function YoutubePlaylists() {
             href={playlist.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-border/80 bg-card shadow-2xs transition-all duration-300 hover:-translate-y-1.5 hover:border-red-500/40 hover:shadow-xl"
+            className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-primary/50 bg-card shadow-2xs transition-all duration-300 hover:-translate-y-1.5 hover:border-red-500/40 hover:shadow-xl"
           >
             <div>
               {/* Video Thumbnail Header */}

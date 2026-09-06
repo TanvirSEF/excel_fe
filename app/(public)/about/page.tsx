@@ -219,7 +219,7 @@ export default function AboutPage() {
           </div>
 
           <div className="flex flex-col justify-center">
-            <div className="rounded-2xl border border-border/80 bg-card p-6 shadow-2xs sm:p-8">
+            <div className="rounded-2xl border border-primary/50 bg-card p-6 shadow-2xs sm:p-8">
               <h3 className="text-lg font-bold tracking-tight">
                 What you get
               </h3>
@@ -281,7 +281,7 @@ export default function AboutPage() {
               return (
                 <div
                   key={pillar.title}
-                  className="rounded-2xl border border-border/80 bg-card p-6 shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg"
+                  className="rounded-2xl border border-primary/50 bg-card p-6 shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/80 hover:shadow-lg"
                 >
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary">
                     <Icon className="h-5 w-5" />
@@ -310,7 +310,7 @@ export default function AboutPage() {
             {TEAM_MEMBERS.map((member) => (
               <div
                 key={member.name}
-                className="group rounded-2xl border border-border/80 bg-card p-6 shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg sm:p-8"
+                className="group rounded-2xl border border-primary/50 bg-card p-6 shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/80 hover:shadow-lg sm:p-8"
               >
                 <div className="flex items-center gap-4">
                   <div
@@ -361,7 +361,7 @@ export default function AboutPage() {
               {TRUST_POINTS.map((point) => (
                 <div
                   key={point}
-                  className="flex items-center gap-2.5 rounded-xl border border-border/80 bg-card px-4 py-3 text-sm font-semibold shadow-2xs"
+                  className="flex items-center gap-2.5 rounded-xl border border-primary/50 bg-card px-4 py-3 text-sm font-semibold shadow-2xs"
                 >
                   <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
                     <IconCheck className="h-3 w-3 stroke-[3]" />

@@ -43,7 +43,7 @@ export function FaqSection() {
         {FAQS.map((faq, index) => (
           <details
             key={faq.question}
-            className="group rounded-2xl border border-border/80 bg-card p-5 shadow-2xs transition-all duration-200 open:border-primary/40 open:shadow-xs hover:border-border"
+            className="group rounded-2xl border border-primary/40 bg-card p-5 shadow-2xs transition-all duration-200 open:border-primary/70 open:shadow-xs hover:border-primary/60"
             {...(index === 0 ? { open: true } : {})}
           >
             <summary className="flex cursor-pointer items-center justify-between gap-4 font-semibold text-foreground transition-colors group-open:text-primary hover:text-primary">

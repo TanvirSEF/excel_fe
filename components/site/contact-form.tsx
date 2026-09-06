@@ -81,7 +81,7 @@ export function ContactForm({ service = null, className, onSuccess }: ContactFor
     <form
       onSubmit={handleSubmit(onSubmit)}
       className={cn(
-        "rounded-2xl border border-border/80 bg-card p-6 shadow-2xs sm:p-8",
+        "rounded-2xl border border-primary/50 bg-card p-6 shadow-2xs sm:p-8",
         className
       )}
       noValidate

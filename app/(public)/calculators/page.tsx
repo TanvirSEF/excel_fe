@@ -125,7 +125,7 @@ export default function CalculatorsPage() {
               return (
                 <div
                   key={item.title}
-                  className="rounded-2xl border border-border/80 bg-card p-6 shadow-2xs"
+                  className="rounded-2xl border border-primary/50 bg-card p-6 shadow-2xs"
                 >
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary">
                     <Icon className="h-[22px] w-[22px]" />
