@@ -59,7 +59,7 @@ export function YoutubePlaylists() {
             href={playlist.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-primary/50 bg-card shadow-2xs transition-all duration-300 hover:-translate-y-1.5 hover:border-red-500/40 hover:shadow-xl"
+            className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-primary/50 bg-card shadow-2xs transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/80 hover:shadow-xl"
           >
             <div>
               {/* Video Thumbnail Header */}
@@ -77,21 +77,21 @@ export function YoutubePlaylists() {
 
                 {/* Floating YouTube Play Button */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-600/90 text-white shadow-xl backdrop-blur-xs transition-all duration-300 group-hover:scale-115 group-hover:bg-red-600 group-hover:shadow-2xl">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/90 text-white shadow-xl backdrop-blur-xs transition-all duration-300 group-hover:scale-115 group-hover:bg-primary group-hover:shadow-2xl">
                     <IconPlayerPlayFilled className="h-6 w-6 translate-x-0.5" />
                   </div>
                 </div>
 
                 {/* Playlist Category Badge */}
                 <div className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-background/90 px-3 py-1 text-xs font-semibold text-foreground shadow-xs backdrop-blur-xs">
-                  <IconBrandYoutube className="h-3.5 w-3.5 text-red-600" />
+                  <IconBrandYoutube className="h-3.5 w-3.5 text-primary" />
                   <span>{playlist.badge}</span>
                 </div>
               </div>
 
               {/* Text Details */}
               <div className="p-5 sm:p-6 space-y-2">
-                <h3 className="text-lg font-bold leading-snug tracking-tight text-foreground transition-colors group-hover:text-red-600 sm:text-xl">
+                <h3 className="text-lg font-bold leading-snug tracking-tight text-foreground transition-colors group-hover:text-primary sm:text-xl">
                   {playlist.title}
                 </h3>
                 <p className="text-sm leading-relaxed text-muted-foreground">
@@ -101,7 +101,7 @@ export function YoutubePlaylists() {
             </div>
 
             {/* Bottom Link Action */}
-            <div className="p-5 sm:p-6 pt-0 flex items-center justify-between border-t border-border/60 mt-3 pt-4 text-xs font-bold text-red-600">
+            <div className="p-5 sm:p-6 pt-0 flex items-center justify-between border-t border-border/60 mt-3 pt-4 text-xs font-bold text-primary">
               <span className="inline-flex items-center gap-1.5">
                 <IconBrandYoutube className="h-4 w-4" />
                 <span>Watch full playlist on YouTube</span>
