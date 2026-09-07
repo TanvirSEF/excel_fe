@@ -24,6 +24,13 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
   Table,
   TableBody,
   TableCell,
@@ -49,9 +56,9 @@ interface AnovaTableRow {
 }
 
 const DEFAULT_CELLS = [
-  ["8", "10", "12"],
-  ["10", "12", "14"],
-  ["12", "14", "22"],
+  ["8, 9", "12, 14", "18, 19"],
+  ["11, 13", "16, 18", "24, 26"],
+  ["14, 15", "21, 22", "30, 32"],
 ]
 
 function resizeGrid(cells: string[][], rows: number, cols: number): string[][] {
@@ -62,6 +69,7 @@ function resizeGrid(cells: string[][], rows: number, cols: number): string[][] {
 
 export function TwoWayAnovaCalculator() {
   const [cells, setCells] = useState<string[][]>(DEFAULT_CELLS)
+  const [alpha, setAlpha] = useState(0.05)
   const rows = cells.length
   const cols = cells[0]?.length ?? 0
 
@@ -164,7 +172,7 @@ export function TwoWayAnovaCalculator() {
 
   const copyRows: string[][] = result
     ? [
-        ["Source", "SS", "df", "MS", "F", "p"],
+        ["Source", "SS", "df", "MS", "F", "p", `Sig? (α=${alpha})`],
         ...anovaRows.map((row) => [
           row.source,
           formatDecimal(row.ss, 2),
@@ -172,6 +180,7 @@ export function TwoWayAnovaCalculator() {
           row.ms !== null ? formatDecimal(row.ms, 2) : "",
           row.f !== null ? formatDecimal(row.f, 2) : "",
           row.p !== null ? formatPValue(row.p) : "",
+          row.p !== null ? (row.p < alpha ? "Yes" : "No") : "",
         ]),
       ]
     : []
@@ -244,6 +253,22 @@ export function TwoWayAnovaCalculator() {
                 </Button>
               </div>
             </div>
+
+              <div className="space-y-1.5">
+                <p className="text-xs font-medium text-muted-foreground">
+                  Significance level (α)
+                </p>
+                <Select value={String(alpha)} onValueChange={(v) => setAlpha(Number(v))}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Pick α" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0.01">0.01 (1%)</SelectItem>
+                    <SelectItem value="0.05">0.05 (5%)</SelectItem>
+                    <SelectItem value="0.1">0.10 (10%)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
             <div className="overflow-x-auto">
               <table className="w-full border-separate border-spacing-1">
@@ -323,6 +348,7 @@ export function TwoWayAnovaCalculator() {
                       <TableHead className="text-right">MS</TableHead>
                       <TableHead className="text-right">F</TableHead>
                       <TableHead className="text-right">p</TableHead>
+                      <TableHead className="text-center">Sig?</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -342,6 +368,17 @@ export function TwoWayAnovaCalculator() {
                         <TableCell className="text-right font-mono tabular-nums">
                           {row.p !== null ? formatPValue(row.p) : "—"}
                         </TableCell>
+                        <TableCell className="text-center text-xs font-bold">
+                          {row.p !== null ? (
+                            row.p < alpha ? (
+                              <span className="text-emerald-600 dark:text-emerald-400">Yes</span>
+                            ) : (
+                              <span className="text-muted-foreground">No</span>
+                            )
+                          ) : (
+                            "—"
+                          )}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -349,6 +386,55 @@ export function TwoWayAnovaCalculator() {
                 <div className="flex justify-end border-t border-border/60 p-2">
                   <CopyTableButton rows={copyRows} />
                 </div>
+              </div>
+
+              <div className="space-y-2">
+                <div
+                  className={`flex items-start gap-2 rounded-xl border p-3 text-xs leading-relaxed ${
+                    result.pRows < alpha
+                      ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
+                      : "border-border/70 bg-muted/20 text-muted-foreground"
+                  }`}
+                >
+                  <span className="font-bold">{result.pRows < alpha ? "✓" : "○"}</span>
+                  <p>
+                    Factor A (rows){result.pRows < alpha ? " has a" : " has NO"}
+                    statistically significant effect at α = {alpha}.
+                  </p>
+                </div>
+                <div
+                  className={`flex items-start gap-2 rounded-xl border p-3 text-xs leading-relaxed ${
+                    result.pCols < alpha
+                      ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
+                      : "border-border/70 bg-muted/20 text-muted-foreground"
+                  }`}
+                >
+                  <span className="font-bold">{result.pCols < alpha ? "✓" : "○"}</span>
+                  <p>
+                    Factor B (columns){result.pCols < alpha ? " has a" : " has NO"}
+                    statistically significant effect at α = {alpha}.
+                  </p>
+                </div>
+                {"pInteraction" in result ? (
+                  <div
+                    className={`flex items-start gap-2 rounded-xl border p-3 text-xs leading-relaxed ${
+                      (result as TwoWayAnovaReplicatedResult).pInteraction < alpha
+                        ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
+                        : "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400"
+                    }`}
+                  >
+                    <span className="font-bold">
+                      {(result as TwoWayAnovaReplicatedResult).pInteraction < alpha ? "✓" : "⚠"}
+                    </span>
+                    <p>
+                      Interaction{(result as TwoWayAnovaReplicatedResult).pInteraction < alpha ? " IS" : " is NOT"}
+                      significant at α = {alpha}.
+                      {(result as TwoWayAnovaReplicatedResult).pInteraction < alpha
+                        ? " The factors work together — interpret combinations, not main effects alone."
+                        : " The factors act independently — main effects tell the full story."}
+                    </p>
+                  </div>
+                ) : null}
               </div>
             </ResultsRegion>
           ) : (
