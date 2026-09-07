@@ -268,6 +268,45 @@ export function twoWayAnovaReplicated(
   }
 }
 
+export type NoiseStandard = "osha" | "niosh"
+
+export interface NoiseExposure {
+  level: number
+  hours: number
+}
+
+export interface NoiseTwaResult {
+  dose: number
+  twa: number
+  totalHours: number
+  allowedTimes: number[]
+}
+
+export function noiseTwa(
+  exposures: NoiseExposure[],
+  standard: NoiseStandard
+): NoiseTwaResult {
+  const criterion = standard === "osha" ? 90 : 85
+  const exchange = standard === "osha" ? 5 : 3
+  let dose = 0
+  let totalHours = 0
+  const allowedTimes: number[] = []
+
+  for (const exposure of exposures) {
+    const allowed = 8 / 2 ** ((exposure.level - criterion) / exchange)
+    allowedTimes.push(allowed)
+    dose += (exposure.hours / allowed) * 100
+    totalHours += exposure.hours
+  }
+
+  const twa =
+    standard === "osha"
+      ? 16.61 * Math.log10(dose / 100) + 90
+      : 10 * Math.log10(dose / 100) + 85
+
+  return { dose, twa, totalHours, allowedTimes }
+}
+
 const ERF_P = 0.3275911
 const ERF_A = [0.254829592, -0.284496736, 1.421413741, -1.453152027, 1.061405429]
 

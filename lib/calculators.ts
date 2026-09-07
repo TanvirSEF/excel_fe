@@ -117,10 +117,11 @@ export const STATS_HUB: CalculatorHub = {
         },
         {
           slug: "time-weighted-average-calculator",
-          name: "Time Weighted Average Calculator",
+          name: "Time Weighted Average (TWA) Calculator",
           whatItIs:
-            "Calculates the average value of something over a specific period, removing the distorting effects of external cash flows or varying time intervals.",
-          whatToExpect: "A clear view of performance or exposure levels over a set timeline.",
+            "Measures a worker's daily noise or chemical exposure across an 8-hour workday, with OSHA and NIOSH safety limits built in.",
+          whatToExpect:
+            "Your 8-hour TWA, total dose % and a safety verdict against the legal exposure limits.",
         },
       ],
     },
