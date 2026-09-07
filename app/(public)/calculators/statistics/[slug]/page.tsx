@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import type { ComponentType } from "react"
+import { IconChevronDown } from "@tabler/icons-react"
 
 import { GeometricMeanCalculator } from "@/components/site/calculators/statistics/geometric-mean-calculator"
 import { HarmonicMeanCalculator } from "@/components/site/calculators/statistics/harmonic-mean-calculator"
@@ -194,6 +195,31 @@ export default async function CalculatorPage({
               <span className="font-semibold text-primary">In Excel: </span>
               {detail.excelNote}
             </p>
+          </div>
+        ) : null}
+
+        {detail.faqs && detail.faqs.length > 0 ? (
+          <div className="mt-8 space-y-4 border-t border-border/60 pt-8">
+            <h3 className="text-lg font-bold tracking-tight text-foreground">
+              Frequently asked questions
+            </h3>
+            {detail.faqs.map((faq, index) => (
+              <details
+                key={faq.question}
+                className="group rounded-2xl border border-primary/40 bg-muted/20 p-5 transition-all duration-200 open:border-primary/70 hover:border-primary/60"
+                {...(index === 0 ? { open: true } : {})}
+              >
+                <summary className="flex cursor-pointer items-center justify-between gap-4 font-semibold text-foreground transition-colors group-open:text-primary hover:text-primary">
+                  <span className="text-sm sm:text-base">{faq.question}</span>
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground transition-transform duration-200 group-open:rotate-180 group-open:bg-primary/10 group-open:text-primary">
+                    <IconChevronDown className="h-4 w-4" />
+                  </div>
+                </summary>
+                <p className="mt-3.5 text-sm leading-relaxed text-muted-foreground">
+                  {faq.answer}
+                </p>
+              </details>
+            ))}
           </div>
         ) : null}
       </section>
