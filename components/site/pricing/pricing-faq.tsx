@@ -4,7 +4,7 @@ const FAQS = [
   {
     question: "Is everything on Excel Insider really free?",
     answer:
-      "Yes. All 1,600+ tutorials, the interactive calculators and the newsletter templates are completely free to read, copy and use for personal or commercial projects — with no paywall and no account required.",
+      "Yes. All 1,600+ tutorials and the newsletter templates are completely free to read, copy and use for personal or commercial projects — with no paywall and no account required.",
   },
   {
     question: "How much does a custom template or dashboard cost?",

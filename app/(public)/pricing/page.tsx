@@ -42,7 +42,7 @@ const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
 export const metadata: Metadata = {
   title: "Pricing & Free Templates | Excel Insider",
   description:
-    "Every tutorial, calculator and template on Excel Insider is free. Expert spreadsheet help from $19 — quick fixes, custom features and full automation, delivered in days.",
+    "Every tutorial and template on Excel Insider is free. Expert spreadsheet help from $19 — quick fixes, custom features and full automation, delivered in days.",
   alternates: { canonical: "/pricing" },
   openGraph: {
     title: "Pricing & Free Templates | Excel Insider",

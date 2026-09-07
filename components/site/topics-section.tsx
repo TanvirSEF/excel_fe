@@ -6,7 +6,6 @@ import {
   IconMathFunction,
   IconReportMoney,
   IconTable,
-  IconTools,
 } from "@tabler/icons-react"
 
 import type { Category } from "@/types/api"
@@ -62,16 +61,6 @@ const DEFAULT_TOPICS = [
     badge: "150+ Templates",
     accentColor: "from-amber-500/15 to-amber-500/5",
   },
-  {
-    title: "Calculators & Free Tools",
-    slug: "calculators",
-    description:
-      "Access instant interactive spreadsheet calculators for loans, dates, percentages, and financial metrics.",
-    icon: IconTools,
-    badge: "Interactive",
-    accentColor: "from-indigo-500/15 to-indigo-500/5",
-    customHref: "/calculators",
-  },
 ]
 
 export function TopicsSection({ categories }: TopicsSectionProps) {
@@ -84,7 +73,7 @@ export function TopicsSection({ categories }: TopicsSectionProps) {
     )
     return {
       ...defaultTopic,
-      href: defaultTopic.customHref ?? (matched ? `/categories/${matched.slug}` : `/blog`),
+      href: matched ? `/categories/${matched.slug}` : `/blog`,
     }
   })
 

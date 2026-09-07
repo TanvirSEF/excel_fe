@@ -23,7 +23,6 @@ const EXPLORE_LINKS = [
   { label: "VBA & Macro Tutorials", href: "/blog" },
   { label: "Pivot Tables & Dashboards", href: "/blog" },
   { label: "Google Sheets & Apps Script", href: "/blog" },
-  { label: "Free Interactive Calculators", href: "/calculators" },
 ]
 
 const COMPANY_LINKS = [

@@ -5,7 +5,6 @@ import { HeroStatsBand } from "@/components/site/hero-stats-band"
 import { TopicsSection } from "@/components/site/topics-section"
 import { PostSection } from "@/components/site/post-section"
 import { ServicesSection } from "@/components/site/services-section"
-import { CalculatorsShowcase } from "@/components/site/calculators-showcase"
 import { TopicsExplorer } from "@/components/site/topics-explorer"
 import { FaqSection } from "@/components/site/faq-section"
 import { YoutubePlaylists } from "@/components/site/youtube-playlists"
@@ -69,12 +68,7 @@ export default async function HomePage() {
           <ServicesSection />
         </div>
 
-        {/* 6. Interactive Spreadsheet Calculators Showcase (4 Tools) */}
-        <div className="border-t border-border/60">
-          <CalculatorsShowcase />
-        </div>
-
-        {/* 7. Comprehensive Topic Directory (Category Tabs + Live Filtered Posts) */}
+        {/* 6. Comprehensive Topic Directory (Category Tabs + Live Filtered Posts) */}
         <div className="border-t border-border/60">
           <TopicsExplorer
             categories={categories}
@@ -82,7 +76,7 @@ export default async function HomePage() {
           />
         </div>
 
-        {/* 8. Fresh Content Feed: Latest Articles (3x3 Grid = 9 Posts) */}
+        {/* 7. Fresh Content Feed: Latest Articles (3x3 Grid = 9 Posts) */}
         <PostSection
           title="Latest Articles"
           subtitle="Fresh spreadsheet tips, VBA automations, and downloadable templates."

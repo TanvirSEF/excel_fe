@@ -67,12 +67,11 @@ export const FREE_PLAN: FreePlan = {
   unit: "forever",
   features: [
     "1,600+ tutorials & formula deep-dives",
-    "All 7 interactive calculators",
     "100+ downloadable newsletter templates",
     "Weekly 3-minute tips & cheat sheet",
   ],
   primaryCta: { label: "Explore Free Tutorials", href: "/blog" },
-  secondaryCta: { label: "Try the Calculators", href: "/calculators" },
+  secondaryCta: { label: "Get Free Templates", href: "/pricing#templates" },
 }
 
 export const HELP_PLANS: PaidPlan[] = [

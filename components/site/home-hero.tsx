@@ -6,7 +6,6 @@ import {
   IconTable,
   IconCode,
   IconChartBar,
-  IconCalculator,
 } from "@tabler/icons-react"
 
 import type { Category } from "@/types/api"
@@ -17,7 +16,6 @@ const FALLBACK_PILLS = [
   { label: "Google Sheets", href: "/blog", icon: IconTable },
   { label: "VBA & Macros", href: "/blog", icon: IconCode },
   { label: "Charts & Dashboards", href: "/blog", icon: IconChartBar },
-  { label: "Calculators", href: "/calculators", icon: IconCalculator },
 ]
 
 const SPREADSHEET_ROWS = [
