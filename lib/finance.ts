@@ -2,14 +2,15 @@ export interface DripInput {
   investment: number
   yieldPct: number
   contribution: number
-  divGrowthPct: number
   priceGrowthPct: number
+  taxRatePct: number
   years: number
 }
 
 export interface DripYear {
   year: number
   income: number
+  netDividend: number
   value: number
 }
 
@@ -20,35 +21,102 @@ export interface DripResult {
   firstIncome: number
   totalDividends: number
   totalContributions: number
+  priceGrowthAmount: number
+  yieldOnCost: number
 }
 
 export function simulateDrip(input: DripInput): DripResult {
-  const price = 100
-  let shares = input.investment / price
-  let divPerShare = (input.yieldPct / 100) * price
+  let balance = input.investment
   let totalDividends = 0
-  let totalContributions = input.investment
+  const totalContributions = input.investment + input.contribution * input.years
   const years: DripYear[] = []
-  let income = 0
+  let grossIncome = 0
 
   for (let year = 1; year <= input.years; year++) {
-    income = shares * divPerShare
-    totalDividends += income
-    shares += income / price
-    shares += input.contribution / price
-    totalContributions += input.contribution
-    divPerShare *= 1 + input.divGrowthPct / 100
-    const newPrice = price * (1 + input.priceGrowthPct / 100) ** year
-    years.push({ year, income, value: shares * newPrice })
+    grossIncome = balance * (input.yieldPct / 100)
+    const netDividend = grossIncome * (1 - input.taxRatePct / 100)
+    totalDividends += netDividend
+    balance = (balance + netDividend + input.contribution) * (1 + input.priceGrowthPct / 100)
+    years.push({ year, income: grossIncome, netDividend, value: balance })
   }
+
+  const finalValue = years.length > 0 ? years[years.length - 1].value : input.investment
+  const finalIncome = finalValue * (input.yieldPct / 100)
+  const priceGrowthAmount = finalValue - totalContributions - totalDividends
 
   return {
     years,
-    finalValue: years.length > 0 ? years[years.length - 1].value : input.investment,
-    finalIncome: income,
+    finalValue,
+    finalIncome,
     firstIncome: years.length > 0 ? years[0].income : 0,
     totalDividends,
     totalContributions,
+    priceGrowthAmount,
+    yieldOnCost: totalContributions > 0 ? (finalIncome / totalContributions) * 100 : 0,
+  }
+}
+
+export interface SnowballInput {
+  investment: number
+  initialYieldPct: number
+  taxRatePct: number
+  monthlyContribution: number
+  years: number
+  dividendGrowthPct: number
+  priceGrowthPct: number
+}
+
+export interface SnowballYear {
+  year: number
+  income: number
+  value: number
+}
+
+export interface SnowballResult {
+  years: SnowballYear[]
+  finalValue: number
+  finalAnnualIncome: number
+  firstYearIncome: number
+  totalReinvested: number
+  totalContributions: number
+  yieldOnCost: number
+  hourlyWage: number
+}
+
+export function simulateSnowball(input: SnowballInput): SnowballResult {
+  let price = 100
+  let shares = input.investment / price
+  let divPerShare = (input.initialYieldPct / 100) * price
+  let totalReinvested = 0
+  const annualContribution = input.monthlyContribution * 12
+  const totalContributions = input.investment + annualContribution * input.years
+  const years: SnowballYear[] = []
+  let currentIncome = 0
+
+  for (let year = 1; year <= input.years; year++) {
+    const grossDiv = shares * divPerShare
+    const netDiv = grossDiv * (1 - input.taxRatePct / 100)
+    totalReinvested += netDiv
+    shares += netDiv / price
+    shares += annualContribution / price
+    price *= 1 + input.priceGrowthPct / 100
+    divPerShare *= 1 + input.dividendGrowthPct / 100
+    currentIncome = shares * divPerShare
+    years.push({ year, income: currentIncome, value: shares * price })
+  }
+
+  const finalValue = years.length > 0 ? years[years.length - 1].value : input.investment
+
+  return {
+    years,
+    finalValue,
+    finalAnnualIncome: currentIncome,
+    firstYearIncome: years.length > 0 ? years[0].income : 0,
+    totalReinvested,
+    totalContributions,
+    yieldOnCost:
+      totalContributions > 0 ? (currentIncome / totalContributions) * 100 : 0,
+    hourlyWage: currentIncome / 2080,
   }
 }
 

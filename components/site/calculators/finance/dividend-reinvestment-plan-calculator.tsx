@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { IconRotate } from "@tabler/icons-react"
+import { IconCircleCheck, IconRotate } from "@tabler/icons-react"
 
 import { NumberField } from "@/components/site/calculators/field"
 import { CopyTableButton } from "@/components/site/calculators/copy-table-button"
@@ -33,11 +33,11 @@ import { simulateDrip } from "@/lib/finance"
 
 const DEFAULTS = {
   investment: "10000",
+  addition: "1200",
   yieldPct: "4",
-  contribution: "1000",
-  divGrowth: "5",
-  priceGrowth: "3",
-  years: "10",
+  growthPct: "5",
+  taxRate: "15",
+  years: "20",
 }
 
 export function DividendReinvestmentPlanCalculator() {
@@ -46,38 +46,34 @@ export function DividendReinvestmentPlanCalculator() {
     setValues((current) => ({ ...current, [key]: value }))
 
   const investment = parseNumericInput(values.investment, { min: 1 })
-  const yieldPct = parseNumericInput(values.yieldPct, { min: 0, max: 100 })
-  const contribution = parseNumericInput(values.contribution, { min: 0 })
-  const divGrowth = parseNumericInput(values.divGrowth, { min: 0 })
-  const priceGrowth = parseNumericInput(values.priceGrowth, { min: 0 })
+  const addition = parseNumericInput(values.addition, { min: 0 })
+  const yieldPct = parseNumericInput(values.yieldPct, { min: 0.01, max: 100 })
+  const growthPct = parseNumericInput(values.growthPct, { min: 0 })
+  const taxRate = parseNumericInput(values.taxRate, { min: 0, max: 100 })
   const years = parseNumericInput(values.years, { min: 1, max: 50, integer: true })
 
-  const valid = [
-    investment,
-    yieldPct,
-    contribution,
-    divGrowth,
-    priceGrowth,
-    years,
-  ].every((field) => field.value !== null)
+  const valid = [investment, addition, yieldPct, growthPct, taxRate, years].every(
+    (f) => f.value !== null
+  )
 
   const result = valid
     ? simulateDrip({
         investment: investment.value!,
         yieldPct: yieldPct.value!,
-        contribution: contribution.value!,
-        divGrowthPct: divGrowth.value!,
-        priceGrowthPct: priceGrowth.value!,
+        contribution: addition.value!,
+        priceGrowthPct: growthPct.value!,
+        taxRatePct: taxRate.value!,
         years: years.value!,
       })
     : null
 
   const copyRows = result
     ? [
-        ["Year", "Dividend income", "Portfolio value"],
+        ["Year", "Gross Dividend", "Net Dividend", "Portfolio Value"],
         ...result.years.map((y) => [
           String(y.year),
           formatCurrency(y.income, 0),
+          formatCurrency(y.netDividend, 0),
           formatCurrency(y.value, 0),
         ]),
       ]
@@ -88,21 +84,30 @@ export function DividendReinvestmentPlanCalculator() {
       <div className="grid gap-6 lg:grid-cols-5">
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>Reinvestment plan</CardTitle>
+            <CardTitle>Enter portfolio details</CardTitle>
             <CardDescription>
-              Dividends buy more shares, which pay more dividends — the compounding loop.
+              Your starting capital, yearly additions, dividend yield, price growth and
+              tax rate.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <NumberField label="Initial investment" value={values.investment} onChange={(v) => update("investment", v)} error={investment.error} suffix="$" placeholder="10000" />
-            <NumberField label="Starting dividend yield" value={values.yieldPct} onChange={(v) => update("yieldPct", v)} error={yieldPct.error} suffix="%" placeholder="4" />
-            <NumberField label="Annual contribution" value={values.contribution} onChange={(v) => update("contribution", v)} error={contribution.error} suffix="$" placeholder="1000" />
-            <NumberField label="Dividend growth / yr" value={values.divGrowth} onChange={(v) => update("divGrowth", v)} error={divGrowth.error} suffix="%" placeholder="5" />
-            <NumberField label="Share price growth / yr" value={values.priceGrowth} onChange={(v) => update("priceGrowth", v)} error={priceGrowth.error} suffix="%" placeholder="3" />
-            <NumberField label="Years" value={values.years} onChange={(v) => update("years", v)} error={years.error} hint="1–50" placeholder="10" />
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              1. Investment capital
+            </p>
+            <NumberField label="Current principal ($)" value={values.investment} onChange={(v) => update("investment", v)} error={investment.error} suffix="$" placeholder="10000" />
+            <NumberField label="Annual addition ($)" value={values.addition} onChange={(v) => update("addition", v)} error={addition.error} hint="Extra money invested each year" suffix="$" placeholder="1200" />
+
+            <p className="pt-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              2. Dividend &amp; growth specs
+            </p>
+            <NumberField label="Dividend yield (%)" value={values.yieldPct} onChange={(v) => update("yieldPct", v)} error={yieldPct.error} suffix="%" placeholder="4" />
+            <NumberField label="Price growth (%)" value={values.growthPct} onChange={(v) => update("growthPct", v)} error={growthPct.error} hint="S&P 500 historically grows 7–8%/yr" suffix="%" placeholder="5" />
+            <NumberField label="Tax rate (%)" value={values.taxRate} onChange={(v) => update("taxRate", v)} error={taxRate.error} hint="Dividend tax — 0% in an IRA/401(k)" suffix="%" placeholder="15" />
+            <NumberField label="Years to invest" value={values.years} onChange={(v) => update("years", v)} error={years.error} suffix="yr" placeholder="20" />
+
             <Button type="button" variant="outline" className="w-full" onClick={() => setValues(DEFAULTS)}>
               <IconRotate className="h-4 w-4" />
-              Reset to example
+              Reset
             </Button>
           </CardContent>
         </Card>
@@ -111,33 +116,31 @@ export function DividendReinvestmentPlanCalculator() {
           {result ? (
             <ResultsRegion>
               <GradientHeroMetric
-                label={`Portfolio value after ${years.value} years`}
+                label={`Estimated portfolio value after ${years.value} years`}
                 value={formatCurrency(result.finalValue, 0)}
-                sub={`${formatCurrency(result.totalContributions, 0)} contributed · ${formatCurrency(result.totalDividends, 0)} in dividends collected`}
+                sub={`Final annual income: ${formatCurrency(result.finalIncome, 0)}/yr`}
               />
 
-              <div className="grid gap-3 sm:grid-cols-3">
-                <MetricTile
-                  label="Final annual income"
-                  value={formatCurrency(result.finalIncome, 0)}
-                  sub={`Started at ${formatCurrency(result.firstIncome, 0)}/yr`}
-                />
-                <MetricTile
-                  label="Income growth"
-                  value={`${result.firstIncome > 0 ? formatPercent(((result.finalIncome / result.firstIncome) - 1) * 100, 0) : "—"}`}
-                  sub="Year 1 → final year"
-                />
-                <MetricTile
-                  label="Total dividends"
-                  value={formatCurrency(result.totalDividends, 0)}
-                  sub="All reinvested along the way"
-                />
+              <div className="flex items-start gap-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-xs leading-relaxed text-emerald-700 dark:text-emerald-400">
+                <IconCircleCheck className="mt-0.5 h-4 w-4 shrink-0" />
+                <p>
+                  Solid growth — dividends are working effectively. Your yield on cost
+                  reached {formatPercent(result.yieldOnCost)}, meaning your income is{" "}
+                  {formatPercent(result.yieldOnCost)} of every dollar you put in.
+                </p>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                <MetricTile label="Total contributions" value={formatCurrency(result.totalContributions, 0)} sub="Principal + all yearly additions" />
+                <MetricTile label="Total dividends (net)" value={formatCurrency(result.totalDividends, 0)} sub="After tax, all reinvested" />
+                <MetricTile label="Price growth" value={formatCurrency(result.priceGrowthAmount, 0)} sub="Capital appreciation" />
+                <MetricTile label="Yield on cost (YOC)" value={formatPercent(result.yieldOnCost)} sub="Final income ÷ your contributions" />
               </div>
             </ResultsRegion>
           ) : (
             <ResultsPlaceholder
-              title="Enter your plan"
-              description="Watch reinvested dividends compound your portfolio year by year."
+              title="Enter your investment details"
+              description="Portfolio value, income and yield on cost appear here instantly."
             />
           )}
         </div>
@@ -153,7 +156,8 @@ export function DividendReinvestmentPlanCalculator() {
             <TableHeader>
               <TableRow>
                 <TableHead>Year</TableHead>
-                <TableHead className="text-right">Dividend income</TableHead>
+                <TableHead className="text-right">Gross dividend</TableHead>
+                <TableHead className="text-right">Net dividend</TableHead>
                 <TableHead className="text-right">Portfolio value</TableHead>
               </TableRow>
             </TableHeader>
@@ -162,6 +166,7 @@ export function DividendReinvestmentPlanCalculator() {
                 <TableRow key={y.year}>
                   <TableCell className="font-medium">{y.year}</TableCell>
                   <TableCell className="text-right font-mono tabular-nums">{formatCurrency(y.income, 0)}</TableCell>
+                  <TableCell className="text-right font-mono tabular-nums">{formatCurrency(y.netDividend, 0)}</TableCell>
                   <TableCell className="text-right font-mono tabular-nums">{formatCurrency(y.value, 0)}</TableCell>
                 </TableRow>
               ))}

@@ -106,39 +106,165 @@ export const FINANCE_DETAILS: Record<FinanceSlug, StatsCalculatorDetail> = {
   },
   "dividend-reinvestment-plan-calculator": {
     metaDescription:
-      "Free dividend reinvestment (DRIP) calculator — project portfolio value and dividend income year by year with contributions, dividend growth and price growth.",
-    formula: "Each year: buy more shares with dividends → income = shares × dividend/share",
+      "Free DRIP calculator with tax — project portfolio value, dividend income and yield on cost year by year. Retirement planning and passive income modeling.",
+    formula: "(Balance + Net Dividend + Addition) × (1 + Growth) = New Balance",
     whenToUse: [
-      "To see the full compounding effect of automatically reinvesting dividends instead of spending them.",
-      "When comparing a dividend-growth portfolio against just holding cash or a plain index fund.",
+      "Compounding can grow your wealth faster than you think. A Dividend Reinvestment Plan (DRIP) automatically buys more shares with your dividend payments instead of taking cash — as you own more shares, you earn more dividends, which buy even more shares.",
+      "This calculator includes stock price growth and dividend taxes in the result, showing you the real picture for retirement planning or building a passive income stream.",
     ],
     howToUse: [
-      "Enter your initial investment and the portfolio's starting dividend yield.",
-      "Add your annual contribution, dividend growth rate and expected price growth.",
-      "Watch the year-by-year table — value and income accelerate as dividends buy more shares.",
+      "Enter your starting principal and the annual addition you plan to invest.",
+      "Set the dividend yield, price growth rate and your dividend tax rate.",
+      "Enter the number of years — the year-by-year table shows how compounding accelerates.",
     ],
     example: {
-      title: "Example: $10,000 at 4%, adding $1,000/yr",
-      body: "With 5% dividend growth and 3% price growth, the portfolio reaches roughly $39,200 in 10 years with dividends alone contributing over $4,900.",
+      title: "Example: $10,000 with $1,200/yr additions",
+      body: "At 4% yield, 5% price growth and 15% tax over 20 years: portfolio reaches $113,217, generating $4,529/yr in income with a 13.32% yield on cost from $34,000 in total contributions. Press Reset to reproduce.",
     },
+    excelNote: "In Excel, build a column for each year: =(prev_balance + prev_balance*yield*(1-tax) + addition)*(1+growth)",
+    method: {
+      title: "The math of compounding — formulas used",
+      paragraphs: [
+        "Annual dividend payout: Portfolio Balance × Dividend Yield = Gross Dividend. Tax deduction: Gross Dividend × (1 − Tax Rate) = Net Dividend.",
+        "End of year balance: (Current Balance + Net Dividend + Annual Addition) × (1 + Price Growth) = New Balance. This compounds year after year.",
+        "Yield on Cost (YOC): Final Annual Income ÷ Total Personal Contributions. Income investors track this number — after many years of reinvestment it can grow to 20–50%.",
+      ],
+      formula: "YOC = Final Annual Income ÷ Total Personal Contributions",
+    },
+    facts: [
+      {
+        title: "1. US Dividend Aristocrats",
+        body: "The US market is known for Dividend Aristocrats — companies that raise dividends for at least 25 consecutive years. Dividends make up about 32% of the total return of the S&P 500.",
+      },
+      {
+        title: "2. Global dividend tax differences",
+        body: "Canada offers a Dividend Tax Credit that reduces tax on dividend income. Australia uses Franking Credits to avoid double taxation. The UK offers the FTSE 100 with yields often above 4%. India taxes dividends based on income tax slabs after the 2020 Finance Act.",
+      },
+      {
+        title: "3. Reinvesting during crashes",
+        body: "When stock prices fall, your dividend money buys more shares at lower prices. This helps your portfolio recover faster when the market improves — automatic dollar-cost averaging during downturns.",
+      },
+    ],
+    useCases: [
+      {
+        title: "Retirement planning",
+        body: "Project how your dividend portfolio grows over 20–30 years. The yield on cost shows how much passive income your contributions generate by retirement.",
+      },
+      {
+        title: "Passive income goals",
+        body: "Set a target annual income, then adjust yield, contributions and years to find the combination that reaches it.",
+      },
+      {
+        title: "Comparing investment strategies",
+        body: "Run the numbers with and without reinvestment (set yield to 0%) to see exactly how much DRIP compounding adds to your final wealth.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Is it better to reinvest dividends or take the cash?",
+        answer:
+          "If you do not need the money for daily expenses, reinvesting usually works better. It buys more shares when prices drop and supports steady growth in your portfolio over time.",
+      },
+      {
+        question: "Can I reinvest dividends with any stock?",
+        answer:
+          "Most major brokerages let you turn on auto-reinvest for dividend-paying stocks. Some companies also offer Direct DRIPs that let you buy shares straight from the company.",
+      },
+      {
+        question: "Does reinvesting dividends help during a market crash?",
+        answer:
+          "Yes. When stock prices fall, your dividend money buys more shares at lower prices. This helps your portfolio recover faster when the market improves.",
+      },
+      {
+        question: "What is a safe dividend yield?",
+        answer:
+          "Many investors see 2% to 5% as a safer range. Yields above 8–10% can be risky — a very high yield may signal that the company has financial problems and may cut its dividend soon.",
+      },
+      {
+        question: "Do I still pay taxes if I reinvest dividends?",
+        answer:
+          "Yes, in a regular brokerage account you still pay taxes — tax authorities count dividends as income even after reinvestment. In accounts like an IRA or ISA, you may delay or avoid taxes based on account rules.",
+      },
+    ],
   },
   "dividend-snowball-calculator": {
     metaDescription:
-      "Free dividend snowball calculator — watch your passive income roll from small earnings into larger ones year after year, with a full income timeline.",
-    formula: "Reinvested dividends earn their own dividends — income compounds on itself",
+      "Free dividend snowball calculator — project passive income growth with monthly contributions, dividend increases and tax. Year-by-year timeline and yield on cost.",
+    formula: "Next Year's Income = (New Balance × Yield) × (1 + Dividend Growth Rate)",
     whenToUse: [
-      "To visualize why dividend income stays small for years and then suddenly accelerates.",
-      "For planning how long it takes for passive income to reach a meaningful monthly amount.",
+      "The Dividend Snowball describes the compounding power of dividend growth investing. Like rolling a snowball down a hill, your reinvested dividends start buying more shares than your contributions do — eventually your portfolio generates passive income that covers your living expenses.",
+      "Over time, your reinvested dividends start buying more shares than your monthly contributions do. This is where the snowball effect kicks in — you never need to sell a single share to get there.",
     ],
     howToUse: [
-      "Enter your starting investment, yield and contributions — like any DRIP plan.",
-      "Give dividend growth a realistic 5–7% for dividend-growth portfolios.",
-      "Follow the income timeline — the multiple between year 1 and the final year is the snowball effect.",
+      "Enter your starting portfolio value, initial dividend yield and tax rate.",
+      "Add your monthly contribution and the years you plan to invest.",
+      "Set the dividend growth rate (5–10% for Dividend Aristocrats) and price appreciation (7–8% for the S&P 500).",
+      "Read the future annual income, equivalent hourly wage, yield on cost and year-by-year timeline.",
     ],
     example: {
-      title: "Example: $10,000 at 4% with 6% dividend growth",
-      body: "Over 15 years the annual income grows several times over — the same money quietly working harder every single year.",
+      title: "Example: $10k + $500/mo over 20 years",
+      body: "Starting at 3.5% yield with 8% dividend growth and 7% price growth (15% tax): the portfolio reaches $465,621 and generates $19,629/yr — a 15.10% yield on cost. Press Reset to reproduce.",
     },
+    excelNote: "Track shares, div/share and price in separate columns: shares += net_div/price, then price and div/share grow by their rates.",
+    method: {
+      title: "How the snowball accelerates — two growth engines",
+      paragraphs: [
+        "Capital appreciation: the stock price rises about 7% each year, increasing your total portfolio value. Dividend growth: the company raises its dividend per share — about 8% each year. This part drives the snowball effect: even when the stock price stays flat, your income still grows.",
+        "The calculator tracks shares, dividend per share and price separately. Each year: net dividends and contributions buy more shares, then price and dividend per share both grow. This mirrors real dividend-growth portfolios like SCHD or Dividend Aristocrats.",
+        "The hourly wage metric divides your yearly dividend income by 2,080 hours (40 hours/week × 52 weeks) — it answers: how much does your portfolio earn per hour if it acts like a job?",
+      ],
+      formula: "Hourly Wage = Annual Income ÷ 2,080",
+    },
+    facts: [
+      {
+        title: "1. US Dividend Aristocrats & Kings",
+        body: "The US market includes companies that raise dividends for 25+ years (Aristocrats) and even 50+ years (Kings). ETFs like SCHD give around 3.5% yield with 10–12% yearly dividend growth — many snowball investors prefer this balance.",
+      },
+      {
+        title: "2. Global snowball advantages",
+        body: "Canada's TFSA grows wealth tax-free. Australia's franking credits raise effective yields to 6–8% (BHP, Commonwealth Bank). The UK's FTSE 100 offers 5–7% starting yields from Shell, BP and British American Tobacco. India's PSU companies give high yields but need high dividend growth to fight inflation.",
+      },
+      {
+        title: "3. The crossover point",
+        body: "The crossover happens when your dividend income exceeds your yearly expenses — your investments can support your lifestyle. Many investors also track an earlier milestone: when dividends exceed yearly contributions, the portfolio grows faster on its own.",
+      },
+    ],
+    useCases: [
+      {
+        title: "Financial independence planning",
+        body: "Set a target monthly income, then adjust contributions, yield and years to find the combination that reaches it. The hourly wage metric shows how close you are to replacing a salary.",
+      },
+      {
+        title: "Comparing yield vs growth strategies",
+        body: "High-yield snowballs (4–5%, like SCHD or O) vs high-growth snowballs (1–2%, like AAPL or MSFT). Run both to see which fits your timeline better.",
+      },
+      {
+        title: "Visualizing the crossover",
+        body: "The year-by-year table shows exactly when dividend income overtakes your contributions — the point where the snowball starts rolling on its own.",
+      },
+    ],
+    faqs: [
+      {
+        question: "What is the hourly wage metric?",
+        answer:
+          "This divides your yearly dividend income by 2,080 hours — a standard work year of 40 hours/week across 52 weeks. It shows how much your portfolio earns per hour if it acts like a job.",
+      },
+      {
+        question: "Can I build a snowball with ETFs?",
+        answer:
+          "Yes — many investors prefer ETFs for safety and balance. VIG and SCHD focus on companies with strong dividend history and help maintain steady dividend growth over time.",
+      },
+      {
+        question: "How does the tax rate affect the snowball?",
+        answer:
+          "Taxes reduce the money you can reinvest each year. A 15% tax on dividends lowers your reinvested income by the same amount, slowing compounding. Over many years this can lower your total wealth significantly. Use tax-advantaged accounts like Roth IRA, ISA or TFSA to reduce the impact.",
+      },
+      {
+        question: "When does the snowball cross over?",
+        answer:
+          "The crossover point happens when your dividend income becomes higher than your yearly expenses — your investments can support your lifestyle. Many investors also track an earlier milestone: when dividends exceed their yearly contributions, the portfolio grows faster on its own.",
+      },
+    ],
   },
   "living-off-dividends-calculator": {
     metaDescription:

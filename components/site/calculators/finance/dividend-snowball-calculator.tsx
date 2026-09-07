@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { IconRotate } from "@tabler/icons-react"
+import { IconCircleCheck, IconRotate } from "@tabler/icons-react"
 
 import { NumberField } from "@/components/site/calculators/field"
 import { CopyTableButton } from "@/components/site/calculators/copy-table-button"
@@ -29,15 +29,16 @@ import {
 } from "@/components/ui/table"
 import { parseNumericInput } from "@/lib/calculators"
 import { formatCurrency, formatDecimal } from "@/lib/format"
-import { simulateDrip } from "@/lib/finance"
+import { simulateSnowball } from "@/lib/finance"
 
 const DEFAULTS = {
   investment: "10000",
-  yieldPct: "4",
-  contribution: "1000",
-  divGrowth: "6",
-  priceGrowth: "2",
-  years: "15",
+  initYield: "3.5",
+  taxRate: "15",
+  monthlyContribution: "500",
+  years: "20",
+  divGrowth: "8",
+  priceGrowth: "7",
 }
 
 export function DividendSnowballCalculator() {
@@ -46,33 +47,32 @@ export function DividendSnowballCalculator() {
     setValues((current) => ({ ...current, [key]: value }))
 
   const investment = parseNumericInput(values.investment, { min: 1 })
-  const yieldPct = parseNumericInput(values.yieldPct, { min: 0, max: 100 })
-  const contribution = parseNumericInput(values.contribution, { min: 0 })
+  const initYield = parseNumericInput(values.initYield, { min: 0.01, max: 100 })
+  const taxRate = parseNumericInput(values.taxRate, { min: 0, max: 100 })
+  const monthlyContribution = parseNumericInput(values.monthlyContribution, { min: 0 })
+  const years = parseNumericInput(values.years, { min: 1, max: 50, integer: true })
   const divGrowth = parseNumericInput(values.divGrowth, { min: 0 })
   const priceGrowth = parseNumericInput(values.priceGrowth, { min: 0 })
-  const years = parseNumericInput(values.years, { min: 1, max: 50, integer: true })
 
-  const valid = [investment, yieldPct, contribution, divGrowth, priceGrowth, years].every(
-    (field) => field.value !== null
+  const valid = [investment, initYield, taxRate, monthlyContribution, years, divGrowth, priceGrowth].every(
+    (f) => f.value !== null
   )
 
   const result = valid
-    ? simulateDrip({
+    ? simulateSnowball({
         investment: investment.value!,
-        yieldPct: yieldPct.value!,
-        contribution: contribution.value!,
-        divGrowthPct: divGrowth.value!,
-        priceGrowthPct: priceGrowth.value!,
+        initialYieldPct: initYield.value!,
+        taxRatePct: taxRate.value!,
+        monthlyContribution: monthlyContribution.value!,
         years: years.value!,
+        dividendGrowthPct: divGrowth.value!,
+        priceGrowthPct: priceGrowth.value!,
       })
     : null
 
-  const multiple =
-    result && result.firstIncome > 0 ? result.finalIncome / result.firstIncome : null
-
   const copyRows = result
     ? [
-        ["Year", "Passive income", "Monthly", "Portfolio value"],
+        ["Year", "Annual Income", "Monthly", "Portfolio Value"],
         ...result.years.map((y) => [
           String(y.year),
           formatCurrency(y.income, 0),
@@ -87,62 +87,78 @@ export function DividendSnowballCalculator() {
       <div className="grid gap-6 lg:grid-cols-5">
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>Snowball setup</CardTitle>
+            <CardTitle>Dividend reinvestment plan</CardTitle>
             <CardDescription>
-              The same money, working harder every year — your income timeline.
+              See how reinvested dividends and monthly contributions turn into passive
+              income over time.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <NumberField label="Initial investment" value={values.investment} onChange={(v) => update("investment", v)} error={investment.error} suffix="$" placeholder="10000" />
-            <NumberField label="Starting dividend yield" value={values.yieldPct} onChange={(v) => update("yieldPct", v)} error={yieldPct.error} suffix="%" placeholder="4" />
-            <NumberField label="Annual contribution" value={values.contribution} onChange={(v) => update("contribution", v)} error={contribution.error} suffix="$" placeholder="1000" />
-            <NumberField label="Dividend growth / yr" value={values.divGrowth} onChange={(v) => update("divGrowth", v)} error={divGrowth.error} suffix="%" placeholder="6" />
-            <NumberField label="Share price growth / yr" value={values.priceGrowth} onChange={(v) => update("priceGrowth", v)} error={priceGrowth.error} suffix="%" placeholder="2" />
-            <NumberField label="Years" value={values.years} onChange={(v) => update("years", v)} error={years.error} hint="1–50" placeholder="15" />
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              1. Starting portfolio
+            </p>
+            <NumberField label="Portfolio value ($)" value={values.investment} onChange={(v) => update("investment", v)} error={investment.error} suffix="$" placeholder="10000" />
+            <div className="flex items-end gap-2">
+              <div className="min-w-0 flex-1">
+                <NumberField label="Initial yield (%)" value={values.initYield} onChange={(v) => update("initYield", v)} error={initYield.error} hint="SCHD ≈ 3.5%" suffix="%" placeholder="3.5" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <NumberField label="Tax rate (%)" value={values.taxRate} onChange={(v) => update("taxRate", v)} error={taxRate.error} hint="0% in IRA/TFSA" suffix="%" placeholder="15" />
+              </div>
+            </div>
+
+            <p className="pt-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              2. Fueling growth
+            </p>
+            <NumberField label="Monthly contribution" value={values.monthlyContribution} onChange={(v) => update("monthlyContribution", v)} error={monthlyContribution.error} suffix="$" placeholder="500" />
+            <div className="flex items-end gap-2">
+              <div className="min-w-0 flex-1">
+                <NumberField label="Years to grow" value={values.years} onChange={(v) => update("years", v)} error={years.error} placeholder="20" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <NumberField label="Div growth / yr" value={values.divGrowth} onChange={(v) => update("divGrowth", v)} error={divGrowth.error} hint="Aristocrats: 5-10%" suffix="%" placeholder="8" />
+              </div>
+            </div>
+            <NumberField label="Price appreciation / yr" value={values.priceGrowth} onChange={(v) => update("priceGrowth", v)} error={priceGrowth.error} hint="S&P 500: 7-8%" suffix="%" placeholder="7" />
+
             <Button type="button" variant="outline" className="w-full" onClick={() => setValues(DEFAULTS)}>
               <IconRotate className="h-4 w-4" />
-              Reset to example
+              Reset
             </Button>
           </CardContent>
         </Card>
 
         <div className="space-y-4 lg:col-span-3">
-          {result && multiple !== null ? (
+          {result ? (
             <ResultsRegion>
               <GradientHeroMetric
-                label={`Passive income in year ${years.value}`}
-                value={formatCurrency(result.finalIncome, 0)}
-                sub={`Grew ${formatDecimal(multiple, 1)}× from ${formatCurrency(result.firstIncome, 0)} in year 1`}
+                label="Future annual income"
+                value={formatCurrency(result.finalAnnualIncome, 0)}
+                sub={`Equivalent wage: $${formatDecimal(result.hourlyWage, 2)}/hr`}
               />
 
-              <div className="grid gap-3 sm:grid-cols-3">
-                <MetricTile
-                  label="Monthly income"
-                  value={formatCurrency(result.finalIncome / 12, 0)}
-                  sub="By the final year"
-                />
-                <MetricTile
-                  label="Portfolio value"
-                  value={formatCurrency(result.finalValue, 0)}
-                  sub="The snowball itself"
-                />
-                <MetricTile
-                  label="Total dividends"
-                  value={formatCurrency(result.totalDividends, 0)}
-                  sub="Rolled in along the way"
-                />
+              <div className="flex items-start gap-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-xs leading-relaxed text-emerald-700 dark:text-emerald-400">
+                <IconCircleCheck className="mt-0.5 h-4 w-4 shrink-0" />
+                <p>
+                  Solid income — the portfolio is working well. Income grew{" "}
+                  {result.firstYearIncome > 0
+                    ? `${formatDecimal(result.finalAnnualIncome / result.firstYearIncome, 1)}×`
+                    : ""}{" "}
+                  from year 1&apos;s {formatCurrency(result.firstYearIncome, 0)}.
+                </p>
               </div>
 
-              <p className="text-xs leading-relaxed text-muted-foreground">
-                Notice the curve: the income gains stay small for the first years, then
-                accelerate — that is the snowball. Every reinvested dividend starts
-                earning its own dividends.
-              </p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <MetricTile label="Total portfolio" value={formatCurrency(result.finalValue, 0)} sub="Shares × final price" />
+                <MetricTile label="Total reinvested" value={formatCurrency(result.totalReinvested, 0)} sub="After-tax dividends rolled in" />
+                <MetricTile label="Your contributions" value={formatCurrency(result.totalContributions, 0)} sub="Principal + monthly additions" />
+                <MetricTile label="Yield on cost (YOC)" value={`${formatDecimal(result.yieldOnCost, 2)}%`} sub="Final income ÷ your money in" />
+              </div>
             </ResultsRegion>
           ) : (
             <ResultsPlaceholder
-              title="Enter your snowball"
-              description="Your growing passive-income timeline appears here year by year."
+              title="Enter your snowball plan"
+              description="Future income, portfolio value and yield on cost appear here."
             />
           )}
         </div>
@@ -158,7 +174,7 @@ export function DividendSnowballCalculator() {
             <TableHeader>
               <TableRow>
                 <TableHead>Year</TableHead>
-                <TableHead className="text-right">Passive income</TableHead>
+                <TableHead className="text-right">Annual income</TableHead>
                 <TableHead className="text-right">Monthly</TableHead>
                 <TableHead className="text-right">Portfolio value</TableHead>
               </TableRow>
