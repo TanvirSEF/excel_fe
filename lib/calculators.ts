@@ -1,9 +1,14 @@
 import type { TablerIcon } from "@tabler/icons-react"
 import {
+  IconArmchair,
   IconBriefcase,
+  IconChartArcs,
   IconChartDots,
   IconChartHistogram,
+  IconHome,
   IconMathFunction,
+  IconTarget,
+  IconTrendingUp,
 } from "@tabler/icons-react"
 
 export interface CalculatorEntry {
@@ -258,5 +263,251 @@ export function getStatsGroupForCalculator(slug: string): CalculatorGroup {
     STATS_HUB.groups.find((group) =>
       group.calculators.some((calculator) => calculator.slug === slug)
     ) ?? STATS_HUB.groups[0]
+  )
+}
+
+export const FINANCE_HUB: CalculatorHub = {
+  slug: "finance",
+  badge: "Free Online Tools",
+  title: "Financial Calculator Hub:",
+  titleAccent: "Business, Real Estate & Investing",
+  intro: [
+    "Online financial calculators offer a great way to get you out of the spreadsheets and make your money calculations easier. Whether you want to see how your investment will grow, check if a business idea is profitable, or plan for a happy retirement — our financial calculators are here to do the work.",
+    "We built these tools on logical formulas and packed in all the input options you need. Every result is instant, private and free.",
+  ],
+  hubNote:
+    "This page is the directory of all our financial calculators. Click any calculator below to open its dedicated page — enter your numbers and see the result within a second.",
+  groups: [
+    {
+      title: "Investment & Profit Calculators",
+      tagline:
+        "These tools help you see how much money you can make from stocks and shares.",
+      icon: IconTrendingUp,
+      accent: "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10",
+      calculators: [
+        {
+          slug: "share-profit-calculator",
+          name: "Share Profit Calculator",
+          whatItIs:
+            "A simple tool to check how much money you made (or lost) from buying and selling shares of stock.",
+          whatToExpect:
+            "Enter the price you bought and sold the shares for and see your total profit percentage.",
+        },
+        {
+          slug: "dividend-reinvestment-plan-calculator",
+          name: "Dividend Reinvestment Plan Calculator",
+          whatItIs:
+            "See how fast your money grows if you use your profit payouts (dividends) to buy more shares instead of spending them.",
+          whatToExpect:
+            "Watch how reinvesting helps your account balance grow much faster over 5 or 10 years.",
+        },
+        {
+          slug: "dividend-snowball-calculator",
+          name: "Dividend Snowball Calculator",
+          whatItIs:
+            "Watch the snowball effect in action, where your small earnings roll into bigger earnings over time.",
+          whatToExpect:
+            "A timeline showing how your passive income gets larger every year without extra work.",
+        },
+        {
+          slug: "living-off-dividends-calculator",
+          name: "Living Off Dividends Calculator",
+          whatItIs:
+            "Find out how much money you need invested to pay for your daily life just using the cash payouts from stocks.",
+          whatToExpect:
+            "The exact goal amount you need to save to quit your job and live on investment income.",
+        },
+        {
+          slug: "cost-of-equity-calculator",
+          name: "Cost of Equity Calculator",
+          whatItIs:
+            "A tool for investors to figure out the return a company needs to pay you to make the risk worth it.",
+          whatToExpect:
+            "A percentage that tells you if a stock is a safe bet or a risky one.",
+        },
+      ],
+    },
+    {
+      title: "Real Estate & Energy Savings",
+      tagline: "Use these calculators before you buy property or solar panels.",
+      icon: IconHome,
+      accent: "text-blue-600 dark:text-blue-400 bg-blue-500/10",
+      calculators: [
+        {
+          slug: "rental-property-roi-calculator",
+          name: "Rental Property ROI Calculator",
+          whatItIs:
+            "Checks if buying a house to rent out to others is actually a good business idea.",
+          whatToExpect:
+            "Compares the rent you collect against the costs (repairs, taxes) to reveal your real profit.",
+        },
+        {
+          slug: "cash-on-cash-roi-calculator",
+          name: "Cash on Cash ROI Calculator",
+          whatItIs:
+            "Measures how much cash comes back into your pocket compared to the cash you put down to buy a property.",
+          whatToExpect:
+            "A simple percentage that tells you how hard your down payment is working for you.",
+        },
+        {
+          slug: "solar-roi-calculator",
+          name: "Solar ROI Calculator",
+          whatItIs:
+            "Figures out if installing solar panels on your roof will save you money on electricity bills.",
+          whatToExpect:
+            "How many years it takes for the panels to pay for themselves — the break-even point.",
+        },
+      ],
+    },
+    {
+      title: "Business & Marketing Tools",
+      tagline:
+        "Perfect for business owners who need to know if their spending is working.",
+      icon: IconTarget,
+      accent: "text-amber-600 dark:text-amber-400 bg-amber-500/10",
+      calculators: [
+        {
+          slug: "marketing-roi-calculator",
+          name: "Marketing ROI Calculator",
+          whatItIs:
+            "Tells you if the money you spent on ads or marketing campaigns brought in enough sales to be worth it.",
+          whatToExpect:
+            "A score that shows if your ads are winners (making money) or losers (losing money).",
+        },
+        {
+          slug: "enterprise-seo-roi-calculator",
+          name: "Enterprise SEO ROI Calculator",
+          whatItIs:
+            "Calculates the value of hiring experts to help your large website show up in Google searches.",
+          whatToExpect:
+            "An estimate of how much extra revenue you might earn from getting more visitors to your site.",
+        },
+        {
+          slug: "b2b-roi-calculator",
+          name: "B2B ROI Calculator",
+          whatItIs:
+            "Designed for companies selling to other companies — check if a new tool or service you bought is profitable.",
+          whatToExpect:
+            "A clear yes or no on whether a business purchase was a smart investment.",
+        },
+        {
+          slug: "venture-capital-calculator",
+          name: "Venture Capital Calculator",
+          whatItIs:
+            "A tool for startup founders and investors to see how ownership changes when new money is invested in a company.",
+          whatToExpect:
+            "It shows who owns what percent of the company after a new deal is signed.",
+        },
+      ],
+    },
+    {
+      title: "Advanced Performance Metrics",
+      tagline: "Deep-dive math for serious financial planning.",
+      icon: IconChartArcs,
+      accent: "text-purple-600 dark:text-purple-400 bg-purple-500/10",
+      calculators: [
+        {
+          slug: "irr-calculator",
+          name: "Internal Rate of Return (IRR) Calculator",
+          whatItIs:
+            "The gold-standard formula to find the exact annual growth rate of an investment with complex cash flows.",
+          whatToExpect:
+            "A single percentage that lets you compare two very different investments fairly.",
+        },
+        {
+          slug: "accounting-rate-of-return-calculator",
+          name: "Accounting Rate of Return Calculator",
+          whatItIs:
+            "Looks at the average profit you expect to earn from a project compared to its average cost.",
+          whatToExpect:
+            "A quick snapshot to help managers approve or reject a new project.",
+        },
+        {
+          slug: "holding-period-return-calculator",
+          name: "Holding Period Return Calculator",
+          whatItIs:
+            "Calculates the total return you earned on an investment for the entire time you owned it — 1 month or 10 years.",
+          whatToExpect:
+            "The total profit percentage for the specific period you held the asset.",
+        },
+      ],
+    },
+    {
+      title: "Retirement & Future Planning",
+      tagline: "Tools to help you plan for a secure future.",
+      icon: IconArmchair,
+      accent: "text-teal-600 dark:text-teal-400 bg-teal-500/10",
+      calculators: [
+        {
+          slug: "retirement-rate-of-return-calculator",
+          name: "Retirement Rate of Return Calculator",
+          whatItIs:
+            "Helps you figure out how fast your savings need to grow so you can retire comfortably when you want.",
+          whatToExpect:
+            "It helps you adjust your risk — whether you need to be more aggressive or can safely relax.",
+        },
+        {
+          slug: "savings-withdrawal-calculator",
+          name: "Savings Withdrawal Calculator",
+          whatItIs:
+            "Shows how long your savings will last if you take out a certain amount of money every month.",
+          whatToExpect:
+            "A timeline showing exactly when your money might run out so you can adjust your spending today.",
+        },
+      ],
+    },
+  ],
+  faqs: [
+    {
+      question: "Do I need to pay or sign up to use these?",
+      answer:
+        "No. All of our calculators are 100% free. We believe financial planning should be easy for everyone — no account, no email list, no fees. Just open the page and start calculating.",
+    },
+    {
+      question: "Is my financial data safe?",
+      answer:
+        "Yes, completely. Your privacy is our top priority. We do not save, store, or look at any numbers you type in. The data only exists on your screen while you use the tool — close or refresh the page and it disappears forever.",
+    },
+    {
+      question: "Can I use these for currencies other than US Dollars?",
+      answer:
+        "Currently our tools are designed for USD ($). The math works for other currencies, but the formatting and symbols are built for the US system to ensure the highest accuracy.",
+    },
+    {
+      question: "Do the investment tools show live stock market prices?",
+      answer:
+        "No — and that is on purpose. To keep the calculators lightning-fast and reliable, we do not wait for slow connections to the stock market. You simply type in the current share price yourself, which guarantees an instant answer with no loading delays.",
+    },
+    {
+      question: "Do the results include taxes?",
+      answer:
+        "No. The profit numbers you see are pre-tax. Since everyone's tax rate is different, we show the raw potential of your investment first, before the government's share.",
+    },
+    {
+      question: "Does the math account for inflation (rising costs)?",
+      answer:
+        "That is up to you. Our tools calculate exactly what you type in. We recommend entering values based on current scenarios — what things cost today — which gives you a clear snapshot of your finances right now.",
+    },
+    {
+      question: "Can I use these results for my official tax filing?",
+      answer:
+        "No. These calculators are powerful tools for estimation and planning only — great for setting goals and exploring what-if scenarios, but not a replacement for a professional accountant. Please do not use these numbers for legal or tax documents.",
+    },
+  ],
+}
+
+export const FINANCE_CALCULATORS: CalculatorEntry[] = FINANCE_HUB.groups.flatMap(
+  (group) => group.calculators
+)
+
+export function getFinanceCalculator(slug: string): CalculatorEntry | undefined {
+  return FINANCE_CALCULATORS.find((calculator) => calculator.slug === slug)
+}
+
+export function getFinanceGroupForCalculator(slug: string): CalculatorGroup {
+  return (
+    FINANCE_HUB.groups.find((group) =>
+      group.calculators.some((calculator) => calculator.slug === slug)
+    ) ?? FINANCE_HUB.groups[0]
   )
 }
