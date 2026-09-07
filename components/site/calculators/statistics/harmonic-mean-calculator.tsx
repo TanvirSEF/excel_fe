@@ -19,10 +19,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { formatDecimal } from "@/lib/format"
-import { geometricMean, harmonicMean, mean, parseDataSet } from "@/lib/stats"
+import { formatDecimal, formatNumber } from "@/lib/format"
+import { harmonicMean, mean, parseDataSet } from "@/lib/stats"
 
-const DEFAULT_DATA = "40, 60"
+const DEFAULT_DATA = "30, 60"
 
 export function HarmonicMeanCalculator() {
   const [raw, setRaw] = useState(DEFAULT_DATA)
@@ -30,30 +30,35 @@ export function HarmonicMeanCalculator() {
   const { values, invalid } = parseDataSet(raw)
   const hasNonPositive = values.some((x) => x <= 0)
   const hm = hasNonPositive ? null : harmonicMean(values)
-  const gm = hasNonPositive ? null : geometricMean(values)
   const valid = values.length >= 1 && hm !== null && invalid.length === 0
+  const am = values.length > 0 ? mean(values) : null
+  const reciprocalSum =
+    values.length > 0 && !hasNonPositive
+      ? values.reduce((total, x) => total + 1 / x, 0)
+      : null
 
   return (
     <div className="grid gap-6 lg:grid-cols-5">
       <Card className="lg:col-span-2">
         <CardHeader>
-          <CardTitle>Your rates</CardTitle>
+          <CardTitle>Enter rate or ratio data</CardTitle>
           <CardDescription>
-            Positive numbers only — ideal for speeds, prices per unit and other rates.
+            Speeds, rates, ratios — data where a regular average quietly lies to you.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <DataSetField
-            label="Data set (rates)"
+            label="Data set (comma separated)"
             value={raw}
             onChange={setRaw}
-            placeholder="e.g. 40, 60"
+            hint="Preset loaded. Ideal for speeds & rates."
+            placeholder="e.g. 30, 60"
             invalid={hasNonPositive}
           />
           {hasNonPositive ? (
             <p className="text-[11px] leading-snug text-destructive">
-              The harmonic mean only exists for positive numbers — every value must be
-              greater than zero.
+              The harmonic mean divides by each number — zero and negative values make
+              the result undefined. Enter positive rates only.
             </p>
           ) : null}
           <Button
@@ -63,55 +68,61 @@ export function HarmonicMeanCalculator() {
             onClick={() => setRaw(DEFAULT_DATA)}
           >
             <IconRotate className="h-4 w-4" />
-            Reset to example
+            Reset
           </Button>
         </CardContent>
       </Card>
 
       <div className="space-y-4 lg:col-span-3">
-        {valid && hm !== null ? (
+        {valid && hm !== null && am !== null && reciprocalSum !== null ? (
           <ResultsRegion>
             <GradientHeroMetric
               label="Harmonic mean"
-              value={formatDecimal(hm)}
-              sub="n ÷ Σ(1 ÷ xᵢ) — the correct average for rates"
+              value={formatNumber(hm)}
+              sub="The true average of your rates — not the misleading arithmetic one"
             />
 
             <div className="grid gap-3 sm:grid-cols-3">
-              <MetricTile label="Count (n)" value={`${values.length}`} />
               <MetricTile
                 label="Arithmetic mean"
-                value={formatDecimal(mean(values))}
+                value={formatNumber(am)}
                 sub="For comparison — always ≥ HM"
               />
+              <MetricTile label="Count (n)" value={`${values.length}`} />
               <MetricTile
-                label="Geometric mean"
-                value={gm !== null ? formatDecimal(gm) : "—"}
-                sub="Sits between AM and HM"
+                label="Sum of reciprocals"
+                value={formatDecimal(reciprocalSum, 4)}
+                sub="Σ(1 ÷ xᵢ) — the denominator"
               />
             </div>
 
             <StepList
               steps={[
-                { title: "Formula", body: "HM = n ÷ (1/x₁ + 1/x₂ + … + 1/xₙ)" },
+                { title: "Formula", body: "HM = n ÷ Σ(1 ÷ xᵢ)" },
                 {
-                  title: "Substitute",
-                  body: `${values.length} ÷ (${values.slice(0, 4).map((x) => `1/${formatDecimal(x, 0)}`).join(" + ")}${values.length > 4 ? " + …" : ""})`,
+                  title: "Reciprocals",
+                  body: values
+                    .slice(0, 4)
+                    .map((x) => `1/${formatDecimal(x, 0)} = ${formatDecimal(1 / x, 4)}`)
+                    .join(" · ") + (values.length > 4 ? " · …" : ""),
                 },
-                { title: "Result", body: `HM = ${formatDecimal(hm)}` },
+                {
+                  title: "Result",
+                  body: `${values.length} ÷ ${formatDecimal(reciprocalSum, 4)} = ${formatNumber(hm)}`,
+                },
               ]}
             />
 
             <p className="text-xs leading-relaxed text-muted-foreground">
-              Example: driving 100 km at 40 km/h and then 100 km back at 60 km/h
-              averages exactly {formatDecimal(hm)} km/h — not 50. The harmonic mean
-              weights each rate by the time it takes.
+              The arithmetic mean of the same data is {formatNumber(am)} — but rates
+              average by time, not by trip. The harmonic mean weighs every value by how
+              long it holds, which is why it is always the lower, truer number.
             </p>
           </ResultsRegion>
         ) : (
           <ResultsPlaceholder
             title="Enter positive rates"
-            description="The harmonic mean appears here as soon as you enter one or more positive values."
+            description="The true average of your rates appears here instantly."
           />
         )}
       </div>
