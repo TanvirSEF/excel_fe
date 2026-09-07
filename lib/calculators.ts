@@ -5,8 +5,12 @@ import {
   IconChartArcs,
   IconChartDots,
   IconChartHistogram,
+  IconCoin,
+  IconCreditCard,
   IconHome,
   IconMathFunction,
+  IconReportAnalytics,
+  IconTag,
   IconTarget,
   IconTrendingUp,
 } from "@tabler/icons-react"
@@ -509,5 +513,216 @@ export function getFinanceGroupForCalculator(slug: string): CalculatorGroup {
     FINANCE_HUB.groups.find((group) =>
       group.calculators.some((calculator) => calculator.slug === slug)
     ) ?? FINANCE_HUB.groups[0]
+  )
+}
+
+export const ACCOUNTING_HUB: CalculatorHub = {
+  slug: "accounting",
+  badge: "Free Online Tools",
+  title: "Accounting Calculators",
+  titleAccent: "Hub",
+  intro: [
+    "Accounting calculators and tools are not only for professional bookkeepers. They are also for a small business owner, a student learning accounting, or anyone trying to figure out how much time it takes to pay off a debt.",
+    "We have built 15 online calculators so far — and we plan to build a massive library of accounting tools. As demand grows we will keep adding calculators, and you will always find the full list here by category.",
+  ],
+  hubNote:
+    "Click any calculator below to open its dedicated page — enter your numbers and see the result within a second.",
+  groups: [
+    {
+      title: "Profit Margin & Sales",
+      tagline: "Calculate how much money you will keep from every sale.",
+      icon: IconTag,
+      accent: "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10",
+      calculators: [
+        {
+          slug: "retail-profit-margin-calculator",
+          name: "Retail Profit Margin Calculator",
+          whatItIs:
+            "Finds the percentage of profit you make on a single product sold by your store.",
+          whatToExpect:
+            "It indicates whether your markup is good enough to cover your costs and still make a profit.",
+        },
+        {
+          slug: "wholesale-margin-calculator",
+          name: "Wholesale Margin Calculator",
+          whatItIs:
+            "Calculates the profit margin for a bulk amount of products when you sell them all to a store.",
+          whatToExpect:
+            "It reveals the profit gap between the manufacturing cost of the whole bulk and the price you set for it.",
+        },
+        {
+          slug: "reverse-margin-calculator",
+          name: "Reverse Margin Calculator",
+          whatItIs:
+            "Built to find the maximum cost price that still makes a profit when you have already set the selling price.",
+          whatToExpect:
+            "The target cost — how much you can afford to spend on manufacturing per unit.",
+        },
+        {
+          slug: "amazon-seller-commission-calculator",
+          name: "Amazon Seller Commission Calculator",
+          whatItIs: "Estimates the overall fees Amazon cuts from your sales.",
+          whatToExpect:
+            "A breakdown of referral fees and closing costs that shows what you actually earn.",
+        },
+        {
+          slug: "salesperson-profitability-calculator",
+          name: "Salesperson Profitability Calculator",
+          whatItIs:
+            "Measures whether a salesperson brings in enough revenue to cover their salary and commissions.",
+          whatToExpect:
+            "An ROI number that tells you if a salesperson is an asset for your business.",
+        },
+      ],
+    },
+    {
+      title: "Payroll, Salary & Commissions",
+      tagline: "Tools to manage employee pay, bonuses, and overtime correctly.",
+      icon: IconCoin,
+      accent: "text-blue-600 dark:text-blue-400 bg-blue-500/10",
+      calculators: [
+        {
+          slug: "payroll-overtime-calculator",
+          name: "Payroll Calculator with Overtime",
+          whatItIs:
+            "Calculates a paycheck that includes regular work hours and overtime.",
+          whatToExpect:
+            "A gross pay figure that ensures employees are paid properly for extra work.",
+        },
+        {
+          slug: "gross-up-payroll-calculator",
+          name: "Gross Up Payroll Calculator",
+          whatItIs:
+            "Figures out how much to pay an employee so they take home an exact amount after tax.",
+          whatToExpect:
+            "The higher gross pay that fulfills the employee's take-home target.",
+        },
+        {
+          slug: "prorated-bonus-calculator",
+          name: "Prorated Bonus Calculator",
+          whatItIs:
+            "Determines the fair bonus for an employee who worked only part of the year.",
+          whatToExpect:
+            "A fair, adjusted bonus amount based on the joining date within the year.",
+        },
+        {
+          slug: "sales-commission-calculator",
+          name: "Sales Commission Calculator",
+          whatItIs:
+            "Calculates the commission on sales earned by an employee or sales representative.",
+          whatToExpect: "The exact commission amount for a salesperson.",
+        },
+        {
+          slug: "payroll-conversion-calculator",
+          name: "Payroll Conversion Calculator",
+          whatItIs:
+            "Converts a salary into wages on different timelines — hourly, weekly, monthly.",
+          whatToExpect:
+            "A full breakdown of the annual salary into every timeline's wage.",
+        },
+      ],
+    },
+    {
+      title: "Business Health & Equity",
+      tagline: "Check if your company is efficient and financially stable.",
+      icon: IconReportAnalytics,
+      accent: "text-amber-600 dark:text-amber-400 bg-amber-500/10",
+      calculators: [
+        {
+          slug: "retained-earnings-calculator",
+          name: "Retained Earnings Calculator",
+          whatItIs:
+            "Estimates the total profit a company has kept since its beginning after paying dividends to owners.",
+          whatToExpect:
+            "A cumulative savings amount that signals the company's potential for financial growth.",
+        },
+        {
+          slug: "cash-conversion-cycle-calculator",
+          name: "Cash Conversion Cycle (CCC) Calculator",
+          whatItIs:
+            "Measures how long it takes your business to turn money spent on inventory back into cash in the bank.",
+          whatToExpect:
+            "A timeline that indicates how healthy and fast your business's growth really is.",
+        },
+      ],
+    },
+    {
+      title: "Debt & Personal Accounting",
+      tagline: "Manage your personal debts and adjust your spending.",
+      icon: IconCreditCard,
+      accent: "text-purple-600 dark:text-purple-400 bg-purple-500/10",
+      calculators: [
+        {
+          slug: "debt-payoff-extra-payments-calculator",
+          name: "Debt Payoff Calculator with Extra Payments",
+          whatItIs:
+            "Shows how much faster you can be debt-free if you add extra money to your monthly payment.",
+          whatToExpect: "A new debt-free date — and the interest you save.",
+        },
+        {
+          slug: "debt-snowball-vs-avalanche-calculator",
+          name: "Debt Snowball vs Avalanche Calculator",
+          whatItIs:
+            "Compares two popular payoff strategies: smallest balance first (snowball) vs highest interest first (avalanche).",
+          whatToExpect:
+            "A side-by-side comparison showing which method gets you debt-free faster and cheaper.",
+        },
+        {
+          slug: "marginal-propensity-to-consume-calculator",
+          name: "Marginal Propensity to Consume Calculator",
+          whatItIs:
+            "An economics tool that tells you how much of a raise you will spend versus save.",
+          whatToExpect:
+            "A decimal between 0 and 1 that captures your spending habits as income rises.",
+        },
+      ],
+    },
+  ],
+  faqs: [
+    {
+      question: "Which country's tax laws do these tools follow?",
+      answer:
+        "Primarily the United States — tax-specific tools follow US IRS guidelines. However, for general business math like profit margins, debt payoff, or commissions, the formulas are universal and work for business owners anywhere in the world.",
+    },
+    {
+      question: "Do the payroll tools automatically deduct taxes?",
+      answer:
+        "No — and that helps accuracy. Tax rates change based on where you live and your personal situation. Instead of guessing, our calculators ask you to enter your specific tax rate manually, so the final paycheck number is accurate for you rather than a generic estimate.",
+    },
+    {
+      question: "Does the Amazon calculator update fees automatically?",
+      answer:
+        "No. Amazon changes its fee structure frequently. To ensure you never get an outdated result, you input the current fee percentage yourself — guaranteeing the calculation reflects the real fees you are paying today.",
+    },
+    {
+      question: "Is my salary and payroll data private?",
+      answer:
+        "Yes, 100%. We understand salary data is sensitive. Just like our other tools, nothing is ever saved on our servers — your payroll and debt numbers exist only in your browser and disappear when you close the page.",
+    },
+    {
+      question: "Can I use these tools with currencies other than US Dollars?",
+      answer:
+        "It depends on the tool:",
+      bullets: [
+        "Universal tools — Debt Payoff, Profit Margins and general math work in any currency (Euros, Rupees, Pounds); the math is the same regardless of the symbol",
+        "US-specific tools — tax-specific fields are formatted for USD ($) to match US tax forms",
+      ],
+    },
+  ],
+}
+
+export const ACCOUNTING_CALCULATORS: CalculatorEntry[] = ACCOUNTING_HUB.groups.flatMap(
+  (group) => group.calculators
+)
+
+export function getAccountingCalculator(slug: string): CalculatorEntry | undefined {
+  return ACCOUNTING_CALCULATORS.find((calculator) => calculator.slug === slug)
+}
+
+export function getAccountingGroupForCalculator(slug: string): CalculatorGroup {
+  return (
+    ACCOUNTING_HUB.groups.find((group) =>
+      group.calculators.some((calculator) => calculator.slug === slug)
+    ) ?? ACCOUNTING_HUB.groups[0]
   )
 }
