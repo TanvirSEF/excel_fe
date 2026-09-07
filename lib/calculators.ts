@@ -206,9 +206,9 @@ export const STATS_HUB: CalculatorHub = {
           slug: "weighted-average-overtime-calculator",
           name: "Weighted Average Overtime Calculator",
           whatItIs:
-            "A payroll tool for when an employee works two different jobs at different pay rates in the same week.",
+            "FLSA blended-rate overtime calculator for employees working multiple jobs at different pay rates, with bonuses and commissions included.",
           whatToExpect:
-            "The correct blended overtime rate, so the employee is paid fairly and legally.",
+            "The DOL 4-step process: blended regular rate, half-time premium and total gross pay — computed instantly.",
         },
         {
           slug: "vwap-calculator",
