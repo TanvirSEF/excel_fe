@@ -143,9 +143,9 @@ export const STATS_HUB: CalculatorHub = {
           slug: "pooled-variance-calculator",
           name: "Pooled Variance Calculator",
           whatItIs:
-            "Combines the variance (spread) of two different groups into a better estimate of overall consistency.",
+            "Combines standard deviations or variances from unlimited groups into one weighted, reliable metric — with degrees of freedom handled automatically.",
           whatToExpect:
-            "A crucial number often used in T-Tests to see if two groups are statistically different.",
+            "Pooled variance and pooled standard deviation for t-tests, ANOVA and quality control.",
         },
         {
           slug: "one-way-anova-calculator",
