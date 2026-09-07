@@ -7,6 +7,7 @@ import { CopyTableButton } from "@/components/site/calculators/copy-table-button
 import { DataSetField } from "@/components/site/calculators/statistics/data-set-field"
 import {
   GradientHeroMetric,
+  MetricTile,
   ResultsPlaceholder,
   ResultsRegion,
 } from "@/components/site/calculators/result-metrics"
@@ -26,10 +27,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { formatDecimal, formatPValue } from "@/lib/format"
+import { formatDecimal, formatPercent, formatPValue } from "@/lib/format"
 import { oneWayAnova, parseDataSet } from "@/lib/stats"
 
-const DEFAULT_GROUPS = ["3, 4, 5", "7, 8, 9", "10, 11, 12"]
+const DEFAULT_GROUPS = ["5, 7, 8, 6", "10, 12, 11, 9", "15, 18, 16, 14"]
 
 export function OneWayAnovaCalculator() {
   const [groups, setGroups] = useState<string[]>(DEFAULT_GROUPS)
@@ -47,6 +48,17 @@ export function OneWayAnovaCalculator() {
   const invalidGroups = parsed.some((g) => g.invalid.length > 0)
   const smallGroups = parsed.filter((g) => g.invalid.length === 0 && g.values.length < 2)
   const significant = result !== null && result.p < 0.05
+  const etaValue =
+    result !== null ? result.ssBetween / (result.ssBetween + result.ssWithin) : 0
+  const eta = {
+    value: etaValue,
+    label:
+      etaValue >= 0.14
+        ? "large effect"
+        : etaValue >= 0.06
+          ? "medium effect"
+          : "small effect",
+  }
 
   const anovaRows = result
     ? [
@@ -164,8 +176,26 @@ export function OneWayAnovaCalculator() {
               <GradientHeroMetric
                 label="F statistic"
                 value={formatDecimal(result.f, 2)}
-                sub={`p = ${formatPValue(result.p)} · df (${result.dfBetween}, ${result.dfWithin})`}
+                sub={`p = ${formatPValue(result.p)} · df (${result.dfBetween}, ${result.dfWithin}) · η² = ${eta.label}`}
               />
+
+              <div className="grid gap-3 sm:grid-cols-3">
+                <MetricTile
+                  label="Eta squared (η²)"
+                  value={formatDecimal(eta.value)}
+                  sub={`Effect size — ${eta.label}`}
+                />
+                <MetricTile
+                  label="SS between (signal)"
+                  value={formatDecimal(result.ssBetween, 2)}
+                  sub="Group averages vs the grand average"
+                />
+                <MetricTile
+                  label="SS within (noise)"
+                  value={formatDecimal(result.ssWithin, 2)}
+                  sub="Natural variation inside groups"
+                />
+              </div>
 
               <div
                 className={`flex items-start gap-2.5 rounded-xl border p-3.5 text-xs leading-relaxed ${
@@ -177,7 +207,7 @@ export function OneWayAnovaCalculator() {
                 <IconAlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
                 <p>
                   {significant
-                    ? `p = ${formatPValue(result.p)} < 0.05 — at least one group mean differs significantly from the others.`
+                    ? `Significant difference — p = ${formatPValue(result.p)} < 0.05, and η² ${formatDecimal(eta.value)} means ${formatPercent(eta.value * 100, 1)} of the variation comes from the group factor. At least one group mean differs.`
                     : `p = ${formatPValue(result.p)} ≥ 0.05 — no significant difference detected between the group means.`}
                 </p>
               </div>
