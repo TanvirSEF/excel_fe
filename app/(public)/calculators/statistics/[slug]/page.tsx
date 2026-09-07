@@ -189,6 +189,68 @@ export default async function CalculatorPage({
           </p>
         </div>
 
+        {detail.method ? (
+          <div className="mt-6 rounded-xl border border-primary/25 bg-primary/5 p-4 sm:p-5">
+            <h3 className="text-sm font-bold tracking-tight text-foreground">
+              {detail.method.title}
+            </h3>
+            <div className="mt-2 space-y-2.5">
+              {detail.method.paragraphs.map((paragraph) => (
+                <p
+                  key={paragraph.slice(0, 40)}
+                  className="text-sm leading-relaxed text-muted-foreground"
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+            <p className="mt-3 rounded-lg border border-primary/20 bg-background/60 px-3.5 py-2.5 font-mono text-sm text-foreground">
+              {detail.method.formula}
+            </p>
+          </div>
+        ) : null}
+
+        {detail.facts && detail.facts.length > 0 ? (
+          <div className="mt-6 space-y-3">
+            {detail.facts.map((fact) => (
+              <div
+                key={fact.title}
+                className="rounded-xl border border-border/70 bg-muted/20 p-4"
+              >
+                <p className="text-sm font-bold tracking-tight text-foreground">
+                  {fact.title}
+                </p>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                  {fact.body}
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : null}
+
+        {detail.useCases && detail.useCases.length > 0 ? (
+          <div className="mt-8 border-t border-border/60 pt-8">
+            <h3 className="text-lg font-bold tracking-tight text-foreground">
+              When to use this calculator
+            </h3>
+            <div className="mt-4 grid gap-4 sm:grid-cols-3">
+              {detail.useCases.map((useCase) => (
+                <div
+                  key={useCase.title}
+                  className="rounded-xl border border-primary/40 bg-card p-4 shadow-2xs"
+                >
+                  <p className="text-sm font-bold tracking-tight text-primary">
+                    {useCase.title}
+                  </p>
+                  <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+                    {useCase.body}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
         {detail.excelNote ? (
           <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-primary/15 bg-primary/5 p-4">
             <p className="text-sm leading-relaxed text-foreground/85">
