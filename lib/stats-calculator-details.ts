@@ -473,41 +473,162 @@ export const STATS_DETAILS: Record<StatisticsSlug, StatsCalculatorDetail> = {
   },
   "z-score-to-percentile-calculator": {
     metaDescription:
-      "Free z-score to percentile calculator — convert any z-score into its percentile rank on the normal curve, with areas below, above and between.",
-    formula: "Percentile = Φ(z) × 100%",
+      "Free z-score to percentile calculator with bell curve graph — see your percentile rank, probability and how many people you scored above, instantly.",
+    formula: "Percentile = Φ(z) × 100%  ·  z = (x − μ) ÷ σ",
     whenToUse: [
-      "To translate a standardized score into plain language — z = 1.96 means the 97.5th percentile.",
-      "For test scores (IQ, SAT), growth charts and any normally distributed measurement.",
+      "A test score alone does not say much — a score of 75 may rank very high or very low. You need your percentile rank to understand your position. This calculator converts your z-score to a percentile and shows how many people you scored above.",
+      "The z-score is the distance: how far a data point is from the average. A z-score of 0 means exactly average; +1 means one standard deviation above. The percentile is the rank: how many values fall below yours — the 80th percentile means you scored higher than 80% of the group.",
     ],
     howToUse: [
-      "Enter the z-score directly, or switch to Raw score mode and provide the score, mean and standard deviation.",
-      "The calculator evaluates the standard normal CDF for your z.",
-      "Read the percentile plus the area above and the central area between ±|z|.",
+      "Enter a z-score directly, or switch to Raw Score mode and provide your score, the mean and the standard deviation.",
+      "The calculator evaluates the cumulative distribution function (CDF) — the area under the bell curve from the left up to your z-score.",
+      "Read the percentile, the probability, the right-tail percentage and the bell curve visualization with the shaded area.",
     ],
     example: {
-      title: "Example: IQ 130",
-      body: "IQ 130 with mean 100 and SD 15 gives z = 2.0 → the 97.7250th percentile — roughly the top 2.3%.",
+      title: "A simple example — height",
+      body: "The average height for men is 70 inches with a standard deviation of 3 inches. Your height is 76 inches. Subtract the average: 76 − 70 = 6. Divide by the SD: 6 ÷ 3 = 2. Your z-score is 2.0, which equals the 97.7th percentile — you are taller than about 98% of men.",
     },
-    excelNote: "In Excel use =NORM.S.DIST(z, TRUE).",
+    excelNote: "In Excel use =NORM.S.DIST(z, TRUE) for the probability, then format as a percentage.",
+    method: {
+      title: "How this calculator works — the CDF",
+      paragraphs: [
+        "The calculator uses the cumulative distribution function. The bell curve represents the full population, and the area under the curve shows probability. The curve splits into two equal parts at z = 0, which gives a percentile of 50% — the exact middle.",
+        "A positive z-score moves above the average: the calculator measures the area from the left side of the curve to your score. A negative z-score moves below the average, where the area becomes smaller. People once used a large chart called a Z-Table to find percentiles by hand — this calculator replaces it with instant, more exact results.",
+      ],
+      formula: "Percentile = Φ(z) × 100",
+    },
+    facts: [
+      {
+        title: "1. The 68-95-99.7 rule",
+        body: "68% of all people fall between z = −1 and +1 — the average group. 95% fall between −2 and +2; outside this range you are unusual. 99.7% fall between −3 and +3; falling outside is extremely rare. Use this rule to estimate percentiles without a calculator.",
+      },
+      {
+        title: "2. Percentiles can never reach 100%",
+        body: "The 100th percentile is mathematically impossible — the bell curve stretches forever in both directions without ever touching the bottom. Even a z-score of 5.0 only reaches 99.99997%. Most tests report a highest percentile of 99.9th.",
+      },
+      {
+        title: "3. Symmetry is key",
+        body: "The normal distribution is perfectly symmetrical. A z-score of +1.0 equals the 84th percentile; a z-score of −1.0 equals the 16th percentile. Notice that 100 − 84 = 16. If you know the percentile for a positive z-score, you already know the negative version — just subtract from 100.",
+      },
+    ],
+    useCases: [
+      {
+        title: "Standardized tests",
+        body: "A raw SAT or IQ score does not show your full ranking. An IQ score of 130 has a z-score of +2.0, which falls near the 98th percentile — the top 2% of test takers.",
+      },
+      {
+        title: "Baby growth charts",
+        body: "Doctors use percentiles to track child growth: a baby in the 15th percentile for weight weighs more than 15 out of 100 babies of the same age. Z-scores help doctors follow growth over time and spot problems early.",
+      },
+      {
+        title: "Product quality checks",
+        body: "Factories use z-scores to keep products consistent — a soda machine aiming for 500 ml with fills at 498 or 502 ml. Engineers study the z-scores of fill amounts; the Six Sigma method targets a z-score close to 6.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Can a percentile be negative?",
+        answer:
+          "No. Percentiles always stay between 0% and 100%. A z-score, however, can be negative — meaning your value falls below the average. A z-score of −2.0 matches the 2.28th percentile: a low rank, but still positive.",
+      },
+      {
+        question: "What is a good z-score?",
+        answer:
+          "It depends on what you measure. Test scores and income favor higher values — a positive z-score above +1.0 is often good. Golf scores and race times favor lower values — a negative z-score below −1.0 is better. In most situations, a z-score between −1 and +1 falls within the normal range.",
+      },
+      {
+        question: "Why does the graph never touch the bottom line?",
+        answer:
+          "The normal distribution follows a special pattern — the curve moves closer to zero as the z-score increases, but never fully reaches it. This means rare events can still happen: the chance becomes very small, but never completely disappears.",
+      },
+      {
+        question: "How do I calculate my z-score if I don't have it?",
+        answer:
+          "Subtract the average from your raw score, then divide by the standard deviation: z = (x − μ) ÷ σ. Or simply switch to Raw Score mode above and the calculator derives it for you.",
+      },
+    ],
   },
   "critical-z-value-calculator": {
     metaDescription:
-      "Free critical z value calculator — instant critical values for any confidence level (80–99.9%) or custom α, one or two-tailed. Like NORM.S.INV in Excel.",
-    formula: "z_critical = Φ⁻¹(1 − α) or Φ⁻¹(1 − α/2)",
+      "Free critical z-value calculator with rejection region graph — find critical values for any confidence level (90%, 95%, 99%), one or two-tailed. Instant results.",
+    formula: "z_critical = Φ⁻¹(1 − α) [one-tailed] · z_critical = ±Φ⁻¹(1 − α/2) [two-tailed]",
     whenToUse: [
-      "Before running a z-test: you need the cut-off beyond which you reject the null hypothesis.",
-      "Building confidence intervals: the critical z times the standard error sets the interval's width.",
+      "Every scientific experiment has a turning point — the point where data stops looking average and becomes statistically significant. The Critical Z-Value Calculator finds this boundary in seconds, whether you use a 95% confidence level or a stricter 99% study.",
+      "Think of a game where you throw a ball into a bucket: a small miss feels normal, a large miss feels unusual. The critical z-value sets that limit — if your result stays inside the acceptance region, it is normal chance. If it goes into the rejection zone, you call it statistically significant.",
     ],
     howToUse: [
-      "Pick a confidence level from the dropdown — or type a custom significance α (like 0.05) to override it.",
-      "Choose one-tailed or two-tailed.",
-      "Read the critical z values: ±1.9600 for the classic 95% two-tailed case.",
+      "Pick the significance level (α): 0.05 for most studies, 0.01 for medical studies, or 0.10 for exploratory marketing work.",
+      "Choose the test type: two-tailed (standard — checks for any difference) or one-tailed (left/right — checks one direction only).",
+      "Read the critical z-value, the rejection region area, and the confidence level — the curve shows the rejection zones in red.",
     ],
     example: {
-      title: "Example: 95% two-tailed",
-      body: "α = 0.05 split into two tails of 0.025 each gives critical z = ±1.9600 — the number every statistics student memorizes.",
+      title: "Example: 95% confidence, two-tailed",
+      body: "α = 0.05 split into two tails of 2.5% each. The calculator finds the cutoff for both ends: ±1.960. If your z-score goes above 1.96 or below −1.96, you reject the null hypothesis.",
     },
-    excelNote: "In Excel use =NORM.S.INV(1 − α/2) for two-tailed critical values.",
+    excelNote: "In Excel use =NORM.S.INV(1 − α/2) for two-tailed critical values, or =NORM.S.INV(1 − α) for one-tailed.",
+    method: {
+      title: "Understanding the logic — tails and alpha",
+      paragraphs: [
+        "The significance level (α) sets your risk limit: 0.05 means 95% confident, 0.01 means 99% confident, 0.10 means 90% confident. Most studies use 0.05; medical studies prefer 0.01 for extra safety.",
+        "Two-tailed test (the standard): you look for any kind of difference — the calculator splits α in half, putting α/2 on each side of the curve. One-tailed test: you care about only one direction — the calculator places the full α on one side, which lowers the cutoff to 1.645 instead of 1.96, making significance easier to reach.",
+      ],
+      formula: "Two-tailed: α/2 in each tail · One-tailed: full α in one tail",
+    },
+    facts: [
+      {
+        title: "1. The big three numbers",
+        body: "Statisticians memorize three critical values: ±1.645 for 90% confidence (or 95% one-tailed), ±1.960 as the standard for 95% confidence, and ±2.576 for 99% confidence in strict tests. If you see a z-score of 3.0, it already passes all three.",
+      },
+      {
+        title: "2. Critical values define the rejection region",
+        body: "The red zone on the graph is the rejection region — where the null hypothesis fails. If your test statistic enters this zone beyond the critical value, you reject the null. Most experiments aim for this result because it shows a meaningful finding.",
+      },
+      {
+        title: "3. Z vs. T — the sample size rule",
+        body: "This calculator uses critical z-values, which work when your sample size exceeds 30. With a small sample — like 5 patients — z-values do not work well; you need a critical t-value instead, which uses a higher cutoff to handle the uncertainty.",
+      },
+    ],
+    useCases: [
+      {
+        title: "A/B testing (marketing)",
+        body: "You test two website headlines at 95% confidence. Before collecting data, set the cutoff at 1.96. After a week, your z-score of 2.1 exceeds 1.96 — the result is significant, switch to the new headline.",
+      },
+      {
+        title: "Quality assurance (factories)",
+        body: "A factory making 10mm steel bolts sets a strict 99% confidence level (α = 0.01), giving a critical value of ±2.576. A batch returns a z-score of −2.8 — in the rejection region. The bolts are too thin; the manager stops the machine.",
+      },
+      {
+        title: "Political polling",
+        body: "When news channels say 'Candidate A leads by 4 points with a margin of error of 3%,' they base the margin on critical values. The margin of error equals the critical value multiplied by the standard error — 1.96 for 95% confidence.",
+      },
+    ],
+    faqs: [
+      {
+        question: "What is the difference between a z-score and a critical value?",
+        answer:
+          "Think of the critical value as the goal post and the z-score as the ball. The critical value sets a fixed line before the test — it depends on your confidence level. The z-score shows your result after collecting data. You score a goal when your z-score passes the critical value.",
+      },
+      {
+        question: "Why is the critical value lower for a one-tailed test?",
+        answer:
+          "A one-tailed test puts the full error budget on one side, moving the cutoff closer to the center. Two-tailed at 5%: cutoff is 1.96. One-tailed at 5%: cutoff is 1.645. This makes significance easier to reach, but you must ignore results in the opposite direction.",
+      },
+      {
+        question: "Can a critical value be negative?",
+        answer:
+          "Yes. A left-tailed test uses a negative value because it looks for a decrease — for example, −1.645. A two-tailed test uses both sides, so it includes a positive and a negative value such as ±1.96.",
+      },
+      {
+        question: "What happens if my z-score matches the critical value?",
+        answer:
+          "This is a borderline case. Most rules say you reject only when |z| exceeds the critical value strictly. At exactly 1.96 vs. 1.96, you fail to reject — you are close but do not pass. Collect more data for a clearer result.",
+      },
+      {
+        question: "Does the sample size change the critical z-value?",
+        answer:
+          "No. The z-distribution keeps it fixed: a 95% confidence level always uses 1.96, whether you have 50 people or 5 million. Note: this rule does not apply to t-tests, where t-values change with sample size.",
+      },
+    ],
   },
   "p-value-from-z-score-calculator": {
     metaDescription:
