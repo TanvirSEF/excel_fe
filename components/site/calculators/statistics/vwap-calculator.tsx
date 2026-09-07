@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { IconPlus, IconRotate, IconX } from "@tabler/icons-react"
+import { IconCircleCheck, IconPlus, IconRotate, IconX } from "@tabler/icons-react"
 
 import { NumberField } from "@/components/site/calculators/field"
 import { StepList } from "@/components/site/calculators/statistics/step-list"
@@ -29,16 +29,16 @@ interface TradeRow {
 }
 
 const DEFAULT_ROWS: TradeRow[] = [
-  { price: "100", volume: "200" },
-  { price: "102", volume: "300" },
-  { price: "98", volume: "500" },
+  { price: "150.5", volume: "100" },
+  { price: "150.75", volume: "500" },
+  { price: "149.8", volume: "250" },
 ]
 
 export function VwapCalculator() {
   const [rows, setRows] = useState<TradeRow[]>(DEFAULT_ROWS)
 
   const parsed = rows.map((row) => ({
-    price: parseNumericInput(row.price, { min: 0 }),
+    price: parseNumericInput(row.price, { min: 0.000001 }),
     volume: parseNumericInput(row.volume, { min: 0 }),
   }))
 
@@ -53,6 +53,7 @@ export function VwapCalculator() {
   const volumeSum = trades.reduce((total, t) => total + t.volume, 0)
   const notional = trades.reduce((total, t) => total + t.price * t.volume, 0)
   const vwap = volumeSum > 0 ? notional / volumeSum : null
+  const simpleAvg = trades.length > 0 ? mean(trades.map((t) => t.price)) : null
   const valid = trades.length > 0 && vwap !== null
 
   function updateRow(index: number, key: keyof TradeRow, value: string) {
@@ -65,7 +66,7 @@ export function VwapCalculator() {
     <div className="grid gap-6 lg:grid-cols-5">
       <Card className="lg:col-span-2">
         <CardHeader>
-          <CardTitle>Your trades</CardTitle>
+          <CardTitle>Enter trade transactions</CardTitle>
           <CardDescription>
             Each fill&apos;s price and share volume — the building blocks of VWAP.
           </CardDescription>
@@ -85,21 +86,21 @@ export function VwapCalculator() {
                 <div key={index} className="flex items-end gap-2">
                   <div className="min-w-0 flex-1">
                     <NumberField
-                      label="Price"
+                      label={index === 0 ? "Share price ($)" : "Price"}
                       value={row.price}
                       onChange={(value) => updateRow(index, "price", value)}
                       error={priceError}
                       suffix="$"
-                      placeholder="100"
+                      placeholder="150.5"
                     />
                   </div>
-                  <div className="w-32">
+                  <div className="w-28">
                     <NumberField
-                      label="Volume"
+                      label={index === 0 ? "Volume" : "Shares"}
                       value={row.volume}
                       onChange={(value) => updateRow(index, "volume", value)}
                       error={volumeError}
-                      placeholder="200"
+                      placeholder="100"
                     />
                   </div>
                   <Button
@@ -130,7 +131,7 @@ export function VwapCalculator() {
             onClick={() => setRows((current) => [...current, { price: "", volume: "" }])}
           >
             <IconPlus className="h-4 w-4" />
-            Add another trade
+            Add trade
           </Button>
 
           <Button
@@ -140,7 +141,7 @@ export function VwapCalculator() {
             onClick={() => setRows(DEFAULT_ROWS)}
           >
             <IconRotate className="h-4 w-4" />
-            Reset to example
+            Reset
           </Button>
         </CardContent>
       </Card>
@@ -149,30 +150,35 @@ export function VwapCalculator() {
         {valid && vwap !== null ? (
           <ResultsRegion>
             <GradientHeroMetric
-              label="VWAP"
+              label="Volume weighted average price"
               value={formatCurrency(vwap)}
-              sub="Σ(price × volume) ÷ Σ(volume)"
+              sub={`The true average price across ${formatDecimal(volumeSum, 0)} shares traded`}
             />
 
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="flex items-start gap-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-xs leading-relaxed text-emerald-700 dark:text-emerald-400">
+              <IconCircleCheck className="mt-0.5 h-4 w-4 shrink-0" />
+              <p>
+                Benchmark calculated — weighted average based on volume.{" "}
+                {simpleAvg !== null && simpleAvg !== vwap
+                  ? `The simple average (${formatCurrency(simpleAvg)}) ignores volume and tells a different story.`
+                  : ""}
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-3">
               <MetricTile
                 label="Total volume"
                 value={formatDecimal(volumeSum, 0)}
                 sub="Shares traded"
               />
               <MetricTile
-                label="Notional traded"
+                label="Total traded value"
                 value={formatCurrency(notional)}
                 sub="Σ(price × volume)"
               />
               <MetricTile
-                label="Trades"
-                value={`${trades.length}`}
-                sub={`${rows.length - trades.length} ignored (invalid or empty)`}
-              />
-              <MetricTile
-                label="Simple mean price"
-                value={formatCurrency(mean(trades.map((t) => t.price)))}
+                label="Simple avg price"
+                value={simpleAvg !== null ? formatCurrency(simpleAvg) : "—"}
                 sub="Ignores volume — for comparison"
               />
             </div>
@@ -180,10 +186,10 @@ export function VwapCalculator() {
             <StepList
               steps={[
                 {
-                  title: "Notional per trade",
+                  title: "Per-trade value",
                   body: trades
                     .slice(0, 4)
-                    .map((t) => `${formatDecimal(t.price, 0)}×${formatDecimal(t.volume, 0)}`)
+                    .map((t) => `${formatDecimal(t.price, 2)}×${formatDecimal(t.volume, 0)}`)
                     .join(" + ") + (trades.length > 4 ? " + …" : ""),
                 },
                 {
@@ -195,9 +201,9 @@ export function VwapCalculator() {
             />
 
             <p className="text-xs leading-relaxed text-muted-foreground">
-              Trading below VWAP suggests a favorable entry for buys (and above it for
-              sells). Institutional benchmarks often measure execution quality against
-              the day&apos;s VWAP.
+              Trading below VWAP suggests a favorable entry for buys (above for sells).
+              Institutional benchmarks often measure execution quality against the
+              day&apos;s VWAP.
             </p>
           </ResultsRegion>
         ) : (
