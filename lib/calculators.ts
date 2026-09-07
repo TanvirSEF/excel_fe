@@ -38,6 +38,33 @@ export interface CalculatorHub {
   faqs: CalculatorFaq[]
 }
 
+export interface NumericInputOptions {
+  min?: number
+  max?: number
+  integer?: boolean
+}
+
+export interface ParsedInput {
+  value: number | null
+  error: string | null
+}
+
+export function parseNumericInput(
+  raw: string,
+  { min, max, integer = false }: NumericInputOptions = {}
+): ParsedInput {
+  const cleaned = raw.replace(/[, $]/g, "").trim()
+  if (cleaned === "") return { value: null, error: null }
+  const value = Number(cleaned)
+  if (!Number.isFinite(value)) return { value: null, error: "Enter a valid number" }
+  if (integer && !Number.isInteger(value)) return { value: null, error: "Enter a whole number" }
+  if (min !== undefined && value < min)
+    return { value: null, error: `Must be ${min} or more` }
+  if (max !== undefined && value > max)
+    return { value: null, error: `Must be ${max} or less` }
+  return { value, error: null }
+}
+
 export const STATS_HUB: CalculatorHub = {
   slug: "statistics",
   badge: "Free Online Tools",
@@ -216,4 +243,20 @@ export const STATS_HUB: CalculatorHub = {
         "No, never. Just like our financial tools, your privacy is guaranteed. The data you enter is processed in your browser and is never stored on our servers. Once you close the tab or refresh the page, your data is completely wiped.",
     },
   ],
+}
+
+export const STATS_CALCULATORS: CalculatorEntry[] = STATS_HUB.groups.flatMap(
+  (group) => group.calculators
+)
+
+export function getStatsCalculator(slug: string): CalculatorEntry | undefined {
+  return STATS_CALCULATORS.find((calculator) => calculator.slug === slug)
+}
+
+export function getStatsGroupForCalculator(slug: string): CalculatorGroup {
+  return (
+    STATS_HUB.groups.find((group) =>
+      group.calculators.some((calculator) => calculator.slug === slug)
+    ) ?? STATS_HUB.groups[0]
+  )
 }

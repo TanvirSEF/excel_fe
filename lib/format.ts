@@ -65,3 +65,16 @@ export function formatMultiple(value: number): string {
   const v = finite(value)
   return v === null ? FALLBACK : `${v.toFixed(2)}x`
 }
+
+export function formatDecimal(value: number, digits = 4): string {
+  const v = finite(value)
+  return v === null ? FALLBACK : v.toFixed(digits)
+}
+
+/** 0.0004218 → "0.0004" · 3.1e-7 → "< 0.0001" */
+export function formatPValue(p: number): string {
+  const v = finite(p)
+  if (v === null) return FALLBACK
+  if (v < 1e-4) return "< 0.0001"
+  return v.toFixed(4)
+}
