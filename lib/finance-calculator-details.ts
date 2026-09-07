@@ -22,22 +22,87 @@ export type FinanceSlug =
 export const FINANCE_DETAILS: Record<FinanceSlug, StatsCalculatorDetail> = {
   "share-profit-calculator": {
     metaDescription:
-      "Free share profit calculator — enter buy price, sell price, shares and fees to see your total stock profit, ROI percentage and break-even price.",
-    formula: "Profit = (Sell − Buy) × Shares − Fees",
+      "Free share profit calculator with commissions and capital gains tax — net profit, ROI, break-even price and total fees for any stock trade.",
+    formula: "Net Profit = (Net Revenue − Total Cost) − Tax Amount",
     whenToUse: [
-      "After closing any stock or ETF position — one glance tells you what the trade actually earned after fees.",
-      "Before selling: the break-even price shows the minimum price that covers your costs.",
+      "A share profit calculator helps investors find the real profit from a trade. It shows the difference between price changes and the money you actually keep. Even if a stock price goes up, your final profit can be lower because of brokerage fees, selling charges and taxes.",
+      "This tool helps you check different selling prices and plan better exit points. It also helps you find your break-even point — the price where your selling amount covers all costs. Both short-term traders and long-term investors use it to make decisions based on actual returns.",
     ],
     howToUse: [
-      "Enter the price you bought at and the price you sold at.",
-      "Enter the number of shares and any brokerage fees.",
-      "Read your profit, ROI percentage and the break-even sell price.",
+      "Enter the shares quantity, buy price and sell price.",
+      "Enter both commissions — the buy-side and sell-side fees your broker charges.",
+      "Enter the capital gains tax rate for your situation (0%, 15% or 20% for long-term in the US).",
+      "Read the net profit, post-tax ROI, total cost, revenue, total fees and break-even price.",
     ],
     example: {
-      title: "Example: 100 shares bought at $50, sold at $65",
-      body: "(65 − 50) × 100 = $1,500 profit — a 30% return on the $5,000 cost. Press Reset to reproduce it.",
+      title: "Example: 100 shares bought at $150, sold at $200",
+      body: "Total cost $15,010 (including $10 buy commission). Gross $20,000. Taxable profit $4,980. Tax at 15% = $747. Net profit $4,233 = 28.20% ROI. Press Reset to reproduce.",
     },
-    excelNote: "In Excel: =(Sell−Buy)*Shares−Fees for profit, or =IRR() for multi-year trades.",
+    excelNote: "In Excel: =(Shares*Sell-SellComm)*(1-TaxRate)-(Shares*Buy+BuyComm) for net profit.",
+    method: {
+      title: "The mathematical framework — 5 formulas",
+      paragraphs: [
+        "Total cost basis = (Shares × Buy Price) + Buy Commission. This is your total initial outlay.",
+        "Gross proceeds = Shares × Sell Price. Net revenue = Gross − Sell Commission. This is what remains after paying your broker to close the position.",
+        "Tax liability = (Net Revenue − Total Cost) × (Tax Rate ÷ 100), applied only on positive gains. Net profit = (Net Revenue − Total Cost) − Tax. ROI = (Net Profit ÷ Total Cost) × 100.",
+      ],
+      formula: "ROI = (Net Profit ÷ Total Cost) × 100",
+    },
+    facts: [
+      {
+        title: "1. Tax rules vary by country",
+        body: "USA: long-term gains taxed at 0%, 15% or 20% after one year; short-term at income rates up to 37%. UK: £3,000 annual tax-free allowance. Australia: 50% discount for assets held over 12 months. Canada: 50% inclusion rate (66.67% above $250k). India: 12.5% LTCG above ₹1.25 lakh.",
+      },
+      {
+        title: "2. Holding period matters",
+        body: "In the US and Australia, holding stocks longer reduces your tax bill. In the US, selling after one year drops your rate to 0-20%. Without that, you pay your regular income tax rate — up to 37%. Australia gives a 50% tax discount for assets held over a year.",
+      },
+      {
+        title: "3. Capital losses can offset gains",
+        body: "If your result shows a net loss, this is called a capital loss. In many countries, you can use it to offset other capital gains and reduce your total tax bill for the year.",
+      },
+    ],
+    useCases: [
+      {
+        title: "Planning exit points",
+        body: "Before selling, test different sell prices to find the exit that maximizes profit after all costs — the break-even shows your minimum acceptable price.",
+      },
+      {
+        title: "Comparing brokers",
+        body: "Different brokers charge different fees — some free, some fixed, some percentage-based. Enter each broker's fee structure to see how much commissions eat into your returns.",
+      },
+      {
+        title: "Post-trade tax planning",
+        body: "The tax field shows exactly how much of your profit goes to the government. Adjust the tax rate to compare short-term vs long-term capital gains strategies.",
+      },
+    ],
+    faqs: [
+      {
+        question: "What if my result shows a net loss?",
+        answer:
+          "A net loss means you sold below your total cost. This is a capital loss — in many countries you can use it to offset other capital gains and reduce your total tax for the year.",
+      },
+      {
+        question: "Does this calculator work for crypto?",
+        answer:
+          "Yes, the basic logic is the same for cryptocurrency: compare buy price vs sell price. However, tax rules for crypto differ by country, so check your local laws for the correct tax rate.",
+      },
+      {
+        question: "Is the ROI shown before or after tax?",
+        answer:
+          "This calculator shows post-tax ROI — it tells you how much you actually gained after paying both commissions and capital gains tax.",
+      },
+      {
+        question: "Why do I enter commissions manually?",
+        answer:
+          "Each broker has a different fee structure — some charge no commission, others a fixed fee or a percentage. Manual entry ensures your net profit is accurate for your specific broker.",
+      },
+      {
+        question: "Does the sale price include dividends?",
+        answer:
+          "No. The sell price only reflects the market value of the share. Dividends are counted as separate income and may have their own tax treatment.",
+      },
+    ],
   },
   "dividend-reinvestment-plan-calculator": {
     metaDescription:
