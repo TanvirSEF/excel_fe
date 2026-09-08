@@ -17,13 +17,14 @@ import { ReverseMarginCalculator } from "@/components/site/calculators/accountin
 import { SalesCommissionCalculator } from "@/components/site/calculators/accounting/sales-commission-calculator"
 import { SalespersonProfitabilityCalculator } from "@/components/site/calculators/accounting/salesperson-profitability-calculator"
 import { WholesaleMarginCalculator } from "@/components/site/calculators/accounting/wholesale-margin-calculator"
-import { Breadcrumb } from "@/components/site/breadcrumb"
+import { CalculatorPage } from "@/components/site/calculators/calculator-page"
 import {
   ACCOUNTING_CALCULATORS,
   getAccountingCalculator,
   getAccountingGroupForCalculator,
 } from "@/lib/calculators"
-import { ACCOUNTING_DETAILS, type AccountingSlug } from "@/lib/accounting-calculator-details"
+import { ACCOUNTING_DETAILS, type AccountingSlug } from "@/lib/calculator-content/accounting"
+import { calculatorMetadata } from "@/lib/calculator-content/metadata"
 
 export const dynamicParams = false
 export const revalidate = 300
@@ -60,17 +61,11 @@ export async function generateMetadata({
   const detail = ACCOUNTING_DETAILS[slug as AccountingSlug]
   if (!entry || !detail) return {}
 
-  return {
-    title: `${entry.name} | Excel Insider`,
-    description: detail.metaDescription,
-    alternates: { canonical: `/calculators/accounting/${slug}` },
-    openGraph: {
-      title: `${entry.name} | Excel Insider`,
-      description: detail.metaDescription,
-      url: `/calculators/accounting/${slug}`,
-      images: ["/og-default.png"],
-    },
-  }
+  return calculatorMetadata(
+    entry.name,
+    detail.metaDescription,
+    `/calculators/accounting/${slug}`
+  )
 }
 
 export default async function AccountingCalculatorPage({
@@ -84,111 +79,16 @@ export default async function AccountingCalculatorPage({
   if (!entry || !detail) notFound()
 
   const group = getAccountingGroupForCalculator(slug)
-  const GroupIcon = group.icon
   const Calculator = CALCULATOR_COMPONENTS[slug as AccountingSlug]
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
-      <Breadcrumb
-        items={[
-          { label: "Home", href: "/" },
-          { label: "Calculators" },
-          { label: "Accounting", href: "/calculators/accounting" },
-          { label: entry.name },
-        ]}
-      />
-
-      <header className="mt-6 max-w-3xl space-y-4">
-        <div className="flex items-center gap-3">
-          <div
-            className={`flex h-11 w-11 items-center justify-center rounded-xl ${group.accent}`}
-          >
-            <GroupIcon className="h-[22px] w-[22px]" />
-          </div>
-          <span className="rounded-full border border-primary/20 bg-primary/8 px-3 py-1 text-xs font-semibold text-primary">
-            {group.title}
-          </span>
-        </div>
-        <h1 className="text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-          {entry.name}
-        </h1>
-        <p className="text-pretty text-sm leading-relaxed text-muted-foreground sm:text-base">
-          {entry.whatItIs}
-        </p>
-        <div className="flex items-start gap-2 rounded-xl border border-primary/15 bg-primary/5 px-4 py-3">
-          <p className="text-sm leading-relaxed text-foreground/85">
-            {entry.whatToExpect}
-          </p>
-        </div>
-      </header>
-
-      <div className="mt-10">
-        <Calculator />
-      </div>
-
-      <section className="mt-12 rounded-2xl border border-primary/50 bg-card p-6 shadow-2xs sm:p-8">
-        <h2 className="text-xl font-bold tracking-tight text-foreground">
-          About this calculator
-        </h2>
-
-        <div className="mt-5 space-y-3">
-          {detail.whenToUse.map((paragraph) => (
-            <p
-              key={paragraph.slice(0, 40)}
-              className="text-sm leading-relaxed text-muted-foreground sm:text-base"
-            >
-              {paragraph}
-            </p>
-          ))}
-        </div>
-
-        <div className="mt-6 rounded-xl border border-primary/25 bg-primary/5 px-4 py-3">
-          <p className="text-xs font-semibold uppercase tracking-wider text-primary">
-            Formula
-          </p>
-          <p className="mt-1.5 font-mono text-sm leading-relaxed text-foreground">
-            {detail.formula}
-          </p>
-        </div>
-
-        {detail.howToUse ? (
-          <>
-            <h3 className="mt-6 text-sm font-bold uppercase tracking-wider text-foreground">
-              How to use it
-            </h3>
-            <ol className="mt-3 space-y-2.5">
-              {detail.howToUse.map((step, index) => (
-                <li key={step.slice(0, 40)} className="flex gap-3">
-                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[11px] font-bold text-primary">
-                    {index + 1}
-                  </span>
-                  <p className="text-sm leading-relaxed text-foreground/85">{step}</p>
-                </li>
-              ))}
-            </ol>
-          </>
-        ) : null}
-
-        {detail.example ? (
-          <div className="mt-6 rounded-xl border border-border/70 bg-muted/30 p-4 sm:p-5">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {detail.example.title}
-            </p>
-            <p className="mt-2 text-sm leading-relaxed text-foreground/85">
-              {detail.example.body}
-            </p>
-          </div>
-        ) : null}
-
-        {detail.excelNote ? (
-          <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-primary/15 bg-primary/5 p-4">
-            <p className="text-sm leading-relaxed text-foreground/85">
-              <span className="font-semibold text-primary">In Excel: </span>
-              {detail.excelNote}
-            </p>
-          </div>
-        ) : null}
-      </section>
-    </div>
+    <CalculatorPage
+      category={{ label: "Accounting", href: "/calculators/accounting" }}
+      group={group}
+      entry={entry}
+      detail={detail}
+    >
+      <Calculator />
+    </CalculatorPage>
   )
 }
