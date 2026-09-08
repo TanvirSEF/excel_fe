@@ -27,6 +27,11 @@ export interface CalculatorDetail {
   factsTitle?: string
   factsIntro?: string
   facts?: { title: string; body: string }[]
+  factGroups?: {
+    title?: string
+    intro?: string
+    items: { title: string; body: string }[]
+  }[]
   factsTable?: { title: string; headers: string[]; rows: string[][] }
   useCases?: { title: string; body: string }[]
 }

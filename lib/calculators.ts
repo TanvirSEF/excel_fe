@@ -342,9 +342,9 @@ export const FINANCE_HUB: CalculatorHub = {
           slug: "rental-property-roi-calculator",
           name: "Rental Property ROI Calculator",
           whatItIs:
-            "Checks if buying a house to rent out to others is actually a good business idea.",
+            "Our Rental Property ROI Calculator helps you get the most from your real estate investment. It is built for cash investors and Shariah-compliant financing models. The calculator shows your cash-on-cash return, net operating income, and long-term profit in a simple way.",
           whatToExpect:
-            "Compares the rent you collect against the costs (repairs, taxes) to reveal your real profit.",
+            "It works without interest-based debt or complex formulas. You only enter your numbers and see clear results.",
         },
         {
           slug: "cash-on-cash-roi-calculator",

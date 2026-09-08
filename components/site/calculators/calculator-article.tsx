@@ -157,7 +157,40 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
         </div>
       ) : null}
 
-      {detail.facts && detail.facts.length > 0 ? (
+      {detail.factGroups && detail.factGroups.length > 0 ? (
+        detail.factGroups.map((group, groupIndex) => (
+          <div
+            key={group.title ?? `group-${groupIndex}`}
+            className="mt-8 border-t border-border/60 pt-8"
+          >
+            {group.title ? (
+              <h3 className="text-lg font-bold tracking-tight text-foreground">
+                {group.title}
+              </h3>
+            ) : null}
+            {group.intro ? (
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                {group.intro}
+              </p>
+            ) : null}
+            <div className="mt-4 space-y-3">
+              {group.items.map((fact) => (
+                <div
+                  key={fact.title}
+                  className="rounded-xl border border-border/70 bg-muted/20 p-4"
+                >
+                  <p className="text-sm font-bold tracking-tight text-foreground">
+                    {fact.title}
+                  </p>
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                    {fact.body}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))
+      ) : detail.facts && detail.facts.length > 0 ? (
         <div className="mt-8 border-t border-border/60 pt-8">
           {detail.factsTitle ? (
             <h3 className="text-lg font-bold tracking-tight text-foreground">
