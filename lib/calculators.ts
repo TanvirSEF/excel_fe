@@ -571,9 +571,9 @@ export const ACCOUNTING_HUB: CalculatorHub = {
           slug: "salesperson-profitability-calculator",
           name: "Salesperson Profitability Calculator",
           whatItIs:
-            "Measures whether a salesperson brings in enough revenue to cover their salary and commissions.",
+            "High sales numbers do not always mean high profit. The Salesperson Profitability Calculator helps you measure the actual value a sales rep brings to the business. It includes gross margin and overhead costs to show how much a rep must sell to break even.",
           whatToExpect:
-            "An ROI number that tells you if a salesperson is an asset for your business.",
+            "See how much profit a salesperson adds to the company — their true net contribution.",
         },
       ],
     },
