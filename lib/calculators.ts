@@ -562,9 +562,10 @@ export const ACCOUNTING_HUB: CalculatorHub = {
         {
           slug: "amazon-seller-commission-calculator",
           name: "Amazon Seller Commission Calculator",
-          whatItIs: "Estimates the overall fees Amazon cuts from your sales.",
+          whatItIs:
+            "Selling on Amazon can help you grow your business, but fees can reduce your profits faster than you expect. This Amazon Seller Commission & Profit Calculator shows you exactly what you take home after every cost.",
           whatToExpect:
-            "A breakdown of referral fees and closing costs that shows what you actually earn.",
+            "Enter your referral fees, FBA fulfillment costs, storage fees, and sourcing expenses. You will know right away if a product is worth selling or fits your budget and business goals.",
         },
         {
           slug: "salesperson-profitability-calculator",

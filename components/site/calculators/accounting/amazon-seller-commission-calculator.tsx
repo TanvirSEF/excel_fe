@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { IconRotate } from "@tabler/icons-react"
+import { IconAlertTriangle, IconCircleCheck, IconInfoCircle, IconRotate } from "@tabler/icons-react"
 
 import { NumberField } from "@/components/site/calculators/field"
 import {
@@ -14,86 +14,144 @@ import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 import { parseNumericInput } from "@/lib/calculators"
 import { formatCurrency, formatPercent } from "@/lib/format"
 
-const DEFAULTS = { price: "100", referral: "15", fulfillment: "8", closing: "0", cost: "40" }
+const DEFAULTS = {
+  price: "29.99",
+  referral: "15",
+  closing: "0",
+  fulfillment: "5.40",
+  storage: "0.20",
+  inbound: "0.50",
+  cogs: "6.00",
+  prep: "0.50",
+}
+
+function marginVerdict(margin: number): {
+  kind: "healthy" | "viable" | "thin"
+  text: string
+} {
+  if (margin >= 25) return { kind: "healthy", text: "Healthy Product: Margin is excellent (25%+)." }
+  if (margin >= 15) return { kind: "viable", text: "Viable Product: Margin is workable." }
+  return { kind: "thin", text: "Thin Product: Margin is too thin." }
+}
 
 export function AmazonSellerCommissionCalculator() {
   const [values, setValues] = useState(DEFAULTS)
   const update = (key: keyof typeof DEFAULTS, value: string) =>
     setValues((current) => ({ ...current, [key]: value }))
 
-  const price = parseNumericInput(values.price, { min: 0.01 })
+  const price = parseNumericInput(values.price, { min: 0.000001 })
   const referral = parseNumericInput(values.referral, { min: 0, max: 100 })
-  const fulfillment = parseNumericInput(values.fulfillment, { min: 0 })
   const closing = parseNumericInput(values.closing, { min: 0 })
-  const cost = parseNumericInput(values.cost, { min: 0 })
+  const fulfillment = parseNumericInput(values.fulfillment, { min: 0 })
+  const storage = parseNumericInput(values.storage, { min: 0 })
+  const inbound = parseNumericInput(values.inbound, { min: 0 })
+  const cogs = parseNumericInput(values.cogs, { min: 0 })
+  const prep = parseNumericInput(values.prep, { min: 0 })
 
-  const valid = [price, referral, fulfillment, closing, cost].every((f) => f.value !== null)
+  const valid = [price, referral, closing, fulfillment, storage, inbound, cogs, prep].every(
+    (field) => field.value !== null
+  )
 
-  const referralFee = valid ? (price.value! * referral.value!) / 100 : 0
-  const totalFees = valid ? referralFee + fulfillment.value! + closing.value! : 0
-  const proceeds = valid ? price.value! - totalFees : 0
-  const feePct = valid && price.value! > 0 ? (totalFees / price.value!) * 100 : null
-  const profit = valid ? proceeds - cost.value! : 0
-  const profitMargin = valid && price.value! > 0 ? (profit / price.value!) * 100 : null
+  const referralAmount = valid ? price.value! * (referral.value! / 100) : 0
+  const totalAmazonFees = valid
+    ? referralAmount + closing.value! + fulfillment.value! + storage.value!
+    : 0
+  const investedPerUnit = valid ? cogs.value! + prep.value! + inbound.value! : 0
+  const netProfit = valid
+    ? price.value! - totalAmazonFees - inbound.value! - cogs.value! - prep.value!
+    : 0
+  const netMargin = valid && price.value! > 0 ? (netProfit / price.value!) * 100 : null
+  const returnOnCapital =
+    valid && investedPerUnit > 0 ? (netProfit / investedPerUnit) * 100 : null
+  const verdict = netMargin !== null ? marginVerdict(netMargin) : null
 
   return (
     <div className="grid gap-6 lg:grid-cols-5">
       <Card className="lg:col-span-2">
         <CardHeader>
-          <CardTitle>Sale details</CardTitle>
-          <CardDescription>
-            Amazon changes fees often — enter the current rates from Seller Central.
-          </CardDescription>
+          <CardTitle>Enter product economics</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <NumberField label="Sale price" value={values.price} onChange={(v) => update("price", v)} error={price.error} suffix="$" placeholder="100" />
-          <NumberField label="Referral fee" value={values.referral} onChange={(v) => update("referral", v)} error={referral.error} hint="Most categories: 8–15%" suffix="%" placeholder="15" />
-          <NumberField label="Fulfillment fee (FBA)" value={values.fulfillment} onChange={(v) => update("fulfillment", v)} error={fulfillment.error} hint="Per unit — pick & pack + shipping" suffix="$" placeholder="8" />
-          <NumberField label="Closing fee / per-item" value={values.closing} onChange={(v) => update("closing", v)} error={closing.error} suffix="$" placeholder="0" />
-          <NumberField label="Your product cost" value={values.cost} onChange={(v) => update("cost", v)} error={cost.error} suffix="$" placeholder="40" />
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            1. Sale price &amp; commission
+          </p>
+          <NumberField label="Selling price ($)" value={values.price} onChange={(v) => update("price", v)} error={price.error} suffix="$" placeholder="29.99" />
+          <div className="flex items-start gap-2">
+            <div className="min-w-0 flex-1">
+              <NumberField label="Referral fee (%)" value={values.referral} onChange={(v) => update("referral", v)} error={referral.error} hint="Usually 15%" suffix="%" placeholder="15" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <NumberField label="Closing fee ($)" value={values.closing} onChange={(v) => update("closing", v)} error={closing.error} hint="For Books/Media" suffix="$" placeholder="0" />
+            </div>
+          </div>
+
+          <p className="pt-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            2. FBA &amp; logistics fees
+          </p>
+          <NumberField label="Fulfillment fee ($)" value={values.fulfillment} onChange={(v) => update("fulfillment", v)} error={fulfillment.error} hint="Pick & Pack" suffix="$" placeholder="5.40" />
+          <div className="flex items-start gap-2">
+            <div className="min-w-0 flex-1">
+              <NumberField label="Monthly storage ($)" value={values.storage} onChange={(v) => update("storage", v)} error={storage.error} suffix="$" placeholder="0.20" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <NumberField label="Inbound shipping ($)" value={values.inbound} onChange={(v) => update("inbound", v)} error={inbound.error} hint="Ship to Warehouse" suffix="$" placeholder="0.50" />
+            </div>
+          </div>
+
+          <p className="pt-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            3. Manufacturing &amp; prep
+          </p>
+          <NumberField label="Unit cost (COGS)" value={values.cogs} onChange={(v) => update("cogs", v)} error={cogs.error} suffix="$" placeholder="6.00" />
+          <NumberField label="Prep &amp; labeling ($)" value={values.prep} onChange={(v) => update("prep", v)} error={prep.error} suffix="$" placeholder="0.50" />
+
           <Button type="button" variant="outline" className="w-full" onClick={() => setValues(DEFAULTS)}>
             <IconRotate className="h-4 w-4" />
-            Reset to example
+            Reset
           </Button>
         </CardContent>
       </Card>
 
       <div className="space-y-4 lg:col-span-3">
-        {valid && feePct !== null && profitMargin !== null ? (
+        {valid && netMargin !== null && verdict ? (
           <ResultsRegion>
             <GradientHeroMetric
-              label="You actually keep"
-              value={formatCurrency(profit)}
-              sub={`${formatPercent(profitMargin, 1)} net margin after fees and product cost`}
+              label="Net profit per unit"
+              value={formatCurrency(netProfit)}
             />
 
-            <div className="grid gap-3 sm:grid-cols-2">
-              <MetricTile label="Referral fee" value={formatCurrency(referralFee)} sub={`${referral.value}% of the sale`} />
-              <MetricTile
-                label="Total Amazon fees"
-                value={formatCurrency(totalFees)}
-                sub={`${formatPercent(feePct, 1)} of the sale price`}
-              />
-              <MetricTile label="Net proceeds" value={formatCurrency(proceeds)} sub="What Amazon pays you" />
-              <MetricTile label="Break-even price" value={formatCurrency(cost.value! + totalFees)} sub="Covers cost + fees at this fee level" />
-            </div>
+            {verdict.kind === "thin" ? (
+              <div className="flex items-start gap-2.5 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3.5 text-xs leading-relaxed text-amber-700 dark:text-amber-400">
+                <IconAlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+                <p>{verdict.text}</p>
+              </div>
+            ) : (
+              <div className="flex items-start gap-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-xs leading-relaxed text-emerald-700 dark:text-emerald-400">
+                {verdict.kind === "viable" ? (
+                  <IconInfoCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                ) : (
+                  <IconCircleCheck className="mt-0.5 h-4 w-4 shrink-0" />
+                )}
+                <p>{verdict.text}</p>
+              </div>
+            )}
 
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              Fee percentages vary by category and Amazon adjusts them often — always
-              confirm current rates in Seller Central before pricing a product.
-            </p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <MetricTile label="Net margin" value={formatPercent(netMargin, 2)} sub="Profit ÷ selling price" />
+              <MetricTile label="Return on capital" value={returnOnCapital !== null ? formatPercent(returnOnCapital, 0) : "—"} sub="Profit ÷ cash invested per unit" />
+              <MetricTile label="Total Amazon fees" value={formatCurrency(totalAmazonFees)} sub="Referral + closing + FBA + storage" />
+              <MetricTile label="Referral amt" value={formatCurrency(referralAmount)} sub={`${referral.value}% of selling price`} />
+            </div>
           </ResultsRegion>
         ) : (
           <ResultsPlaceholder
-            title="Enter the sale and fees"
-            description="Amazon's cut, your proceeds and true profit appear here instantly."
+            title="Enter your product economics"
+            description="Net profit, margin and total Amazon fees appear here instantly."
           />
         )}
       </div>
