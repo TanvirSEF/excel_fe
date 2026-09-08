@@ -120,6 +120,99 @@ export function simulateSnowball(input: SnowballInput): SnowballResult {
   }
 }
 
+export interface LivingOffDividendsInput {
+  currentPortfolio: number
+  targetMonthlyIncome: number
+  dividendYieldPct: number
+  dividendGrowthPct: number
+  priceGrowthPct: number
+  taxRatePct: number
+  inflationPct: number
+  monthlyContribution: number
+}
+
+export interface LivingOffDividendsResult {
+  yearsToFreedom: number | null
+  portfolioValue: number
+  netMonthlyIncome: number
+  inflatedMonthlyGoal: number
+  covered: boolean
+  annualIncome: number
+  totalContributions: number
+  yieldOnCost: number
+}
+
+export const LIVING_OFF_MAX_YEARS = 100
+
+export function simulateLivingOffDividends(
+  input: LivingOffDividendsInput
+): LivingOffDividendsResult {
+  const netFactor = 1 - input.taxRatePct / 100
+  const inflationRate = input.inflationPct / 100
+  const annualContribution = input.monthlyContribution * 12
+
+  let price = 100
+  let shares = input.currentPortfolio / price
+  let divPerShare = (input.dividendYieldPct / 100) * price
+  let totalContributions = input.currentPortfolio
+
+  const initialMonthlyIncome = (shares * divPerShare * netFactor) / 12
+  if (initialMonthlyIncome >= input.targetMonthlyIncome) {
+    return {
+      yearsToFreedom: 0,
+      portfolioValue: input.currentPortfolio,
+      netMonthlyIncome: initialMonthlyIncome,
+      inflatedMonthlyGoal: input.targetMonthlyIncome,
+      covered: true,
+      annualIncome: shares * divPerShare,
+      totalContributions,
+      yieldOnCost: (shares * divPerShare) / totalContributions * 100,
+    }
+  }
+
+  for (let year = 1; year <= LIVING_OFF_MAX_YEARS; year++) {
+    const netDividend = shares * divPerShare * netFactor
+    shares += netDividend / price
+    price *= 1 + input.priceGrowthPct / 100
+    divPerShare *= 1 + input.dividendGrowthPct / 100
+    shares += annualContribution / price
+    totalContributions += annualContribution
+
+    const annualIncome = shares * divPerShare
+    const netMonthlyIncome = (annualIncome * netFactor) / 12
+    const inflatedGoal =
+      input.targetMonthlyIncome * (1 + inflationRate) ** year
+
+    if (netMonthlyIncome >= inflatedGoal) {
+      return {
+        yearsToFreedom: year,
+        portfolioValue: shares * price,
+        netMonthlyIncome,
+        inflatedMonthlyGoal: inflatedGoal,
+        covered: true,
+        annualIncome,
+        totalContributions,
+        yieldOnCost: (annualIncome / totalContributions) * 100,
+      }
+    }
+  }
+
+  const annualIncome = shares * divPerShare
+  const inflatedGoal =
+    input.targetMonthlyIncome * (1 + inflationRate) ** LIVING_OFF_MAX_YEARS
+
+  return {
+    yearsToFreedom: null,
+    portfolioValue: shares * price,
+    netMonthlyIncome: (annualIncome * netFactor) / 12,
+    inflatedMonthlyGoal: inflatedGoal,
+    covered: false,
+    annualIncome,
+    totalContributions,
+    yieldOnCost: (annualIncome / totalContributions) * 100,
+  }
+}
+
 export function npv(rate: number, cashFlows: number[]): number {
   return cashFlows.reduce(
     (total, cf, t) => total + cf / (1 + rate) ** t,

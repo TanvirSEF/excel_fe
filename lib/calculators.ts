@@ -318,9 +318,9 @@ export const FINANCE_HUB: CalculatorHub = {
           slug: "living-off-dividends-calculator",
           name: "Living Off Dividends Calculator",
           whatItIs:
-            "Find out how much money you need invested to pay for your daily life just using the cash payouts from stocks.",
+            "Want to live off dividends and leave the rat race behind? Our Living Off Dividends Calculator helps you figure out how much money you need to cover all your living expenses with dividend income.",
           whatToExpect:
-            "The exact goal amount you need to save to quit your job and live on investment income.",
+            "It also shows you how long it will take to get there. The calculator factors in taxes, inflation, and dividend growth so you get a complete and accurate result.",
         },
         {
           slug: "cost-of-equity-calculator",
