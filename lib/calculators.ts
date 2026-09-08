@@ -603,9 +603,9 @@ export const ACCOUNTING_HUB: CalculatorHub = {
           slug: "prorated-bonus-calculator",
           name: "Prorated Bonus Calculator",
           whatItIs:
-            "Determines the fair bonus for an employee who worked only part of the year.",
+            "Starting a new job mid-year or leaving before the year ends can affect your bonus. Either way, you probably won’t get the full bonus. You will get a fair share based on the days you actually worked.",
           whatToExpect:
-            "A fair, adjusted bonus amount based on the joining date within the year.",
+            "This Prorated Bonus Calculator does the math for you and shows exactly what you have earned.",
         },
         {
           slug: "sales-commission-calculator",
