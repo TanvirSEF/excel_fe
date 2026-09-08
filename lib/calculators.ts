@@ -587,9 +587,9 @@ export const ACCOUNTING_HUB: CalculatorHub = {
           slug: "payroll-overtime-calculator",
           name: "Payroll Calculator with Overtime",
           whatItIs:
-            "Calculates a paycheck that includes regular work hours and overtime.",
+            "Extra hours at work can increase a paycheck, but the numbers are not always easy to work out. A Payroll Calculator with Overtime helps break total earnings into regular pay, overtime pay, and double-time pay.",
           whatToExpect:
-            "A gross pay figure that ensures employees are paid properly for extra work.",
+            "The calculator also shows total gross pay for a week or month, so it becomes easier to check a pay stub and plan future expenses.",
         },
         {
           slug: "gross-up-payroll-calculator",

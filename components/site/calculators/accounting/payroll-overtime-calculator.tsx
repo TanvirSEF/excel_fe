@@ -1,10 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { IconRotate } from "@tabler/icons-react"
+import { IconCircleCheck, IconInfoCircle, IconRotate } from "@tabler/icons-react"
 
 import { NumberField } from "@/components/site/calculators/field"
-import { StepList } from "@/components/site/calculators/statistics/step-list"
 import {
   GradientHeroMetric,
   MetricTile,
@@ -15,55 +14,76 @@ import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { parseNumericInput } from "@/lib/calculators"
-import { formatCurrency, formatDecimal } from "@/lib/format"
+import { formatCurrency } from "@/lib/format"
 
-const DEFAULTS = {
-  rate: "20",
-  regularHours: "40",
-  otHours: "10",
-  multiplier: "1.5",
+const DEFAULTS = { rate: "25.00", regular: "40", overtime: "5", doubleTime: "0" }
+
+type PeriodView = "period" | "weekly" | "biweekly"
+
+const PERIOD_LABELS: Record<PeriodView, string> = {
+  period: "This Period",
+  weekly: "This Week",
+  biweekly: "Bi-Weekly Total",
 }
 
 export function PayrollOvertimeCalculator() {
   const [values, setValues] = useState(DEFAULTS)
+  const [view, setView] = useState<PeriodView>("period")
   const update = (key: keyof typeof DEFAULTS, value: string) =>
     setValues((current) => ({ ...current, [key]: value }))
 
   const rate = parseNumericInput(values.rate, { min: 0.01 })
-  const regularHours = parseNumericInput(values.regularHours, { min: 0 })
-  const otHours = parseNumericInput(values.otHours, { min: 0 })
-  const multiplier = parseNumericInput(values.multiplier, { min: 1 })
+  const regular = parseNumericInput(values.regular, { min: 0 })
+  const overtime = parseNumericInput(values.overtime, { min: 0 })
+  const doubleTime = parseNumericInput(values.doubleTime, { min: 0 })
 
-  const valid = [rate, regularHours, otHours, multiplier].every((f) => f.value !== null)
+  const valid = [rate, regular, overtime, doubleTime].every(
+    (field) => field.value !== null
+  )
 
-  const regularPay = valid ? rate.value! * regularHours.value! : 0
-  const otRate = valid ? rate.value! * multiplier.value! : 0
-  const otPay = valid ? otRate * otHours.value! : 0
-  const gross = regularPay + otPay
-  const totalHours = valid ? regularHours.value! + otHours.value! : 0
+  const regularPay = valid ? regular.value! * rate.value! : 0
+  const overtimePay = valid ? overtime.value! * rate.value! * 1.5 : 0
+  const doubleTimePay = valid ? doubleTime.value! * rate.value! * 2 : 0
+  const totalPay = valid ? regularPay + overtimePay + doubleTimePay : 0
+  const totalHours = valid ? regular.value! + overtime.value! + doubleTime.value! : 0
+  const effectiveRate = valid && totalHours > 0 ? totalPay / totalHours : null
+  const boosted = overtimePay + doubleTimePay > 0
 
   return (
     <div className="grid gap-6 lg:grid-cols-5">
       <Card className="lg:col-span-2">
         <CardHeader>
-          <CardTitle>Timesheet</CardTitle>
-          <CardDescription>
-            Regular hours at base rate, overtime at the multiplier — standard FLSA payroll math.
-          </CardDescription>
+          <CardTitle>Calculate gross pay &amp; overtime</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <NumberField label="Hourly rate" value={values.rate} onChange={(v) => update("rate", v)} error={rate.error} suffix="$" placeholder="20" />
-          <NumberField label="Regular hours" value={values.regularHours} onChange={(v) => update("regularHours", v)} error={regularHours.error} placeholder="40" />
-          <NumberField label="Overtime hours" value={values.otHours} onChange={(v) => update("otHours", v)} error={otHours.error} placeholder="10" />
-          <NumberField label="OT multiplier" value={values.multiplier} onChange={(v) => update("multiplier", v)} error={multiplier.error} hint="1.5 = time-and-a-half (the FLSA standard)" placeholder="1.5" />
+          <NumberField label="Hourly rate ($)" value={values.rate} onChange={(v) => update("rate", v)} error={rate.error} suffix="$" placeholder="25.00" />
+
+          <div>
+            <p className="mb-1.5 text-xs font-medium text-muted-foreground">Pay period view</p>
+            <Tabs value={view} onValueChange={(value) => setView(value as PeriodView)}>
+              <TabsList className="w-full">
+                <TabsTrigger value="period" className="flex-1">This Period Only</TabsTrigger>
+                <TabsTrigger value="weekly" className="flex-1">Weekly</TabsTrigger>
+                <TabsTrigger value="biweekly" className="flex-1">Bi-Weekly</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
+
+          <p className="pt-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Hours worked ({PERIOD_LABELS[view].toLowerCase()})
+          </p>
+          <NumberField label="Regular (1.0x)" value={values.regular} onChange={(v) => update("regular", v)} error={regular.error} placeholder="40" />
+          <NumberField label="Overtime (1.5x)" value={values.overtime} onChange={(v) => update("overtime", v)} error={overtime.error} placeholder="5" />
+          <NumberField label="Double time (2.0x)" value={values.doubleTime} onChange={(v) => update("doubleTime", v)} error={doubleTime.error} hint="Holiday / 7th Day" placeholder="0" />
+
           <Button type="button" variant="outline" className="w-full" onClick={() => setValues(DEFAULTS)}>
             <IconRotate className="h-4 w-4" />
-            Reset to example
+            Reset
           </Button>
         </CardContent>
       </Card>
@@ -72,34 +92,40 @@ export function PayrollOvertimeCalculator() {
         {valid ? (
           <ResultsRegion>
             <GradientHeroMetric
-              label="Gross pay"
-              value={formatCurrency(gross)}
-              sub={`${formatDecimal(totalHours, 1)} total hours · OT paid at ${formatCurrency(otRate)}/h`}
+              label="Total gross pay"
+              value={formatCurrency(totalPay)}
+              sub={
+                effectiveRate !== null
+                  ? `Effective rate: ${formatCurrency(effectiveRate)}/hr`
+                  : undefined
+              }
             />
+
+            {boosted ? (
+              <div className="flex items-start gap-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-xs leading-relaxed text-emerald-700 dark:text-emerald-400">
+                <IconCircleCheck className="mt-0.5 h-4 w-4 shrink-0" />
+                <p>
+                  Boosted Pay: Includes {formatCurrency(overtimePay + doubleTimePay)} in
+                  overtime premiums.
+                </p>
+              </div>
+            ) : (
+              <div className="flex items-start gap-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-xs leading-relaxed text-emerald-700 dark:text-emerald-400">
+                <IconInfoCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                <p>Standard Pay: Regular hours only.</p>
+              </div>
+            )}
 
             <div className="grid gap-3 sm:grid-cols-3">
-              <MetricTile label="Regular pay" value={formatCurrency(regularPay)} sub={`${formatDecimal(regularHours.value!, 1)} h × ${formatCurrency(rate.value!)}`} />
-              <MetricTile label="Overtime pay" value={formatCurrency(otPay)} sub={`${formatDecimal(otHours.value!, 1)} h × ${formatCurrency(otRate)}`} />
-              <MetricTile label="Effective hourly" value={formatCurrency(totalHours > 0 ? gross / totalHours : 0)} sub="Across all hours" />
+              <MetricTile label="Regular pay" value={formatCurrency(regularPay)} sub="Hours × rate" />
+              <MetricTile label="Overtime (1.5x)" value={formatCurrency(overtimePay)} sub="Hours × rate × 1.5" />
+              <MetricTile label="Double time" value={formatCurrency(doubleTimePay)} sub="Hours × rate × 2.0" />
             </div>
-
-            <StepList
-              steps={[
-                { title: "Regular pay", body: `${formatDecimal(regularHours.value!, 0)} h × ${formatCurrency(rate.value!)} = ${formatCurrency(regularPay)}` },
-                { title: "Overtime rate", body: `${formatCurrency(rate.value!)} × ${formatDecimal(multiplier.value!, 2)} = ${formatCurrency(otRate)}` },
-                { title: "Gross pay", body: `${formatCurrency(regularPay)} + ${formatCurrency(otPay)} = ${formatCurrency(gross)}` },
-              ]}
-            />
-
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              This is gross pay before taxes — the FAQ explains why we let you apply your
-              own tax rate instead of guessing one.
-            </p>
           </ResultsRegion>
         ) : (
           <ResultsPlaceholder
-            title="Enter hours and rate"
-            description="Gross pay with the overtime breakdown appears here instantly."
+            title="Enter your hours and rate"
+            description="Gross pay, effective rate and the overtime breakdown appear here instantly."
           />
         )}
       </div>
