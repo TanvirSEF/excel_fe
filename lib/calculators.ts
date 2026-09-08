@@ -659,8 +659,9 @@ export const ACCOUNTING_HUB: CalculatorHub = {
           slug: "debt-payoff-extra-payments-calculator",
           name: "Debt Payoff Calculator with Extra Payments",
           whatItIs:
-            "Shows how much faster you can be debt-free if you add extra money to your monthly payment.",
-          whatToExpect: "A new debt-free date — and the interest you save.",
+            "One of the best ways to free up more money each month is to pay off debt faster — even small extra payments can make a big difference over time. An extra $50 or $100 each month can cut years from your loan and reduce the total finance charges you pay.",
+          whatToExpect:
+            "This Debt Payoff Calculator helps you see your payoff timeline and shows how extra payments can speed up your progress.",
         },
         {
           slug: "debt-snowball-vs-avalanche-calculator",
