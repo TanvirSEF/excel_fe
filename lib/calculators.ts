@@ -555,9 +555,9 @@ export const ACCOUNTING_HUB: CalculatorHub = {
           slug: "reverse-margin-calculator",
           name: "Reverse Margin Calculator",
           whatItIs:
-            "Built to find the maximum cost price that still makes a profit when you have already set the selling price.",
+            "Businesses make profit when they buy at the right price, not only when they sell. The Reverse Margin Calculator starts with the market price and works backward, showing the highest amount you can pay a supplier and still reach your profit goal.",
           whatToExpect:
-            "The target cost — how much you can afford to spend on manufacturing per unit.",
+            "The calculator also includes extra costs such as shipping, taxes & future discounts that can reduce your profit.",
         },
         {
           slug: "amazon-seller-commission-calculator",
