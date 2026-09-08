@@ -619,9 +619,9 @@ export const ACCOUNTING_HUB: CalculatorHub = {
           slug: "payroll-conversion-calculator",
           name: "Payroll Conversion Calculator",
           whatItIs:
-            "Converts a salary into wages on different timelines — hourly, weekly, monthly.",
+            "Many people need to convert their pay into a different income period. An hourly rate can be difficult to compare with a yearly salary. This Payroll Conversion Calculator makes those conversions quick and simple.",
           whatToExpect:
-            "A full breakdown of the annual salary into every timeline's wage.",
+            "It shows your earnings across all common pay periods, from hourly pay to annual income, so you can understand your income and plan your finances with ease.",
         },
       ],
     },
