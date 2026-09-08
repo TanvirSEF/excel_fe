@@ -350,9 +350,9 @@ export const FINANCE_HUB: CalculatorHub = {
           slug: "cash-on-cash-roi-calculator",
           name: "Cash on Cash ROI Calculator",
           whatItIs:
-            "Measures how much cash comes back into your pocket compared to the cash you put down to buy a property.",
+            "Track your property returns with our Cash on Cash ROI Calculator. This tool helps you measure the yearly return on your own invested money. It includes down payments, closing costs, and repair expenses in the calculation.",
           whatToExpect:
-            "A simple percentage that tells you how hard your down payment is working for you.",
+            "This helps you see the exact return on your cash investment.",
         },
         {
           slug: "solar-roi-calculator",
