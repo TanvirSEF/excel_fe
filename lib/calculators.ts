@@ -547,9 +547,9 @@ export const ACCOUNTING_HUB: CalculatorHub = {
           slug: "wholesale-margin-calculator",
           name: "Wholesale Margin Calculator",
           whatItIs:
-            "Calculates the profit margin for a bulk amount of products when you sell them all to a store.",
+            "Wholesale pricing requires a careful balance. You need to cover your production costs and commissions — but you also need to leave enough profit for the retailer. If your pricing misses the mark, one side of the deal loses money.",
           whatToExpect:
-            "It reveals the profit gap between the manufacturing cost of the whole bulk and the price you set for it.",
+            "It combines your costs, your target margin, and the retailer’s margin to calculate the correct Wholesale Price and MSRP (Recommended Retail Price).",
         },
         {
           slug: "reverse-margin-calculator",

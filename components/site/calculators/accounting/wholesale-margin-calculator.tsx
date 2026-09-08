@@ -1,10 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { IconRotate } from "@tabler/icons-react"
+import { IconAlertTriangle, IconCircleCheck, IconRotate } from "@tabler/icons-react"
 
 import { NumberField } from "@/components/site/calculators/field"
-import { StepList } from "@/components/site/calculators/statistics/step-list"
 import {
   GradientHeroMetric,
   MetricTile,
@@ -15,84 +14,133 @@ import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 import { parseNumericInput } from "@/lib/calculators"
-import { formatCurrency, formatNumber, formatPercent } from "@/lib/format"
+import { formatCurrency } from "@/lib/format"
 
-const DEFAULTS = { unitCost: "5", quantity: "1000", bulkPrice: "7000" }
+const DEFAULTS = {
+  cogs: "20",
+  wholesaleMargin: "30",
+  retailMargin: "50",
+  shipping: "0",
+  commission: "0",
+  quantity: "100",
+  tax: "0",
+}
 
 export function WholesaleMarginCalculator() {
   const [values, setValues] = useState(DEFAULTS)
   const update = (key: keyof typeof DEFAULTS, value: string) =>
     setValues((current) => ({ ...current, [key]: value }))
 
-  const unitCost = parseNumericInput(values.unitCost, { min: 0.000001 })
-  const quantity = parseNumericInput(values.quantity, { min: 1 })
-  const bulkPrice = parseNumericInput(values.bulkPrice, { min: 0.000001 })
+  const cogs = parseNumericInput(values.cogs, { min: 0.000001 })
+  const wholesaleMargin = parseNumericInput(values.wholesaleMargin, { min: 0.01, max: 99.99 })
+  const retailMargin = parseNumericInput(values.retailMargin, { min: 0.01, max: 99.99 })
+  const shipping = parseNumericInput(values.shipping, { min: 0 })
+  const commission = parseNumericInput(values.commission, { min: 0, max: 99.99 })
+  const quantity = parseNumericInput(values.quantity, { min: 1, integer: true })
+  const tax = parseNumericInput(values.tax, { min: 0, max: 100 })
 
-  const valid = unitCost.value !== null && quantity.value !== null && bulkPrice.value !== null
+  const valid = [cogs, wholesaleMargin, retailMargin, shipping, commission, quantity, tax].every(
+    (field) => field.value !== null
+  )
 
-  const totalCost = valid ? unitCost.value! * quantity.value! : 0
-  const profit = valid ? bulkPrice.value! - totalCost : 0
-  const margin = valid && bulkPrice.value! > 0 ? (profit / bulkPrice.value!) * 100 : null
-  const effectiveUnitPrice = valid ? bulkPrice.value! / quantity.value! : 0
+  const denominator = valid
+    ? 1 - (wholesaleMargin.value! + commission.value!) / 100
+    : 0
+  const wholesalePrice =
+    valid && denominator > 0 ? (cogs.value! + shipping.value!) / denominator : 0
+  const commissionAmount = valid ? wholesalePrice * (commission.value! / 100) : 0
+  const unitProfit = valid
+    ? wholesalePrice - cogs.value! - shipping.value! - commissionAmount
+    : 0
+  const msrp = valid ? wholesalePrice / (1 - retailMargin.value! / 100) : 0
+  const totalProfit = valid ? unitProfit * quantity.value! : 0
+  const orderValueWithTax = valid
+    ? wholesalePrice * quantity.value! * (1 + tax.value! / 100)
+    : 0
+  const healthy = wholesaleMargin.value! >= 20
 
   return (
     <div className="grid gap-6 lg:grid-cols-5">
       <Card className="lg:col-span-2">
         <CardHeader>
-          <CardTitle>The bulk deal</CardTitle>
-          <CardDescription>
-            Manufacturing cost per unit, the quantity in the bulk, and the price you charge for it.
-          </CardDescription>
+          <CardTitle>Enter pricing data matrix</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <NumberField label="Cost per unit" value={values.unitCost} onChange={(v) => update("unitCost", v)} error={unitCost.error} suffix="$" placeholder="5" />
-          <NumberField label="Units in the bulk" value={values.quantity} onChange={(v) => update("quantity", v)} error={quantity.error} placeholder="1000" />
-          <NumberField label="Bulk selling price" value={values.bulkPrice} onChange={(v) => update("bulkPrice", v)} error={bulkPrice.error} hint="What the store pays you for the whole lot" suffix="$" placeholder="7000" />
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            1. Core pricing &amp; margins
+          </p>
+          <NumberField label="Unit cost (COGS)" value={values.cogs} onChange={(v) => update("cogs", v)} error={cogs.error} hint="Product baseline" suffix="$" placeholder="20" />
+          <div className="flex items-start gap-2">
+            <div className="min-w-0 flex-1">
+              <NumberField label="Wholesale margin (%)" value={values.wholesaleMargin} onChange={(v) => update("wholesaleMargin", v)} error={wholesaleMargin.error} hint="Your target profit" suffix="%" placeholder="30" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <NumberField label="Retail margin (%)" value={values.retailMargin} onChange={(v) => update("retailMargin", v)} error={retailMargin.error} hint="MSRP store margin" suffix="%" placeholder="50" />
+            </div>
+          </div>
+
+          <p className="pt-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            2. Wholesale adjustments
+          </p>
+          <div className="flex items-start gap-2">
+            <div className="min-w-0 flex-1">
+              <NumberField label="Shipping cost ($)" value={values.shipping} onChange={(v) => update("shipping", v)} error={shipping.error} suffix="$" placeholder="0" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <NumberField label="Sales commission (%)" value={values.commission} onChange={(v) => update("commission", v)} error={commission.error} suffix="%" placeholder="0" />
+            </div>
+          </div>
+          <div className="flex items-start gap-2">
+            <div className="min-w-0 flex-1">
+              <NumberField label="Order quantity" value={values.quantity} onChange={(v) => update("quantity", v)} error={quantity.error} placeholder="100" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <NumberField label="Sales tax (%)" value={values.tax} onChange={(v) => update("tax", v)} error={tax.error} suffix="%" placeholder="0" />
+            </div>
+          </div>
+
           <Button type="button" variant="outline" className="w-full" onClick={() => setValues(DEFAULTS)}>
             <IconRotate className="h-4 w-4" />
-            Reset to example
+            Reset
           </Button>
         </CardContent>
       </Card>
 
       <div className="space-y-4 lg:col-span-3">
-        {valid && margin !== null ? (
+        {valid ? (
           <ResultsRegion>
             <GradientHeroMetric
-              label="Wholesale margin"
-              value={formatPercent(margin)}
-              sub={`${formatCurrency(profit, 0)} profit on the whole ${formatCurrency(bulkPrice.value!, 0)} deal`}
+              label="Wholesale price"
+              value={formatCurrency(wholesalePrice)}
             />
 
-            <div className="grid gap-3 sm:grid-cols-3">
-              <MetricTile label="Total cost" value={formatCurrency(totalCost, 0)} sub={`${
-                formatNumber(quantity.value!)
-              } units × ${formatCurrency(unitCost.value!)}`} />
-              <MetricTile label="Bulk profit" value={formatCurrency(profit, 0)} sub="Price − total cost" />
-              <MetricTile
-                label="Effective unit price"
-                value={formatCurrency(effectiveUnitPrice)}
-                sub={`${formatCurrency(effectiveUnitPrice - unitCost.value!)} margin per unit`}
-              />
+            {healthy ? (
+              <div className="flex items-start gap-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-xs leading-relaxed text-emerald-700 dark:text-emerald-400">
+                <IconCircleCheck className="mt-0.5 h-4 w-4 shrink-0" />
+                <p>Healthy Chain: Sustainable margins for all parties.</p>
+              </div>
+            ) : (
+              <div className="flex items-start gap-2.5 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3.5 text-xs leading-relaxed text-amber-700 dark:text-amber-400">
+                <IconAlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+                <p>Thin Margins: Risky for the long run.</p>
+              </div>
+            )}
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              <MetricTile label="MSRP" value={formatCurrency(msrp)} sub="Suggested retail price" />
+              <MetricTile label="Unit profit" value={formatCurrency(unitProfit)} sub="Wholesale − costs − commission" />
+              <MetricTile label="Total profit" value={formatCurrency(totalProfit)} sub={`Unit profit × ${quantity.value} units`} />
+              <MetricTile label="Order value + tax" value={formatCurrency(orderValueWithTax)} sub="Wholesale × qty + tax" />
             </div>
-
-            <StepList
-              steps={[
-                { title: "Total cost", body: `${formatNumber(quantity.value!)} × ${formatCurrency(unitCost.value!)} = ${formatCurrency(totalCost, 0)}` },
-                { title: "Profit", body: `${formatCurrency(bulkPrice.value!, 0)} − ${formatCurrency(totalCost, 0)} = ${formatCurrency(profit, 0)}` },
-                { title: "Margin", body: `${formatCurrency(profit, 0)} ÷ ${formatCurrency(bulkPrice.value!, 0)} = ${formatPercent(margin)}` },
-              ]}
-            />
           </ResultsRegion>
         ) : (
           <ResultsPlaceholder
-            title="Enter the bulk deal"
-            description="Wholesale margin, total profit and effective unit price appear here."
+            title="Enter your pricing data"
+            description="Wholesale price, MSRP and profit appear here instantly."
           />
         )}
       </div>
