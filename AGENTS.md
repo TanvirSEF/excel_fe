@@ -50,5 +50,16 @@ All AI agents working on this codebase MUST strictly follow these rules:
 - **No Fake / Mock Placeholders**: Never leave `TODO: implement later` stubs or hardcoded dummy mocks in production code. Wire directly to active API wrappers and schema types.
 - **Idiomatic Error & Loading States**: Use Next.js conventions (`error.tsx`, `not-found.tsx`) and standard Skeleton loaders rather than custom ad-hoc error dialogs.
 
+## 8. Calculator Content Architecture
+- Page content lives in `lib/calculator-content/{finance|statistics|accounting}/{slug}.ts` — one calculator per file, typed as `CalculatorDetail` from `lib/calculator-content/types.ts`.
+- To update a calculator's page content: edit its content file only. New calculators must be registered in the category's `index.ts` (slug → export) — index slugs and registry entries must stay 1:1 (currently 45 ↔ 45).
+- Section rendering is centralized in `components/site/calculators/calculator-article.tsx`; page templates must never duplicate section markup. New section types go in `types.ts` + the article component.
+- **Content-only rule**: a calculator page shows exactly the content the owner provides — nothing extra. Do not add auto-generated filler sections (how-to steps, examples, Excel notes, use cases) or extra UI blocks (tables, notes) inside calculator components unless explicitly provided.
+- Verify calculator math against the owner's expected sample values before shipping a content update; report any mismatch instead of silently "fixing" either side.
+
+## 9. Pending Improvements (Deferred — Not Urgent)
+- Split `lib/calculators.ts` (~730 lines: registry + groups + hub copy + getters) into per-category registry files if the hub keeps growing.
+- Add a consistency check that `lib/calculator-content/*/index.ts` slugs match the registry 1:1 (verified manually during the September 2026 refactor).
+
 
 

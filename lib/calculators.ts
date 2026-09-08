@@ -310,9 +310,9 @@ export const FINANCE_HUB: CalculatorHub = {
           slug: "dividend-snowball-calculator",
           name: "Dividend Snowball Calculator",
           whatItIs:
-            "Watch the snowball effect in action, where your small earnings roll into bigger earnings over time.",
+            "Find out your path to financial freedom with our Dividend Snowball Calculator. This tool helps you track how dividend reinvestment grows your income over time.",
           whatToExpect:
-            "A timeline showing how your passive income gets larger every year without extra work.",
+            "It also shows how monthly contributions and yearly dividend increases boost your portfolio faster. A small cash flow can grow into a strong stream of passive income.",
         },
         {
           slug: "living-off-dividends-calculator",

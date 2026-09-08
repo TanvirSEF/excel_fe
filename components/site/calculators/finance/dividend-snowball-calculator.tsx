@@ -4,7 +4,6 @@ import { useState } from "react"
 import { IconCircleCheck, IconRotate } from "@tabler/icons-react"
 
 import { NumberField } from "@/components/site/calculators/field"
-import { CopyTableButton } from "@/components/site/calculators/copy-table-button"
 import {
   GradientHeroMetric,
   MetricTile,
@@ -19,14 +18,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import { parseNumericInput } from "@/lib/calculators"
 import { formatCurrency, formatDecimal } from "@/lib/format"
 import { simulateSnowball } from "@/lib/finance"
@@ -70,21 +61,8 @@ export function DividendSnowballCalculator() {
       })
     : null
 
-  const copyRows = result
-    ? [
-        ["Year", "Annual Income", "Monthly", "Portfolio Value"],
-        ...result.years.map((y) => [
-          String(y.year),
-          formatCurrency(y.income, 0),
-          formatCurrency(y.income / 12, 0),
-          formatCurrency(y.value, 0),
-        ]),
-      ]
-    : []
-
   return (
-    <div className="space-y-6">
-      <div className="grid gap-6 lg:grid-cols-5">
+    <div className="grid gap-6 lg:grid-cols-5">
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle>Dividend reinvestment plan</CardTitle>
@@ -98,7 +76,7 @@ export function DividendSnowballCalculator() {
               1. Starting portfolio
             </p>
             <NumberField label="Portfolio value ($)" value={values.investment} onChange={(v) => update("investment", v)} error={investment.error} suffix="$" placeholder="10000" />
-            <div className="flex items-end gap-2">
+            <div className="flex items-start gap-2">
               <div className="min-w-0 flex-1">
                 <NumberField label="Initial yield (%)" value={values.initYield} onChange={(v) => update("initYield", v)} error={initYield.error} hint="SCHD ≈ 3.5%" suffix="%" placeholder="3.5" />
               </div>
@@ -111,15 +89,15 @@ export function DividendSnowballCalculator() {
               2. Fueling growth
             </p>
             <NumberField label="Monthly contribution" value={values.monthlyContribution} onChange={(v) => update("monthlyContribution", v)} error={monthlyContribution.error} suffix="$" placeholder="500" />
-            <div className="flex items-end gap-2">
+            <div className="flex items-start gap-2">
               <div className="min-w-0 flex-1">
                 <NumberField label="Years to grow" value={values.years} onChange={(v) => update("years", v)} error={years.error} placeholder="20" />
               </div>
               <div className="min-w-0 flex-1">
-                <NumberField label="Div growth / yr" value={values.divGrowth} onChange={(v) => update("divGrowth", v)} error={divGrowth.error} hint="Aristocrats: 5-10%" suffix="%" placeholder="8" />
+                <NumberField label="Dividend growth rate (%)" value={values.divGrowth} onChange={(v) => update("divGrowth", v)} error={divGrowth.error} hint="Aristocrats: 5-10%" suffix="%" placeholder="8" />
               </div>
             </div>
-            <NumberField label="Price appreciation / yr" value={values.priceGrowth} onChange={(v) => update("priceGrowth", v)} error={priceGrowth.error} hint="S&P 500: 7-8%" suffix="%" placeholder="7" />
+            <NumberField label="Price appreciation (%)" value={values.priceGrowth} onChange={(v) => update("priceGrowth", v)} error={priceGrowth.error} hint="S&P 500: 7-8%" suffix="%" placeholder="7" />
 
             <Button type="button" variant="outline" className="w-full" onClick={() => setValues(DEFAULTS)}>
               <IconRotate className="h-4 w-4" />
@@ -139,13 +117,7 @@ export function DividendSnowballCalculator() {
 
               <div className="flex items-start gap-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-xs leading-relaxed text-emerald-700 dark:text-emerald-400">
                 <IconCircleCheck className="mt-0.5 h-4 w-4 shrink-0" />
-                <p>
-                  Solid income — the portfolio is working well. Income grew{" "}
-                  {result.firstYearIncome > 0
-                    ? `${formatDecimal(result.finalAnnualIncome / result.firstYearIncome, 1)}×`
-                    : ""}{" "}
-                  from year 1&apos;s {formatCurrency(result.firstYearIncome, 0)}.
-                </p>
+                <p>Solid Income: Portfolio is working well.</p>
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2">
@@ -162,36 +134,6 @@ export function DividendSnowballCalculator() {
             />
           )}
         </div>
-      </div>
-
-      {result ? (
-        <div className="overflow-x-auto rounded-2xl border border-primary/50 bg-card shadow-2xs">
-          <div className="flex items-center justify-between px-4 pt-4">
-            <p className="text-sm font-bold tracking-tight text-foreground">Income timeline</p>
-            <CopyTableButton rows={copyRows} />
-          </div>
-          <Table className="mt-2">
-            <TableHeader>
-              <TableRow>
-                <TableHead>Year</TableHead>
-                <TableHead className="text-right">Annual income</TableHead>
-                <TableHead className="text-right">Monthly</TableHead>
-                <TableHead className="text-right">Portfolio value</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {result.years.map((y) => (
-                <TableRow key={y.year}>
-                  <TableCell className="font-medium">{y.year}</TableCell>
-                  <TableCell className="text-right font-mono tabular-nums">{formatCurrency(y.income, 0)}</TableCell>
-                  <TableCell className="text-right font-mono tabular-nums">{formatCurrency(y.income / 12, 0)}</TableCell>
-                  <TableCell className="text-right font-mono tabular-nums">{formatCurrency(y.value, 0)}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      ) : null}
     </div>
   )
 }
