@@ -358,9 +358,9 @@ export const FINANCE_HUB: CalculatorHub = {
           slug: "solar-roi-calculator",
           name: "Solar ROI Calculator",
           whatItIs:
-            "Figures out if installing solar panels on your roof will save you money on electricity bills.",
+            "Plan your move to renewable energy with our Solar ROI Calculator. This tool checks your installation costs, government incentives, and rising utility rates. It helps you estimate your payback period, monthly savings, and long-term financial savings.",
           whatToExpect:
-            "How many years it takes for the panels to pay for themselves — the break-even point.",
+            "You can use it to make better decisions for your home or business before you invest your money.",
         },
       ],
     },
