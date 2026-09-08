@@ -673,11 +673,11 @@ export const ACCOUNTING_HUB: CalculatorHub = {
         },
         {
           slug: "marginal-propensity-to-consume-calculator",
-          name: "Marginal Propensity to Consume Calculator",
+          name: "Marginal Propensity to Consume (MPC) Calculator",
           whatItIs:
-            "An economics tool that tells you how much of a raise you will spend versus save.",
+            "Think you get an unexpected $100 from work bonus or birthday gifts. What’s the first thing you do with it — spend it or save it? That simple choice shows you a lot about your money habits or Marginal Propensity to Consume.",
           whatToExpect:
-            "A decimal between 0 and 1 that captures your spending habits as income rises.",
+            "Your Marginal Propensity to Consume gives that habit a number. This calculator shows you how much of every extra dollar you spend and how much you save for later.",
         },
       ],
     },
