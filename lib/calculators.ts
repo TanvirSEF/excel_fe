@@ -539,9 +539,9 @@ export const ACCOUNTING_HUB: CalculatorHub = {
           slug: "retail-profit-margin-calculator",
           name: "Retail Profit Margin Calculator",
           whatItIs:
-            "Finds the percentage of profit you make on a single product sold by your store.",
+            "Wrong pricing kills businesses. If you set your price too high, customers may stop buying. If you set it too low, your business may lose money fast. Most retailers guess their prices and hope for the best.",
           whatToExpect:
-            "It indicates whether your markup is good enough to cover your costs and still make a profit.",
+            "This calculator takes the guesswork out — it compares Margin and Markup, checks your numbers, and shows you exactly what to charge to stay profitable.",
         },
         {
           slug: "wholesale-margin-calculator",
