@@ -431,9 +431,9 @@ export const FINANCE_HUB: CalculatorHub = {
           slug: "holding-period-return-calculator",
           name: "Holding Period Return Calculator",
           whatItIs:
-            "Calculates the total return you earned on an investment for the entire time you owned it — 1 month or 10 years.",
+            "Our Holding Period Return (HPR) Calculator helps you measure your investment performance accurately. It works for stocks, real estate, and more. The tool adds up your capital gains and income to give you a total percentage return.",
           whatToExpect:
-            "The total profit percentage for the specific period you held the asset.",
+            "It also shows your Annualized Return so you can compare short-term and long-term investments fairly.",
         },
       ],
     },
