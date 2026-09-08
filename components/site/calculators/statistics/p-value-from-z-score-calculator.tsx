@@ -27,7 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { parseNumericInput } from "@/lib/calculators"
-import { formatDecimal, formatPValue, formatPercent } from "@/lib/format"
+import { formatDecimal, formatPValue } from "@/lib/format"
 import { pValueFromZ } from "@/lib/stats"
 
 type TailType = "two" | "left" | "right"

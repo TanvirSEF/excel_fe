@@ -294,9 +294,9 @@ export const FINANCE_HUB: CalculatorHub = {
           slug: "share-profit-calculator",
           name: "Share Profit Calculator",
           whatItIs:
-            "A simple tool to check how much money you made (or lost) from buying and selling shares of stock.",
+            "Improve your trading decisions with our Share Profit Calculator. This tool simply calculates your actual profit or loss by considering your purchase price, selling price, brokerage fees, and capital gains tax.",
           whatToExpect:
-            "Enter the price you bought and sold the shares for and see your total profit percentage.",
+            "It gives you a clear view of your actual ROI and the amount you take home.",
         },
         {
           slug: "dividend-reinvestment-plan-calculator",

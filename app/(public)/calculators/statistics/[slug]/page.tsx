@@ -194,19 +194,23 @@ export default async function CalculatorPage({
             <h3 className="text-sm font-bold tracking-tight text-foreground">
               {detail.method.title}
             </h3>
-            <div className="mt-2 space-y-2.5">
-              {detail.method.paragraphs.map((paragraph) => (
-                <p
-                  key={paragraph.slice(0, 40)}
-                  className="text-sm leading-relaxed text-muted-foreground"
-                >
-                  {paragraph}
-                </p>
-              ))}
-            </div>
-            <p className="mt-3 rounded-lg border border-primary/20 bg-background/60 px-3.5 py-2.5 font-mono text-sm text-foreground">
-              {detail.method.formula}
-            </p>
+            {detail.method.paragraphs ? (
+              <div className="mt-2 space-y-2.5">
+                {detail.method.paragraphs.map((paragraph) => (
+                  <p
+                    key={paragraph.slice(0, 40)}
+                    className="text-sm leading-relaxed text-muted-foreground"
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+            ) : null}
+            {detail.method.formula ? (
+              <p className="mt-3 rounded-lg border border-primary/20 bg-background/60 px-3.5 py-2.5 font-mono text-sm text-foreground">
+                {detail.method.formula}
+              </p>
+            ) : null}
           </div>
         ) : null}
 

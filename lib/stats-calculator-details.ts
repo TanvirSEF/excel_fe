@@ -1,3 +1,9 @@
+export interface EquationItem {
+  label: string
+  note: string
+  equation: string
+}
+
 export interface StatsCalculatorDetail {
   metaDescription: string
   formula: string
@@ -6,8 +12,21 @@ export interface StatsCalculatorDetail {
   example: { title: string; body: string }
   excelNote?: string
   faqs?: { question: string; answer: string }[]
-  method?: { title: string; paragraphs: string[]; formula: string }
+  method?: {
+    title: string
+    paragraphs?: string[]
+    formula?: string
+    equations?: EquationItem[]
+  }
+  parameters?: {
+    title: string
+    intro?: string
+    items: { name: string; description: string }[]
+  }
+  factsTitle?: string
+  factsIntro?: string
   facts?: { title: string; body: string }[]
+  factsTable?: { title: string; headers: string[]; rows: string[][] }
   useCases?: { title: string; body: string }[]
 }
 
