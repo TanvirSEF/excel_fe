@@ -643,9 +643,9 @@ export const ACCOUNTING_HUB: CalculatorHub = {
           slug: "cash-conversion-cycle-calculator",
           name: "Cash Conversion Cycle (CCC) Calculator",
           whatItIs:
-            "Measures how long it takes your business to turn money spent on inventory back into cash in the bank.",
+            "A business can show strong profits and still struggle to keep cash on hand. A Cash Conversion Cycle (CCC) Calculator helps measure that process in days. It checks inventory, customer payments, and supplier payments to show how cash moves through daily operations.",
           whatToExpect:
-            "A timeline that indicates how healthy and fast your business's growth really is.",
+            "The results can help you uncover delays and reveal opportunities to improve cash flow.",
         },
       ],
     },
