@@ -326,9 +326,9 @@ export const FINANCE_HUB: CalculatorHub = {
           slug: "cost-of-equity-calculator",
           name: "Cost of Equity Calculator",
           whatItIs:
-            "A tool for investors to figure out the return a company needs to pay you to make the risk worth it.",
+            "Use our Cost of Equity Calculator to find the return your shareholders expect. This tool gives you two simple methods for calculation. You can use the Capital Asset Pricing Model (CAPM) or the Dividend Capitalization Model.",
           whatToExpect:
-            "A percentage that tells you if a stock is a safe bet or a risky one.",
+            "Both methods help finance teams and investors estimate the required return for a stock or project.",
         },
       ],
     },

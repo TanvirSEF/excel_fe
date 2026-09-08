@@ -103,6 +103,20 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
                   <p className="mt-2 rounded-lg border border-primary/20 bg-background px-3 py-2 font-mono text-sm leading-relaxed text-foreground">
                     {item.equation}
                   </p>
+                  {item.terms ? (
+                    <dl className="mt-2.5 space-y-1.5">
+                      {item.terms.map((term) => (
+                        <div key={term.name} className="flex gap-2">
+                          <dt className="shrink-0 font-mono text-xs font-semibold text-foreground/80">
+                            {term.name}:
+                          </dt>
+                          <dd className="text-xs leading-relaxed text-muted-foreground">
+                            {term.description}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  ) : null}
                 </div>
               ))}
             </div>

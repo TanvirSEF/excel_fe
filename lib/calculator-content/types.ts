@@ -2,6 +2,7 @@ export interface EquationItem {
   label: string
   note?: string
   equation: string
+  terms?: { name: string; description: string }[]
 }
 
 export interface CalculatorDetail {
