@@ -383,9 +383,9 @@ export const FINANCE_HUB: CalculatorHub = {
           slug: "enterprise-seo-roi-calculator",
           name: "Enterprise SEO ROI Calculator",
           whatItIs:
-            "Calculates the value of hiring experts to help your large website show up in Google searches.",
+            "Forecast your organic growth with confidence using our Advanced Enterprise SEO ROI Calculator. This tool is built for marketing directors and SEO strategists who need more than basic traffic numbers. It goes deeper than simple estimates. It breaks down conversion value, resource costs, and long-term profitability.",
           whatToExpect:
-            "An estimate of how much extra revenue you might earn from getting more visitors to your site.",
+            "You can use it to build a stronger SEO budget with clear and useful data.",
         },
         {
           slug: "b2b-roi-calculator",
