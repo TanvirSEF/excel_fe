@@ -391,9 +391,9 @@ export const FINANCE_HUB: CalculatorHub = {
           slug: "b2b-roi-calculator",
           name: "B2B ROI Calculator",
           whatItIs:
-            "Designed for companies selling to other companies — check if a new tool or service you bought is profitable.",
+            "Measure how well your sales team is performing with our B2B ROI Calculator. This tool is built for high-ticket business sales. It connects your marketing leads to your final revenue numbers.",
           whatToExpect:
-            "A clear yes or no on whether a business purchase was a smart investment.",
+            "You can track SQL conversion rates, win rates, and team costs. It shows you exactly where your money goes.",
         },
         {
           slug: "venture-capital-calculator",
