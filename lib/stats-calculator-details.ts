@@ -1,15 +1,15 @@
 export interface EquationItem {
   label: string
-  note: string
+  note?: string
   equation: string
 }
 
 export interface StatsCalculatorDetail {
   metaDescription: string
-  formula: string
+  formula?: string
   whenToUse: string[]
-  howToUse: string[]
-  example: { title: string; body: string }
+  howToUse?: string[]
+  example?: { title: string; body: string }
   excelNote?: string
   faqs?: { question: string; answer: string }[]
   method?: {

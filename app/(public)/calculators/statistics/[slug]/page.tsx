@@ -166,28 +166,34 @@ export default async function CalculatorPage({
           </p>
         </div>
 
-        <h3 className="mt-6 text-sm font-bold uppercase tracking-wider text-foreground">
-          How to use it
-        </h3>
-        <ol className="mt-3 space-y-2.5">
-          {detail.howToUse.map((step, index) => (
-            <li key={step.slice(0, 40)} className="flex gap-3">
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[11px] font-bold text-primary">
-                {index + 1}
-              </span>
-              <p className="text-sm leading-relaxed text-foreground/85">{step}</p>
-            </li>
-          ))}
-        </ol>
+        {detail.howToUse ? (
+          <>
+            <h3 className="mt-6 text-sm font-bold uppercase tracking-wider text-foreground">
+              How to use it
+            </h3>
+            <ol className="mt-3 space-y-2.5">
+              {detail.howToUse.map((step, index) => (
+                <li key={step.slice(0, 40)} className="flex gap-3">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[11px] font-bold text-primary">
+                    {index + 1}
+                  </span>
+                  <p className="text-sm leading-relaxed text-foreground/85">{step}</p>
+                </li>
+              ))}
+            </ol>
+          </>
+        ) : null}
 
-        <div className="mt-6 rounded-xl border border-border/70 bg-muted/30 p-4 sm:p-5">
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            {detail.example.title}
-          </p>
-          <p className="mt-2 text-sm leading-relaxed text-foreground/85">
-            {detail.example.body}
-          </p>
-        </div>
+        {detail.example ? (
+          <div className="mt-6 rounded-xl border border-border/70 bg-muted/30 p-4 sm:p-5">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              {detail.example.title}
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-foreground/85">
+              {detail.example.body}
+            </p>
+          </div>
+        ) : null}
 
         {detail.method ? (
           <div className="mt-6 rounded-xl border border-primary/25 bg-primary/5 p-4 sm:p-5">

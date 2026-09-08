@@ -300,11 +300,11 @@ export const FINANCE_HUB: CalculatorHub = {
         },
         {
           slug: "dividend-reinvestment-plan-calculator",
-          name: "Dividend Reinvestment Plan Calculator",
+          name: "Dividend Reinvestment Plan (DRIP) Calculator",
           whatItIs:
-            "See how fast your money grows if you use your profit payouts (dividends) to buy more shares instead of spending them.",
+            "Compounding can grow your wealth faster than you think. Our Dividend Reinvestment Plan (DRIP) Calculator shows you how. It helps you see how reinvesting your dividends can build real wealth over time.",
           whatToExpect:
-            "Watch how reinvesting helps your account balance grow much faster over 5 or 10 years.",
+            "You can also add yearly contributions and factor in stock growth. The result gives you a clear idea of where your money could be spent. It works great for retirement planning or building a passive income stream.",
         },
         {
           slug: "dividend-snowball-calculator",

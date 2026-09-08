@@ -155,37 +155,45 @@ export default async function FinanceCalculatorPage({
           ))}
         </div>
 
-        <div className="mt-6 rounded-xl border border-primary/25 bg-primary/5 px-4 py-3">
-          <p className="text-xs font-semibold uppercase tracking-wider text-primary">
-            Formula
-          </p>
-          <p className="mt-1.5 font-mono text-sm leading-relaxed text-foreground">
-            {detail.formula}
-          </p>
-        </div>
+        {detail.formula ? (
+          <div className="mt-6 rounded-xl border border-primary/25 bg-primary/5 px-4 py-3">
+            <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+              Formula
+            </p>
+            <p className="mt-1.5 font-mono text-sm leading-relaxed text-foreground">
+              {detail.formula}
+            </p>
+          </div>
+        ) : null}
 
-        <h3 className="mt-6 text-sm font-bold uppercase tracking-wider text-foreground">
-          How to use it
-        </h3>
-        <ol className="mt-3 space-y-2.5">
-          {detail.howToUse.map((step, index) => (
-            <li key={step.slice(0, 40)} className="flex gap-3">
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[11px] font-bold text-primary">
-                {index + 1}
-              </span>
-              <p className="text-sm leading-relaxed text-foreground/85">{step}</p>
-            </li>
-          ))}
-        </ol>
+        {detail.howToUse ? (
+          <>
+            <h3 className="mt-6 text-sm font-bold uppercase tracking-wider text-foreground">
+              How to use it
+            </h3>
+            <ol className="mt-3 space-y-2.5">
+              {detail.howToUse.map((step, index) => (
+                <li key={step.slice(0, 40)} className="flex gap-3">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[11px] font-bold text-primary">
+                    {index + 1}
+                  </span>
+                  <p className="text-sm leading-relaxed text-foreground/85">{step}</p>
+                </li>
+              ))}
+            </ol>
+          </>
+        ) : null}
 
-        <div className="mt-6 rounded-xl border border-border/70 bg-muted/30 p-4 sm:p-5">
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            {detail.example.title}
-          </p>
-          <p className="mt-2 text-sm leading-relaxed text-foreground/85">
-            {detail.example.body}
-          </p>
-        </div>
+        {detail.example ? (
+          <div className="mt-6 rounded-xl border border-border/70 bg-muted/30 p-4 sm:p-5">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              {detail.example.title}
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-foreground/85">
+              {detail.example.body}
+            </p>
+          </div>
+        ) : null}
 
         {detail.method ? (
           <div className="mt-6 rounded-xl border border-primary/25 bg-primary/5 p-4 sm:p-5">
@@ -214,9 +222,11 @@ export default async function FinanceCalculatorPage({
                     <p className="text-sm font-bold tracking-tight text-foreground">
                       {item.label}
                     </p>
-                    <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
-                      {item.note}
-                    </p>
+                    {item.note ? (
+                      <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
+                        {item.note}
+                      </p>
+                    ) : null}
                     <p className="mt-2 rounded-lg border border-primary/20 bg-background px-3 py-2 font-mono text-sm leading-relaxed text-foreground">
                       {item.equation}
                     </p>

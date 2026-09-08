@@ -4,7 +4,6 @@ import { useState } from "react"
 import { IconCircleCheck, IconRotate } from "@tabler/icons-react"
 
 import { NumberField } from "@/components/site/calculators/field"
-import { CopyTableButton } from "@/components/site/calculators/copy-table-button"
 import {
   GradientHeroMetric,
   MetricTile,
@@ -19,14 +18,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import { parseNumericInput } from "@/lib/calculators"
 import { formatCurrency, formatPercent } from "@/lib/format"
 import { simulateDrip } from "@/lib/finance"
@@ -67,21 +58,8 @@ export function DividendReinvestmentPlanCalculator() {
       })
     : null
 
-  const copyRows = result
-    ? [
-        ["Year", "Gross Dividend", "Net Dividend", "Portfolio Value"],
-        ...result.years.map((y) => [
-          String(y.year),
-          formatCurrency(y.income, 0),
-          formatCurrency(y.netDividend, 0),
-          formatCurrency(y.value, 0),
-        ]),
-      ]
-    : []
-
   return (
-    <div className="space-y-6">
-      <div className="grid gap-6 lg:grid-cols-5">
+    <div className="grid gap-6 lg:grid-cols-5">
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle>Enter portfolio details</CardTitle>
@@ -123,11 +101,7 @@ export function DividendReinvestmentPlanCalculator() {
 
               <div className="flex items-start gap-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-xs leading-relaxed text-emerald-700 dark:text-emerald-400">
                 <IconCircleCheck className="mt-0.5 h-4 w-4 shrink-0" />
-                <p>
-                  Solid growth — dividends are working effectively. Your yield on cost
-                  reached {formatPercent(result.yieldOnCost)}, meaning your income is{" "}
-                  {formatPercent(result.yieldOnCost)} of every dollar you put in.
-                </p>
+                <p>Solid Growth: Dividends are working effectively.</p>
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2">
@@ -144,36 +118,6 @@ export function DividendReinvestmentPlanCalculator() {
             />
           )}
         </div>
-      </div>
-
-      {result ? (
-        <div className="overflow-x-auto rounded-2xl border border-primary/50 bg-card shadow-2xs">
-          <div className="flex items-center justify-between px-4 pt-4">
-            <p className="text-sm font-bold tracking-tight text-foreground">Year by year</p>
-            <CopyTableButton rows={copyRows} />
-          </div>
-          <Table className="mt-2">
-            <TableHeader>
-              <TableRow>
-                <TableHead>Year</TableHead>
-                <TableHead className="text-right">Gross dividend</TableHead>
-                <TableHead className="text-right">Net dividend</TableHead>
-                <TableHead className="text-right">Portfolio value</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {result.years.map((y) => (
-                <TableRow key={y.year}>
-                  <TableCell className="font-medium">{y.year}</TableCell>
-                  <TableCell className="text-right font-mono tabular-nums">{formatCurrency(y.income, 0)}</TableCell>
-                  <TableCell className="text-right font-mono tabular-nums">{formatCurrency(y.netDividend, 0)}</TableCell>
-                  <TableCell className="text-right font-mono tabular-nums">{formatCurrency(y.value, 0)}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      ) : null}
     </div>
   )
 }

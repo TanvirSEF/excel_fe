@@ -23,22 +23,10 @@ export const FINANCE_DETAILS: Record<FinanceSlug, StatsCalculatorDetail> = {
   "share-profit-calculator": {
     metaDescription:
       "Free share profit calculator with commissions and capital gains tax — net profit, ROI, break-even price and total fees for any stock trade.",
-    formula: "Net Profit = (Net Revenue − Total Cost) − Tax Amount",
     whenToUse: [
       "A share profit calculator helps investors find the real profit from a trade. It shows the difference between price changes and the money you actually keep. Even if a stock price goes up, your final profit can be lower because of brokerage fees, selling charges, and taxes.",
       "This tool helps you check different selling prices and plan better exit points. It also helps you find your break-even point, where your selling amount covers all costs. Both short-term traders and long-term investors use it to make better decisions based on actual returns, not only market prices.",
     ],
-    howToUse: [
-      "Enter the shares quantity, buy price and sell price.",
-      "Enter both commissions — the buy-side and sell-side fees your broker charges.",
-      "Enter the capital gains tax rate for your situation (0%, 15% or 20% for long-term in the US).",
-      "Read the net profit, post-tax ROI, total cost, revenue, total fees and break-even price.",
-    ],
-    example: {
-      title: "Example: 100 shares bought at $150, sold at $200",
-      body: "Total cost $15,010 (including $10 buy commission). Gross revenue $20,000. Taxable profit $4,980. Tax at 15% = $747. Net profit $4,233 = 28.20% ROI after $767 in total fees and taxes. Press Reset to reproduce.",
-    },
-    excelNote: "In Excel: =(Shares*Sell-SellComm)*(1-TaxRate)-(Shares*Buy+BuyComm) for net profit.",
     method: {
       title: "The Mathematical Framework: Formulas and Equations",
       paragraphs: [
@@ -165,84 +153,110 @@ export const FINANCE_DETAILS: Record<FinanceSlug, StatsCalculatorDetail> = {
   },
   "dividend-reinvestment-plan-calculator": {
     metaDescription:
-      "Free DRIP calculator with tax — project portfolio value, dividend income and yield on cost year by year. Retirement planning and passive income modeling.",
-    formula: "(Balance + Net Dividend + Addition) × (1 + Growth) = New Balance",
+      "Free Dividend Reinvestment Plan (DRIP) calculator — see how reinvesting dividends with yearly contributions, stock price growth and tax builds wealth over time, with yield on cost.",
     whenToUse: [
-      "Compounding can grow your wealth faster than you think. A Dividend Reinvestment Plan (DRIP) automatically buys more shares with your dividend payments instead of taking cash — as you own more shares, you earn more dividends, which buy even more shares.",
-      "This calculator includes stock price growth and dividend taxes in the result, showing you the real picture for retirement planning or building a passive income stream.",
+      "A Dividend Reinvestment Plan, or DRIP, is a simple investment strategy that helps you buy more shares with your dividend payments. Instead of taking cash from the company, you use that money to purchase more shares of the same company.",
+      "Many long-term investors use this method to grow their money. As you own more shares, you earn more dividends. Those extra dividends help you buy even more shares. This cycle keeps your investment growing faster.",
+      "This calculator helps you measure that growth. It also includes stock price growth and taxes in the result.",
     ],
-    howToUse: [
-      "Enter your starting principal and the annual addition you plan to invest.",
-      "Set the dividend yield, price growth rate and your dividend tax rate.",
-      "Enter the number of years — the year-by-year table shows how compounding accelerates.",
-    ],
-    example: {
-      title: "Example: $10,000 with $1,200/yr additions",
-      body: "At 4% yield, 5% price growth and 15% tax over 20 years: portfolio reaches $113,217, generating $4,529/yr in income with a 13.32% yield on cost from $34,000 in total contributions. Press Reset to reproduce.",
-    },
-    excelNote: "In Excel, build a column for each year: =(prev_balance + prev_balance*yield*(1-tax) + addition)*(1+growth)",
     method: {
-      title: "The math of compounding — formulas used",
+      title: "The Math of Compounding: Formulas Used",
       paragraphs: [
-        "Annual dividend payout: Portfolio Balance × Dividend Yield = Gross Dividend. Tax deduction: Gross Dividend × (1 − Tax Rate) = Net Dividend.",
-        "End of year balance: (Current Balance + Net Dividend + Annual Addition) × (1 + Price Growth) = New Balance. This compounds year after year.",
-        "Yield on Cost (YOC): Final Annual Income ÷ Total Personal Contributions. Income investors track this number — after many years of reinvestment it can grow to 20–50%.",
+        "The calculator uses a year-by-year compounding method to give accurate results:",
       ],
-      formula: "YOC = Final Annual Income ÷ Total Personal Contributions",
+      equations: [
+        {
+          label: "Annual Dividend Payout",
+          equation: "Portfolio Balance × Dividend Yield = Gross Dividend",
+        },
+        {
+          label: "Tax Deduction",
+          equation: "Gross Dividend × (1 − Tax Rate) = Net Dividend",
+        },
+        {
+          label: "End of Year Balance",
+          equation:
+            "(Current Balance + Net Dividend + Annual Addition) × (1 + Price Growth) = New Balance",
+        },
+        {
+          label: "Yield on Cost (YOC)",
+          note: "This measures your return based on the actual dollars you invested from your pocket.",
+          equation: "Final Annual Income ÷ Total Personal Contributions = YOC",
+        },
+      ],
     },
+    parameters: {
+      title: "Clarifying the Advanced Parameters",
+      items: [
+        {
+          name: "Annual Addition",
+          description: "This is the extra money you invest each year from your salary.",
+        },
+        {
+          name: "Price Appreciation",
+          description:
+            "This shows how much the stock price may grow each year. The S&P 500 often grows around 7% to 8% yearly.",
+        },
+        {
+          name: "Tax Rate",
+          description:
+            "Your dividend tax depends on your account type. A 401(k) or IRA works differently from a taxable brokerage account. Many people pay around 15% tax on dividends.",
+        },
+        {
+          name: "Yield on Cost (YOC)",
+          description:
+            "Income investors often track this number. It shows your dividend yield based on the money you invested. After many years of reinvestment, this number can grow to 20% to 50%.",
+        },
+      ],
+    },
+    factsTitle: "Global Investment Facts: Dividends by Region",
     facts: [
       {
-        title: "1. US Dividend Aristocrats",
-        body: "The US market is known for Dividend Aristocrats — companies that raise dividends for at least 25 consecutive years. Dividends make up about 32% of the total return of the S&P 500.",
+        title: "United States (USA)",
+        body: "The US market is well known for Dividend Aristocrats. These companies raise their dividends for at least 25 years in a row. Standard & Poor's says dividends make up about 32% of the total return of the S&P 500.",
       },
       {
-        title: "2. Global dividend tax differences",
-        body: "Canada offers a Dividend Tax Credit that reduces tax on dividend income. Australia uses Franking Credits to avoid double taxation. The UK offers the FTSE 100 with yields often above 4%. India taxes dividends based on income tax slabs after the 2020 Finance Act.",
+        title: "Canada (CAN)",
+        body: "Canada attracts many income investors, especially in banking and energy. The Dividend Tax Credit helps Canadian residents pay less tax on dividend income than on interest income. This can help when you enter your tax rate.",
       },
       {
-        title: "3. Reinvesting during crashes",
-        body: "When stock prices fall, your dividend money buys more shares at lower prices. This helps your portfolio recover faster when the market improves — automatic dollar-cost averaging during downturns.",
-      },
-    ],
-    useCases: [
-      {
-        title: "Retirement planning",
-        body: "Project how your dividend portfolio grows over 20–30 years. The yield on cost shows how much passive income your contributions generate by retirement.",
+        title: "England / United Kingdom (UK)",
+        body: "The UK stock market, especially the FTSE 100, offers high average dividend yields. These yields often go above 4%. Many UK investors use DRIPs to protect their money from inflation over time.",
       },
       {
-        title: "Passive income goals",
-        body: "Set a target annual income, then adjust yield, contributions and years to find the combination that reaches it.",
+        title: "Australia (AUS)",
+        body: "Australia uses a system called Franking Credits. This system helps investors avoid double taxation. Shareholders can claim credit for the tax that the company already pays on its profits. This increases the net dividend for Australian residents.",
       },
       {
-        title: "Comparing investment strategies",
-        body: "Run the numbers with and without reinvestment (set yield to 0%) to see exactly how much DRIP compounding adds to your final wealth.",
+        title: "India (IND)",
+        body: "Dividend investing in India has changed in recent years. After the Finance Act 2020, investors now pay tax on dividends based on their income tax slab. Even so, many investors still trust blue-chip companies for steady growth and stability.",
       },
     ],
     faqs: [
       {
-        question: "Is it better to reinvest dividends or take the cash?",
+        question: "Is It Better to Reinvest Dividends or Take the Cash?",
         answer:
-          "If you do not need the money for daily expenses, reinvesting usually works better. It buys more shares when prices drop and supports steady growth in your portfolio over time.",
+          "If you do not need the money for daily expenses, reinvesting usually works better. It helps you buy more shares when prices drop. This method also supports steady growth in your portfolio over time.",
       },
       {
-        question: "Can I reinvest dividends with any stock?",
+        question: "Can I Reinvest Dividends with Any Stock?",
         answer:
-          "Most major brokerages let you turn on auto-reinvest for dividend-paying stocks. Some companies also offer Direct DRIPs that let you buy shares straight from the company.",
+          "Most major brokerages let you turn on Auto-Reinvest for dividend-paying stocks. Some companies also offer Direct DRIPs. These plans let you buy shares straight from the company.",
       },
       {
-        question: "Does reinvesting dividends help during a market crash?",
+        question: "Does Reinvesting Dividends Help During a Market Crash?",
         answer:
-          "Yes. When stock prices fall, your dividend money buys more shares at lower prices. This helps your portfolio recover faster when the market improves.",
+          "Yes, it helps. When stock prices fall, your dividend money buys more shares at lower prices. This helps your portfolio recover faster when the market improves again.",
       },
       {
-        question: "What is a safe dividend yield?",
+        question: "What Is a Safe Dividend Yield?",
         answer:
-          "Many investors see 2% to 5% as a safer range. Yields above 8–10% can be risky — a very high yield may signal that the company has financial problems and may cut its dividend soon.",
+          "Many investors see a dividend yield between 2% and 5% as a safer range. Yields above 8% to 10% can be risky. A very high yield may show that the company has financial problems and may reduce its dividend soon.",
       },
       {
-        question: "Do I still pay taxes if I reinvest dividends?",
+        question: "Do I Still Pay Taxes If I Reinvest Dividends?",
         answer:
-          "Yes, in a regular brokerage account you still pay taxes — tax authorities count dividends as income even after reinvestment. In accounts like an IRA or ISA, you may delay or avoid taxes based on account rules.",
+          "Yes, in a regular brokerage account, you still pay taxes. Tax authorities count dividends as income, even after reinvestment. In accounts like an IRA or ISA, you may delay taxes or avoid them, based on the account rules.",
       },
     ],
   },
