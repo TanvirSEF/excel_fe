@@ -611,8 +611,9 @@ export const ACCOUNTING_HUB: CalculatorHub = {
           slug: "sales-commission-calculator",
           name: "Sales Commission Calculator",
           whatItIs:
-            "Calculates the commission on sales earned by an employee or sales representative.",
-          whatToExpect: "The exact commission amount for a salesperson.",
+            "Sales pay becomes hard to track when quotas and accelerators apply. This Sales Commission Calculator adds base salary, standard commission, and performance bonuses to show total earnings. The tool supports both flat rate plans and tiered commission plans.",
+          whatToExpect:
+            "People can use this tool to plan future paychecks with better accuracy.",
         },
         {
           slug: "payroll-conversion-calculator",
