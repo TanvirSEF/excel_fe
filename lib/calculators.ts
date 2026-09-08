@@ -635,9 +635,9 @@ export const ACCOUNTING_HUB: CalculatorHub = {
           slug: "retained-earnings-calculator",
           name: "Retained Earnings Calculator",
           whatItIs:
-            "Estimates the total profit a company has kept since its beginning after paying dividends to owners.",
+            "The Retained Earnings Calculator shows the “savings account” of your business. You can use it to plan equipment purchases, pay off debt, or track your company’s growth.",
           whatToExpect:
-            "A cumulative savings amount that signals the company's potential for financial growth.",
+            "This tool shows how your net income and dividends affect your final equity balance.",
         },
         {
           slug: "cash-conversion-cycle-calculator",
