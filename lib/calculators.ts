@@ -399,9 +399,9 @@ export const FINANCE_HUB: CalculatorHub = {
           slug: "venture-capital-calculator",
           name: "Venture Capital Calculator",
           whatItIs:
-            "A tool for startup founders and investors to see how ownership changes when new money is invested in a company.",
+            "Our Venture Capital Calculator helps you understand startup valuations with ease. It uses the industry-standard VC Method to guide you through the numbers. You can find post-money valuations, required ownership stakes, and implied IRR.",
           whatToExpect:
-            "It shows who owns what percent of the company after a new deal is signed.",
+            "The tool also accounts for future dilution and exit timelines. It works great for both founders and investors.",
         },
       ],
     },
