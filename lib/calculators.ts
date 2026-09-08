@@ -375,9 +375,9 @@ export const FINANCE_HUB: CalculatorHub = {
           slug: "marketing-roi-calculator",
           name: "Marketing ROI Calculator",
           whatItIs:
-            "Tells you if the money you spent on ads or marketing campaigns brought in enough sales to be worth it.",
+            "Track how well your advertising campaigns are performing with our Marketing ROI Calculator. This tool breaks down your profitability by looking at ad spend, labor costs, COGS, and customer lifetime value.",
           whatToExpect:
-            "A score that shows if your ads are winners (making money) or losers (losing money).",
+            "You get clear numbers that help you grow your marketing budget with confidence.",
         },
         {
           slug: "enterprise-seo-roi-calculator",
