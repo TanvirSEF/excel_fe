@@ -455,9 +455,9 @@ export const FINANCE_HUB: CalculatorHub = {
           slug: "savings-withdrawal-calculator",
           name: "Savings Withdrawal Calculator",
           whatItIs:
-            "Shows how long your savings will last if you take out a certain amount of money every month.",
+            "Use our Savings Withdrawal Calculator to plan your financial future with confidence. This tool helps you estimate how long your savings may last. You can use it for retirement, a career break, or a fixed inheritance.",
           whatToExpect:
-            "A timeline showing exactly when your money might run out so you can adjust your spending today.",
+            "This calculator includes Inflation and Investment Returns in the estimate. It gives you a more practical view of your withdrawal period.",
         },
       ],
     },
