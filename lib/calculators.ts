@@ -667,9 +667,9 @@ export const ACCOUNTING_HUB: CalculatorHub = {
           slug: "debt-snowball-vs-avalanche-calculator",
           name: "Debt Snowball vs Avalanche Calculator",
           whatItIs:
-            "Compares two popular payoff strategies: smallest balance first (snowball) vs highest interest first (avalanche).",
+            "Do you have several debt payments and don’t know which one to pay off first? This Snowball vs. Avalanche Calculator compares the two most popular debt payoff strategies for you.",
           whatToExpect:
-            "A side-by-side comparison showing which method gets you debt-free faster and cheaper.",
+            "Enter your balances and interest rates to see which method saves you more money and gets you debt-free faster.",
         },
         {
           slug: "marginal-propensity-to-consume-calculator",
