@@ -415,9 +415,9 @@ export const FINANCE_HUB: CalculatorHub = {
           slug: "irr-calculator",
           name: "Internal Rate of Return (IRR) Calculator",
           whatItIs:
-            "The gold-standard formula to find the exact annual growth rate of an investment with complex cash flows.",
+            "Use our Internal Rate of Return (IRR) Calculator to find the true return on your investment. This tool is useful for corporate finance, real estate deals, and private equity projects. It uses a smart method to work through different cash flows and find the annual return rate.",
           whatToExpect:
-            "A single percentage that lets you compare two very different investments fairly.",
+            "You can use it to see if a project is worth the risk.",
         },
         {
           slug: "accounting-rate-of-return-calculator",
