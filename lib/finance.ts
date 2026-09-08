@@ -246,36 +246,6 @@ export function irr(cashFlows: number[]): number | null {
   return (lo + hi) / 2
 }
 
-export function futureValue(
-  rate: number,
-  principal: number,
-  annualContribution: number,
-  years: number
-): number {
-  if (years <= 0) return principal
-  const value = principal * (1 + rate) ** years
-  if (rate === 0) return value + annualContribution * years
-  return value + annualContribution * (((1 + rate) ** years - 1) / rate)
-}
-
-export function requiredRate(
-  principal: number,
-  annualContribution: number,
-  years: number,
-  target: number
-): number | null {
-  if (years <= 0 || target <= principal) return null
-  let lo = 0.000001
-  let hi = 5
-  if (futureValue(hi, principal, annualContribution, years) < target) return null
-  for (let i = 0; i < 200; i++) {
-    const mid = (lo + hi) / 2
-    if (futureValue(mid, principal, annualContribution, years) < target) lo = mid
-    else hi = mid
-  }
-  return (lo + hi) / 2
-}
-
 export interface WithdrawalYear {
   year: number
   startBalance: number

@@ -447,9 +447,9 @@ export const FINANCE_HUB: CalculatorHub = {
           slug: "retirement-rate-of-return-calculator",
           name: "Retirement Rate of Return Calculator",
           whatItIs:
-            "Helps you figure out how fast your savings need to grow so you can retire comfortably when you want.",
+            "Our Retirement Rate of Return Calculator helps you plan your financial future. It shows you how your savings can grow over time. You can add your monthly contributions and expected salary increases.",
           whatToExpect:
-            "It helps you adjust your risk — whether you need to be more aggressive or can safely relax.",
+            "The tool also factors in compound interest to estimate your total savings. It adjusts for inflation too, so you can see what your money will actually be worth.",
         },
         {
           slug: "savings-withdrawal-calculator",
