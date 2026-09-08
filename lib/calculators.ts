@@ -595,9 +595,9 @@ export const ACCOUNTING_HUB: CalculatorHub = {
           slug: "gross-up-payroll-calculator",
           name: "Gross Up Payroll Calculator",
           whatItIs:
-            "Figures out how much to pay an employee so they take home an exact amount after tax.",
+            "Do you want to give an employee a bonus, a gift, or relocation support? You probably want them to receive a specific amount in hand. But taxes take a cut before the money reaches them — so if you want your employee to take home exactly $1,000, you need to pay more than that upfront.",
           whatToExpect:
-            "The higher gross pay that fulfills the employee's take-home target.",
+            "This Gross-Up Calculator does the math for you. It tells you the total gross amount to pay so your employee gets the exact net amount you planned.",
         },
         {
           slug: "prorated-bonus-calculator",
