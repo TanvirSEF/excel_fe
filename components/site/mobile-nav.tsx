@@ -132,16 +132,27 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
                       <IconBrandGoogle className="h-3.5 w-3.5" />
                       <span>Google Sheets</span>
                     </p>
-                    {categories.filter(c => c.slug.includes("google") || c.slug.includes("sheets")).slice(0, 5).map((item) => (
-                      <Link
-                        key={item.slug}
-                        href={`/categories/${item.slug}`}
-                        onClick={handleLinkClick}
-                        className="flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-muted-foreground hover:bg-background hover:text-foreground"
-                      >
-                        <span className="truncate">{item.name}</span>
-                      </Link>
-                    ))}
+                    {[
+                      "google-sheets-basics",
+                      "google-sheets-functions",
+                      "google-sheets-formulas",
+                      "google-sheets-intermediate-tutorials",
+                      "charts-in-google-sheets",
+                      "google-sheets-advanced-tutorials",
+                    ].map((slug) => {
+                      const dbCat = categories.find((c) => c.slug === slug)
+                      const name = dbCat ? dbCat.name : slug
+                      return (
+                        <Link
+                          key={slug}
+                          href={`/categories/${slug}`}
+                          onClick={handleLinkClick}
+                          className="flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-muted-foreground hover:bg-background hover:text-foreground"
+                        >
+                          <span className="truncate">{name}</span>
+                        </Link>
+                      )
+                    })}
                   </div>
 
                   <div className="pt-1.5 border-t border-border/40">

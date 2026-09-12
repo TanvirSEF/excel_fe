@@ -20,6 +20,7 @@ import {
   IconBrandGoogle,
   IconBulb,
   IconBolt,
+  IconAdjustments,
 } from "@tabler/icons-react"
 
 import { cn } from "@/lib/utils"
@@ -73,10 +74,10 @@ const EXCEL_TOPICS: CategoryItem[] = [
 
 const GOOGLE_TOPICS: CategoryItem[] = [
   {
-    name: "Google Sheets Formulas",
-    slug: "google-sheets-formulas",
-    description: "QUERY, ARRAYFORMULA, IMPORTRANGE & regex",
-    icon: IconMathFunction,
+    name: "Google Sheets Basics",
+    slug: "google-sheets-basics",
+    description: "Getting started, interface & core fundamentals",
+    icon: IconBulb,
   },
   {
     name: "Google Sheets Functions",
@@ -85,16 +86,22 @@ const GOOGLE_TOPICS: CategoryItem[] = [
     icon: IconTable,
   },
   {
-    name: "Charts in Google Sheets",
-    slug: "charts-in-google-sheets",
-    description: "Interactive cloud charts & sparklines",
-    icon: IconChartBar,
+    name: "Google Sheets Formulas",
+    slug: "google-sheets-formulas",
+    description: "QUERY, ARRAYFORMULA, IMPORTRANGE & regex",
+    icon: IconMathFunction,
   },
   {
-    name: "Google Sheets Basics",
-    slug: "google-sheets-basics",
-    description: "Getting started, interface & core fundamentals",
-    icon: IconBulb,
+    name: "Intermediate Tutorials",
+    slug: "google-sheets-intermediate-tutorials",
+    description: "Data cleaning, Pivot tables & conditional formatting",
+    icon: IconAdjustments,
+  },
+  {
+    name: "Charts in Google Sheets",
+    slug: "charts-in-google-sheets",
+    description: "Interactive cloud charts, dashboards & sparklines",
+    icon: IconChartBar,
   },
   {
     name: "Advanced Tutorials",
