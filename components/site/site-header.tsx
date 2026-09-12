@@ -19,7 +19,6 @@ export async function SiteHeader() {
           Number(b.is_featured) - Number(a.is_featured) ||
           a.order_index - b.order_index
       )
-      .slice(0, 4)
       .map((c) => ({ name: c.name, slug: c.slug, description: c.description }))
   } catch {
     navCategories = []

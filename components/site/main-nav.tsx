@@ -16,50 +16,91 @@ import {
   IconFileSpreadsheet,
   IconUserCheck,
   IconArrowRight,
+  IconBrandOffice,
+  IconBrandGoogle,
+  IconBulb,
+  IconSparkles,
 } from "@tabler/icons-react"
 
 import { cn } from "@/lib/utils"
 import type { NavCategory } from "@/types/api"
 
-const BLOG_ITEM_STYLES = [
+interface CategoryItem {
+  name: string
+  slug: string
+  description: string
+  icon: typeof IconMathFunction
+}
+
+const EXCEL_TOPICS: CategoryItem[] = [
   {
+    name: "Functions & Formulas",
+    slug: "excel-functions-formulas",
+    description: "VLOOKUP, XLOOKUP, INDEX MATCH & logic",
     icon: IconMathFunction,
-    box: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
   },
   {
+    name: "Advanced Excel",
+    slug: "advanced-excel",
+    description: "Dynamic arrays, complex modeling & arrays",
     icon: IconTable,
-    box: "bg-green-500/10 text-green-600 dark:text-green-400",
   },
   {
+    name: "Excel VBA & Macros",
+    slug: "excel-vba",
+    description: "Automation scripts, procedures & user forms",
     icon: IconCode,
-    box: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
   },
   {
+    name: "Excel Pivot Tables",
+    slug: "excel-pivot-table",
+    description: "Summary reports, slicers & data models",
     icon: IconChartBar,
-    box: "bg-purple-500/10 text-purple-600 dark:text-purple-400",
+  },
+  {
+    name: "Excel Charts & Visuals",
+    slug: "excel-charts",
+    description: "Visual reporting & dynamic dashboards",
+    icon: IconChartHistogram,
+  },
+  {
+    name: "Excel Pro Tips & Tricks",
+    slug: "excel-pro-tips",
+    description: "Productivity shortcuts, hacks & best practices",
+    icon: IconSparkles,
   },
 ]
 
-const FALLBACK_BLOG_ITEMS: NavCategory[] = [
+const GOOGLE_TOPICS: CategoryItem[] = [
   {
-    name: "Excel Formulas & Functions",
-    slug: "",
-    description: "VLOOKUP, XLOOKUP, INDEX MATCH & more",
+    name: "Google Sheets Formulas",
+    slug: "google-sheets-formulas",
+    description: "QUERY, ARRAYFORMULA, IMPORTRANGE & regex",
+    icon: IconMathFunction,
   },
   {
-    name: "Google Sheets Guides",
-    slug: "",
-    description: "Cloud functions, QUERY, ARRAYFORMULA",
+    name: "Google Sheets Functions",
+    slug: "google-sheets-functions",
+    description: "FILTER, SORT, UNIQUE & web functions",
+    icon: IconTable,
   },
   {
-    name: "VBA & Macro Automation",
-    slug: "",
-    description: "Automate repetitive spreadsheet workflows",
+    name: "Charts in Google Sheets",
+    slug: "charts-in-google-sheets",
+    description: "Interactive cloud charts & sparklines",
+    icon: IconChartBar,
   },
   {
-    name: "Charts & Dashboards",
-    slug: "",
-    description: "Professional visualizations & reporting",
+    name: "Google Sheets Basics",
+    slug: "google-sheets-basics",
+    description: "Getting started, interface & core fundamentals",
+    icon: IconBulb,
+  },
+  {
+    name: "Advanced Tutorials",
+    slug: "google-sheets-advanced-tutorials",
+    description: "Apps Script automation, APIs & cloud workflows",
+    icon: IconCode,
   },
 ]
 
@@ -68,7 +109,6 @@ interface MainNavProps {
 }
 
 export function MainNav({ categories = [] }: MainNavProps) {
-  const blogItems = categories.length > 0 ? categories : FALLBACK_BLOG_ITEMS
   const pathname = usePathname()
 
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
@@ -96,6 +136,27 @@ export function MainNav({ categories = [] }: MainNavProps) {
     setPrevPathname(pathname)
     setActiveMenu(null)
   }
+
+  // Resolve category slugs against actual DB categories
+  const categoryMap = new Map(categories.map((c) => [c.slug, c]))
+
+  const excelItems = EXCEL_TOPICS.map((topic) => {
+    const dbCat = categoryMap.get(topic.slug)
+    return {
+      ...topic,
+      slug: dbCat ? dbCat.slug : topic.slug,
+      name: dbCat ? dbCat.name : topic.name,
+    }
+  })
+
+  const googleItems = GOOGLE_TOPICS.map((topic) => {
+    const dbCat = categoryMap.get(topic.slug)
+    return {
+      ...topic,
+      slug: dbCat ? dbCat.slug : topic.slug,
+      name: dbCat ? dbCat.name : topic.name,
+    }
+  })
 
   const isBlogActive = pathname.startsWith("/blog") || pathname.startsWith("/categories")
   const isPricingActive = pathname.startsWith("/pricing")
@@ -202,7 +263,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
         )}
       </div>
 
-      {/* Spreadsheet Blogs Mega Dropdown */}
+      {/* Spreadsheet Blogs 2-Column Mega Menu */}
       <div
         className="relative"
         onMouseEnter={() => handleMouseEnter("blogs")}
@@ -228,46 +289,110 @@ export function MainNav({ categories = [] }: MainNavProps) {
 
         {activeMenu === "blogs" && (
           <div
-            className="absolute top-full left-0 pt-1.5 z-50 animate-in fade-in-0 zoom-in-95 duration-150"
+            className="absolute top-full -left-28 xl:-left-20 pt-1.5 z-50 animate-in fade-in-0 zoom-in-95 duration-150"
             onMouseEnter={() => handleMouseEnter("blogs")}
             onMouseLeave={handleMouseLeave}
           >
-            <div className="w-80 p-2 rounded-xl shadow-xl border border-border/70 backdrop-blur-md bg-background/95">
-              {blogItems.map((item, index) => {
-                const style = BLOG_ITEM_STYLES[index % BLOG_ITEM_STYLES.length]
-                const Icon = style.icon
-                return (
-                  <Link
-                    key={item.slug || item.name}
-                    href={item.slug ? `/categories/${item.slug}` : "/blog"}
-                    onClick={() => setActiveMenu(null)}
-                    className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-muted/60 transition-colors"
-                  >
-                    <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", style.box)}>
-                      <Icon className="h-4 w-4" />
+            <div className="w-[660px] xl:w-[700px] rounded-2xl shadow-2xl border border-border/70 backdrop-blur-xl bg-background/98 p-4 sm:p-5">
+              <div className="grid grid-cols-2 gap-5">
+                {/* Column 1: Microsoft Excel */}
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2.5 pb-2.5 border-b border-border/60">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                      <IconBrandOffice className="h-4.5 w-4.5" />
                     </div>
-                    <div className="min-w-0 space-y-0.5">
-                      <p className="truncate text-xs font-semibold text-foreground">{item.name}</p>
-                      {item.description ? (
-                        <p className="line-clamp-1 text-[11px] text-muted-foreground">{item.description}</p>
-                      ) : null}
+                    <div>
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                        Microsoft Excel
+                      </h3>
+                      <p className="text-[11px] text-muted-foreground">Formulas, VBA macros & deep-dives</p>
                     </div>
-                  </Link>
-                )
-              })}
+                  </div>
 
-              <div className="my-1.5 h-px bg-border/60" />
+                  <div className="space-y-0.5">
+                    {excelItems.map((item) => {
+                      const Icon = item.icon
+                      return (
+                        <Link
+                          key={item.slug}
+                          href={`/categories/${item.slug}`}
+                          onClick={() => setActiveMenu(null)}
+                          className="flex items-start gap-2.5 p-2 rounded-lg hover:bg-muted/60 transition-colors group"
+                        >
+                          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground group-hover:bg-emerald-500/15 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors mt-0.5">
+                            <Icon className="h-3.5 w-3.5" />
+                          </div>
+                          <div className="min-w-0 space-y-0.5">
+                            <p className="truncate text-xs font-semibold text-foreground group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                              {item.name}
+                            </p>
+                            <p className="line-clamp-1 text-[11px] text-muted-foreground">
+                              {item.description}
+                            </p>
+                          </div>
+                        </Link>
+                      )
+                    })}
+                  </div>
+                </div>
 
-              <Link
-                href="/categories"
-                onClick={() => setActiveMenu(null)}
-                className="flex items-center justify-between p-2 rounded-lg text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 hover:bg-muted/40 transition-colors"
-              >
-                <span className="flex items-center gap-1.5">
-                  <IconBook2 className="h-3.5 w-3.5" />
+                {/* Column 2: Google Sheets */}
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2.5 pb-2.5 border-b border-border/60">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/10 text-teal-600 dark:text-teal-400">
+                      <IconBrandGoogle className="h-4.5 w-4.5" />
+                    </div>
+                    <div>
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">
+                        Google Sheets
+                      </h3>
+                      <p className="text-[11px] text-muted-foreground">Cloud functions & web workflows</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-0.5">
+                    {googleItems.map((item) => {
+                      const Icon = item.icon
+                      return (
+                        <Link
+                          key={item.slug}
+                          href={`/categories/${item.slug}`}
+                          onClick={() => setActiveMenu(null)}
+                          className="flex items-start gap-2.5 p-2 rounded-lg hover:bg-muted/60 transition-colors group"
+                        >
+                          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground group-hover:bg-teal-500/15 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors mt-0.5">
+                            <Icon className="h-3.5 w-3.5" />
+                          </div>
+                          <div className="min-w-0 space-y-0.5">
+                            <p className="truncate text-xs font-semibold text-foreground group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+                              {item.name}
+                            </p>
+                            <p className="line-clamp-1 text-[11px] text-muted-foreground">
+                              {item.description}
+                            </p>
+                          </div>
+                        </Link>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Footer Bar */}
+              <div className="mt-4 pt-3 border-t border-border/60 flex items-center justify-between">
+                <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+                  <IconBook2 className="h-3.5 w-3.5 text-primary" />
+                  <span>Looking for more? Explore all 1,600+ spreadsheet guides.</span>
+                </p>
+                <Link
+                  href="/categories"
+                  onClick={() => setActiveMenu(null)}
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-primary/80 transition-colors px-2.5 py-1 rounded-md hover:bg-primary/10"
+                >
                   <span>Browse All Categories</span>
-                </span>
-              </Link>
+                  <IconArrowRight className="h-3 w-3" />
+                </Link>
+              </div>
             </div>
           </div>
         )}

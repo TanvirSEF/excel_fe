@@ -8,9 +8,7 @@ import {
   IconMenu2,
   IconChevronDown,
   IconMathFunction,
-  IconTable,
   IconCode,
-  IconChartBar,
   IconChartHistogram,
   IconReportMoney,
   IconScale,
@@ -19,6 +17,8 @@ import {
   IconMail,
   IconInfoCircle,
   IconBook2,
+  IconBrandOffice,
+  IconBrandGoogle,
 } from "@tabler/icons-react"
 
 import {
@@ -33,27 +33,11 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import type { NavCategory } from "@/types/api"
 
-const BLOG_ITEM_ICONS = [
-  { icon: IconMathFunction, color: "text-emerald-500" },
-  { icon: IconTable, color: "text-green-500" },
-  { icon: IconCode, color: "text-amber-500" },
-  { icon: IconChartBar, color: "text-purple-500" },
-]
-
-const FALLBACK_BLOG_ITEMS: NavCategory[] = [
-  { name: "Excel Formulas & Functions", slug: "", description: null },
-  { name: "Google Sheets Guides", slug: "", description: null },
-  { name: "VBA & Macro Automation", slug: "", description: null },
-  { name: "Charts & Dashboards", slug: "", description: null },
-]
-
 interface MobileNavProps {
   categories?: NavCategory[]
 }
 
 export function MobileNav({ categories = [] }: MobileNavProps) {
-  const blogItems =
-    categories.length > 0 ? categories : FALLBACK_BLOG_ITEMS
   const [open, setOpen] = useState(false)
   const [blogsExpanded, setBlogsExpanded] = useState(true)
   const [pricingExpanded, setPricingExpanded] = useState(false)
@@ -123,30 +107,55 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
               </button>
 
               {blogsExpanded && (
-                <div className="space-y-1 px-2 pb-2.5 pt-1 text-xs border-t border-border/40">
-                  {blogItems.map((item, index) => {
-                    const style = BLOG_ITEM_ICONS[index % BLOG_ITEM_ICONS.length]
-                    const Icon = style.icon
-                    return (
+                <div className="space-y-3 px-2 pb-3 pt-2 text-xs border-t border-border/40">
+                  {/* Excel Group */}
+                  <div className="space-y-1">
+                    <p className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                      <IconBrandOffice className="h-3.5 w-3.5" />
+                      <span>Microsoft Excel</span>
+                    </p>
+                    {categories.filter(c => c.slug.includes("excel") || !c.slug.includes("google")).slice(0, 5).map((item) => (
                       <Link
-                        key={item.slug || item.name}
-                        href={item.slug ? `/categories/${item.slug}` : "/blog"}
+                        key={item.slug}
+                        href={`/categories/${item.slug}`}
                         onClick={handleLinkClick}
-                        className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
+                        className="flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-muted-foreground hover:bg-background hover:text-foreground"
                       >
-                        <Icon className={cn("h-3.5 w-3.5 shrink-0", style.color)} />
                         <span className="truncate">{item.name}</span>
                       </Link>
-                    )
-                  })}
-                  <Link
-                    href="/categories"
-                    onClick={handleLinkClick}
-                    className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 font-medium text-emerald-600 dark:text-emerald-400 hover:bg-background"
-                  >
-                    <IconBook2 className="h-3.5 w-3.5 shrink-0" />
-                    <span>Browse All Categories</span>
-                  </Link>
+                    ))}
+                  </div>
+
+                  {/* Google Sheets Group */}
+                  <div className="space-y-1 pt-1.5 border-t border-border/30">
+                    <p className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 flex items-center gap-1.5">
+                      <IconBrandGoogle className="h-3.5 w-3.5" />
+                      <span>Google Sheets</span>
+                    </p>
+                    {categories.filter(c => c.slug.includes("google") || c.slug.includes("sheets")).slice(0, 5).map((item) => (
+                      <Link
+                        key={item.slug}
+                        href={`/categories/${item.slug}`}
+                        onClick={handleLinkClick}
+                        className="flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-muted-foreground hover:bg-background hover:text-foreground"
+                      >
+                        <span className="truncate">{item.name}</span>
+                      </Link>
+                    ))}
+                  </div>
+
+                  <div className="pt-1.5 border-t border-border/40">
+                    <Link
+                      href="/categories"
+                      onClick={handleLinkClick}
+                      className="flex items-center justify-between rounded-lg px-2.5 py-2 font-semibold text-emerald-600 dark:text-emerald-400 hover:bg-background"
+                    >
+                      <span className="flex items-center gap-2">
+                        <IconBook2 className="h-3.5 w-3.5 shrink-0" />
+                        <span>Browse All Categories</span>
+                      </span>
+                    </Link>
+                  </div>
                 </div>
               )}
             </div>
