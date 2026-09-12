@@ -136,6 +136,7 @@ export type MarkType =
   | "italic"
   | "strike"
   | "code"
+  | "kbd"
   | "link"
   | "textStyle"
   | "highlight"
@@ -161,7 +162,7 @@ export type TextAlign = "left" | "center" | "right"
 
 export type Block =
   | { type: "paragraph"; text: string; content?: InlineText[]; align?: TextAlign }
-  | { type: "heading"; text: string; level: number; content?: InlineText[]; align?: TextAlign }
+  | { type: "heading"; text: string; level: number; num?: string; content?: InlineText[]; align?: TextAlign }
   | { type: "quote"; text: string; content?: InlineText[] }
   | { type: "code"; text: string; language?: string }
   | { type: "list"; items: RichText[]; ordered?: boolean }

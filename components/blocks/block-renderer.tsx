@@ -73,6 +73,13 @@ function withMarks(content: ReactNode, marks?: InlineMark[]): ReactNode {
       case "strike":
         node = <del>{node}</del>
         break
+      case "kbd":
+        node = (
+          <kbd className="inline-flex items-center rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[0.8em] font-semibold text-foreground shadow-[inset_0_-1px_0_rgba(0,0,0,0.15)]">
+            {node}
+          </kbd>
+        )
+        break
       case "code":
         node = (
           <code className="rounded-md bg-muted px-1.5 py-0.5 font-mono text-[0.85em]">
@@ -161,6 +168,20 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
       const level = clampHeadingLevel(block.level)
       const id = headingId(block.text, usedIds)
       const Tag = `h${level}` as "h2" | "h3" | "h4"
+
+      if (block.num) {
+        return (
+          <div id={id} className="flex scroll-mt-20 items-center gap-3">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
+              {block.num}
+            </span>
+            <Tag className={cn(HEADING_CLASSES[level], alignClass(block.align))}>
+              <InlineRuns value={block.content ?? block.text} />
+            </Tag>
+          </div>
+        )
+      }
+
       return (
         <Tag
           id={id}
@@ -264,6 +285,22 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
     case "callout": {
       const meta = CALLOUT_STYLES[block.variant] ?? CALLOUT_STYLES.info
       const Icon = meta.icon
+
+      if (block.variant === "tip" && block.title) {
+        return (
+          <div className="overflow-hidden rounded-xl border border-emerald-500/40">
+            <div className="bg-emerald-600 px-5 py-3 dark:bg-emerald-700">
+              <p className="text-center text-sm font-bold uppercase tracking-wider text-white">
+                {block.title}
+              </p>
+            </div>
+            <div className="bg-card px-5 py-4 text-[0.95rem] leading-7 text-foreground/90">
+              <InlineRuns value={block.content ?? block.text} />
+            </div>
+          </div>
+        )
+      }
+
       return (
         <div className={cn("rounded-xl border p-4 sm:p-5", meta.box)}>
           <div className="flex items-start gap-3">
