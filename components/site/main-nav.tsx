@@ -19,7 +19,7 @@ import {
   IconBrandOffice,
   IconBrandGoogle,
   IconBulb,
-  IconSparkles,
+  IconBolt,
 } from "@tabler/icons-react"
 
 import { cn } from "@/lib/utils"
@@ -67,7 +67,7 @@ const EXCEL_TOPICS: CategoryItem[] = [
     name: "Excel Pro Tips & Tricks",
     slug: "excel-pro-tips",
     description: "Productivity shortcuts, hacks & best practices",
-    icon: IconSparkles,
+    icon: IconBolt,
   },
 ]
 

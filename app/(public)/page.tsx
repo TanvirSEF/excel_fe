@@ -7,6 +7,7 @@ import { PostSection } from "@/components/site/post-section"
 import { ServicesSection } from "@/components/site/services-section"
 import { TopicsExplorer } from "@/components/site/topics-explorer"
 import { FaqSection } from "@/components/site/faq-section"
+import { CalculatorsSection } from "@/components/site/calculators-section"
 import { YoutubePlaylists } from "@/components/site/youtube-playlists"
 import { NewsletterBand } from "@/components/site/newsletter/newsletter-band"
 import { getCategories } from "@/lib/api/categories"
@@ -63,7 +64,12 @@ export default async function HomePage() {
           />
         </div>
 
-        {/* 5. Professional Excel & Sheets Services (3 Bespoke 3D Cards) */}
+        {/* 5. Interactive Spreadsheet Calculators Showcase (45 Free Tools) */}
+        <div className="border-t border-border/60">
+          <CalculatorsSection />
+        </div>
+
+        {/* 6. Professional Excel & Sheets Services (3 Bespoke 3D Cards) */}
         <div className="border-t border-border/60">
           <ServicesSection />
         </div>
