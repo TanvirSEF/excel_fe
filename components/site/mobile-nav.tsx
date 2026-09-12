@@ -133,26 +133,22 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
                       <span>Google Sheets</span>
                     </p>
                     {[
-                      "google-sheets-basics",
-                      "google-sheets-functions",
-                      "google-sheets-formulas",
-                      "google-sheets-intermediate-tutorials",
-                      "charts-in-google-sheets",
-                      "google-sheets-advanced-tutorials",
-                    ].map((slug) => {
-                      const dbCat = categories.find((c) => c.slug === slug)
-                      const name = dbCat ? dbCat.name : slug
-                      return (
-                        <Link
-                          key={slug}
-                          href={`/categories/${slug}`}
-                          onClick={handleLinkClick}
-                          className="flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-muted-foreground hover:bg-background hover:text-foreground"
-                        >
-                          <span className="truncate">{name}</span>
-                        </Link>
-                      )
-                    })}
+                      { slug: "google-sheets-basics", name: "Google Sheets Basic" },
+                      { slug: "google-sheets-functions", name: "Google Sheets Functions" },
+                      { slug: "google-sheets-formulas", name: "Google Sheets Formulas" },
+                      { slug: "google-sheets-intermediate-tutorials", name: "Google Sheets Intermediate Tutorial" },
+                      { slug: "charts-in-google-sheets", name: "Google Sheets Charts" },
+                      { slug: "google-sheets-advanced-tutorials", name: "Google Sheets Advanced Tutorial" },
+                    ].map((item) => (
+                      <Link
+                        key={item.slug}
+                        href={`/categories/${item.slug}`}
+                        onClick={handleLinkClick}
+                        className="flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-muted-foreground hover:bg-background hover:text-foreground"
+                      >
+                        <span className="truncate">{item.name}</span>
+                      </Link>
+                    ))}
                   </div>
 
                   <div className="pt-1.5 border-t border-border/40">

@@ -74,7 +74,7 @@ const EXCEL_TOPICS: CategoryItem[] = [
 
 const GOOGLE_TOPICS: CategoryItem[] = [
   {
-    name: "Google Sheets Basics",
+    name: "Google Sheets Basic",
     slug: "google-sheets-basics",
     description: "Getting started, interface & core fundamentals",
     icon: IconBulb,
@@ -92,19 +92,19 @@ const GOOGLE_TOPICS: CategoryItem[] = [
     icon: IconMathFunction,
   },
   {
-    name: "Intermediate Tutorials",
+    name: "Google Sheets Intermediate Tutorial",
     slug: "google-sheets-intermediate-tutorials",
     description: "Data cleaning, Pivot tables & conditional formatting",
     icon: IconAdjustments,
   },
   {
-    name: "Charts in Google Sheets",
+    name: "Google Sheets Charts",
     slug: "charts-in-google-sheets",
     description: "Interactive cloud charts, dashboards & sparklines",
     icon: IconChartBar,
   },
   {
-    name: "Advanced Tutorials",
+    name: "Google Sheets Advanced Tutorial",
     slug: "google-sheets-advanced-tutorials",
     description: "Apps Script automation, APIs & cloud workflows",
     icon: IconCode,
@@ -161,7 +161,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
     return {
       ...topic,
       slug: dbCat ? dbCat.slug : topic.slug,
-      name: dbCat ? dbCat.name : topic.name,
+      name: topic.name,
     }
   })
 
