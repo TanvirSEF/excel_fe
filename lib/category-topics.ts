@@ -122,6 +122,17 @@ export const GOOGLE_CURATED_TOPICS: CuratedTopic[] = [
   },
 ]
 
+export const GOOGLE_TRACK_SLUGS: string[] = GOOGLE_CURATED_TOPICS.map(
+  (topic) => topic.slug
+)
+
+export function isGoogleSheetsCategory(
+  slug: string | null | undefined
+): boolean {
+  if (!slug) return false
+  return GOOGLE_TRACK_SLUGS.includes(slug)
+}
+
 function getExcelTopicIcon(slug: string): TablerIcon {
   const matched = EXCEL_CURATED_TOPICS.find((t) => t.slug === slug)
   if (matched) return matched.icon

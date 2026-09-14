@@ -1,7 +1,7 @@
 import { config } from "@/lib/config"
 import type { PostDetail, PostListItem, SeriesSummary } from "@/types/api"
 
-export function buildArticleJsonLd(post: PostDetail) {
+export function buildArticleJsonLd(post: PostDetail, path?: string) {
   const image = post.og_image_url ?? post.featured_image_url
   const data: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -16,7 +16,7 @@ export function buildArticleJsonLd(post: PostDetail) {
       name: "Excel Insider",
       url: config.siteUrl,
     },
-    mainEntityOfPage: `${config.siteUrl}/blog/${post.slug}`,
+    mainEntityOfPage: `${config.siteUrl}${path ?? `/blog/${post.slug}`}`,
   }
   if (image) data.image = [image]
 

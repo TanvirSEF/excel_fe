@@ -3,12 +3,19 @@ import Link from "next/link"
 import { IconArrowUpRight, IconClock, IconFlame } from "@tabler/icons-react"
 
 import { Time } from "@/components/shared/time"
+import { isGoogleSheetsCategory } from "@/lib/category-topics"
 import { cn } from "@/lib/utils"
 import type { PostListItem } from "@/types/api"
 
 interface PostCardProps {
   post: PostListItem
   className?: string
+}
+
+export function postHref(post: Pick<PostListItem, "slug" | "category">) {
+  return isGoogleSheetsCategory(post.category?.slug)
+    ? `/google-sheets/${post.slug}`
+    : `/blog/${post.slug}`
 }
 
 export function PostCard({ post, className }: PostCardProps) {
@@ -19,7 +26,7 @@ export function PostCard({ post, className }: PostCardProps) {
         className
       )}
     >
-      <Link href={`/blog/${post.slug}`} className="flex h-full flex-col">
+      <Link href={postHref(post)} className="flex h-full flex-col">
         {/* Featured Image or Gradient Fallback */}
         <div className="relative aspect-16/10 w-full overflow-hidden rounded-xl border border-border/40 bg-muted">
           {post.featured_image_url ? (

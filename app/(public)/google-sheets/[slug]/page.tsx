@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { notFound, permanentRedirect } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { IconSparkles } from "@tabler/icons-react"
 
 import { BlockRenderer } from "@/components/blocks/block-renderer"
@@ -9,23 +9,29 @@ import { ArticleHeader } from "@/components/site/article-header"
 import { ArticleTags } from "@/components/site/article-tags"
 import { Breadcrumb } from "@/components/site/breadcrumb"
 import { CommentsSection } from "@/components/site/comments-section"
+import { CurriculumSidebar } from "@/components/site/learning-track/curriculum-sidebar"
+import { CurriculumDrawer } from "@/components/site/learning-track/curriculum-drawer"
+import {
+  LessonPager,
+  LessonProgress,
+  type PagerLesson,
+} from "@/components/site/learning-track/lesson-pager"
 import { NewsletterForm } from "@/components/site/newsletter/newsletter-form"
-import { PostSection } from "@/components/site/post-section"
 import { ReadingProgress } from "@/components/site/reading-progress"
-import { SeriesStrip } from "@/components/site/series-strip"
 import { ApiClientError } from "@/lib/api/error"
-import { getPostBySlug, getPostComments, getPosts } from "@/lib/api/posts"
+import { getCurriculum } from "@/lib/api/curriculum"
+import { getPostBySlug, getPostComments } from "@/lib/api/posts"
 import { isGoogleSheetsCategory } from "@/lib/category-topics"
 import { extractToc } from "@/lib/blocks"
 import { buildArticleJsonLd } from "@/lib/seo"
 import { config } from "@/lib/config"
-import type { PostDetail } from "@/types/api"
+import type { CurriculumModule, PostDetail } from "@/types/api"
 
-interface ArticlePageProps {
+interface LessonPageProps {
   params: Promise<{ slug: string }>
 }
 
-async function loadPost(slug: string): Promise<PostDetail> {
+async function loadLesson(slug: string): Promise<PostDetail> {
   try {
     return await getPostBySlug(slug)
   } catch (error) {
@@ -36,11 +42,24 @@ async function loadPost(slug: string): Promise<PostDetail> {
   }
 }
 
+function flattenTrack(modules: CurriculumModule[]) {
+  return modules.flatMap((module) =>
+    module.topics.flatMap((topic) =>
+      topic.lessons.map((lesson) => ({
+        slug: lesson.slug,
+        title: lesson.title,
+        topicName: topic.name,
+        moduleName: module.name,
+      }))
+    )
+  )
+}
+
 export async function generateMetadata({
   params,
-}: ArticlePageProps): Promise<Metadata> {
+}: LessonPageProps): Promise<Metadata> {
   const { slug } = await params
-  const post = await loadPost(slug)
+  const post = await loadLesson(slug)
 
   const title = post.meta_title ?? post.title
   const description = post.meta_description ?? post.excerpt ?? undefined
@@ -49,12 +68,12 @@ export async function generateMetadata({
   return {
     title,
     description,
-    alternates: { canonical: post.canonical_url ?? `/blog/${post.slug}` },
+    alternates: { canonical: `/google-sheets/${post.slug}` },
     openGraph: {
       title,
       description,
       type: "article",
-      url: post.canonical_url ?? `${config.siteUrl}/blog/${post.slug}`,
+      url: `${config.siteUrl}/google-sheets/${post.slug}`,
       publishedTime: post.published_at ?? undefined,
       modifiedTime: post.updated_at,
       authors: [post.author_name],
@@ -70,46 +89,66 @@ export async function generateMetadata({
   }
 }
 
-export default async function ArticlePage({ params }: ArticlePageProps) {
+export default async function LessonPage({ params }: LessonPageProps) {
   const { slug } = await params
-  const post = await loadPost(slug)
+  const post = await loadLesson(slug)
 
-  if (isGoogleSheetsCategory(post.category_slug)) {
-    permanentRedirect(`/google-sheets/${post.slug}`)
+  if (!isGoogleSheetsCategory(post.category_slug)) {
+    redirect(`/blog/${post.slug}`)
   }
-  const comments = await getPostComments(post.id).catch(() => [])
 
+  const [comments, modules] = await Promise.all([
+    getPostComments(post.id).catch(() => []),
+    getCurriculum(300).catch(() => [] as CurriculumModule[]),
+  ])
   const toc = extractToc(post.content_json?.blocks ?? [])
 
-  const related = post.category_slug
-    ? await getPosts({ category: post.category_slug, page_size: 4 }, 300)
-        .then((page) =>
-          page.items.filter((item) => item.id !== post.id).slice(0, 3)
-        )
-        .catch(() => [])
-    : []
+  const flat = flattenTrack(modules)
+  const index = flat.findIndex((lesson) => lesson.slug === post.slug)
+  const position = index >= 0 ? index + 1 : 0
+  const prev: PagerLesson | null = index > 0 ? flat[index - 1] : null
+  const next: PagerLesson | null =
+    index >= 0 && index < flat.length - 1 ? flat[index + 1] : null
+  const activeModule = modules.find((module) =>
+    module.topics.some((topic) =>
+      topic.lessons.some((lesson) => lesson.slug === post.slug)
+    )
+  )
 
-  const breadcrumbItems = [
-    { label: "Home", href: "/" },
-    ...(post.category_slug
-      ? [{ label: post.category_name ?? "", href: `/categories/${post.category_slug}` }]
-      : []),
-    { label: post.title },
-  ]
+  const lessonPath = `/google-sheets/${post.slug}`
 
   return (
     <>
       <ReadingProgress />
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-10 px-4 py-10 sm:py-12 xl:grid-cols-[minmax(0,1fr)_220px]">
+      <div className="mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-8 px-4 py-10 sm:py-12 xl:grid-cols-[264px_minmax(0,1fr)_220px]">
+        <aside className="hidden xl:block">
+          <div className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto pr-1">
+            <CurriculumSidebar modules={modules} activeLessonSlug={post.slug} />
+          </div>
+        </aside>
+
         <article className="mx-auto w-full max-w-3xl xl:mx-0">
-          <Breadcrumb items={breadcrumbItems} />
-          {post.series ? <SeriesStrip series={post.series} /> : null}
+          <Breadcrumb
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Google Sheets", href: "/google-sheets" },
+              ...(activeModule
+                ? [{ label: activeModule.name, href: `/google-sheets#${activeModule.slug}` }]
+                : []),
+              { label: post.title },
+            ]}
+          />
+
+          <LessonProgress position={position} total={flat.length} />
+
           <ArticleHeader post={post} />
 
           <MobileToc entries={toc} />
 
           <BlockRenderer blocks={post.content_json?.blocks ?? []} />
           <ArticleTags tags={post.tags} />
+
+          <LessonPager prev={prev} next={next} />
 
           <div className="relative mt-10 overflow-hidden rounded-2xl bg-gradient-to-bl from-chart-2 via-primary to-chart-5 p-6 text-primary-foreground shadow-xl sm:p-8">
             <div
@@ -130,10 +169,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 Free Weekly Tips
               </span>
               <p className="mt-3 text-lg font-bold tracking-tight text-balance">
-                Liked this? Get one practical Excel tip every week.
+                Liked this lesson? Get one practical spreadsheet tip every week.
               </p>
               <div className="mt-4">
-                <NewsletterForm source="article-footer" variant="band" />
+                <NewsletterForm source="lesson-footer" variant="band" />
               </div>
             </div>
           </div>
@@ -141,7 +180,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           <CommentsSection postId={post.id} comments={comments} />
           <script
             type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: buildArticleJsonLd(post) }}
+            dangerouslySetInnerHTML={{
+              __html: buildArticleJsonLd(post, lessonPath),
+            }}
           />
         </article>
 
@@ -152,18 +193,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         </aside>
       </div>
 
-      {related.length > 0 ? (
-        <div className="border-t border-border/60">
-          <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
-            <PostSection
-              title="Related Articles"
-              subtitle={`More from ${post.category_name}`}
-              badge="Keep Reading"
-              posts={related}
-            />
-          </div>
-        </div>
-      ) : null}
+      <CurriculumDrawer modules={modules} activeLessonSlug={post.slug} />
     </>
   )
 }

@@ -165,7 +165,10 @@ export function MainNav({ categories = [] }: MainNavProps) {
     }
   })
 
-  const isBlogActive = pathname.startsWith("/blog") || pathname.startsWith("/categories")
+  const isBlogActive =
+    pathname.startsWith("/blog") ||
+    pathname.startsWith("/categories") ||
+    pathname.startsWith("/google-sheets")
   const isPricingActive = pathname.startsWith("/pricing")
   const isCalculatorActive = pathname.startsWith("/calculators")
 
@@ -357,13 +360,24 @@ export function MainNav({ categories = [] }: MainNavProps) {
                     </div>
                   </div>
 
+                  <Link
+                    href="/google-sheets"
+                    onClick={() => setActiveMenu(null)}
+                    className="flex items-center justify-between gap-2 rounded-lg border border-teal-500/30 bg-teal-500/10 p-2 transition-colors hover:bg-teal-500/20"
+                  >
+                    <span className="text-xs font-bold text-teal-700 dark:text-teal-300">
+                      Learning Track — step-by-step course
+                    </span>
+                    <IconArrowRight className="h-3.5 w-3.5 shrink-0 text-teal-600 dark:text-teal-400" />
+                  </Link>
+
                   <div className="space-y-0.5">
                     {googleItems.map((item) => {
                       const Icon = item.icon
                       return (
                         <Link
                           key={item.slug}
-                          href={`/categories/${item.slug}`}
+                          href={`/google-sheets#${item.slug}`}
                           onClick={() => setActiveMenu(null)}
                           className="flex items-start gap-2.5 p-2 rounded-lg hover:bg-muted/60 transition-colors group"
                         >

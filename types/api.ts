@@ -70,6 +70,27 @@ export interface SeriesWithPosts {
   posts: Page<PostListItem>
 }
 
+export interface CurriculumLesson {
+  slug: string
+  title: string
+  reading_time_minutes: number | null
+}
+
+export interface CurriculumTopic {
+  slug: string
+  name: string
+  lesson_count: number
+  lessons: CurriculumLesson[]
+}
+
+export interface CurriculumModule {
+  slug: string
+  name: string
+  description: string | null
+  lesson_count: number
+  topics: CurriculumTopic[]
+}
+
 export interface SeriesLink {
   title: string
   slug: string

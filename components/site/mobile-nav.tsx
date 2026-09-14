@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation"
 import {
   IconMenu2,
   IconChevronDown,
+  IconArrowRight,
   IconMathFunction,
   IconCode,
   IconChartHistogram,
@@ -132,6 +133,14 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
                       <IconBrandGoogle className="h-3.5 w-3.5" />
                       <span>Google Sheets</span>
                     </p>
+                    <Link
+                      href="/google-sheets"
+                      onClick={handleLinkClick}
+                      className="mx-1.5 flex items-center justify-between gap-2 rounded-lg border border-teal-500/30 bg-teal-500/10 px-2.5 py-2 text-xs font-bold text-teal-700 dark:text-teal-300"
+                    >
+                      <span>Learning Track — course</span>
+                      <IconArrowRight className="h-3.5 w-3.5 shrink-0" />
+                    </Link>
                     {[
                       { slug: "google-sheets-basics", name: "Google Sheets Basic" },
                       { slug: "google-sheets-functions", name: "Google Sheets Functions" },
@@ -142,7 +151,7 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
                     ].map((item) => (
                       <Link
                         key={item.slug}
-                        href={`/categories/${item.slug}`}
+                        href={`/google-sheets#${item.slug}`}
                         onClick={handleLinkClick}
                         className="flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-muted-foreground hover:bg-background hover:text-foreground"
                       >
