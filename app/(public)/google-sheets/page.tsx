@@ -10,6 +10,7 @@ import {
 import { Breadcrumb } from "@/components/site/breadcrumb"
 import { getCurriculum } from "@/lib/api/curriculum"
 import { GOOGLE_CURATED_TOPICS } from "@/lib/category-topics"
+import { curatedTopics } from "@/lib/curriculum-curation"
 import type { CurriculumModule } from "@/types/api"
 
 export const revalidate = 300
@@ -67,6 +68,7 @@ export default async function GoogleSheetsHubPage() {
 
       <div className="mt-12 space-y-14">
         {modules.map((module, moduleIndex) => {
+          const topics = curatedTopics(module.slug, module.topics)
           return (
             <section key={module.slug} id={module.slug} aria-labelledby={`module-${module.slug}`}>
               <div className="flex items-start gap-4">
@@ -81,7 +83,7 @@ export default async function GoogleSheetsHubPage() {
                     {module.name}
                   </h2>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    {module.topics.length} topics · {module.lesson_count} lessons
+                    {topics.length} topics · {module.lesson_count} lessons
                   </p>
                   {module.description ? (
                     <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-muted-foreground/80">
@@ -92,7 +94,7 @@ export default async function GoogleSheetsHubPage() {
               </div>
 
               <ul className="mt-6 divide-y divide-border/60 rounded-xl border border-border/70 bg-card">
-                {module.topics.map((topic) => {
+                {topics.map((topic) => {
                   const firstTopicLesson = topic.lessons[0]
                   return (
                     <li key={topic.slug}>

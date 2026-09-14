@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { IconChevronDown } from "@tabler/icons-react"
 
+import { curatedTopics } from "@/lib/curriculum-curation"
 import { cn } from "@/lib/utils"
 import type { CurriculumModule } from "@/types/api"
 
@@ -40,7 +41,7 @@ export function CurriculumSidebar({
             </summary>
 
             <ul className="space-y-0.5 border-t border-border/50 px-2.5 py-2.5">
-              {module.topics.map((topic) => {
+              {curatedTopics(module.slug, module.topics).map((topic) => {
                 const topicActive =
                   moduleActive && topic.slug === activeTopic?.slug
                 const firstLesson = topic.lessons[0]
