@@ -54,6 +54,36 @@ export interface CategoryMini {
   slug: string
 }
 
+export interface SeriesSummary {
+  id: string
+  name: string
+  slug: string
+  description: string | null
+  seo_title: string | null
+  seo_description: string | null
+  category?: CategoryMini | null
+  post_count: number
+}
+
+export interface SeriesWithPosts {
+  series: SeriesSummary
+  posts: Page<PostListItem>
+}
+
+export interface SeriesLink {
+  title: string
+  slug: string
+}
+
+export interface SeriesContext {
+  slug: string
+  name: string
+  position: number
+  total: number
+  prev: SeriesLink | null
+  next: SeriesLink | null
+}
+
 export interface PostListItem {
   id: string
   title: string
@@ -85,6 +115,7 @@ export interface PostDetail extends PostListItem {
   schema_type: string
   scheduled_at: string | null
   rejection_reason: string | null
+  series?: SeriesContext | null
   created_at: string
   updated_at: string
 }

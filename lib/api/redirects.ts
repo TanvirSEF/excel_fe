@@ -13,6 +13,8 @@ export function looksLikeWpPath(pathname: string): boolean {
   if (pathname.startsWith("/wp-content/") || pathname.startsWith("/wp-login")) {
     return true
   }
+  // WordPress series hubs: /<category>/<series>/ e.g. /excel-pro-tips/concatenate/
+  if (/^\/[a-z0-9-]+\/[a-z0-9-]+\/?$/.test(pathname)) return true
   return false
 }
 

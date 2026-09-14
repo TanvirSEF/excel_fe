@@ -1,5 +1,5 @@
 import { config } from "@/lib/config"
-import type { PostDetail } from "@/types/api"
+import type { PostDetail, PostListItem, SeriesSummary } from "@/types/api"
 
 export function buildArticleJsonLd(post: PostDetail) {
   const image = post.og_image_url ?? post.featured_image_url
@@ -19,6 +19,28 @@ export function buildArticleJsonLd(post: PostDetail) {
     mainEntityOfPage: `${config.siteUrl}/blog/${post.slug}`,
   }
   if (image) data.image = [image]
+
+  return JSON.stringify(data)
+}
+
+export function buildSeriesJsonLd(series: SeriesSummary, posts: PostListItem[]) {
+  const data: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: series.name,
+    url: `${config.siteUrl}/series/${series.slug}`,
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: posts.length,
+      itemListElement: posts.map((post, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: `${config.siteUrl}/blog/${post.slug}`,
+        name: post.title,
+      })),
+    },
+  }
+  if (series.description) data.description = series.description
 
   return JSON.stringify(data)
 }

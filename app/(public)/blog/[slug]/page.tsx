@@ -12,6 +12,7 @@ import { CommentsSection } from "@/components/site/comments-section"
 import { NewsletterForm } from "@/components/site/newsletter/newsletter-form"
 import { PostSection } from "@/components/site/post-section"
 import { ReadingProgress } from "@/components/site/reading-progress"
+import { SeriesStrip } from "@/components/site/series-strip"
 import { ApiClientError } from "@/lib/api/error"
 import { getPostBySlug, getPostComments, getPosts } from "@/lib/api/posts"
 import { extractToc } from "@/lib/blocks"
@@ -97,6 +98,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-10 px-4 py-10 sm:py-12 xl:grid-cols-[minmax(0,1fr)_220px]">
         <article className="mx-auto w-full max-w-3xl xl:mx-0">
           <Breadcrumb items={breadcrumbItems} />
+          {post.series ? <SeriesStrip series={post.series} /> : null}
           <ArticleHeader post={post} />
 
           <MobileToc entries={toc} />

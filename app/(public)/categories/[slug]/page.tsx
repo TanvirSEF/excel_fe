@@ -5,8 +5,10 @@ import { Pagination } from "@/components/shared/pagination"
 import { Breadcrumb } from "@/components/site/breadcrumb"
 import { PageHeader } from "@/components/site/page-header"
 import { PostGrid } from "@/components/site/post-grid"
+import { SeriesOverview } from "@/components/site/series-overview"
 import { getCategoryWithPosts } from "@/lib/api/categories"
 import { ApiClientError } from "@/lib/api/error"
+import { getSeries } from "@/lib/api/series"
 import { clamp, firstParam } from "@/lib/utils"
 
 interface CategoryPageProps {
@@ -48,7 +50,10 @@ export default async function CategoryPage({
   const [{ slug }, query] = await Promise.all([params, searchParams])
   const page = clamp(Number(firstParam(query.page) ?? 1) || 1, 1, 10_000)
 
-  const { category, posts } = await loadCategory(slug, page)
+  const [{ category, posts }, series] = await Promise.all([
+    loadCategory(slug, page),
+    getSeries(slug, 300).catch(() => []),
+  ])
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:py-14">
@@ -76,6 +81,8 @@ export default async function CategoryPage({
         description={category.description ?? undefined}
         meta={`${posts.total} ${posts.total === 1 ? "article" : "articles"}`}
       />
+
+      <SeriesOverview series={series} />
 
       <PostGrid
         posts={posts.items}
