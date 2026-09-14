@@ -7,8 +7,16 @@ interface SeriesOverviewProps {
   series: SeriesSummary[]
 }
 
+const MIN_LESSONS = 3
+const MAX_SHOWN = 12
+
 export function SeriesOverview({ series }: SeriesOverviewProps) {
-  if (series.length === 0) return null
+  const visible = series
+    .filter((item) => item.post_count >= MIN_LESSONS)
+    .sort((a, b) => b.post_count - a.post_count || a.name.localeCompare(b.name))
+    .slice(0, MAX_SHOWN)
+
+  if (visible.length === 0) return null
 
   return (
     <section className="mt-8 mb-10 space-y-4" aria-label="Lesson series">
@@ -19,7 +27,7 @@ export function SeriesOverview({ series }: SeriesOverviewProps) {
         </h2>
       </div>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {series.map((item) => (
+        {visible.map((item) => (
           <Link
             key={item.id}
             href={`/series/${item.slug}`}
