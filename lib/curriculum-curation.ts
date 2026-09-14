@@ -7,9 +7,8 @@ export interface CuratedTopicEntry {
 
 // Topic lists extracted from the legacy WordPress site's lesson sidebar
 // (the Bellows accordion on /google-sheets/basics/introduction-to-google-sheets/):
-// the exact curated entries, display names and order per module. Two legacy
-// topics (Refresh Data, Export Data) have no matching series yet and are
-// omitted until their content is migrated.
+// the exact curated entries, display names and order per module. The
+// refresh-data and export-data topics appear once wp_cpt_import has run.
 export const GS_CURATED_TOPICS: Record<string, CuratedTopicEntry[]> = {
   "google-sheets-basics": [
     { slug: "introduction", name: "Introduction to Google Sheets" },
@@ -48,7 +47,9 @@ export const GS_CURATED_TOPICS: Record<string, CuratedTopicEntry[]> = {
     { slug: "protect-sheets", name: "Protect Data in Google Sheets" },
     { slug: "data-validation-google-sheets-intermediate-tutorial", name: "Data Validation in Google Sheets" },
     { slug: "drop-down-google-sheets-intermediate-tutorial", name: "Dropdown in Google Sheets" },
+    { slug: "refresh-data", name: "Refresh Google Sheets Data" },
     { slug: "print-sheets-google-sheets-intermediate-tutorial", name: "Print Data in Google Sheets" },
+    { slug: "export-data", name: "Export Data from Google Sheets" },
     { slug: "version-history", name: "Version History in Google Sheets" },
   ],
   "charts-in-google-sheets": [
