@@ -228,16 +228,19 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
         />
       )
 
-    case "image":
+    case "image": {
+      const width = block.width ?? 1200
+      const height = block.height ?? Math.round(width * 0.5625)
       return (
-        <figure>
+        <figure className="my-6 flex flex-col items-center">
           <Image
             src={block.url}
             alt={block.alt ?? ""}
-            width={1200}
-            height={675}
+            width={width}
+            height={height}
             sizes="(max-width: 768px) 100vw, 768px"
-            className="h-auto w-full rounded-xl border"
+            className="h-auto rounded-xl border"
+            style={{ width: "100%", maxWidth: width }}
           />
           {block.alt ? (
             <figcaption className="mt-2 text-center text-xs text-muted-foreground">
@@ -246,6 +249,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
           ) : null}
         </figure>
       )
+    }
 
     case "table": {
       const [headerRow, ...bodyRows] = block.rows

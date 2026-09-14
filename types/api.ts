@@ -219,7 +219,7 @@ export type Block =
   | { type: "code"; text: string; language?: string }
   | { type: "list"; items: RichText[]; ordered?: boolean }
   | { type: "html"; html: string }
-  | { type: "image"; url: string; alt?: string }
+  | { type: "image"; url: string; alt?: string; width?: number; height?: number }
   | { type: "table"; rows: RichText[][]; header?: boolean }
   | { type: "callout"; variant: CalloutVariant; text: string; title?: string; content?: RichText }
   | { type: "button"; label: string; href: string; variant: ButtonVariant }
