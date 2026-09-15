@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { IconChevronDown } from "@tabler/icons-react"
+import { IconChevronDown, IconList } from "@tabler/icons-react"
 
 import type { TocEntry } from "@/lib/blocks"
 import { cn } from "@/lib/utils"
@@ -39,7 +39,7 @@ function buildSections(entries: TocEntry[]): {
 
 export function Toc({ entries }: TocProps) {
   const [activeId, setActiveId] = useState<string | null>(null)
-  const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
+  const [expanded, setExpanded] = useState<Set<string>>(new Set())
   const entryIds = entries.map((entry) => entry.id).join("|")
 
   useEffect(() => {
@@ -105,8 +105,8 @@ export function Toc({ entries }: TocProps) {
   ) {
     event.preventDefault()
     const id = section.entry.id
-    const isCollapsed = collapsed.has(id)
-    setCollapsed((prev) => {
+    const wasExpanded = expanded.has(id)
+    setExpanded((prev) => {
       const next = new Set(prev)
       if (next.has(id)) {
         next.delete(id)
@@ -115,7 +115,7 @@ export function Toc({ entries }: TocProps) {
       }
       return next
     })
-    if (isCollapsed) {
+    if (!wasExpanded) {
       document
         .getElementById(id)
         ?.scrollIntoView({ behavior: "smooth", block: "start" })
@@ -129,11 +129,15 @@ export function Toc({ entries }: TocProps) {
       section.children.some((child) => child.id === activeId))
 
   return (
-    <nav aria-label="Table of contents" className="text-sm">
-      <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-        On this page
-      </p>
-      <ul className="space-y-0.5 border-l">
+    <nav
+      aria-label="Table of contents"
+      className="rounded-xl border border-border/80 bg-card text-sm shadow-2xs"
+    >
+      <div className="flex items-center gap-2 border-b border-border/60 px-4 py-3">
+        <IconList className="h-4 w-4 text-primary" />
+        <p className="text-sm font-semibold text-foreground">On this page</p>
+      </div>
+      <ul className="space-y-0.5 border-l p-3 pl-4">
         {orphans.map((entry) => (
           <li key={entry.id}>
             <a
@@ -151,7 +155,7 @@ export function Toc({ entries }: TocProps) {
           </li>
         ))}
         {sections.map((section) => {
-          const open = !collapsed.has(section.entry.id) || isActiveChild(section)
+          const open = expanded.has(section.entry.id) || isActiveChild(section)
           const hasChildren = section.children.length > 0
           return (
             <li key={section.entry.id}>

@@ -66,10 +66,7 @@ export function MobileToc({ entries }: MobileTocProps) {
         <ol className="space-y-1">
           {sections.map((section, index) => (
             <li key={section.entry.id}>
-              <details
-                open={index === 0}
-                className="group/section rounded-lg transition-colors hover:bg-muted/60"
-              >
+              <details className="group/section rounded-lg transition-colors hover:bg-muted/60">
                 <summary className="flex cursor-pointer list-none items-center gap-3 px-2.5 py-2.5 text-sm font-medium text-foreground/85 [&::-webkit-details-marker]:hidden">
                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary/10 text-[11px] font-bold text-primary">
                     {String(index + 1).padStart(2, "0")}
