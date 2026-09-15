@@ -52,17 +52,18 @@ const FONT_SIZES = [
   { value: "28px", label: "Huge 28" },
 ]
 
-const TEXT_COLORS = [
-  "#0d9488",
-  "#2563eb",
-  "#7c3aed",
-  "#db2777",
-  "#dc2626",
-  "#ea580c",
-  "#d97706",
-  "#16a34a",
-  "#0ea5e9",
-  "#334155",
+const TEXT_COLORS: { hex: string; name: string }[] = [
+  { hex: "#0d9488", name: "Teal" },
+  { hex: "#2563eb", name: "Blue" },
+  { hex: "#7c3aed", name: "Violet" },
+  { hex: "#db2777", name: "Pink" },
+  { hex: "#dc2626", name: "Red" },
+  { hex: "#ea580c", name: "Orange" },
+  { hex: "#d97706", name: "Amber" },
+  { hex: "#16a34a", name: "Green" },
+  { hex: "#0ea5e9", name: "Sky" },
+  { hex: "#334155", name: "Slate" },
+  { hex: "#00678A", name: "Dark Azure" },
 ]
 
 const HIGHLIGHT_COLORS = [
@@ -702,11 +703,11 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
       {panel === "color" ? (
         <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-background p-2">
           <div className="flex flex-wrap items-center gap-1.5">
-            {TEXT_COLORS.map((hex) => (
+            {TEXT_COLORS.map(({ hex, name }) => (
               <button
                 key={hex}
                 type="button"
-                title={hex}
+                title={name}
                 onClick={() => applyColor(hex)}
                 className="h-6 w-6 rounded-md border border-border/60 transition-transform hover:scale-110"
                 style={{ backgroundColor: hex }}
