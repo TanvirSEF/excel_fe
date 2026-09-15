@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { IconCalendar, IconClock } from "@tabler/icons-react"
+import { IconCalendar } from "@tabler/icons-react"
 
 import { Time } from "@/components/shared/time"
 import { ShareButtons } from "@/components/site/share-buttons"
@@ -42,12 +42,6 @@ export function ArticleHeader({ post }: { post: PostDetail }) {
             <span className="flex items-center gap-1.5">
               <IconCalendar className="h-4 w-4 text-primary/70" />
               <Time date={post.published_at} variant="full" />
-            </span>
-          ) : null}
-          {post.reading_time_minutes ? (
-            <span className="flex items-center gap-1.5">
-              <IconClock className="h-4 w-4 text-primary/70" />
-              <span>{post.reading_time_minutes} min read</span>
             </span>
           ) : null}
         </div>

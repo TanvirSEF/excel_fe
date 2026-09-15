@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { IconArrowUpRight, IconClock, IconFlame } from "@tabler/icons-react"
+import { IconArrowUpRight, IconFlame } from "@tabler/icons-react"
 
 import { Time } from "@/components/shared/time"
 import { isGoogleSheetsCategory } from "@/lib/category-topics"
@@ -81,25 +81,11 @@ export function PostCard({ post, className }: PostCardProps) {
             ) : null}
 
             {/* Meta Row */}
-            <div className="flex items-center gap-2 pt-1 text-xs text-muted-foreground">
-              {post.reading_time_minutes ? (
-                <span className="inline-flex items-center gap-1">
-                  <IconClock className="h-3 w-3 shrink-0" />
-                  {post.reading_time_minutes} min read
-                </span>
-              ) : null}
-
-              {post.published_at ? (
-                <>
-                  {post.reading_time_minutes ? (
-                    <span aria-hidden className="text-border">
-                      •
-                    </span>
-                  ) : null}
-                  <Time date={post.published_at} variant="date" />
-                </>
-              ) : null}
-            </div>
+            {post.published_at ? (
+              <div className="flex items-center gap-2 pt-1 text-xs text-muted-foreground">
+                <Time date={post.published_at} variant="date" />
+              </div>
+            ) : null}
           </div>
 
           {/* Read article arrow indicator */}

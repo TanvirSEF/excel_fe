@@ -13,11 +13,9 @@ import { CurriculumSidebar } from "@/components/site/learning-track/curriculum-s
 import { CurriculumDrawer } from "@/components/site/learning-track/curriculum-drawer"
 import {
   LessonPager,
-  LessonProgress,
   type PagerLesson,
 } from "@/components/site/learning-track/lesson-pager"
 import { NewsletterForm } from "@/components/site/newsletter/newsletter-form"
-import { ReadingProgress } from "@/components/site/reading-progress"
 import { ApiClientError } from "@/lib/api/error"
 import { getCurriculum } from "@/lib/api/curriculum"
 import { getPostBySlug, getPostComments } from "@/lib/api/posts"
@@ -105,7 +103,6 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
   const flat = flattenTrack(modules)
   const index = flat.findIndex((lesson) => lesson.slug === post.slug)
-  const position = index >= 0 ? index + 1 : 0
   const prev: PagerLesson | null = index > 0 ? flat[index - 1] : null
   const next: PagerLesson | null =
     index >= 0 && index < flat.length - 1 ? flat[index + 1] : null
@@ -119,7 +116,6 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
   return (
     <>
-      <ReadingProgress />
       <div className="mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-8 px-4 py-10 sm:py-12 xl:grid-cols-[264px_minmax(0,1fr)_220px]">
         <aside className="hidden xl:block">
           <div className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto pr-1">
@@ -138,8 +134,6 @@ export default async function LessonPage({ params }: LessonPageProps) {
               { label: post.title },
             ]}
           />
-
-          <LessonProgress position={position} total={flat.length} />
 
           <ArticleHeader post={post} />
 

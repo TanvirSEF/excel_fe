@@ -12,43 +12,11 @@ export interface PagerLesson {
 }
 
 interface LessonPagerProps {
-  position: number
-  total: number
   prev: PagerLesson | null
   next: PagerLesson | null
 }
 
-export function LessonProgress({
-  position,
-  total,
-}: Pick<LessonPagerProps, "position" | "total">) {
-  const percent = total > 0 ? Math.round((position / total) * 100) : 0
-
-  return (
-    <div className="my-5 rounded-xl border border-teal-500/30 bg-teal-500/5 px-4 py-3">
-      <div className="flex items-center justify-between gap-3 text-xs">
-        <p className="font-semibold text-teal-700 dark:text-teal-300">
-          Lesson {position} of {total}
-        </p>
-        <p className="text-muted-foreground">{percent}% of the track</p>
-      </div>
-      <div
-        role="progressbar"
-        aria-valuenow={percent}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        className="mt-2 h-1.5 overflow-hidden rounded-full bg-teal-500/15"
-      >
-        <div
-          className="h-full rounded-full bg-teal-500"
-          style={{ width: `${percent}%` }}
-        />
-      </div>
-    </div>
-  )
-}
-
-export function LessonPager({ prev, next }: Omit<LessonPagerProps, "position" | "total">) {
+export function LessonPager({ prev, next }: LessonPagerProps) {
   if (!prev && !next) return null
 
   return (
