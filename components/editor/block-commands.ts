@@ -8,6 +8,7 @@ import {
   IconChevronsDown,
   IconCode,
   IconInfoCircle,
+  IconKeyboard,
   IconLink,
   IconList,
   IconListNumbers,
@@ -22,7 +23,7 @@ import {
 import type { CalloutVariant } from "@/types/api"
 
 export type BlockGroupId = "callouts" | "structure" | "media" | "advanced"
-export type BlockPanel = "image" | "button" | "embed" | "html"
+export type BlockPanel = "image" | "button" | "embed" | "html" | "keys"
 
 export interface BlockCommand {
   id: string
@@ -251,5 +252,14 @@ export const BLOCK_COMMANDS: BlockCommand[] = [
     keywords: ["html", "raw", "iframe", "embed"],
     group: "advanced",
     panel: "html",
+  },
+  {
+    id: "keyboard-keys",
+    label: "Keyboard keys…",
+    description: "Ctrl + S style key caps",
+    icon: IconKeyboard,
+    keywords: ["keyboard", "key", "keys", "kbd", "shortcut", "hotkey"],
+    group: "advanced",
+    panel: "keys",
   },
 ]

@@ -1,7 +1,7 @@
 "use client"
 
 import { Fragment, useState } from "react"
-import type { Editor } from "@tiptap/react"
+import type { Editor, JSONContent } from "@tiptap/react"
 import {
   IconAlignCenter,
   IconAlignLeft,
@@ -29,6 +29,7 @@ import {
   runBlockCommand,
   type BlockPanel,
 } from "@/components/editor/block-commands"
+import { EditorGuide } from "@/components/editor/editor-guide"
 import { MediaPicker } from "@/components/editor/media-picker"
 import { Button } from "@/components/ui/button"
 import {
@@ -98,6 +99,7 @@ export function EditorToolbar({ editor, panel, onPanelChange }: EditorToolbarPro
   const [embedCaption, setEmbedCaption] = useState("")
   const [imageWidth, setImageWidth] = useState("")
   const [imageHeight, setImageHeight] = useState("")
+  const [keysText, setKeysText] = useState("")
 
   const inCodeBlock = editor.isActive("codeBlock")
   const currentFontSize =
@@ -158,6 +160,23 @@ export function EditorToolbar({ editor, panel, onPanelChange }: EditorToolbarPro
     const url = /^(https?:\/\/|mailto:|\/|#)/i.test(href) ? href : `https://${href}`
     editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run()
     setLinkUrl("")
+    onPanelChange(null)
+  }
+
+  function applyKeys() {
+    const raw = keysText.trim()
+    if (!raw) return
+    const keys = raw
+      .split(/\s*\+\s*/)
+      .map((key) => key.trim())
+      .filter(Boolean)
+    const content: JSONContent[] = []
+    keys.forEach((key, index) => {
+      if (index > 0) content.push({ type: "text", text: " + " })
+      content.push({ type: "text", text: key, marks: [{ type: "kbd" }] })
+    })
+    editor.chain().focus().insertContent(content).run()
+    setKeysText("")
     onPanelChange(null)
   }
 
@@ -461,6 +480,8 @@ export function EditorToolbar({ editor, panel, onPanelChange }: EditorToolbarPro
             </select>
           </>
         ) : null}
+        <Divider />
+        <EditorGuide />
       </div>
 
       {panel === "link" ? (
@@ -796,6 +817,29 @@ export function EditorToolbar({ editor, panel, onPanelChange }: EditorToolbarPro
             }}
           >
             Insert video
+          </Button>
+        </div>
+      ) : null}
+
+      {panel === "keys" ? (
+        <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-background p-2">
+          <Input
+            value={keysText}
+            onChange={(event) => setKeysText(event.target.value)}
+            placeholder="e.g. Ctrl + Shift + Enter"
+            className="h-8 flex-1 min-w-48"
+            autoFocus
+            onKeyDown={(event) => {
+              if (event.key === "Enter") applyKeys()
+            }}
+          />
+          <Button
+            type="button"
+            size="sm"
+            disabled={!keysText.trim()}
+            onClick={applyKeys}
+          >
+            Insert keys
           </Button>
         </div>
       ) : null}
