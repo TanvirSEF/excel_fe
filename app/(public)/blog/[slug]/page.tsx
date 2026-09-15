@@ -94,8 +94,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         <BlogArticleHeader post={post} />
       </div>
 
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-10 px-4 pt-10 sm:px-6 xl:grid-cols-[minmax(0,1fr)_220px]">
-        <article className="mx-auto w-full max-w-[720px] xl:mx-0">
+      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-10 px-4 pt-10 sm:px-6 xl:grid-cols-[minmax(0,1fr)_230px]">
+        <article className="mx-auto w-full max-w-[860px] xl:mx-0">
           <div className="border-y border-border/70 py-3">
             <ShareButtons title={post.title} />
           </div>
@@ -134,7 +134,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
       {related.length > 0 ? (
         <div className="mt-10 border-t border-border/60 bg-muted/40">
-          <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
+          <div className="mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 sm:py-14">
             <PostSection
               title="Related Articles"
               subtitle={`More from ${post.category_name}`}

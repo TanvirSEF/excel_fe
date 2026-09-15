@@ -156,7 +156,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
       return (
         <p
           className={cn(
-            "text-lg font-medium leading-8 text-foreground/90",
+            "text-lg font-medium leading-9 text-foreground/95",
             alignClass(block.align)
           )}
         >
@@ -194,7 +194,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
 
     case "quote":
       return (
-        <blockquote className="border-l-2 border-primary pl-4 text-[1.15rem] font-medium italic leading-8 text-muted-foreground">
+        <blockquote className="border-l-2 border-primary pl-4 text-[1.15rem] font-medium italic leading-9 text-muted-foreground">
           <InlineRuns value={block.content ?? block.text} />
         </blockquote>
       )
@@ -207,7 +207,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
       return (
         <ListTag
           className={cn(
-            "space-y-1.5 pl-6 text-lg font-medium leading-8",
+            "space-y-1.5 pl-6 text-lg font-medium leading-9",
             block.ordered ? "list-decimal" : "list-disc marker:text-primary"
           )}
         >
