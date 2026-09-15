@@ -393,9 +393,23 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
 export function BlockRenderer({ blocks, className }: BlockRendererProps) {
   const usedIds = new Set<string>()
 
+  let ledeCount = 0
+  while (ledeCount < blocks.length && blocks[ledeCount].type === "paragraph") {
+    ledeCount++
+  }
+
   return (
     <div className={cn("space-y-7", className)}>
-      {blocks.map((block, index) => (
+      {ledeCount > 0 ? (
+        <div className="rounded-2xl border border-primary/15 bg-primary/5 p-5 sm:p-6">
+          <div className="space-y-4">
+            {blocks.slice(0, ledeCount).map((block, index) => (
+              <BlockNode key={index} block={block} usedIds={usedIds} />
+            ))}
+          </div>
+        </div>
+      ) : null}
+      {blocks.slice(ledeCount).map((block, index) => (
         <BlockNode key={index} block={block} usedIds={usedIds} />
       ))}
     </div>

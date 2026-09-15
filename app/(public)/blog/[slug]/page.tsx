@@ -6,7 +6,6 @@ import { MobileToc } from "@/components/blocks/mobile-toc"
 import { Toc } from "@/components/blocks/toc"
 import { ArticleTags } from "@/components/site/article-tags"
 import { BlogArticleHeader } from "@/components/site/blog-article-header"
-import { Breadcrumb } from "@/components/site/breadcrumb"
 import { CommentsSection } from "@/components/site/comments-section"
 import { ArticleCtaBand } from "@/components/site/newsletter/article-cta-band"
 import { PostSection } from "@/components/site/post-section"
@@ -88,19 +87,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         .catch(() => [])
     : []
 
-  const breadcrumbItems = [
-    { label: "Home", href: "/" },
-    ...(post.category_slug
-      ? [{ label: post.category_name ?? "", href: `/categories/${post.category_slug}` }]
-      : []),
-    { label: post.title },
-  ]
-
   return (
     <>
       <ReadingProgress />
       <div className="mx-auto w-full max-w-[760px] px-4 pt-8 sm:px-6 sm:pt-10">
-        <Breadcrumb items={breadcrumbItems} />
         <BlogArticleHeader post={post} />
       </div>
 
