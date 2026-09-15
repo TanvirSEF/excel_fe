@@ -6,7 +6,6 @@ import { MobileToc } from "@/components/blocks/mobile-toc"
 import { Toc } from "@/components/blocks/toc"
 import { ArticleHeader } from "@/components/site/article-header"
 import { ArticleTags } from "@/components/site/article-tags"
-import { Breadcrumb } from "@/components/site/breadcrumb"
 import { CommentsSection } from "@/components/site/comments-section"
 import { CurriculumSidebar } from "@/components/site/learning-track/curriculum-sidebar"
 import { CurriculumDrawer } from "@/components/site/learning-track/curriculum-drawer"
@@ -105,11 +104,6 @@ export default async function LessonPage({ params }: LessonPageProps) {
   const prev: PagerLesson | null = index > 0 ? flat[index - 1] : null
   const next: PagerLesson | null =
     index >= 0 && index < flat.length - 1 ? flat[index + 1] : null
-  const activeModule = modules.find((module) =>
-    module.topics.some((topic) =>
-      topic.lessons.some((lesson) => lesson.slug === post.slug)
-    )
-  )
 
   const lessonPath = `/google-sheets/${post.slug}`
 
@@ -123,17 +117,6 @@ export default async function LessonPage({ params }: LessonPageProps) {
         </aside>
 
         <article className="mx-auto w-full max-w-3xl xl:mx-0">
-          <Breadcrumb
-            items={[
-              { label: "Home", href: "/" },
-              { label: "Google Sheets", href: "/google-sheets" },
-              ...(activeModule
-                ? [{ label: activeModule.name, href: `/google-sheets#${activeModule.slug}` }]
-                : []),
-              { label: post.title },
-            ]}
-          />
-
           <ArticleHeader post={post} />
 
           <MobileToc entries={toc} />
