@@ -223,6 +223,9 @@ export function blocksToDoc(blocks: Block[]): JSONContent {
         case "list":
           return {
             type: block.ordered ? "orderedList" : "bulletList",
+            ...(!block.ordered && block.marker
+              ? { attrs: { marker: block.marker } }
+              : {}),
             content: block.items.map((item) => ({
               type: "listItem",
               content: [paragraph(item)],
@@ -363,10 +366,15 @@ export function docToBlocks(doc: JSONContent | null | undefined): Block[] {
           .map((listItem) => richOf(listItem.content))
           .filter((item) => (typeof item === "string" ? item.length > 0 : true))
         if (items.length > 0) {
+          const marker =
+            node.type === "bulletList" && node.attrs?.marker === "arrow"
+              ? ("arrow" as const)
+              : undefined
           blocks.push({
             type: "list",
             items,
             ordered: node.type === "orderedList",
+            ...(marker ? { marker } : {}),
           })
         }
         break

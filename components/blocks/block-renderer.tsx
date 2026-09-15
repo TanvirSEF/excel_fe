@@ -208,7 +208,11 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
         <ListTag
           className={cn(
             "space-y-1.5 pl-6 text-lg font-medium leading-9",
-            block.ordered ? "list-decimal" : "list-disc marker:text-primary"
+            block.marker === "arrow"
+              ? "[list-style-type:'➤']"
+              : block.ordered
+                ? "list-decimal"
+                : "list-disc marker:text-primary"
           )}
         >
           {block.items.map((item, index) => (

@@ -234,7 +234,7 @@ export type Block =
   | { type: "heading"; text: string; level: number; num?: string; content?: InlineText[]; align?: TextAlign }
   | { type: "quote"; text: string; content?: InlineText[] }
   | { type: "code"; text: string; language?: string }
-  | { type: "list"; items: RichText[]; ordered?: boolean }
+  | { type: "list"; items: RichText[]; ordered?: boolean; marker?: "arrow" }
   | { type: "html"; html: string }
   | { type: "image"; url: string; alt?: string; width?: number; height?: number }
   | { type: "table"; rows: RichText[][]; header?: boolean }

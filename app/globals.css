@@ -184,6 +184,10 @@
   padding-left: 1.5rem;
 }
 
+.post-editor .tiptap ul[data-marker="arrow"] {
+  list-style: "➤ ";
+}
+
 .post-editor .tiptap ol {
   list-style: decimal;
   padding-left: 1.5rem;

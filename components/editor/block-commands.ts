@@ -5,6 +5,7 @@ import {
   IconAlertTriangle,
   IconBrandHtml5,
   IconBulb,
+  IconCaretRight,
   IconChevronsDown,
   IconCode,
   IconInfoCircle,
@@ -198,6 +199,24 @@ export const BLOCK_COMMANDS: BlockCommand[] = [
     keywords: ["bullet", "unordered", "list", "ul"],
     group: "structure",
     action: (editor) => editor.chain().focus().toggleBulletList().run(),
+  },
+  {
+    id: "arrow-list",
+    label: "Arrow list",
+    description: "List with ➤ markers",
+    icon: IconCaretRight,
+    keywords: ["arrow", "list", "bullet", "point", "marker", "triangular"],
+    group: "structure",
+    action: (editor) =>
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: "bulletList",
+          attrs: { marker: "arrow" },
+          content: [{ type: "listItem", content: [{ type: "paragraph" }] }],
+        })
+        .run(),
   },
   {
     id: "ordered-list",

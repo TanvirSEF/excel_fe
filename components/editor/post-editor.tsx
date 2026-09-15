@@ -25,6 +25,7 @@ import { EmbedNode } from "@/components/editor/embed-node"
 import { HeadingNum } from "@/components/editor/heading-num"
 import { HtmlBlock } from "@/components/editor/html-block"
 import { KbdMark } from "@/components/editor/kbd-mark"
+import { ListMarker } from "@/components/editor/list-marker"
 import { SlashMenu } from "@/components/editor/slash-menu"
 import type { Panel } from "@/components/editor/editor-toolbar"
 
@@ -79,6 +80,7 @@ export function PostEditor({ initialDoc, onDocChange }: PostEditorProps) {
       AccordionNode,
       HeadingNum,
       KbdMark,
+      ListMarker,
       SlashMenu.configure({ onOpenPanel: setInsertPanel }),
     ],
     content: initialDoc ?? { type: "doc", content: [{ type: "paragraph" }] },
