@@ -1,7 +1,15 @@
 import type { Metadata } from "next"
 import Image from "next/image"
+import Link from "next/link"
 import { notFound } from "next/navigation"
-import { IconCalendar, IconNews } from "@tabler/icons-react"
+import {
+  IconBrandGithub,
+  IconBrandLinkedin,
+  IconBrandX,
+  IconCalendar,
+  IconNews,
+  IconWorld,
+} from "@tabler/icons-react"
 
 import { Pagination } from "@/components/shared/pagination"
 import { Time } from "@/components/shared/time"
@@ -11,6 +19,7 @@ import { getAuthor } from "@/lib/api/authors"
 import { getPosts } from "@/lib/api/posts"
 import { ApiClientError } from "@/lib/api/error"
 import { clamp, firstParam } from "@/lib/utils"
+import { config } from "@/lib/config"
 
 interface AuthorPageProps {
   params: Promise<{ id: string }>
@@ -58,6 +67,30 @@ export default async function AuthorPage({ params, searchParams }: AuthorPagePro
   const author = await loadAuthor(id)
   const posts = await getPosts({ author: author.id, page, page_size: 12 })
 
+  const sameAs = [
+    author.website_url,
+    author.linkedin_url,
+    author.twitter_url,
+    author.github_url,
+  ].filter(Boolean) as string[]
+
+  const personJsonLd = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: author.name,
+    url: `${config.siteUrl}/authors/${author.id}`,
+    image: author.avatar_url ?? undefined,
+    description: author.bio ?? undefined,
+    ...(sameAs.length > 0 && { sameAs }),
+  })
+
+  const socialLinks = [
+    { href: author.linkedin_url, icon: IconBrandLinkedin, label: "LinkedIn" },
+    { href: author.twitter_url, icon: IconBrandX, label: "X / Twitter" },
+    { href: author.github_url, icon: IconBrandGithub, label: "GitHub" },
+    { href: author.website_url, icon: IconWorld, label: "Website" },
+  ].filter((link) => Boolean(link.href))
+
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:py-14">
       <Breadcrumb
@@ -98,6 +131,23 @@ export default async function AuthorPage({ params, searchParams }: AuthorPagePro
                 {author.bio}
               </p>
             ) : null}
+            {socialLinks.length > 0 ? (
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                {socialLinks.map(({ href, icon: Icon, label }) => (
+                  <Link
+                    key={label}
+                    href={href!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className="flex items-center gap-1.5 rounded-lg border border-border/70 bg-background/60 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
+                  >
+                    <Icon className="h-3.5 w-3.5" />
+                    {label}
+                  </Link>
+                ))}
+              </div>
+            ) : null}
           </div>
         </div>
       </header>
@@ -117,6 +167,12 @@ export default async function AuthorPage({ params, searchParams }: AuthorPagePro
           pathname={`/authors/${author.id}`}
         />
       </div>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: personJsonLd }}
+      />
     </div>
   )
 }
+

@@ -3,9 +3,13 @@
 import { useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import {
+  IconBrandGithub,
+  IconBrandLinkedin,
+  IconBrandX,
   IconLoader2,
   IconTrash,
   IconUpload,
+  IconWorld,
 } from "@tabler/icons-react"
 import { toast } from "sonner"
 
@@ -56,6 +60,10 @@ export function SettingsView() {
 
   const [name, setName] = useState("")
   const [bio, setBio] = useState("")
+  const [websiteUrl, setWebsiteUrl] = useState("")
+  const [linkedinUrl, setLinkedinUrl] = useState("")
+  const [twitterUrl, setTwitterUrl] = useState("")
+  const [githubUrl, setGithubUrl] = useState("")
   const [avatarUrl, setAvatarUrl] = useState("")
   const [loadedFor, setLoadedFor] = useState<string | null>(null)
 
@@ -69,8 +77,13 @@ export function SettingsView() {
     setLoadedFor(user.id)
     setName(user.name)
     setBio(user.bio ?? "")
+    setWebsiteUrl(user.website_url ?? "")
+    setLinkedinUrl(user.linkedin_url ?? "")
+    setTwitterUrl(user.twitter_url ?? "")
+    setGithubUrl(user.github_url ?? "")
     setAvatarUrl(user.avatar_url ?? "")
   }
+
 
   async function persistAvatar(url: string | null) {
     if (!user) return
@@ -142,6 +155,10 @@ export function SettingsView() {
         input: {
           name: name.trim(),
           bio: bio.trim() || null,
+          website_url: websiteUrl.trim() || null,
+          linkedin_url: linkedinUrl.trim() || null,
+          twitter_url: twitterUrl.trim() || null,
+          github_url: githubUrl.trim() || null,
         },
       })
       toast.success("Profile saved.")
@@ -155,6 +172,7 @@ export function SettingsView() {
       setSavingProfile(false)
     }
   }
+
 
   async function onChangePassword() {
     if (newPassword.length < 10) {
@@ -242,6 +260,57 @@ export function SettingsView() {
             className="w-full rounded-md border border-input bg-background p-2 text-sm shadow-xs focus:outline-none focus:ring-2 focus:ring-ring/50"
           />
         </div>
+
+        <div className="space-y-3">
+          <Label>Social &amp; Web Presence</Label>
+          <div className="space-y-2">
+            <div className="relative">
+              <IconWorld className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                id="settings-website"
+                value={websiteUrl}
+                onChange={(event) => setWebsiteUrl(event.target.value)}
+                placeholder="https://yourwebsite.com"
+                type="url"
+                className="pl-9"
+              />
+            </div>
+            <div className="relative">
+              <IconBrandLinkedin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                id="settings-linkedin"
+                value={linkedinUrl}
+                onChange={(event) => setLinkedinUrl(event.target.value)}
+                placeholder="https://linkedin.com/in/yourprofile"
+                type="url"
+                className="pl-9"
+              />
+            </div>
+            <div className="relative">
+              <IconBrandX className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                id="settings-twitter"
+                value={twitterUrl}
+                onChange={(event) => setTwitterUrl(event.target.value)}
+                placeholder="https://x.com/yourhandle"
+                type="url"
+                className="pl-9"
+              />
+            </div>
+            <div className="relative">
+              <IconBrandGithub className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                id="settings-github"
+                value={githubUrl}
+                onChange={(event) => setGithubUrl(event.target.value)}
+                placeholder="https://github.com/yourusername"
+                type="url"
+                className="pl-9"
+              />
+            </div>
+          </div>
+        </div>
+
         <div className="flex flex-wrap items-center gap-4">
           <Avatar className="h-20 w-20 rounded-full border">
             {avatarUrl ? (

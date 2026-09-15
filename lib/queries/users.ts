@@ -21,6 +21,10 @@ export interface UserUpdateInput {
   name?: string
   avatar_url?: string | null
   bio?: string | null
+  website_url?: string | null
+  linkedin_url?: string | null
+  twitter_url?: string | null
+  github_url?: string | null
   role?: UserRole
   is_active?: boolean
   is_verified?: boolean

@@ -37,6 +37,10 @@ export interface User {
   role: UserRole
   avatar_url: string | null
   bio: string | null
+  website_url: string | null
+  linkedin_url: string | null
+  twitter_url: string | null
+  github_url: string | null
   is_active: boolean
   is_verified: boolean
   last_login_at: string | null
@@ -83,6 +87,10 @@ export interface AuthorProfile {
   bio: string | null
   joined_at: string
   post_count: number
+  website_url: string | null
+  linkedin_url: string | null
+  twitter_url: string | null
+  github_url: string | null
 }
 
 export interface CurriculumTopic {
