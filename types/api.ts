@@ -76,6 +76,15 @@ export interface CurriculumLesson {
   reading_time_minutes: number | null
 }
 
+export interface AuthorProfile {
+  id: string
+  name: string
+  avatar_url: string | null
+  bio: string | null
+  joined_at: string
+  post_count: number
+}
+
 export interface CurriculumTopic {
   slug: string
   name: string

@@ -30,14 +30,17 @@ export function ArticleHeader({ post }: { post: PostDetail }) {
           {post.title}
         </h1>
         <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
-          <span className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-primary">
+          <Link
+            href={`/authors/${post.author_id}`}
+            className="group flex items-center gap-2.5"
+          >
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-primary transition-colors group-hover:bg-primary/25">
               {initials(post.author_name)}
             </span>
-            <span className="font-medium text-foreground/80">
+            <span className="font-medium text-foreground/80 underline-offset-4 transition-colors group-hover:text-primary group-hover:underline">
               {post.author_name}
             </span>
-          </span>
+          </Link>
           {post.published_at ? (
             <span className="flex items-center gap-1.5">
               <IconCalendar className="h-4 w-4 text-primary/70" />
