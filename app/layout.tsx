@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { DM_Sans, Geist_Mono } from "next/font/google"
+import { Figtree, Geist_Mono } from "next/font/google"
 
 import "./globals.css"
 import { Providers } from "@/components/providers"
@@ -8,7 +8,7 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { config } from "@/lib/config"
 import { cn } from "@/lib/utils"
 
-const dmSans = DM_Sans({
+const figtree = Figtree({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
@@ -47,7 +47,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", dmSans.variable, fontMono.variable, "font-sans")}
+      className={cn("antialiased", figtree.variable, fontMono.variable, "font-sans")}
     >
       <body suppressHydrationWarning>
         <ThemeProvider>

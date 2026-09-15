@@ -156,7 +156,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
       return (
         <p
           className={cn(
-            "text-[0.975rem] leading-7 text-foreground/90 sm:text-base",
+            "text-lg font-medium leading-8 text-foreground/90",
             alignClass(block.align)
           )}
         >
@@ -194,7 +194,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
 
     case "quote":
       return (
-        <blockquote className="border-l-2 border-primary pl-4 text-[1.05rem] italic leading-7 text-muted-foreground">
+        <blockquote className="border-l-2 border-primary pl-4 text-[1.15rem] font-medium italic leading-8 text-muted-foreground">
           <InlineRuns value={block.content ?? block.text} />
         </blockquote>
       )
@@ -207,7 +207,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
       return (
         <ListTag
           className={cn(
-            "space-y-1.5 pl-6 text-[0.975rem] leading-7 sm:text-base",
+            "space-y-1.5 pl-6 text-lg font-medium leading-8",
             block.ordered ? "list-decimal" : "list-disc marker:text-primary"
           )}
         >
@@ -298,7 +298,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
                 {block.title}
               </p>
             </div>
-            <div className="bg-card px-5 py-4 text-[0.95rem] leading-7 text-foreground/90">
+            <div className="bg-card px-5 py-4 text-[1.05rem] font-medium leading-8 text-foreground/90">
               <InlineRuns value={block.content ?? block.text} />
             </div>
           </div>
@@ -315,7 +315,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
                   {block.title}
                 </p>
               ) : null}
-              <div className="text-[0.95rem] leading-7 text-foreground/90">
+              <div className="text-[1.05rem] font-medium leading-8 text-foreground/90">
                 <InlineRuns value={block.content ?? block.text} />
               </div>
             </div>
@@ -376,7 +376,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
             {block.title}
             <IconChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-180" />
           </summary>
-          <div className="border-t border-border/60 px-4 py-3 text-[0.95rem] leading-7 text-foreground/90">
+          <div className="border-t border-border/60 px-4 py-3 text-[1.05rem] font-medium leading-8 text-foreground/90">
             <InlineRuns value={block.content ?? block.text} />
           </div>
         </details>
