@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { EditorContent, useEditor, useEditorState, type JSONContent } from "@tiptap/react"
 import Color from "@tiptap/extension-color"
 import Highlight from "@tiptap/extension-highlight"
@@ -24,6 +25,8 @@ import { EmbedNode } from "@/components/editor/embed-node"
 import { HeadingNum } from "@/components/editor/heading-num"
 import { HtmlBlock } from "@/components/editor/html-block"
 import { KbdMark } from "@/components/editor/kbd-mark"
+import { SlashMenu } from "@/components/editor/slash-menu"
+import type { Panel } from "@/components/editor/editor-toolbar"
 
 interface PostEditorProps {
   initialDoc: JSONContent | null
@@ -46,6 +49,8 @@ function countWords(text: string) {
 }
 
 export function PostEditor({ initialDoc, onDocChange }: PostEditorProps) {
+  const [insertPanel, setInsertPanel] = useState<Panel>(null)
+
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -74,6 +79,7 @@ export function PostEditor({ initialDoc, onDocChange }: PostEditorProps) {
       AccordionNode,
       HeadingNum,
       KbdMark,
+      SlashMenu.configure({ onOpenPanel: setInsertPanel }),
     ],
     content: initialDoc ?? { type: "doc", content: [{ type: "paragraph" }] },
     onUpdate: ({ editor }) => {
@@ -99,7 +105,11 @@ export function PostEditor({ initialDoc, onDocChange }: PostEditorProps) {
 
   return (
     <div className="post-editor space-y-3">
-      <EditorToolbar editor={editor} />
+      <EditorToolbar
+        editor={editor}
+        panel={insertPanel}
+        onPanelChange={setInsertPanel}
+      />
       <div className="min-h-96 rounded-xl border bg-card p-6">
         <EditorContent editor={editor} className="min-h-80" />
       </div>

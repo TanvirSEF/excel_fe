@@ -1,47 +1,47 @@
 "use client"
 
-import { useState } from "react"
+import { Fragment, useState } from "react"
 import type { Editor } from "@tiptap/react"
 import {
   IconAlignCenter,
   IconAlignLeft,
   IconAlignRight,
-  IconAlertOctagon,
-  IconAlertTriangle,
   IconArrowBackUp,
   IconArrowForwardUp,
   IconBold,
-  IconChevronsDown,
   IconCode,
   IconEraser,
   IconHighlight,
-  IconInfoCircle,
   IconItalic,
   IconKeyboard,
   IconLink,
   IconLinkOff,
   IconMinus,
   IconPalette,
-  IconPhoto,
   IconPlus,
-  IconSparkles,
   IconStrikethrough,
-  IconTable,
-  IconVideo,
 } from "@tabler/icons-react"
 
+import {
+  BLOCK_COMMANDS,
+  BLOCK_GROUPS,
+  nextHeadingNumber,
+  runBlockCommand,
+  type BlockPanel,
+} from "@/components/editor/block-commands"
 import { MediaPicker } from "@/components/editor/media-picker"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
-import type { ButtonVariant, CalloutVariant } from "@/types/api"
+import type { ButtonVariant } from "@/types/api"
 
 const LANGUAGES = ["plaintext", "excel", "vba", "python", "sql"]
 
@@ -75,23 +75,15 @@ const HIGHLIGHT_COLORS = [
   "#e2e8f0",
 ]
 
+export type Panel = BlockPanel | "link" | "fontsize" | "color" | "highlight" | null
+
 interface EditorToolbarProps {
   editor: Editor
+  panel: Panel
+  onPanelChange: (panel: Panel) => void
 }
 
-type Panel =
-  | "image"
-  | "html"
-  | "link"
-  | "fontsize"
-  | "color"
-  | "highlight"
-  | "button"
-  | "embed"
-  | null
-
-export function EditorToolbar({ editor }: EditorToolbarProps) {
-  const [panel, setPanel] = useState<Panel>(null)
+export function EditorToolbar({ editor, panel, onPanelChange }: EditorToolbarProps) {
   const [imageUrl, setImageUrl] = useState("")
   const [imageAlt, setImageAlt] = useState("")
   const [html, setHtml] = useState("")
@@ -115,11 +107,11 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
 
   function openPanel(next: Panel, prefetch?: () => void) {
     if (panel === next) {
-      setPanel(null)
+      onPanelChange(null)
       return
     }
     prefetch?.()
-    setPanel(next)
+    onPanelChange(next)
   }
 
   function applyFontSize(value: string) {
@@ -142,12 +134,12 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
     if (!/^\d{1,3}(\.\d+)?(px|pt|rem|em|%)$/.test(value)) return
     editor.chain().focus().setFontSize(value).run()
     setCustomFontSize("")
-    setPanel(null)
+    onPanelChange(null)
   }
 
   function applyColor(hex: string) {
     editor.chain().focus().setColor(hex).run()
-    setPanel(null)
+    onPanelChange(null)
   }
 
   function applyHighlight(hex: string | null) {
@@ -157,7 +149,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
     } else {
       chain.unsetHighlight().run()
     }
-    setPanel(null)
+    onPanelChange(null)
   }
 
   function applyLink() {
@@ -166,19 +158,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
     const url = /^(https?:\/\/|mailto:|\/|#)/i.test(href) ? href : `https://${href}`
     editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run()
     setLinkUrl("")
-    setPanel(null)
-  }
-
-  function insertCallout(variant: CalloutVariant, title = "") {
-    editor
-      .chain()
-      .focus()
-      .insertContent({
-        type: "callout",
-        attrs: { variant, title },
-        content: [{ type: "paragraph" }],
-      })
-      .run()
+    onPanelChange(null)
   }
 
   function toggleNumberedHeading() {
@@ -187,14 +167,10 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
       editor.chain().focus().updateAttributes("heading", { num: null }).run()
       return
     }
-    let count = 0
-    editor.state.doc.descendants((node) => {
-      if (node.type.name === "heading" && node.attrs.num) count += 1
-    })
     editor
       .chain()
       .focus()
-      .updateAttributes("heading", { num: String(count + 1) })
+      .updateAttributes("heading", { num: nextHeadingNumber(editor) })
       .run()
   }
 
@@ -434,70 +410,27 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
               Insert
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="w-56">
-            <DropdownMenuItem
-              onClick={() => insertCallout("tip", "Key Takeaways")}
-            >
-              <IconSparkles className="h-4 w-4" />
-              Key Takeaways
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => insertCallout("info")}>
-              <IconInfoCircle className="h-4 w-4" />
-              Callout — Info
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => insertCallout("warning")}>
-              <IconAlertTriangle className="h-4 w-4" />
-              Callout — Warning
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => insertCallout("danger")}>
-              <IconAlertOctagon className="h-4 w-4" />
-              Callout — Danger
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() =>
-                editor
-                  .chain()
-                  .focus()
-                  .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
-                  .run()
-              }
-            >
-              <IconTable className="h-4 w-4" />
-              Table
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => openPanel("image")}>
-              <IconPhoto className="h-4 w-4" />
-              Image…
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => openPanel("button")}>
-              <IconLink className="h-4 w-4" />
-              Button…
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => openPanel("embed")}>
-              <IconVideo className="h-4 w-4" />
-              Video embed…
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => openPanel("html")}>
-              <IconCode className="h-4 w-4" />
-              HTML block…
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() =>
-                editor
-                  .chain()
-                  .focus()
-                  .insertContent({
-                    type: "accordion",
-                    attrs: { title: "" },
-                    content: [{ type: "paragraph" }],
-                  })
-                  .run()
-              }
-            >
-              <IconChevronsDown className="h-4 w-4" />
-              Accordion
-            </DropdownMenuItem>
+          <DropdownMenuContent align="start" className="w-64">
+            {BLOCK_GROUPS.map((group, groupIndex) => {
+              const groupItems = BLOCK_COMMANDS.filter(
+                (item) => item.group === group.id
+              )
+              return (
+                <Fragment key={group.id}>
+                  {groupIndex > 0 ? <DropdownMenuSeparator /> : null}
+                  <DropdownMenuLabel>{group.label}</DropdownMenuLabel>
+                  {groupItems.map((item) => (
+                    <DropdownMenuItem
+                      key={item.id}
+                      onClick={() => runBlockCommand(editor, item, openPanel)}
+                    >
+                      <item.icon className="h-4 w-4" />
+                      {item.label}
+                    </DropdownMenuItem>
+                  ))}
+                </Fragment>
+              )
+            })}
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -556,7 +489,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
               size="sm"
               onClick={() => {
                 editor.chain().focus().extendMarkRange("link").unsetLink().run()
-                setPanel(null)
+                onPanelChange(null)
               }}
             >
               Remove
@@ -629,7 +562,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
               setImageAlt("")
               setImageWidth("")
               setImageHeight("")
-              setPanel(null)
+              onPanelChange(null)
             }}
           >
             Insert
@@ -643,7 +576,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
                 .focus()
                 .setImage({ src: item.file_url, alt: item.alt_text ?? "" })
                 .run()
-              setPanel(null)
+              onPanelChange(null)
             }}
           />
         </div>
@@ -669,7 +602,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
                 .insertContent({ type: "htmlBlock", attrs: { html } })
                 .run()
               setHtml("")
-              setPanel(null)
+              onPanelChange(null)
             }}
           >
             Insert HTML block
@@ -735,7 +668,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
             size="sm"
             onClick={() => {
               editor.chain().focus().unsetColor().run()
-              setPanel(null)
+              onPanelChange(null)
             }}
           >
             Reset
@@ -817,7 +750,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
               setButtonLabel("")
               setButtonHref("")
               setButtonVariant("primary")
-              setPanel(null)
+              onPanelChange(null)
             }}
           >
             Insert button
@@ -859,7 +792,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
                 .run()
               setEmbedUrl("")
               setEmbedCaption("")
-              setPanel(null)
+              onPanelChange(null)
             }}
           >
             Insert video
