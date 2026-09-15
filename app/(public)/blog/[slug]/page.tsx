@@ -1,17 +1,17 @@
 import type { Metadata } from "next"
 import { notFound, permanentRedirect } from "next/navigation"
-import { IconSparkles } from "@tabler/icons-react"
 
 import { BlockRenderer } from "@/components/blocks/block-renderer"
 import { MobileToc } from "@/components/blocks/mobile-toc"
 import { Toc } from "@/components/blocks/toc"
-import { ArticleHeader } from "@/components/site/article-header"
 import { ArticleTags } from "@/components/site/article-tags"
+import { BlogArticleHeader } from "@/components/site/blog-article-header"
 import { Breadcrumb } from "@/components/site/breadcrumb"
 import { CommentsSection } from "@/components/site/comments-section"
-import { NewsletterForm } from "@/components/site/newsletter/newsletter-form"
+import { ArticleCtaBand } from "@/components/site/newsletter/article-cta-band"
 import { PostSection } from "@/components/site/post-section"
 import { ReadingProgress } from "@/components/site/reading-progress"
+import { ShareButtons } from "@/components/site/share-buttons"
 import { ApiClientError } from "@/lib/api/error"
 import { getPostBySlug, getPostComments, getPosts } from "@/lib/api/posts"
 import { isGoogleSheetsCategory } from "@/lib/category-topics"
@@ -99,44 +99,36 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   return (
     <>
       <ReadingProgress />
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-10 px-4 py-10 sm:py-12 xl:grid-cols-[minmax(0,1fr)_220px]">
-        <article className="mx-auto w-full max-w-3xl xl:mx-0">
-          <Breadcrumb items={breadcrumbItems} />
-          <ArticleHeader post={post} />
+      <div className="mx-auto w-full max-w-[760px] px-4 pt-8 sm:px-6 sm:pt-10">
+        <Breadcrumb items={breadcrumbItems} />
+        <BlogArticleHeader post={post} />
+      </div>
+
+      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-10 px-4 pt-10 sm:px-6 xl:grid-cols-[minmax(0,1fr)_220px]">
+        <article className="mx-auto w-full max-w-[720px] xl:mx-0">
+          <div className="border-y border-border/70 py-3">
+            <ShareButtons title={post.title} />
+          </div>
 
           <MobileToc entries={toc} />
 
           <BlockRenderer blocks={post.content_json?.blocks ?? []} />
-          <ArticleTags tags={post.tags} />
+          <ArticleTags
+            tags={post.tags}
+            className="rounded-2xl border border-border/70 bg-muted/40 px-5 py-4"
+          />
 
-          <div className="relative mt-10 overflow-hidden rounded-2xl bg-gradient-to-bl from-chart-2 via-primary to-chart-5 p-6 text-primary-foreground shadow-xl sm:p-8">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-white/10 blur-3xl"
-            />
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-white/8 blur-3xl"
-            />
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 bg-gradient-to-bl from-white/10 via-transparent to-transparent"
-            />
-            <div className="relative">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-3 py-1 text-xs font-semibold text-primary-foreground/90">
-                <IconSparkles className="h-3.5 w-3.5" />
-                Free Weekly Tips
-              </span>
-              <p className="mt-3 text-lg font-bold tracking-tight text-balance">
-                Liked this? Get one practical Excel tip every week.
-              </p>
-              <div className="mt-4">
-                <NewsletterForm source="article-footer" variant="band" />
-              </div>
-            </div>
-          </div>
+          <ArticleCtaBand
+            source="article-footer"
+            heading="Liked this? Get one practical Excel tip every week."
+            className="rounded-3xl p-7 shadow-2xl sm:p-10"
+          />
 
-          <CommentsSection postId={post.id} comments={comments} />
+          <CommentsSection
+            postId={post.id}
+            comments={comments}
+            className="rounded-2xl border border-border/70 bg-card p-6 shadow-2xs sm:p-8"
+          />
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: buildArticleJsonLd(post) }}
@@ -144,14 +136,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         </article>
 
         <aside className="hidden xl:block">
-          <div className="sticky top-20">
+          <div className="sticky top-20 rounded-2xl border border-border/70 bg-card p-5 shadow-2xs">
             <Toc entries={toc} />
           </div>
         </aside>
       </div>
 
       {related.length > 0 ? (
-        <div className="border-t border-border/60">
+        <div className="mt-10 border-t border-border/60 bg-muted/40">
           <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
             <PostSection
               title="Related Articles"

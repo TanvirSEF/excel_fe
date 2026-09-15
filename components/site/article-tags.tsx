@@ -1,12 +1,22 @@
 import Link from "next/link"
 
-export function ArticleTags({ tags }: { tags: string[] }) {
+import { cn } from "@/lib/utils"
+
+export function ArticleTags({
+  tags,
+  className,
+}: {
+  tags: string[]
+  className?: string
+}) {
   if (tags.length === 0) {
     return null
   }
 
   return (
-    <footer className="mt-10 flex flex-wrap items-center gap-2 border-t pt-6">
+    <footer
+      className={cn("mt-10 flex flex-wrap items-center gap-2 border-t pt-6", className)}
+    >
       {tags.map((tag) => (
         <Link
           key={tag}

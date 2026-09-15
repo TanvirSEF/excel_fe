@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { apiFetch } from "@/lib/api/api-fetch"
 import { ApiClientError } from "@/lib/api/error"
+import { cn } from "@/lib/utils"
 import type { Comment } from "@/types/api"
 
 const commentSchema = z.object({
@@ -25,9 +26,14 @@ type CommentForm = z.infer<typeof commentSchema>
 interface CommentsSectionProps {
   postId: string
   comments: Comment[]
+  className?: string
 }
 
-export function CommentsSection({ postId, comments }: CommentsSectionProps) {
+export function CommentsSection({
+  postId,
+  comments,
+  className,
+}: CommentsSectionProps) {
   const [replyTo, setReplyTo] = useState<Comment | null>(null)
   const [submitted, setSubmitted] = useState(false)
 
@@ -74,7 +80,7 @@ export function CommentsSection({ postId, comments }: CommentsSectionProps) {
   const topLevel = comments.filter((comment) => !comment.parent_id)
 
   return (
-    <section className="mt-12 border-t pt-8">
+    <section className={cn("mt-12 border-t pt-8", className)}>
       <h2 className="text-lg font-semibold">
         Comments{topLevel.length > 0 ? ` (${countAll(comments)})` : ""}
       </h2>
