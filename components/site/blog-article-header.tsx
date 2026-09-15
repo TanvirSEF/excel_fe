@@ -32,12 +32,26 @@ export function BlogArticleHeader({ post }: { post: PostDetail }) {
         </p>
       ) : null}
       <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
-        <span className="flex items-center gap-2.5">
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary ring-1 ring-primary/20">
-            {initials(post.author_name)}
+        {post.author_id ? (
+          <Link
+            href={`/authors/${post.author_id}`}
+            className="group flex items-center gap-2.5"
+          >
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary ring-1 ring-primary/20 transition-colors group-hover:bg-primary/20">
+              {initials(post.author_name)}
+            </span>
+            <span className="font-semibold text-foreground underline-offset-4 transition-colors group-hover:text-primary group-hover:underline">
+              {post.author_name}
+            </span>
+          </Link>
+        ) : (
+          <span className="flex items-center gap-2.5">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary ring-1 ring-primary/20">
+              {initials(post.author_name)}
+            </span>
+            <span className="font-semibold text-foreground">{post.author_name}</span>
           </span>
-          <span className="font-semibold text-foreground">{post.author_name}</span>
-        </span>
+        )}
         {post.published_at ? (
           <span className="flex items-center gap-1.5 text-muted-foreground">
             <IconCalendar className="h-4 w-4 text-primary/70" />
