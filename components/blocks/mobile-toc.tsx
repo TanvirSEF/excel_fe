@@ -14,11 +14,11 @@ export function MobileToc({ entries }: { entries: TocEntry[] }) {
   function goToSection(event: React.MouseEvent<HTMLAnchorElement>, id: string) {
     event.preventDefault()
     if (detailsRef.current) detailsRef.current.open = false
+    const target = document.getElementById(id)
+    target?.closest("details")?.setAttribute("open", "")
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        document
-          .getElementById(id)
-          ?.scrollIntoView({ behavior: "smooth", block: "start" })
+        target?.scrollIntoView({ behavior: "smooth", block: "start" })
       })
     })
     history.replaceState(null, "", `#${id}`)

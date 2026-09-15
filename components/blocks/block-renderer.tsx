@@ -150,6 +150,110 @@ function alignClass(align: TextAlign | undefined) {
   return null
 }
 
+function headingLevel(block: Block): 2 | 3 | 4 | null {
+  return block.type === "heading" ? clampHeadingLevel(block.level) : null
+}
+
+function isHeading(
+  block: Block,
+  level: 2 | 3 | 4
+): block is Extract<Block, { type: "heading" }> {
+  return headingLevel(block) === level
+}
+
+interface SubsectionItemProps {
+  heading: Extract<Block, { type: "heading" }>
+  content: Block[]
+  open: boolean
+  usedIds: Set<string>
+}
+
+function SubsectionItem({ heading, content, open, usedIds }: SubsectionItemProps) {
+  const id = headingId(heading.text, usedIds)
+
+  return (
+    <details
+      open={open}
+      className="group rounded-xl border border-border/80 bg-card shadow-2xs transition-colors open:border-primary/40 hover:border-primary/40"
+    >
+      <summary
+        id={id}
+        className="flex cursor-pointer list-none items-center justify-between gap-3 scroll-mt-20 px-4 py-3.5 [&::-webkit-details-marker]:hidden"
+      >
+        <span className="flex min-w-0 items-center gap-2.5">
+          {heading.num ? (
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+              {heading.num}
+            </span>
+          ) : null}
+          <span
+            className={cn(
+              "text-base font-semibold tracking-tight text-foreground transition-colors group-open:text-primary sm:text-lg",
+              alignClass(heading.align)
+            )}
+          >
+            <InlineRuns value={heading.content ?? heading.text} />
+          </span>
+        </span>
+        <IconChevronDown className="h-4.5 w-4.5 shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-180 group-open:text-primary" />
+      </summary>
+      <div className="space-y-6 border-t border-border/60 px-4 py-5 sm:px-5">
+        {content.map((block, index) => (
+          <BlockNode key={index} block={block} usedIds={usedIds} />
+        ))}
+      </div>
+    </details>
+  )
+}
+
+function renderBody(blocks: Block[], usedIds: Set<string>): ReactNode[] {
+  const nodes: ReactNode[] = []
+  let i = 0
+
+  while (i < blocks.length && headingLevel(blocks[i]) !== 2) {
+    nodes.push(<BlockNode key={i} block={blocks[i]} usedIds={usedIds} />)
+    i++
+  }
+
+  while (i < blocks.length) {
+    nodes.push(<BlockNode key={i} block={blocks[i]} usedIds={usedIds} />)
+    i++
+
+    while (i < blocks.length) {
+      const level = headingLevel(blocks[i])
+      if (level === 2 || level === 3) break
+      nodes.push(<BlockNode key={i} block={blocks[i]} usedIds={usedIds} />)
+      i++
+    }
+
+    let first = true
+    while (i < blocks.length) {
+      const heading = blocks[i]
+      if (!isHeading(heading, 3)) break
+      i++
+      const content: Block[] = []
+      while (i < blocks.length) {
+        const level = headingLevel(blocks[i])
+        if (level === 2 || level === 3) break
+        content.push(blocks[i])
+        i++
+      }
+      nodes.push(
+        <SubsectionItem
+          key={`subsection-${i}`}
+          heading={heading}
+          content={content}
+          open={first}
+          usedIds={usedIds}
+        />
+      )
+      first = false
+    }
+  }
+
+  return nodes
+}
+
 function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
   switch (block.type) {
     case "paragraph":
@@ -409,9 +513,7 @@ export function BlockRenderer({ blocks, className }: BlockRendererProps) {
           </div>
         </div>
       ) : null}
-      {blocks.slice(ledeCount).map((block, index) => (
-        <BlockNode key={index} block={block} usedIds={usedIds} />
-      ))}
+      {renderBody(blocks.slice(ledeCount), usedIds)}
     </div>
   )
 }
