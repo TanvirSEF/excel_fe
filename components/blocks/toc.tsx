@@ -137,17 +137,17 @@ export function Toc({ entries }: TocProps) {
         <IconList className="h-4 w-4 text-primary" />
         <p className="text-sm font-semibold text-foreground">On this page</p>
       </div>
-      <ul className="space-y-0.5 border-l p-3 pl-4">
+      <ul className="space-y-0.5 p-3">
         {orphans.map((entry) => (
           <li key={entry.id}>
             <a
               href={`#${entry.id}`}
               onClick={(event) => goToSection(event, entry.id)}
               className={cn(
-                "-ml-px block border-l py-1.5 pl-4 text-muted-foreground transition-colors hover:text-foreground",
+                "block rounded-md px-2.5 py-1.5 text-sm transition-colors hover:bg-muted/60",
                 activeId === entry.id
-                  ? "border-primary text-primary"
-                  : "border-transparent"
+                  ? "bg-primary/10 font-medium text-primary"
+                  : "text-muted-foreground hover:text-foreground"
               )}
             >
               {entry.text}
@@ -163,7 +163,7 @@ export function Toc({ entries }: TocProps) {
                 <button
                   type="button"
                   onClick={(event) => toggleSection(event, section)}
-                  className="-ml-px flex w-full cursor-pointer items-center justify-between gap-2 border-l py-1.5 pl-4 text-left font-semibold text-foreground/90 transition-colors hover:text-foreground"
+                  className="flex w-full cursor-pointer items-center justify-between gap-2 rounded-md px-2.5 py-1.5 text-left text-sm font-semibold text-foreground/90 transition-colors hover:bg-muted/60 hover:text-foreground"
                 >
                   <span className="line-clamp-2">{section.entry.text}</span>
                   <IconChevronDown
@@ -178,10 +178,10 @@ export function Toc({ entries }: TocProps) {
                   href={`#${section.entry.id}`}
                   onClick={(event) => goToSection(event, section.entry.id)}
                   className={cn(
-                    "-ml-px block border-l py-1.5 pl-4 font-semibold text-foreground/90 transition-colors hover:text-foreground",
+                    "block rounded-md px-2.5 py-1.5 text-sm font-semibold transition-colors hover:bg-muted/60",
                     activeId === section.entry.id
-                      ? "border-primary text-primary"
-                      : "border-transparent"
+                      ? "bg-primary/10 text-primary"
+                      : "text-foreground/90"
                   )}
                 >
                   {section.entry.text}
@@ -196,12 +196,12 @@ export function Toc({ entries }: TocProps) {
                         href={`#${child.id}`}
                         onClick={(event) => goToSection(event, child.id)}
                         className={cn(
-                          "-ml-px block border-l py-1.5 transition-colors",
-                          child.level === 3 && "pl-7",
-                          child.level === 4 && "pl-10",
+                          "block rounded-md py-1.5 pr-2.5 text-sm transition-colors hover:bg-muted/60",
+                          child.level === 3 && "pl-6",
+                          child.level === 4 && "pl-9",
                           activeId === child.id
-                            ? "border-primary text-primary"
-                            : "border-transparent text-muted-foreground hover:text-foreground"
+                            ? "bg-primary/10 font-medium text-primary"
+                            : "text-muted-foreground hover:text-foreground"
                         )}
                       >
                         {child.text}
