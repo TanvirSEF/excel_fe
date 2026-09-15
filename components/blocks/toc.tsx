@@ -61,9 +61,9 @@ export function Toc({ entries }: TocProps) {
   function goToSection(event: React.MouseEvent<HTMLAnchorElement>, id: string) {
     event.preventDefault()
     setActiveId(id)
-    const target = document.getElementById(id)
-    target?.closest("details")?.setAttribute("open", "")
-    target?.scrollIntoView({ behavior: "smooth", block: "start" })
+    document
+      .getElementById(id)
+      ?.scrollIntoView({ behavior: "smooth", block: "start" })
     history.replaceState(null, "", `#${id}`)
   }
 
