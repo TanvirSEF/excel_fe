@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 
 import { HomeHero } from "@/components/site/home-hero"
 import { HeroStatsBand } from "@/components/site/hero-stats-band"
+import { LearningTrackSection } from "@/components/site/learning-track-section"
 import { TopicsSection } from "@/components/site/topics-section"
 import { PostSection } from "@/components/site/post-section"
 import { ServicesSection } from "@/components/site/services-section"
@@ -11,7 +12,9 @@ import { CalculatorsSection } from "@/components/site/calculators-section"
 import { YoutubePlaylists } from "@/components/site/youtube-playlists"
 import { NewsletterBand } from "@/components/site/newsletter/newsletter-band"
 import { getCategories } from "@/lib/api/categories"
+import { getCurriculum } from "@/lib/api/curriculum"
 import { getPosts } from "@/lib/api/posts"
+import type { CurriculumModule } from "@/types/api"
 
 export const revalidate = 300
 
@@ -31,10 +34,11 @@ export const metadata: Metadata = {
 }
 
 export default async function HomePage() {
-  const [trending, latest, categories] = await Promise.all([
+  const [trending, latest, categories, trackModules] = await Promise.all([
     getPosts({ trending: true, page_size: 3 }, 300),
     getPosts({ page_size: 9 }, 300),
     getCategories(300),
+    getCurriculum(300).catch(() => [] as CurriculumModule[]),
   ])
 
   const featuredCategories = categories.filter((c) => c.is_featured)
@@ -51,7 +55,12 @@ export default async function HomePage() {
         {/* 3. Explore by Core Pillar (6 Structured Learning Tracks) */}
         <TopicsSection categories={categories} />
 
-        {/* 4. Trending & Editor's Picks (Top 3 Popular Guides) */}
+        {/* 4. Google Sheets Learning Track (Course Journey Showcase) */}
+        <div className="border-t border-border/60">
+          <LearningTrackSection modules={trackModules} />
+        </div>
+
+        {/* 5. Trending & Editor's Picks (Top 3 Popular Guides) */}
         <div className="border-t border-border/60">
           <PostSection
             title="Trending Tutorials"
