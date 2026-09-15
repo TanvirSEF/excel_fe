@@ -14,6 +14,7 @@ const MARK_TYPES = new Set([
   "italic",
   "strike",
   "code",
+  "kbd",
   "link",
   "textStyle",
   "highlight",
@@ -29,6 +30,13 @@ function textOf(node: JSONContent | undefined): string {
 
 function stringAttr(value: unknown): string | undefined {
   return typeof value === "string" && value.length > 0 ? value : undefined
+}
+
+function numberAttr(value: unknown): number | undefined {
+  if (typeof value === "number" && Number.isFinite(value) && value > 0) {
+    return value
+  }
+  return undefined
 }
 
 function markOf(mark: NonNullable<JSONContent["marks"]>[number]): InlineMark | null {
@@ -160,6 +168,7 @@ export function blocksToDoc(blocks: Block[]): JSONContent {
             attrs: {
               level: clampLevel(block.level),
               ...(block.align ? { textAlign: block.align } : {}),
+              ...(block.num ? { num: block.num } : {}),
             },
             ...(content.length ? { content } : {}),
           }
@@ -224,7 +233,12 @@ export function blocksToDoc(blocks: Block[]): JSONContent {
         case "image":
           return {
             type: "image",
-            attrs: { src: block.url, alt: block.alt ?? null },
+            attrs: {
+              src: block.url,
+              alt: block.alt ?? null,
+              ...(block.width ? { width: block.width } : {}),
+              ...(block.height ? { height: block.height } : {}),
+            },
           }
         case "table":
           return {
@@ -268,10 +282,12 @@ export function docToBlocks(doc: JSONContent | null | undefined): Block[] {
       }
       case "heading": {
         const { text, content } = blockOf(richOf(node.content))
+        const num = stringAttr(node.attrs?.num)
         blocks.push({
           type: "heading",
           text,
           level: clampLevel(Number(node.attrs?.level ?? 2)),
+          ...(num ? { num } : {}),
           ...(content ? { content } : {}),
           ...(alignOf(node.attrs?.textAlign)
             ? { align: alignOf(node.attrs?.textAlign) }
@@ -360,10 +376,14 @@ export function docToBlocks(doc: JSONContent | null | undefined): Block[] {
         break
       case "image":
         if (node.attrs?.src) {
+          const width = numberAttr(node.attrs?.width)
+          const height = numberAttr(node.attrs?.height)
           blocks.push({
             type: "image",
             url: node.attrs.src,
             alt: node.attrs.alt ?? undefined,
+            ...(width ? { width } : {}),
+            ...(height ? { height } : {}),
           })
         }
         break

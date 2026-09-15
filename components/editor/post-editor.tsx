@@ -21,12 +21,24 @@ import { CalloutNode } from "@/components/editor/callout-node"
 import { CodeBlockLanguage } from "@/components/editor/code-block-language"
 import { EditorToolbar } from "@/components/editor/editor-toolbar"
 import { EmbedNode } from "@/components/editor/embed-node"
+import { HeadingNum } from "@/components/editor/heading-num"
 import { HtmlBlock } from "@/components/editor/html-block"
+import { KbdMark } from "@/components/editor/kbd-mark"
 
 interface PostEditorProps {
   initialDoc: JSONContent | null
   onDocChange: (doc: JSONContent) => void
 }
+
+const SizedImage = Image.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      width: { default: null },
+      height: { default: null },
+    }
+  },
+})
 
 function countWords(text: string) {
   const trimmed = text.trim()
@@ -42,7 +54,7 @@ export function PostEditor({ initialDoc, onDocChange }: PostEditorProps) {
         link: { openOnClick: false, autolink: true, defaultProtocol: "https" },
       }),
       CodeBlockLanguage,
-      Image.configure({ inline: false }),
+      SizedImage.configure({ inline: false }),
       Placeholder.configure({
         placeholder: "Write your article… use the toolbar to add blocks.",
       }),
@@ -60,6 +72,8 @@ export function PostEditor({ initialDoc, onDocChange }: PostEditorProps) {
       CtaButtonNode,
       EmbedNode,
       AccordionNode,
+      HeadingNum,
+      KbdMark,
     ],
     content: initialDoc ?? { type: "doc", content: [{ type: "paragraph" }] },
     onUpdate: ({ editor }) => {

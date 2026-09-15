@@ -6,25 +6,42 @@ import {
   IconAlignCenter,
   IconAlignLeft,
   IconAlignRight,
+  IconAlertOctagon,
+  IconAlertTriangle,
   IconArrowBackUp,
   IconArrowForwardUp,
   IconBold,
+  IconChevronsDown,
   IconCode,
   IconEraser,
   IconHighlight,
+  IconInfoCircle,
   IconItalic,
+  IconKeyboard,
   IconLink,
   IconLinkOff,
   IconMinus,
   IconPalette,
+  IconPhoto,
+  IconPlus,
+  IconSparkles,
   IconStrikethrough,
+  IconTable,
+  IconVideo,
 } from "@tabler/icons-react"
 
 import { MediaPicker } from "@/components/editor/media-picker"
 import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
-import type { ButtonVariant } from "@/types/api"
+import type { ButtonVariant, CalloutVariant } from "@/types/api"
 
 const LANGUAGES = ["plaintext", "excel", "vba", "python", "sql"]
 
@@ -86,6 +103,8 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
   const [buttonVariant, setButtonVariant] = useState<ButtonVariant>("primary")
   const [embedUrl, setEmbedUrl] = useState("")
   const [embedCaption, setEmbedCaption] = useState("")
+  const [imageWidth, setImageWidth] = useState("")
+  const [imageHeight, setImageHeight] = useState("")
 
   const inCodeBlock = editor.isActive("codeBlock")
   const currentFontSize =
@@ -149,6 +168,35 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
     setPanel(null)
   }
 
+  function insertCallout(variant: CalloutVariant, title = "") {
+    editor
+      .chain()
+      .focus()
+      .insertContent({
+        type: "callout",
+        attrs: { variant, title },
+        content: [{ type: "paragraph" }],
+      })
+      .run()
+  }
+
+  function toggleNumberedHeading() {
+    if (!editor.isActive("heading")) return
+    if (editor.getAttributes("heading").num) {
+      editor.chain().focus().updateAttributes("heading", { num: null }).run()
+      return
+    }
+    let count = 0
+    editor.state.doc.descendants((node) => {
+      if (node.type.name === "heading" && node.attrs.num) count += 1
+    })
+    editor
+      .chain()
+      .focus()
+      .updateAttributes("heading", { num: String(count + 1) })
+      .run()
+  }
+
   return (
     <div className="space-y-2 rounded-xl border bg-muted/30 p-2">
       <div className="flex flex-wrap items-center gap-1">
@@ -187,6 +235,17 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
             H{level}
           </ToolbarButton>
         ))}
+        <ToolbarButton
+          active={
+            editor.isActive("heading") &&
+            Boolean(editor.getAttributes("heading").num)
+          }
+          disabled={!editor.isActive("heading")}
+          title="Numbered heading badge"
+          onClick={toggleNumberedHeading}
+        >
+          1.
+        </ToolbarButton>
         <Divider />
 
         <ToolbarButton
@@ -220,6 +279,14 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
           onClick={() => editor.chain().focus().toggleCode().run()}
         >
           <IconCode className="h-4 w-4" />
+        </ToolbarButton>
+        <ToolbarButton
+          active={editor.isActive("kbd")}
+          disabled={inCodeBlock}
+          title="Keyboard key"
+          onClick={() => editor.chain().focus().toggleMark("kbd").run()}
+        >
+          <IconKeyboard className="h-4 w-4" />
         </ToolbarButton>
         <ToolbarButton
           active={editor.isActive("link") || panel === "link"}
@@ -356,78 +423,82 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         </ToolbarButton>
         <Divider />
 
-        <ToolbarButton
-          active={panel === "image"}
-          onClick={() => openPanel("image")}
-        >
-          Image
-        </ToolbarButton>
-        <ToolbarButton
-          active={panel === "html"}
-          onClick={() => openPanel("html")}
-        >
-          HTML
-        </ToolbarButton>
-        <ToolbarButton
-          active={false}
-          onClick={() =>
-            editor
-              .chain()
-              .focus()
-              .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
-              .run()
-          }
-        >
-          Table
-        </ToolbarButton>
-        <ToolbarButton
-          active={false}
-          title="Info / tip / warning / danger box"
-          onClick={() =>
-            editor
-              .chain()
-              .focus()
-              .insertContent({
-                type: "callout",
-                attrs: { variant: "info", title: "" },
-                content: [{ type: "paragraph" }],
-              })
-              .run()
-          }
-        >
-          Callout
-        </ToolbarButton>
-        <ToolbarButton
-          active={panel === "button"}
-          title="Styled link button"
-          onClick={() => openPanel("button")}
-        >
-          Button
-        </ToolbarButton>
-        <ToolbarButton
-          active={panel === "embed"}
-          title="YouTube / Vimeo video"
-          onClick={() => openPanel("embed")}
-        >
-          Embed
-        </ToolbarButton>
-        <ToolbarButton
-          active={false}
-          title="Collapsible FAQ section"
-          onClick={() =>
-            editor
-              .chain()
-              .focus()
-              .insertContent({
-                type: "accordion",
-                attrs: { title: "" },
-                content: [{ type: "paragraph" }],
-              })
-              .run()
-          }
-        >
-          Accordion
-        </ToolbarButton>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              type="button"
+              className="flex h-8 items-center justify-center gap-1 rounded-md px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            >
+              <IconPlus className="h-4 w-4" />
+              Insert
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="w-56">
+            <DropdownMenuItem
+              onClick={() => insertCallout("tip", "Key Takeaways")}
+            >
+              <IconSparkles className="h-4 w-4" />
+              Key Takeaways
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => insertCallout("info")}>
+              <IconInfoCircle className="h-4 w-4" />
+              Callout — Info
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => insertCallout("warning")}>
+              <IconAlertTriangle className="h-4 w-4" />
+              Callout — Warning
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => insertCallout("danger")}>
+              <IconAlertOctagon className="h-4 w-4" />
+              Callout — Danger
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+                  .run()
+              }
+            >
+              <IconTable className="h-4 w-4" />
+              Table
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openPanel("image")}>
+              <IconPhoto className="h-4 w-4" />
+              Image…
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openPanel("button")}>
+              <IconLink className="h-4 w-4" />
+              Button…
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openPanel("embed")}>
+              <IconVideo className="h-4 w-4" />
+              Video embed…
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => openPanel("html")}>
+              <IconCode className="h-4 w-4" />
+              HTML block…
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .insertContent({
+                    type: "accordion",
+                    attrs: { title: "" },
+                    content: [{ type: "paragraph" }],
+                  })
+                  .run()
+              }
+            >
+              <IconChevronsDown className="h-4 w-4" />
+              Accordion
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         {inCodeBlock ? (
           <>
@@ -507,6 +578,20 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
             placeholder="Alt text"
             className="h-8 flex-1 min-w-48"
           />
+          <Input
+            type="number"
+            value={imageWidth}
+            onChange={(event) => setImageWidth(event.target.value)}
+            placeholder="Width"
+            className="h-8 w-24"
+          />
+          <Input
+            type="number"
+            value={imageHeight}
+            onChange={(event) => setImageHeight(event.target.value)}
+            placeholder="Height"
+            className="h-8 w-24"
+          />
           <Button
             type="button"
             variant="outline"
@@ -520,9 +605,29 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
             size="sm"
             disabled={!imageUrl}
             onClick={() => {
-              editor.chain().focus().setImage({ src: imageUrl, alt: imageAlt }).run()
+              const width = Number(imageWidth)
+              const height = Number(imageHeight)
+              editor
+                .chain()
+                .focus()
+                .insertContent({
+                  type: "image",
+                  attrs: {
+                    src: imageUrl,
+                    alt: imageAlt,
+                    ...(imageWidth && Number.isFinite(width) && width > 0
+                      ? { width }
+                      : {}),
+                    ...(imageHeight && Number.isFinite(height) && height > 0
+                      ? { height }
+                      : {}),
+                  },
+                })
+                .run()
               setImageUrl("")
               setImageAlt("")
+              setImageWidth("")
+              setImageHeight("")
               setPanel(null)
             }}
           >
