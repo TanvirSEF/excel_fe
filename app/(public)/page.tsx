@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   const [trending, latest, categories, trackModules] = await Promise.all([
     getPosts({ trending: true, page_size: 3 }, 300),
-    getPosts({ page_size: 9 }, 300),
+    getPosts({ page_size: 3 }, 300),
     getCategories(300),
     getCurriculum(300).catch(() => [] as CurriculumModule[]),
   ])
@@ -85,7 +85,7 @@ export default async function HomePage() {
           />
         </div>
 
-        {/* 7. Fresh Content Feed: Latest Articles (3x3 Grid = 9 Posts) */}
+        {/* 7. Fresh Content Feed: Latest Articles */}
         <PostSection
           title="Latest Articles"
           subtitle="Fresh spreadsheet tips, VBA automations, and downloadable templates."
