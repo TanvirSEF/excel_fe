@@ -167,6 +167,7 @@ export interface PostAdminItem {
   category_name: string | null
   rejection_reason: string | null
   is_trending?: boolean
+  is_trending_pinned?: boolean
   updated_at: string
   published_at: string | null
 }
