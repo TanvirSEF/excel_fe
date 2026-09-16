@@ -30,7 +30,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
-import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import type { NavCategory } from "@/types/api"
 
@@ -289,11 +288,6 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
             <span className="text-xs font-medium text-muted-foreground">Switch Theme</span>
             <ThemeToggle />
           </div>
-          <Button asChild className="w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-medium shadow-sm">
-            <Link href="/pricing" onClick={handleLinkClick}>
-              Explore Free Templates
-            </Link>
-          </Button>
         </div>
       </SheetContent>
     </Sheet>
