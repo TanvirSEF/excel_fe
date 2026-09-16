@@ -3,7 +3,6 @@ import type { Metadata } from "next"
 import { HomeHero } from "@/components/site/home-hero"
 import { HeroStatsBand } from "@/components/site/hero-stats-band"
 import { LearningTrackSection } from "@/components/site/learning-track-section"
-import { TopicsSection } from "@/components/site/topics-section"
 import { PostSection } from "@/components/site/post-section"
 import { ServicesSection } from "@/components/site/services-section"
 import { TopicsExplorer } from "@/components/site/topics-explorer"
@@ -52,8 +51,8 @@ export default async function HomePage() {
       <HeroStatsBand />
 
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* 3. Explore by Core Pillar (6 Structured Learning Tracks) */}
-        <TopicsSection categories={categories} />
+        {/* 3. Professional Excel & Sheets Services (3 Bespoke 3D Cards) */}
+        <ServicesSection />
 
         {/* 4. Google Sheets Learning Track (Course Journey Showcase) */}
         <div className="border-t border-border/60">
@@ -76,11 +75,6 @@ export default async function HomePage() {
         {/* 5. Interactive Spreadsheet Calculators Showcase (45 Free Tools) */}
         <div className="border-t border-border/60">
           <CalculatorsSection />
-        </div>
-
-        {/* 6. Professional Excel & Sheets Services (3 Bespoke 3D Cards) */}
-        <div className="border-t border-border/60">
-          <ServicesSection />
         </div>
 
         {/* 6. Comprehensive Topic Directory (Category Tabs + Live Filtered Posts) */}
