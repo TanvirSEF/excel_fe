@@ -4,6 +4,7 @@ import { HomeHero } from "@/components/site/home-hero"
 import { HeroStatsBand } from "@/components/site/hero-stats-band"
 import { LearningTrackSection } from "@/components/site/learning-track-section"
 import { PostSection } from "@/components/site/post-section"
+import { TrendingSection } from "@/components/site/trending-list"
 import { ServicesSection } from "@/components/site/services-section"
 import { TopicsExplorer } from "@/components/site/topics-explorer"
 import { FaqSection } from "@/components/site/faq-section"
@@ -34,7 +35,7 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const [trending, latest, categories, trackModules] = await Promise.all([
-    getPosts({ trending: true, page_size: 3 }, 300),
+    getPosts({ trending: true, page_size: 10 }, 300),
     getPosts({ page_size: 3 }, 300),
     getCategories(300),
     getCurriculum(300).catch(() => [] as CurriculumModule[]),
@@ -59,17 +60,9 @@ export default async function HomePage() {
           <LearningTrackSection modules={trackModules} />
         </div>
 
-        {/* 5. Trending & Editor's Picks (Top 3 Popular Guides) */}
+        {/* 5. Trending Tutorials (Ranked Top 10 Listing) */}
         <div className="border-t border-border/60">
-          <PostSection
-            title="Trending Tutorials"
-            subtitle="Top formula breakdowns and spreadsheet guides most read this week."
-            badge="Popular this week"
-            action={{ label: "View all tutorials", href: "/blog" }}
-            posts={trending.items.slice(0, 3)}
-            hideIfEmpty
-            className="py-12 sm:py-16"
-          />
+          <TrendingSection posts={trending.items} className="py-12 sm:py-16" />
         </div>
 
         {/* 5. Interactive Spreadsheet Calculators Showcase (45 Free Tools) */}
