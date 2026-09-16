@@ -1,9 +1,7 @@
 import type { Metadata } from "next"
 
-import { BlockRenderer } from "@/components/blocks/block-renderer"
-import { Breadcrumb } from "@/components/site/breadcrumb"
-import { PageHeader } from "@/components/site/page-header"
-import { privacyContent } from "@/lib/legal/privacy"
+import { LegalPage } from "@/components/site/legal/legal-page"
+import { PrivacyContent, privacyToc } from "@/components/site/legal/privacy-content"
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Excel Insider",
@@ -14,20 +12,14 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-10 sm:py-14">
-      <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Privacy Policy" }]} />
-
-      <div className="mt-6">
-        <PageHeader
-          bordered
-          title="Privacy Policy"
-          description="How we collect, use, and protect your personal data."
-        />
-      </div>
-
-      <div className="mt-8">
-        <BlockRenderer blocks={privacyContent.blocks} />
-      </div>
-    </div>
+    <LegalPage
+      title="Privacy Policy"
+      description="How we collect, use, and protect your personal data."
+      breadcrumbLabel="Privacy Policy"
+      updatedAt="August 21, 2026"
+      toc={privacyToc}
+    >
+      <PrivacyContent />
+    </LegalPage>
   )
 }

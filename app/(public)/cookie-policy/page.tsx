@@ -1,9 +1,7 @@
 import type { Metadata } from "next"
 
-import { BlockRenderer } from "@/components/blocks/block-renderer"
-import { Breadcrumb } from "@/components/site/breadcrumb"
-import { PageHeader } from "@/components/site/page-header"
-import { cookieContent } from "@/lib/legal/cookie"
+import { CookieContent, cookieToc } from "@/components/site/legal/cookie-content"
+import { LegalPage } from "@/components/site/legal/legal-page"
 
 export const metadata: Metadata = {
   title: "Cookie Policy | Excel Insider",
@@ -14,20 +12,14 @@ export const metadata: Metadata = {
 
 export default function CookiePolicyPage() {
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-10 sm:py-14">
-      <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Cookie Policy" }]} />
-
-      <div className="mt-6">
-        <PageHeader
-          bordered
-          title="Cookie Policy"
-          description="What cookies we use and how to control them."
-        />
-      </div>
-
-      <div className="mt-8">
-        <BlockRenderer blocks={cookieContent.blocks} />
-      </div>
-    </div>
+    <LegalPage
+      title="Cookie Policy"
+      description="What cookies we use and how to control them."
+      breadcrumbLabel="Cookie Policy"
+      updatedAt="November 12, 2025"
+      toc={cookieToc}
+    >
+      <CookieContent />
+    </LegalPage>
   )
 }
