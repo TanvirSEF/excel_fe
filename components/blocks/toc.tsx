@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { IconChevronDown } from "@tabler/icons-react"
 
 import type { TocEntry } from "@/lib/blocks"
@@ -39,8 +39,10 @@ function buildSections(entries: TocEntry[]): {
 
 export function Toc({ entries }: TocProps) {
   const [activeId, setActiveId] = useState<string | null>(null)
-  const [expanded, setExpanded] = useState<Set<string>>(new Set())
+  const [openSectionId, setOpenSectionId] = useState<string | null>(null)
+  const [prevActiveSectionId, setPrevActiveSectionId] = useState<string | null>(null)
   const entryIds = entries.map((entry) => entry.id).join("|")
+  const { sections, orphans } = useMemo(() => buildSections(entries), [entries])
 
   useEffect(() => {
     const ids = entryIds ? entryIds.split("|") : []
@@ -52,6 +54,11 @@ export function Toc({ entries }: TocProps) {
     let ticking = false
     function update() {
       ticking = false
+      const hash = window.location.hash.replace(/^#/, "")
+      if (hash && ids.includes(hash)) {
+        setActiveId(hash)
+        return
+      }
       const marker = window.scrollY + ACTIVE_MARKER_OFFSET
       let current: string | null = null
       for (const heading of headings) {
@@ -83,9 +90,22 @@ export function Toc({ entries }: TocProps) {
     }
   }, [entryIds])
 
-  if (entries.length < 2) return null
+  const activeSectionId = useMemo(() => {
+    if (!activeId) return null
+    return (
+      sections.find(
+        (s) =>
+          s.entry.id === activeId || s.children.some((c) => c.id === activeId)
+      )?.entry.id ?? null
+    )
+  }, [activeId, sections])
 
-  const { sections, orphans } = buildSections(entries)
+  if (activeSectionId !== prevActiveSectionId) {
+    setPrevActiveSectionId(activeSectionId)
+    setOpenSectionId(activeSectionId)
+  }
+
+  if (entries.length < 2) return null
 
   function goToSection(
     event: React.MouseEvent<HTMLAnchorElement>,
@@ -105,28 +125,17 @@ export function Toc({ entries }: TocProps) {
   ) {
     event.preventDefault()
     const id = section.entry.id
-    const wasExpanded = expanded.has(id)
-    setExpanded((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) {
-        next.delete(id)
-      } else {
-        next.add(id)
-      }
-      return next
-    })
-    if (!wasExpanded) {
+    if (openSectionId === id) {
+      setOpenSectionId(null)
+    } else {
+      setOpenSectionId(id)
+      setActiveId(id)
       document
         .getElementById(id)
         ?.scrollIntoView({ behavior: "smooth", block: "start" })
       history.replaceState(null, "", `#${id}`)
     }
   }
-
-  const isActiveChild = (section: TocSection) =>
-    activeId !== null &&
-    (section.entry.id === activeId ||
-      section.children.some((child) => child.id === activeId))
 
   return (
     <nav aria-label="Table of contents" className="text-sm">
@@ -151,21 +160,25 @@ export function Toc({ entries }: TocProps) {
           </li>
         ))}
         {sections.map((section) => {
-          const open = expanded.has(section.entry.id) || isActiveChild(section)
+          const isOpen = openSectionId === section.entry.id
           const hasChildren = section.children.length > 0
+          const isCurrentHeading = activeId === section.entry.id
           return (
             <li key={section.entry.id}>
               {hasChildren ? (
                 <button
                   type="button"
                   onClick={(event) => toggleSection(event, section)}
-                  className="flex w-full cursor-pointer items-center justify-between gap-2 py-1.5 pl-4 text-left text-sm font-semibold text-foreground/90 transition-colors hover:text-foreground"
+                  className={cn(
+                    "flex w-full cursor-pointer items-center justify-between gap-2 py-1.5 pl-4 text-left text-sm font-semibold transition-colors hover:text-foreground",
+                    isCurrentHeading ? "text-primary" : "text-foreground/90"
+                  )}
                 >
                   <span className="line-clamp-2">{section.entry.text}</span>
                   <IconChevronDown
                     className={cn(
                       "h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200",
-                      open && "rotate-180"
+                      isOpen && "rotate-180"
                     )}
                   />
                 </button>
@@ -175,7 +188,7 @@ export function Toc({ entries }: TocProps) {
                   onClick={(event) => goToSection(event, section.entry.id)}
                   className={cn(
                     "block py-1.5 pl-4 text-sm font-semibold transition-colors hover:text-foreground",
-                    activeId === section.entry.id
+                    isCurrentHeading
                       ? "text-primary"
                       : "text-foreground/90"
                   )}
@@ -184,7 +197,7 @@ export function Toc({ entries }: TocProps) {
                 </a>
               )}
 
-              {open && hasChildren ? (
+              {isOpen && hasChildren ? (
                 <ul className="space-y-0.5">
                   {section.children.map((child) => (
                     <li key={child.id}>

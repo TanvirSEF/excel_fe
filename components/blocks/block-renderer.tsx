@@ -24,10 +24,13 @@ import type {
 
 import { CodeBlock } from "./code-block"
 import { CopyButton } from "./copy-button"
+import { InlineToc } from "./inline-toc"
+import type { TocEntry } from "@/lib/blocks"
 
 interface BlockRendererProps {
   blocks: Block[]
   className?: string
+  toc?: TocEntry[]
 }
 
 const HEADING_CLASSES: Record<2 | 3 | 4, string> = {
@@ -621,13 +624,32 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
   }
 }
 
-export function BlockRenderer({ blocks, className }: BlockRendererProps) {
+export function BlockRenderer({ blocks, className, toc }: BlockRendererProps) {
   const usedIds = new Set<string>()
+  const hasToc = Boolean(toc && toc.length >= 2)
+
+  const takeawayIndex = hasToc
+    ? blocks.findIndex(
+        (b) =>
+          b.type === "callout" &&
+          ((b.title && /takeaway/i.test(b.title)) ||
+            (b.variant === "tip" && Boolean(b.title)))
+      )
+    : -1
 
   return (
     <div className={cn("space-y-3.5 sm:space-y-4", className)}>
+      {hasToc && takeawayIndex === -1 && toc ? (
+        <InlineToc entries={toc} />
+      ) : null}
+
       {blocks.map((block, index) => (
-        <BlockNode key={index} block={block} usedIds={usedIds} />
+        <Fragment key={index}>
+          <BlockNode block={block} usedIds={usedIds} />
+          {hasToc && index === takeawayIndex && toc ? (
+            <InlineToc entries={toc} />
+          ) : null}
+        </Fragment>
       ))}
     </div>
   )

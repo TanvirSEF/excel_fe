@@ -2,8 +2,6 @@ import type { Metadata } from "next"
 import { notFound, permanentRedirect } from "next/navigation"
 
 import { BlockRenderer } from "@/components/blocks/block-renderer"
-import { MobileToc } from "@/components/blocks/mobile-toc"
-import { Toc } from "@/components/blocks/toc"
 import { ArticleTags } from "@/components/site/article-tags"
 import { BlogArticleHeader } from "@/components/site/blog-article-header"
 import { CommentsSection } from "@/components/site/comments-section"
@@ -90,19 +88,20 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   return (
     <>
       <ReadingProgress />
-      <div className="mx-auto w-full max-w-[760px] px-4 pt-8 sm:px-6 sm:pt-10">
+      <div className="mx-auto w-full max-w-[860px] px-4 pt-8 sm:px-6 sm:pt-10">
         <BlogArticleHeader post={post} />
       </div>
 
-      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-10 px-4 pt-10 sm:px-6 xl:grid-cols-[minmax(0,1fr)_230px]">
-        <article className="mx-auto w-full max-w-[860px] xl:mx-0">
+      <div className="mx-auto w-full max-w-[860px] px-4 pt-8 sm:px-6">
+        <article className="w-full">
           <div className="border-y border-border/70 py-3">
             <ShareButtons title={post.title} />
           </div>
 
-          <MobileToc entries={toc} />
-
-          <BlockRenderer blocks={post.content_json?.blocks ?? []} />
+          <BlockRenderer
+            blocks={post.content_json?.blocks ?? []}
+            toc={toc}
+          />
           <ArticleTags
             tags={post.tags}
             className="rounded-2xl border border-border/70 bg-muted/40 px-5 py-4"
@@ -124,12 +123,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             dangerouslySetInnerHTML={{ __html: buildArticleJsonLd(post) }}
           />
         </article>
-
-        <aside className="hidden xl:block">
-          <div className="sticky top-20 rounded-2xl border border-border/70 bg-card p-5 shadow-2xs">
-            <Toc entries={toc} />
-          </div>
-        </aside>
       </div>
 
       {related.length > 0 ? (
