@@ -106,7 +106,7 @@ function withMarks(
         break
       case "kbd":
         node = (
-          <kbd className="inline-flex items-center rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[0.8em] font-semibold text-foreground shadow-[inset_0_-1px_0_rgba(0,0,0,0.15)]">
+          <kbd className="relative -top-[1.5px] mx-1 inline-flex min-w-[1.8em] select-none items-center justify-center rounded-[6px] border border-primary bg-card px-2 py-0.5 font-sans text-[0.8em] font-bold uppercase tracking-wide text-foreground shadow-[0_2.5px_0_0_var(--color-primary),0_3px_4px_rgba(0,0,0,0.08)] align-baseline dark:shadow-[0_2.5px_0_0_var(--color-primary),0_3px_6px_rgba(0,0,0,0.35)]">
             {node}
           </kbd>
         )

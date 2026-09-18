@@ -322,3 +322,34 @@
 .legal-prose a:hover {
   color: color-mix(in oklab, var(--primary) 80%, transparent);
 }
+
+/* 3D Theme Keyboard Keycaps */
+article kbd,
+.tiptap kbd {
+  position: relative;
+  top: -1.5px;
+  display: inline-flex;
+  min-width: 1.8em;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: 1px solid var(--primary);
+  background-color: var(--card);
+  padding: 0.125rem 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.8em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--foreground);
+  box-shadow: 0 2.5px 0 0 var(--primary), 0 3px 4px rgba(0, 0, 0, 0.08);
+  user-select: none;
+  vertical-align: baseline;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+
+.dark article kbd,
+.dark .tiptap kbd {
+  box-shadow: 0 2.5px 0 0 var(--primary), 0 3px 6px rgba(0, 0, 0, 0.35);
+}
