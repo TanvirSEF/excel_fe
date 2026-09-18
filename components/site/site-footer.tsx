@@ -3,13 +3,15 @@ import Link from "next/link"
 import {
   IconArrowUpRight,
   IconBrandFacebook,
-  IconBrandGithub,
   IconBrandLinkedin,
+  IconBrandPinterest,
   IconBrandX,
   IconBrandYoutube,
   IconMail,
   IconShieldCheck,
 } from "@tabler/icons-react"
+
+import { cn } from "@/lib/utils"
 
 const SERVICES_LINKS = [
   { label: "Services & Solutions", href: "/pricing" },
@@ -35,11 +37,41 @@ const COMPANY_LINKS = [
 ]
 
 const SOCIAL_LINKS = [
-  { label: "YouTube", href: "https://youtube.com", icon: IconBrandYoutube },
-  { label: "X (Twitter)", href: "https://x.com", icon: IconBrandX },
-  { label: "LinkedIn", href: "https://linkedin.com", icon: IconBrandLinkedin },
-  { label: "Facebook", href: "https://facebook.com", icon: IconBrandFacebook },
-  { label: "GitHub", href: "https://github.com", icon: IconBrandGithub },
+  {
+    label: "YouTube",
+    href: "https://www.youtube.com/@ExcelInsider32",
+    icon: IconBrandYoutube,
+    className:
+      "bg-[#FF0000] text-white hover:bg-[#E60000] shadow-sm shadow-[#FF0000]/30",
+  },
+  {
+    label: "X (Twitter)",
+    href: "https://x.com/ex_ins",
+    icon: IconBrandX,
+    className:
+      "bg-black text-white ring-1 ring-white/20 hover:bg-neutral-900 shadow-sm shadow-black/40",
+  },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/excel-insider",
+    icon: IconBrandLinkedin,
+    className:
+      "bg-[#0A66C2] text-white hover:bg-[#084e96] shadow-sm shadow-[#0A66C2]/30",
+  },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/people/Excel-Insider/61585095068115",
+    icon: IconBrandFacebook,
+    className:
+      "bg-[#1877F2] text-white hover:bg-[#1464c9] shadow-sm shadow-[#1877F2]/30",
+  },
+  {
+    label: "Pinterest",
+    href: "https://www.pinterest.com/excel_insider/",
+    icon: IconBrandPinterest,
+    className:
+      "bg-[#E60023] text-white hover:bg-[#c5001e] shadow-sm shadow-[#E60023]/30",
+  },
 ]
 
 export function SiteFooter() {
@@ -134,7 +166,7 @@ export function SiteFooter() {
               <p className="text-xs font-bold uppercase tracking-wider text-primary-foreground/70">
                 Follow Excel Insider
               </p>
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2.5">
                 {SOCIAL_LINKS.map((item) => {
                   const Icon = item.icon
                   return (
@@ -144,7 +176,10 @@ export function SiteFooter() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={item.label}
-                      className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary-foreground/20 bg-primary-foreground/10 text-primary-foreground shadow-xs backdrop-blur-xs transition-all duration-200 hover:-translate-y-1 hover:border-primary-foreground/50 hover:bg-primary-foreground hover:text-primary hover:shadow-lg"
+                      className={cn(
+                        "flex h-9 w-9 items-center justify-center rounded-full transition-all duration-200 hover:-translate-y-1 hover:scale-110 active:scale-95",
+                        item.className
+                      )}
                     >
                       <Icon className="h-4.5 w-4.5" />
                     </a>
