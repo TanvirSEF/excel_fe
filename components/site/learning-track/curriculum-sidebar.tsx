@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import Link from "next/link"
 import { IconChevronDown } from "@tabler/icons-react"
 
@@ -25,19 +28,45 @@ export function CurriculumSidebar({
     topic.lessons.some((lesson) => lesson.slug === activeLessonSlug)
   )
 
+  const [prevActiveSlug, setPrevActiveSlug] = useState(activeLessonSlug)
+  const [openModuleSlug, setOpenModuleSlug] = useState<string | null>(
+    activeModule?.slug ?? null
+  )
+
+  if (activeLessonSlug !== prevActiveSlug) {
+    setPrevActiveSlug(activeLessonSlug)
+    setOpenModuleSlug(activeModule?.slug ?? null)
+  }
+
   return (
     <nav aria-label="Curriculum" className={cn("space-y-2", className)}>
       {modules.map((module) => {
         const moduleActive = module.slug === activeModule?.slug
+        const isOpen = openModuleSlug === module.slug
+
         return (
           <details
             key={module.slug}
-            open={moduleActive}
+            open={isOpen}
             className="group rounded-xl border border-border/60 bg-card"
           >
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-4 py-3.5 text-sm font-bold text-foreground [&::-webkit-details-marker]:hidden">
+            <summary
+              onClick={(e) => {
+                e.preventDefault()
+                setOpenModuleSlug((current) =>
+                  current === module.slug ? null : module.slug
+                )
+              }}
+              aria-expanded={isOpen}
+              className="flex cursor-pointer list-none items-center justify-between gap-2 px-4 py-3.5 text-sm font-bold text-foreground select-none [&::-webkit-details-marker]:hidden"
+            >
               <span className="line-clamp-2">{module.name}</span>
-              <IconChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />
+              <IconChevronDown
+                className={cn(
+                  "h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200",
+                  isOpen && "rotate-180"
+                )}
+              />
             </summary>
 
             <ul className="space-y-0.5 border-t border-border/50 px-2.5 py-2.5">
