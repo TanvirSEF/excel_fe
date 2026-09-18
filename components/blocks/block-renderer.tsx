@@ -27,9 +27,9 @@ interface BlockRendererProps {
 }
 
 const HEADING_CLASSES: Record<2 | 3 | 4, string> = {
-  2: "mt-2 text-2xl font-bold tracking-tight sm:text-[1.7rem]",
-  3: "mt-1.5 text-xl font-semibold tracking-tight",
-  4: "mt-1 text-lg font-semibold tracking-tight",
+  2: "mt-8 sm:mt-10 mb-2 sm:mb-3 text-2xl sm:text-[1.7rem] font-bold tracking-tight text-foreground leading-snug first:mt-0",
+  3: "mt-6 sm:mt-7 mb-1.5 sm:mb-2 text-xl sm:text-[1.3rem] font-semibold tracking-tight text-foreground leading-snug first:mt-0",
+  4: "mt-5 sm:mt-6 mb-1 text-lg sm:text-xl font-semibold text-foreground leading-snug first:mt-0",
 }
 
 const SAFE_HREF = /^(https?:\/\/|mailto:|\/|#)/i
@@ -156,7 +156,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
       return (
         <p
           className={cn(
-            "text-lg font-medium leading-9 text-foreground/95",
+            "text-base sm:text-[1.03125rem] font-normal leading-[1.625] text-foreground/90",
             alignClass(block.align)
           )}
         >
@@ -171,11 +171,17 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
 
       if (block.num) {
         return (
-          <div id={id} className="flex scroll-mt-20 items-center gap-3">
+          <div
+            id={id}
+            className={cn(
+              "flex scroll-mt-24 items-center gap-3",
+              HEADING_CLASSES[level]
+            )}
+          >
             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
               {block.num}
             </span>
-            <Tag className={cn(HEADING_CLASSES[level], alignClass(block.align))}>
+            <Tag className={cn(alignClass(block.align))}>
               <InlineRuns value={block.content ?? block.text} />
             </Tag>
           </div>
@@ -185,7 +191,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
       return (
         <Tag
           id={id}
-          className={cn("scroll-mt-20", HEADING_CLASSES[level], alignClass(block.align))}
+          className={cn("scroll-mt-24", HEADING_CLASSES[level], alignClass(block.align))}
         >
           <InlineRuns value={block.content ?? block.text} />
         </Tag>
@@ -194,7 +200,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
 
     case "quote":
       return (
-        <blockquote className="border-l-2 border-primary pl-4 text-[1.15rem] font-medium italic leading-9 text-muted-foreground">
+        <blockquote className="my-4 border-l-4 border-primary/70 bg-primary/5 rounded-r-xl py-2.5 px-4 text-base italic font-normal leading-[1.6] text-muted-foreground">
           <InlineRuns value={block.content ?? block.text} />
         </blockquote>
       )
@@ -207,7 +213,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
       return (
         <ListTag
           className={cn(
-            "space-y-1.5 pl-6 text-lg font-medium leading-9",
+            "my-3 space-y-1.5 pl-6 text-base sm:text-[1.03125rem] font-normal leading-[1.625] text-foreground/90",
             block.marker === "arrow"
               ? "[list-style-type:'➤']"
               : block.ordered
@@ -216,7 +222,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
           )}
         >
           {block.items.map((item, index) => (
-            <li key={index}>
+            <li key={index} className="pl-1">
               <InlineRuns value={item} />
             </li>
           ))}
@@ -243,7 +249,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
             width={width}
             height={height}
             sizes="(max-width: 768px) 100vw, 768px"
-            className="h-auto rounded-xl border"
+            className="h-auto rounded-xl border border-border/80 shadow-xs"
             style={{ width: "100%", maxWidth: width, height: "auto" }}
           />
         </figure>
@@ -253,15 +259,15 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
     case "table": {
       const [headerRow, ...bodyRows] = block.rows
       return (
-        <div className="overflow-x-auto rounded-lg border">
+        <div className="my-6 overflow-x-auto rounded-xl border border-border/80 bg-card shadow-2xs">
           <table className="w-full border-collapse text-sm">
             {block.header ? (
-              <thead className="bg-muted/60">
+              <thead className="border-b border-border bg-muted/60">
                 <tr>
                   {headerRow.map((cell, index) => (
                     <th
                       key={index}
-                      className="border-b px-3 py-2 text-left font-semibold"
+                      className="px-4 py-3 text-left font-semibold text-foreground"
                     >
                       <InlineRuns value={cell} />
                     </th>
@@ -269,11 +275,11 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
                 </tr>
               </thead>
             ) : null}
-            <tbody>
+            <tbody className="divide-y divide-border/40">
               {(block.header ? bodyRows : block.rows).map((row, rowIndex) => (
-                <tr key={rowIndex} className="odd:bg-muted/20 hover:bg-muted/40">
+                <tr key={rowIndex} className="odd:bg-transparent even:bg-muted/20 hover:bg-muted/40 transition-colors">
                   {row.map((cell, cellIndex) => (
-                    <td key={cellIndex} className="px-3 py-2 align-top">
+                    <td key={cellIndex} className="px-4 py-3 align-top leading-relaxed">
                       <InlineRuns value={cell} />
                     </td>
                   ))}
@@ -293,62 +299,61 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
         return (
           <div className="overflow-hidden rounded-xl border border-emerald-500/40">
             <div className="bg-emerald-600 px-5 py-3 dark:bg-emerald-700">
-              <p className="text-center text-sm font-bold uppercase tracking-wider text-white">
+              <p className="text-base font-bold text-white tracking-wide">
                 {block.title}
               </p>
             </div>
-            <div className="bg-card px-5 py-4 text-[1.05rem] font-medium leading-8 text-foreground/90">
-              <InlineRuns value={block.content ?? block.text} />
+            <div className="bg-emerald-50/60 p-5 dark:bg-emerald-950/20">
+              <p className="text-base font-normal leading-relaxed text-emerald-950 dark:text-emerald-200">
+                <InlineRuns value={block.content ?? block.text} />
+              </p>
             </div>
           </div>
         )
       }
 
       return (
-        <div className={cn("rounded-xl border p-4 sm:p-5", meta.box)}>
-          <div className="flex items-start gap-3">
-            <Icon className={cn("mt-0.5 h-5 w-5 shrink-0", meta.iconClass)} />
-            <div className="min-w-0">
-              {block.title ? (
-                <p className={cn("text-sm font-bold", meta.iconClass)}>
-                  {block.title}
-                </p>
-              ) : null}
-              <div className="text-[1.05rem] font-medium leading-8 text-foreground/90">
-                <InlineRuns value={block.content ?? block.text} />
-              </div>
-            </div>
+        <div
+          className={cn(
+            "flex items-start gap-3 rounded-xl border p-4 text-base",
+            meta.box
+          )}
+        >
+          <Icon className={cn("mt-0.5 h-5 w-5 shrink-0", meta.iconClass)} />
+          <div className="flex-1 space-y-1">
+            {block.title ? (
+              <p className="font-semibold text-foreground">{block.title}</p>
+            ) : null}
+            <p className="font-normal leading-relaxed text-foreground/90">
+              <InlineRuns value={block.content ?? block.text} />
+            </p>
           </div>
         </div>
       )
     }
 
-    case "button": {
-      if (!SAFE_HREF.test(block.href)) return null
-      const isInternal = block.href.startsWith("/") || block.href.startsWith("#")
+    case "button":
       return (
-        <div className="py-1">
+        <div className="my-3">
           <a
             href={block.href}
             className={cn(
-              "inline-flex items-center rounded-lg px-5 py-2.5 text-sm font-semibold transition-colors",
+              "inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold transition-colors",
               block.variant === "primary"
                 ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                : "border border-primary/40 text-primary hover:bg-primary/10"
+                : "border border-border bg-background hover:bg-muted"
             )}
-            {...(isInternal ? {} : { target: "_blank", rel: "noopener noreferrer" })}
           >
             {block.label}
           </a>
         </div>
       )
-    }
 
     case "embed": {
       const embedUrl = toEmbedUrl(block.url)
       if (!embedUrl) return null
       return (
-        <figure>
+        <figure className="my-6">
           <div className="overflow-hidden rounded-xl border">
             <iframe
               src={embedUrl}
@@ -370,19 +375,19 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
 
     case "accordion":
       return (
-        <details className="group rounded-xl border border-border/80 bg-card shadow-2xs">
+        <details className="group my-4 rounded-xl border border-border/80 bg-card shadow-2xs">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-foreground [&::-webkit-details-marker]:hidden">
             {block.title}
-            <IconChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-180" />
+            <IconChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />
           </summary>
-          <div className="border-t border-border/60 px-4 py-3 text-[1.05rem] font-medium leading-8 text-foreground/90">
+          <div className="border-t border-border/60 px-4 py-3 text-base font-normal leading-relaxed text-foreground/90">
             <InlineRuns value={block.content ?? block.text} />
           </div>
         </details>
       )
 
     case "hr":
-      return <hr className="border-border" />
+      return <hr className="my-5 border-t border-border/60" />
 
     default:
       return null
@@ -392,23 +397,9 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
 export function BlockRenderer({ blocks, className }: BlockRendererProps) {
   const usedIds = new Set<string>()
 
-  let ledeCount = 0
-  while (ledeCount < blocks.length && blocks[ledeCount].type === "paragraph") {
-    ledeCount++
-  }
-
   return (
-    <div className={cn("space-y-7", className)}>
-      {ledeCount > 0 ? (
-        <div className="rounded-2xl border border-primary/15 bg-primary/5 p-5 sm:p-6">
-          <div className="space-y-4">
-            {blocks.slice(0, ledeCount).map((block, index) => (
-              <BlockNode key={index} block={block} usedIds={usedIds} />
-            ))}
-          </div>
-        </div>
-      ) : null}
-      {blocks.slice(ledeCount).map((block, index) => (
+    <div className={cn("space-y-3.5 sm:space-y-4", className)}>
+      {blocks.map((block, index) => (
         <BlockNode key={index} block={block} usedIds={usedIds} />
       ))}
     </div>
