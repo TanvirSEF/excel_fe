@@ -322,18 +322,36 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
       const meta = CALLOUT_STYLES[block.variant] ?? CALLOUT_STYLES.info
       const Icon = meta.icon
 
-      if (block.variant === "tip" && block.title) {
+      const isTakeaway =
+        (block.title && /takeaway/i.test(block.title)) ||
+        (block.variant === "tip" && Boolean(block.title))
+
+      if (isTakeaway) {
         return (
-          <div className="overflow-hidden rounded-xl border border-emerald-500/40">
-            <div className="bg-emerald-600 px-5 py-3 dark:bg-emerald-700">
-              <p className="text-base font-bold text-white tracking-wide">
-                {block.title}
-              </p>
+          <div className="relative my-8 sm:my-10 rounded-2xl border-2 border-teal-500/30 bg-gradient-to-b from-teal-500/[0.04] via-emerald-500/[0.02] to-transparent p-5 sm:p-7 pt-7 sm:pt-8 shadow-sm dark:border-teal-500/40 dark:from-teal-950/20">
+            {/* Centered Theme Ribbon Banner */}
+            <div className="absolute -top-5 sm:-top-5.5 left-1/2 -translate-x-1/2 z-10 w-fit max-w-[92%]">
+              <div className="relative flex items-center justify-center">
+                {/* Left ribbon tail (folded shadow) */}
+                <div className="hidden sm:block absolute -left-3.5 top-2.5 h-7 w-4 bg-teal-800 -z-10 [clip-path:polygon(0_0,100%_0,100%_100%,0_100%,40%_50%)]" />
+                <div className="hidden sm:block absolute -left-1 bottom-0 h-2.5 w-1.5 bg-teal-950 -z-10 [clip-path:polygon(100%_0,0_0,100%_100%)]" />
+
+                {/* Main Ribbon */}
+                <div className="flex items-center justify-center gap-2.5 rounded-lg bg-gradient-to-r from-teal-700 via-emerald-600 to-teal-700 px-6 sm:px-9 py-2 sm:py-2.5 text-white shadow-md shadow-teal-900/25 border-t border-white/20">
+                  <IconBulb className="h-5 w-5 sm:h-6 sm:w-6 text-amber-300 shrink-0 drop-shadow-xs" />
+                  <span className="text-base sm:text-lg md:text-xl font-extrabold uppercase tracking-wider text-white drop-shadow-xs whitespace-nowrap">
+                    {block.title || "Key Takeaways"}
+                  </span>
+                </div>
+
+                {/* Right ribbon tail (folded shadow) */}
+                <div className="hidden sm:block absolute -right-3.5 top-2.5 h-7 w-4 bg-teal-800 -z-10 [clip-path:polygon(0_0,100%_0,60%_50%,100%_100%,0_100%)]" />
+                <div className="hidden sm:block absolute -right-1 bottom-0 h-2.5 w-1.5 bg-teal-950 -z-10 [clip-path:polygon(0_0,100%_0,0_100%)]" />
+              </div>
             </div>
-            <div className="bg-emerald-50/60 p-5 dark:bg-emerald-950/20">
-              <p className="text-base font-normal leading-relaxed text-emerald-950 dark:text-emerald-200">
-                <InlineRuns value={block.content ?? block.text} />
-              </p>
+
+            <div className="text-base sm:text-[1.03125rem] font-normal leading-[1.65] text-foreground/90">
+              <InlineRuns value={block.content ?? block.text} />
             </div>
           </div>
         )
