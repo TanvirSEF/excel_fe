@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { can, useAuthStore } from "@/lib/auth"
-import { useAdminPosts, useDeletePost } from "@/lib/queries/posts"
+import { useAdminPosts, useDeletePost, useSetTrendingPin } from "@/lib/queries/posts"
 import { ApiClientError } from "@/lib/api/error"
 import type { PostAdminItem, PostStatus } from "@/types/api"
 
@@ -39,6 +39,7 @@ export function PostsView() {
   const user = useAuthStore((state) => state.user)
   const canDelete = can(user, "posts:delete")
   const canCreate = can(user, "posts:manage")
+  const canPin = can(user, "posts:publish")
 
   const { data, isPending, isError, error, refetch } = useAdminPosts({
     status,
@@ -47,6 +48,7 @@ export function PostsView() {
   })
 
   const deletePost = useDeletePost()
+  const pinPost = useSetTrendingPin()
 
   const items = (data?.items ?? []).filter((post) =>
     search ? post.title.toLowerCase().includes(search.toLowerCase()) : true
@@ -65,6 +67,23 @@ export function PostsView() {
           : "Could not delete the post."
       toast.error(message)
       throw cause
+    }
+  }
+
+  async function onTogglePin(post: PostAdminItem, pinned: boolean) {
+    try {
+      await pinPost.mutateAsync({ postId: post.id, pinned })
+      toast.success(
+        pinned
+          ? `Pinned "${post.title}" to trending`
+          : `Unpinned "${post.title}"`
+      )
+    } catch (cause) {
+      const message =
+        cause instanceof ApiClientError
+          ? cause.message
+          : "Could not update trending."
+      toast.error(message)
     }
   }
 
@@ -157,6 +176,8 @@ export function PostsView() {
           posts={items}
           canDelete={canDelete}
           onDelete={setPendingDelete}
+          canPin={canPin}
+          onTogglePin={onTogglePin}
         />
       )}
 

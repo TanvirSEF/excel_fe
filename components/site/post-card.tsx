@@ -12,7 +12,7 @@ interface PostCardProps {
   className?: string
 }
 
-function postHref(post: Pick<PostListItem, "slug" | "category">) {
+export function postHref(post: Pick<PostListItem, "slug" | "category">) {
   return isGoogleSheetsCategory(post.category?.slug)
     ? `/google-sheets/${post.slug}`
     : `/blog/${post.slug}`

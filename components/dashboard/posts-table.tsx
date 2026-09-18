@@ -30,9 +30,11 @@ interface PostsTableProps {
   posts: PostAdminItem[]
   canDelete: boolean
   onDelete: (post: PostAdminItem) => void
+  canPin: boolean
+  onTogglePin: (post: PostAdminItem, pinned: boolean) => void
 }
 
-export function PostsTable({ posts, canDelete, onDelete }: PostsTableProps) {
+export function PostsTable({ posts, canDelete, onDelete, canPin, onTogglePin }: PostsTableProps) {
   const columns = useMemo(
     () =>
       columnHelper.columns([
@@ -46,7 +48,11 @@ export function PostsTable({ posts, canDelete, onDelete }: PostsTableProps) {
               >
                 <span className="line-clamp-1">{row.original.title}</span>
               </Link>
-              {row.original.is_trending ? (
+              {row.original.is_trending_pinned ? (
+                <span className="shrink-0 rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-medium text-amber-600 dark:text-amber-400">
+                  Pinned
+                </span>
+              ) : row.original.is_trending ? (
                 <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
                   Trending
                 </span>
@@ -90,6 +96,17 @@ export function PostsTable({ posts, canDelete, onDelete }: PostsTableProps) {
           header: () => null,
           cell: ({ row }) => (
             <div className="flex items-center justify-end gap-3">
+              {canPin && row.original.status === "published" ? (
+                <button
+                  type="button"
+                  onClick={() =>
+                    onTogglePin(row.original, !row.original.is_trending_pinned)
+                  }
+                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                >
+                  {row.original.is_trending_pinned ? "Unpin" : "Pin"}
+                </button>
+              ) : null}
               {row.original.status === "published" ? (
                 <Link
                   href={`/blog/${row.original.slug}`}
@@ -118,7 +135,7 @@ export function PostsTable({ posts, canDelete, onDelete }: PostsTableProps) {
           ),
         }),
       ]),
-    [canDelete, onDelete]
+    [canDelete, onDelete, canPin, onTogglePin]
   )
 
   const table = useTable({

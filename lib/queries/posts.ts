@@ -93,6 +93,22 @@ export function useDeletePost() {
   })
 }
 
+export function useSetTrendingPin() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ postId, pinned }: { postId: string; pinned: boolean }) =>
+      apiFetch<PostAdminItem>(`/posts/${postId}/trending`, {
+        method: "PATCH",
+        body: { pinned },
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-posts"] })
+      queryClient.invalidateQueries({ queryKey: ["posts"] })
+    },
+  })
+}
+
 function useInvalidatePost(postId: string) {
   const queryClient = useQueryClient()
   return () => {

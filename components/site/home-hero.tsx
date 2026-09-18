@@ -1,7 +1,6 @@
 import Link from "next/link"
 import {
   IconArrowRight,
-  IconFileSpreadsheet,
   IconMathFunction,
   IconTable,
   IconCode,
@@ -131,22 +130,21 @@ export function HomeHero({ categories }: { categories: Category[] }) {
         {/* ── Left: Content ── */}
         <div className="space-y-8">
 
-          {/* Trust badge */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-3.5 py-1.5 text-xs font-medium text-primary-foreground/90">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary-foreground/70" />
-            Trusted by 40,000+ spreadsheet learners
-          </div>
-
           {/* H1 */}
-          <h1 className="text-[2.6rem] font-bold leading-[1.1] tracking-tight text-primary-foreground sm:text-5xl lg:text-[3rem]">
-            Excel &amp; Google Sheets
-            <br />
-            <span className="text-teal-400">done right.</span>
+          <h1 className="text-[2rem] font-bold leading-[1.12] tracking-tight text-primary-foreground sm:text-[2.5rem] lg:text-[2.6rem]">
+            Learn Excel &amp; Google Sheets Like a Pro,
+            <br className="hidden sm:block" />
+            <span className="text-teal-400">
+              Solve Spreadsheet Problems &amp; Get Custom Templates!
+            </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="max-w-md text-base leading-relaxed text-primary-foreground/75 sm:text-lg">
-            1,600+ practical formula guides, VBA automation tutorials, Pivot Table deep-dives, and free business templates — all written for real spreadsheet work.
+          <p className="max-w-lg text-base leading-relaxed text-primary-foreground/75 sm:text-lg">
+            Excel Insider helps you learn Excel and Google Sheets with clear guides and video
+            tutorials. Get expert spreadsheet support, personalized tools, and custom templates.
+            Download free or premium templates designed to improve accuracy, efficiency, and
+            productivity.
           </p>
 
           {/* CTAs */}
@@ -159,17 +157,6 @@ export function HomeHero({ categories }: { categories: Category[] }) {
               <Link href="/blog" className="flex items-center gap-2">
                 Browse Tutorials
                 <IconArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="h-11 rounded-lg border-primary-foreground/35 bg-primary-foreground/5 px-5 text-sm font-medium text-primary-foreground shadow-none hover:border-primary-foreground/60 hover:bg-primary-foreground/15 hover:text-primary-foreground"
-            >
-              <Link href="/pricing" className="flex items-center gap-2">
-                <IconFileSpreadsheet className="h-4 w-4" />
-                Free Templates
               </Link>
             </Button>
           </div>

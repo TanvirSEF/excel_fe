@@ -3,8 +3,8 @@ import type { Metadata } from "next"
 import { HomeHero } from "@/components/site/home-hero"
 import { HeroStatsBand } from "@/components/site/hero-stats-band"
 import { LearningTrackSection } from "@/components/site/learning-track-section"
-import { TopicsSection } from "@/components/site/topics-section"
 import { PostSection } from "@/components/site/post-section"
+import { TrendingSection } from "@/components/site/trending-list"
 import { ServicesSection } from "@/components/site/services-section"
 import { TopicsExplorer } from "@/components/site/topics-explorer"
 import { FaqSection } from "@/components/site/faq-section"
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const [trending, latest, categories, trackModules] = await Promise.all([
-    getPosts({ trending: true, page_size: 3 }, 300),
-    getPosts({ page_size: 9 }, 300),
+    getPosts({ trending: true, page_size: 10 }, 300),
+    getPosts({ page_size: 3 }, 300),
     getCategories(300),
     getCurriculum(300).catch(() => [] as CurriculumModule[]),
   ])
@@ -52,35 +52,22 @@ export default async function HomePage() {
       <HeroStatsBand />
 
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* 3. Explore by Core Pillar (6 Structured Learning Tracks) */}
-        <TopicsSection categories={categories} />
+        {/* 3. Professional Excel & Sheets Services (3 Bespoke 3D Cards) */}
+        <ServicesSection />
 
         {/* 4. Google Sheets Learning Track (Course Journey Showcase) */}
         <div className="border-t border-border/60">
           <LearningTrackSection modules={trackModules} />
         </div>
 
-        {/* 5. Trending & Editor's Picks (Top 3 Popular Guides) */}
+        {/* 5. Trending Tutorials (Ranked Top 10 Listing) */}
         <div className="border-t border-border/60">
-          <PostSection
-            title="Trending Tutorials"
-            subtitle="Top formula breakdowns and spreadsheet guides most read this week."
-            badge="Popular this week"
-            action={{ label: "View all tutorials", href: "/blog" }}
-            posts={trending.items.slice(0, 3)}
-            hideIfEmpty
-            className="py-12 sm:py-16"
-          />
+          <TrendingSection posts={trending.items} className="py-12 sm:py-16" />
         </div>
 
         {/* 5. Interactive Spreadsheet Calculators Showcase (45 Free Tools) */}
         <div className="border-t border-border/60">
           <CalculatorsSection />
-        </div>
-
-        {/* 6. Professional Excel & Sheets Services (3 Bespoke 3D Cards) */}
-        <div className="border-t border-border/60">
-          <ServicesSection />
         </div>
 
         {/* 6. Comprehensive Topic Directory (Category Tabs + Live Filtered Posts) */}
@@ -91,7 +78,7 @@ export default async function HomePage() {
           />
         </div>
 
-        {/* 7. Fresh Content Feed: Latest Articles (3x3 Grid = 9 Posts) */}
+        {/* 7. Fresh Content Feed: Latest Articles */}
         <PostSection
           title="Latest Articles"
           subtitle="Fresh spreadsheet tips, VBA automations, and downloadable templates."

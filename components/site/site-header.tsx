@@ -4,7 +4,6 @@ import Image from "next/image"
 import { MainNav } from "@/components/site/main-nav"
 import { MobileNav } from "@/components/site/mobile-nav"
 import { SearchDialog } from "@/components/site/search-dialog"
-import { Button } from "@/components/ui/button"
 import { getCategories } from "@/lib/api/categories"
 import type { NavCategory } from "@/types/api"
 
@@ -48,16 +47,6 @@ export async function SiteHeader() {
 
         <div className="flex items-center gap-2 sm:gap-3">
           <SearchDialog />
-
-          <div className="hidden sm:flex items-center gap-2 border-l border-border/60 pl-3">
-            <Button
-              asChild
-              size="sm"
-              className="hidden xl:inline-flex rounded-full font-medium shadow-xs text-xs px-4 h-8.5 transition-all hover:shadow-sm"
-            >
-              <Link href="/pricing">Free Templates</Link>
-            </Button>
-          </div>
 
           <MobileNav categories={navCategories} />
         </div>
