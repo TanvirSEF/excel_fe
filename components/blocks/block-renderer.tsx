@@ -17,6 +17,7 @@ import type {
   Block,
   CalloutVariant,
   InlineMark,
+  InlineText,
   RichText,
   TextAlign,
 } from "@/types/api"
@@ -74,17 +75,66 @@ function isDownloadHref(href: string, text?: string): boolean {
   return false
 }
 
-function stripLeadingNote(runs?: RichText): RichText | undefined {
-  if (!runs) return runs
-  if (typeof runs === "string") {
-    return runs.replace(/^notes?:\s*/i, "")
+function cleanNoteContent(
+  value: RichText | undefined,
+  title?: string
+): RichText {
+  if (!value) return ""
+
+  const isMatch = (str: string) => {
+    const t = str.trim()
+    if (!t) return false
+    if (/^notes?:?\s*/i.test(t)) return true
+    if (
+      title &&
+      new RegExp(
+        "^" + title.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&") + ":?\\s*",
+        "i"
+      ).test(t)
+    ) {
+      return true
+    }
+    return false
+  }
+
+  const strip = (str: string) => {
+    let res = str.replace(/^[\s\r\n]*notes?:?\s*/i, "")
+    if (title) {
+      res = res.replace(
+        new RegExp(
+          "^[\\s\\r\\n]*" +
+            title.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&") +
+            ":?\\s*",
+          "i"
+        ),
+        ""
+      )
+    }
+    return res
+  }
+
+  if (typeof value === "string") {
+    return strip(value).trimStart()
+  }
+
+  const runs: InlineText[] = [...value]
+  while (runs.length > 0 && !runs[0].text.trim()) {
+    runs.shift()
   }
   if (runs.length === 0) return runs
-  const [first, ...rest] = runs
-  const stripped = first.text.replace(/^notes?:\s*/i, "")
-  if (stripped === first.text) return runs
-  if (!stripped) return rest
-  return [{ ...first, text: stripped }, ...rest]
+
+  if (isMatch(runs[0].text)) {
+    const stripped = strip(runs[0].text).trimStart()
+    if (stripped) {
+      runs[0] = { ...runs[0], text: stripped }
+    } else {
+      runs.shift()
+      while (runs.length > 0 && !runs[0].text.trim()) {
+        runs.shift()
+      }
+    }
+  }
+  return runs
 }
 
 function withMarks(
@@ -385,9 +435,10 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
             : `${block.title}:`
           : "Note:"
 
-        const content = block.title
-          ? (block.content ?? block.text)
-          : (stripLeadingNote(block.content) ?? (block.text ?? "").replace(/^notes?:\s*/i, ""))
+        const content = cleanNoteContent(
+          block.content ?? block.text,
+          block.title
+        )
 
         return (
           <div className="relative my-6 flex items-start gap-3 rounded-r-2xl border-l-[5px] border-primary bg-primary/[0.08] p-4 sm:p-5 shadow-md shadow-primary/20 transition-colors dark:bg-primary/[0.14] dark:shadow-black/30">
