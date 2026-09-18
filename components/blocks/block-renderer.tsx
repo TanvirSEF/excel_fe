@@ -267,14 +267,41 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
           <div
             id={id}
             className={cn(
-              "flex scroll-mt-24 items-center gap-3",
+              "group flex scroll-mt-24 items-center gap-3 transition-colors cursor-pointer",
               HEADING_CLASSES[level]
             )}
           >
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground shadow-xs transition-transform duration-200 group-hover:scale-105">
               {block.num}
             </span>
-            <Tag className={cn(alignClass(block.align))}>
+            <Tag
+              className={cn(
+                "transition-colors duration-200 group-hover:text-primary",
+                alignClass(block.align)
+              )}
+            >
+              <InlineRuns value={block.content ?? block.text} />
+            </Tag>
+          </div>
+        )
+      }
+
+      if (level === 3) {
+        return (
+          <div
+            id={id}
+            className="group mt-6 sm:mt-7 mb-1.5 sm:mb-2 flex scroll-mt-24 items-start gap-2.5 first:mt-0 cursor-pointer"
+          >
+            <span
+              aria-hidden="true"
+              className="mt-1 h-5 w-1 rounded-full bg-primary/80 transition-all duration-200 group-hover:h-6 group-hover:scale-y-110 group-hover:bg-primary shrink-0"
+            />
+            <Tag
+              className={cn(
+                "text-xl sm:text-[1.3rem] font-semibold tracking-tight text-foreground leading-snug transition-all duration-200 group-hover:text-primary group-hover:translate-x-0.5",
+                alignClass(block.align)
+              )}
+            >
               <InlineRuns value={block.content ?? block.text} />
             </Tag>
           </div>
@@ -284,7 +311,11 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
       return (
         <Tag
           id={id}
-          className={cn("scroll-mt-24", HEADING_CLASSES[level], alignClass(block.align))}
+          className={cn(
+            "scroll-mt-24 transition-colors duration-200 hover:text-primary cursor-pointer",
+            HEADING_CLASSES[level],
+            alignClass(block.align)
+          )}
         >
           <InlineRuns value={block.content ?? block.text} />
         </Tag>
