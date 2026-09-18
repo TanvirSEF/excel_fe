@@ -246,11 +246,6 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
             className="h-auto rounded-xl border"
             style={{ width: "100%", maxWidth: width, height: "auto" }}
           />
-          {block.alt ? (
-            <figcaption className="mt-2 text-center text-xs text-muted-foreground">
-              {block.alt}
-            </figcaption>
-          ) : null}
         </figure>
       )
     }
