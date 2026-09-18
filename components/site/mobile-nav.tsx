@@ -66,11 +66,11 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
             <SheetTitle asChild>
               <Link href="/" onClick={handleLinkClick} className="inline-block">
                 <Image
-                  src="/logo.png"
+                  src="/logo-3x.png"
                   alt="Excel Insider"
-                  width={140}
-                  height={36}
-                  className="h-8 w-auto object-contain dark:brightness-110"
+                  width={155}
+                  height={40}
+                  className="h-9 w-auto object-contain dark:brightness-110"
                 />
               </Link>
             </SheetTitle>
@@ -82,11 +82,11 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
               href="/about"
               onClick={handleLinkClick}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
+                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-[0.9375rem] font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
                 pathname === "/about" && "bg-muted font-semibold text-foreground"
               )}
             >
-              <IconInfoCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              <IconInfoCircle className="h-4.5 w-4.5 text-emerald-600 dark:text-emerald-400" />
               <span>About Us</span>
             </Link>
 
@@ -95,10 +95,10 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
               <button
                 type="button"
                 onClick={() => setBlogsExpanded(!blogsExpanded)}
-                className="flex w-full items-center justify-between px-3 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-muted/40"
+                className="flex w-full items-center justify-between px-3 py-2.5 text-[0.9375rem] font-semibold text-foreground transition-colors hover:bg-muted/40"
               >
                 <span className="flex items-center gap-2.5">
-                  <IconMathFunction className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                  <IconMathFunction className="h-4.5 w-4.5 text-emerald-600 dark:text-emerald-400" />
                   <span>Spreadsheet Blogs</span>
                 </span>
                 <IconChevronDown
@@ -180,10 +180,10 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
               <button
                 type="button"
                 onClick={() => setPricingExpanded(!pricingExpanded)}
-                className="flex w-full items-center justify-between px-3 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-muted/40"
+                className="flex w-full items-center justify-between px-3 py-2.5 text-[0.9375rem] font-semibold text-foreground transition-colors hover:bg-muted/40"
               >
                 <span className="flex items-center gap-2.5">
-                  <IconFileSpreadsheet className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                  <IconFileSpreadsheet className="h-4.5 w-4.5 text-blue-600 dark:text-blue-400" />
                   <span>Pricing & Templates</span>
                 </span>
                 <IconChevronDown
@@ -226,10 +226,10 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
               <button
                 type="button"
                 onClick={() => setCalcExpanded(!calcExpanded)}
-                className="flex w-full items-center justify-between px-3 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-muted/40"
+                className="flex w-full items-center justify-between px-3 py-2.5 text-[0.9375rem] font-semibold text-foreground transition-colors hover:bg-muted/40"
               >
                 <span className="flex items-center gap-2.5">
-                  <IconChartHistogram className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                  <IconChartHistogram className="h-4.5 w-4.5 text-indigo-600 dark:text-indigo-400" />
                   <span>Calculators</span>
                 </span>
                 <IconChevronDown
@@ -272,11 +272,11 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
               href="/contact"
               onClick={handleLinkClick}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
+                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-[0.9375rem] font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
                 pathname === "/contact" && "bg-muted font-semibold text-foreground"
               )}
             >
-              <IconMail className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+              <IconMail className="h-4.5 w-4.5 text-amber-600 dark:text-amber-400" />
               <span>Contact Us</span>
             </Link>
           </nav>

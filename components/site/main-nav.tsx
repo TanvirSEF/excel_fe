@@ -173,12 +173,12 @@ export function MainNav({ categories = [] }: MainNavProps) {
   const isCalculatorActive = pathname.startsWith("/calculators")
 
   return (
-    <nav className="hidden lg:flex items-center gap-1 xl:gap-2 text-sm font-medium" aria-label="Main Navigation">
+    <nav className="hidden lg:flex items-center gap-1 xl:gap-2.5 text-[0.9375rem] xl:text-[0.96875rem] font-medium" aria-label="Main Navigation">
       {/* About Us */}
       <Link
         href="/about"
         className={cn(
-          "rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:text-foreground hover:bg-muted/50",
+          "rounded-lg px-3.5 py-2 text-muted-foreground transition-colors hover:text-foreground hover:bg-muted/50",
           pathname === "/about" && "text-foreground font-semibold bg-muted/40"
         )}
       >
@@ -195,7 +195,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
           type="button"
           onClick={() => setActiveMenu(activeMenu === "pricing" ? null : "pricing")}
           className={cn(
-            "group flex items-center gap-1 rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:text-foreground hover:bg-muted/50 outline-none cursor-pointer",
+            "group flex items-center gap-1 rounded-lg px-3.5 py-2 text-muted-foreground transition-colors hover:text-foreground hover:bg-muted/50 outline-none cursor-pointer",
             (isPricingActive || activeMenu === "pricing") && "text-foreground font-semibold bg-muted/40"
           )}
           aria-expanded={activeMenu === "pricing"}
@@ -203,7 +203,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
           <span>Pricing</span>
           <IconChevronDown
             className={cn(
-              "h-3.5 w-3.5 transition-transform duration-200 opacity-70",
+              "h-4 w-4 transition-transform duration-200 opacity-70",
               activeMenu === "pricing" && "rotate-180"
             )}
           />
@@ -283,7 +283,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
           type="button"
           onClick={() => setActiveMenu(activeMenu === "blogs" ? null : "blogs")}
           className={cn(
-            "group flex items-center gap-1 rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:text-foreground hover:bg-muted/50 outline-none cursor-pointer",
+            "group flex items-center gap-1 rounded-lg px-3.5 py-2 text-muted-foreground transition-colors hover:text-foreground hover:bg-muted/50 outline-none cursor-pointer",
             (isBlogActive || activeMenu === "blogs") && "text-foreground font-semibold bg-muted/40"
           )}
           aria-expanded={activeMenu === "blogs"}
@@ -291,7 +291,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
           <span>Spreadsheet Blogs</span>
           <IconChevronDown
             className={cn(
-              "h-3.5 w-3.5 transition-transform duration-200 opacity-70",
+              "h-4 w-4 transition-transform duration-200 opacity-70",
               activeMenu === "blogs" && "rotate-180"
             )}
           />
@@ -429,7 +429,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
           type="button"
           onClick={() => setActiveMenu(activeMenu === "calculators" ? null : "calculators")}
           className={cn(
-            "group flex items-center gap-1 rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:text-foreground hover:bg-muted/50 outline-none cursor-pointer",
+            "group flex items-center gap-1 rounded-lg px-3.5 py-2 text-muted-foreground transition-colors hover:text-foreground hover:bg-muted/50 outline-none cursor-pointer",
             (isCalculatorActive || activeMenu === "calculators") && "text-foreground font-semibold bg-muted/40"
           )}
           aria-expanded={activeMenu === "calculators"}
@@ -437,7 +437,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
           <span>Calculators</span>
           <IconChevronDown
             className={cn(
-              "h-3.5 w-3.5 transition-transform duration-200 opacity-70",
+              "h-4 w-4 transition-transform duration-200 opacity-70",
               activeMenu === "calculators" && "rotate-180"
             )}
           />
@@ -511,7 +511,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
       <Link
         href="/contact"
         className={cn(
-          "rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:text-foreground hover:bg-muted/50",
+          "rounded-lg px-3.5 py-2 text-muted-foreground transition-colors hover:text-foreground hover:bg-muted/50",
           pathname === "/contact" && "text-foreground font-semibold bg-muted/40"
         )}
       >

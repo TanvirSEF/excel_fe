@@ -25,7 +25,7 @@ export async function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/85 backdrop-blur-md supports-backdrop-filter:bg-background/70 shadow-2xs transition-all">
-      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-16 sm:h-[4.25rem] w-full max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-6">
           <Link
             href="/"
@@ -33,12 +33,12 @@ export async function SiteHeader() {
             aria-label="Excel Insider Home"
           >
             <Image
-              src="/logo.png"
+              src="/logo-3x.png"
               alt="Excel Insider"
-              width={160}
-              height={42}
+              width={185}
+              height={48}
               priority
-              className="h-9 w-auto object-contain dark:brightness-110"
+              className="h-10 sm:h-11 md:h-11.5 w-auto object-contain dark:brightness-110"
             />
           </Link>
         </div>

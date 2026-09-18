@@ -8,7 +8,6 @@ import {
   IconBrandX,
   IconBrandYoutube,
   IconMail,
-  IconShieldCheck,
 } from "@tabler/icons-react"
 
 import { cn } from "@/lib/utils"
@@ -133,14 +132,14 @@ export function SiteFooter() {
           <div className="space-y-6 lg:col-span-5">
             <Link
               href="/"
-              className="inline-flex items-center rounded-xl bg-white/95 px-3.5 py-2 shadow-sm transition-transform hover:scale-[1.02]"
+              className="inline-flex items-center transition-transform hover:opacity-90 active:scale-95"
             >
               <Image
-                src="/logo.png"
+                src="/logo-footer-3x.png"
                 alt="Excel Insider"
-                width={160}
-                height={42}
-                className="h-8 w-auto object-contain"
+                width={200}
+                height={52}
+                className="h-11 sm:h-12 w-auto object-contain drop-shadow-xs"
               />
             </Link>
 
@@ -249,18 +248,11 @@ export function SiteFooter() {
           </div>
         </div>
 
-        {/* ── Bottom Bar: Copyright & Badges ── */}
-        <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-primary-foreground/20 pt-8 text-xs text-primary-foreground/75 sm:flex-row">
+        {/* ── Bottom Bar: Copyright ── */}
+        <div className="mt-14 flex flex-col items-center justify-center border-t border-primary-foreground/20 pt-8 text-xs text-primary-foreground/75 text-center">
           <p>
             © {new Date().getFullYear()} <strong className="font-semibold text-primary-foreground">Excel Insider</strong>. All rights reserved.
           </p>
-
-          <div className="flex items-center gap-3">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-primary-foreground/30 bg-primary-foreground/10 px-3 py-1 text-[11px] font-semibold text-primary-foreground backdrop-blur-xs">
-              <IconShieldCheck className="h-3.5 w-3.5" />
-              <span>Excel 365 &amp; Google Sheets Verified</span>
-            </div>
-          </div>
         </div>
       </div>
     </footer>
