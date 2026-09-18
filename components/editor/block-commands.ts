@@ -8,12 +8,17 @@ import {
   IconCaretRight,
   IconChevronsDown,
   IconCode,
+  IconH2,
+  IconH3,
   IconInfoCircle,
   IconKeyboard,
   IconLink,
   IconList,
   IconListNumbers,
+  IconMathFunction,
   IconMinus,
+  IconNotes,
+  IconPaperclip,
   IconPhoto,
   IconQuote,
   IconSparkles,
@@ -60,6 +65,26 @@ export function insertCallout(
     .run()
 }
 
+export function insertFormula(
+  editor: Editor,
+  formula = "=VLOOKUP(lookup_value, table_array, col_index, [range_lookup])"
+) {
+  editor
+    .chain()
+    .focus()
+    .insertContent({
+      type: "callout",
+      attrs: { variant: "info", title: "Formula" },
+      content: [
+        {
+          type: "paragraph",
+          content: [{ type: "text", text: formula }],
+        },
+      ],
+    })
+    .run()
+}
+
 export function nextHeadingNumber(editor: Editor): string {
   let count = 0
   editor.state.doc.descendants((node) => {
@@ -84,11 +109,38 @@ export const BLOCK_COMMANDS: BlockCommand[] = [
   {
     id: "key-takeaways",
     label: "Key Takeaways",
-    description: "Green summary banner",
+    description: "Ribbon banner summary card",
     icon: IconSparkles,
-    keywords: ["takeaways", "summary", "highlight", "callout", "tip"],
+    keywords: ["takeaways", "summary", "highlight", "callout", "tip", "key"],
     group: "callouts",
     action: (editor) => insertCallout(editor, "tip", "Key Takeaways"),
+  },
+  {
+    id: "formula-box",
+    label: "Formula Box",
+    description: "Centered formula card with copy button",
+    icon: IconMathFunction,
+    keywords: ["formula", "syntax", "function", "excel", "math", "vlookup", "box"],
+    group: "callouts",
+    action: (editor) => insertFormula(editor),
+  },
+  {
+    id: "formula-explanation",
+    label: "Formula Explanation",
+    description: "Bordered card with cutout header badge",
+    icon: IconNotes,
+    keywords: ["formula", "explanation", "explain", "notes", "syntax", "details"],
+    group: "callouts",
+    action: (editor) => insertCallout(editor, "info", "Formula Explanation"),
+  },
+  {
+    id: "callout-note",
+    label: "Note Box",
+    description: "Paperclip accent callout for tips and notices",
+    icon: IconPaperclip,
+    keywords: ["note", "notice", "paperclip", "callout", "memo", "important"],
+    group: "callouts",
+    action: (editor) => insertCallout(editor, "info", "Note"),
   },
   {
     id: "callout-info",
@@ -127,6 +179,39 @@ export const BLOCK_COMMANDS: BlockCommand[] = [
     action: (editor) => insertCallout(editor, "danger"),
   },
   {
+    id: "heading-2",
+    label: "Heading 2 (H2)",
+    description: "Major section heading",
+    icon: IconH2,
+    keywords: ["heading", "h2", "title", "section", "major"],
+    group: "structure",
+    action: (editor) => editor.chain().focus().setHeading({ level: 2 }).run(),
+  },
+  {
+    id: "heading-3",
+    label: "Heading 3 (H3)",
+    description: "Sub-section with guide rail accent",
+    icon: IconH3,
+    keywords: ["heading", "h3", "subheading", "subsection", "rail", "accent"],
+    group: "structure",
+    action: (editor) => editor.chain().focus().setHeading({ level: 3 }).run(),
+  },
+  {
+    id: "numbered-heading",
+    label: "Numbered heading (01, 02...)",
+    description: "H2 with circular numbered badge",
+    icon: IconListNumbers,
+    keywords: ["heading", "numbered", "section", "h2", "num", "numhead", "badge", "step"],
+    group: "structure",
+    action: (editor) =>
+      editor
+        .chain()
+        .focus()
+        .setHeading({ level: 2 })
+        .updateAttributes("heading", { num: nextHeadingNumber(editor) })
+        .run(),
+  },
+  {
     id: "table",
     label: "Table",
     description: "3×3 table with header row",
@@ -156,21 +241,6 @@ export const BLOCK_COMMANDS: BlockCommand[] = [
           attrs: { title: "" },
           content: [{ type: "paragraph" }],
         })
-        .run(),
-  },
-  {
-    id: "numbered-heading",
-    label: "Numbered heading",
-    description: "Heading with section number",
-    icon: IconListNumbers,
-    keywords: ["heading", "numbered", "section", "h2", "num", "numhead"],
-    group: "structure",
-    action: (editor) =>
-      editor
-        .chain()
-        .focus()
-        .setHeading({ level: 2 })
-        .updateAttributes("heading", { num: nextHeadingNumber(editor) })
         .run(),
   },
   {

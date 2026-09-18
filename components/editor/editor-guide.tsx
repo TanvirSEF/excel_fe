@@ -28,7 +28,8 @@ const SHORTCUTS: { keys: string[]; action: string }[] = [
 ]
 
 const INPUT_RULES: { input: string; action: string }[] = [
-  { input: "## ", action: "Heading" },
+  { input: "## ", action: "Heading 2 (H2)" },
+  { input: "### ", action: "Heading 3 with guide rail (H3)" },
   { input: "> ", action: "Quote" },
   { input: "- ", action: "Bullet list" },
   { input: "1. ", action: "Ordered list" },
