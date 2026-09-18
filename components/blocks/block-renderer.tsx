@@ -60,7 +60,23 @@ const CALLOUT_STYLES: Record<
   },
 }
 
-function withMarks(content: ReactNode, marks?: InlineMark[]): ReactNode {
+const DOWNLOAD_REGEX = /\.(xlsx?|xlsm|xltx?|csv|zip|rar|pdf|7z)(\?.*)?$/i
+
+function isDownloadHref(href: string, text?: string): boolean {
+  if (DOWNLOAD_REGEX.test(href)) return true
+  if (href.includes("/downloads/") || href.includes("/api/v1/assets/")) return true
+  if (text) {
+    const trimmed = text.trim()
+    if (DOWNLOAD_REGEX.test(trimmed) || /\bdownload\b/i.test(trimmed)) return true
+  }
+  return false
+}
+
+function withMarks(
+  content: ReactNode,
+  marks?: InlineMark[],
+  rawText?: string
+): ReactNode {
   let node = content
   for (const mark of marks ?? []) {
     switch (mark.type) {
@@ -91,11 +107,18 @@ function withMarks(content: ReactNode, marks?: InlineMark[]): ReactNode {
         const href = mark.href ?? ""
         if (!SAFE_HREF.test(href)) break
         const isInternal = href.startsWith("/") || href.startsWith("#")
+        const isDownload = isDownloadHref(href, rawText)
         node = (
           <a
             href={href}
-            className="font-medium text-primary underline underline-offset-2 hover:text-primary/80"
-            {...(isInternal ? {} : { target: "_blank", rel: "noopener noreferrer" })}
+            className={cn(
+              "text-primary underline underline-offset-2 hover:text-primary/80",
+              isDownload ? "font-bold" : "font-medium"
+            )}
+            {...(isDownload ? { download: "" } : {})}
+            {...(isInternal && !isDownload
+              ? {}
+              : { target: "_blank", rel: "noopener noreferrer" })}
           >
             {node}
           </a>
@@ -138,7 +161,11 @@ function InlineRuns({ value }: { value: RichText }) {
             {part}
           </Fragment>
         ))
-        return <Fragment key={index}>{withMarks(parts, inline.marks)}</Fragment>
+        return (
+          <Fragment key={index}>
+            {withMarks(parts, inline.marks, inline.text)}
+          </Fragment>
+        )
       })}
     </>
   )
