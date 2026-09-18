@@ -6,6 +6,8 @@ import {
   IconChevronDown,
   IconInfoCircle,
   IconAlertOctagon,
+  IconNotes,
+  IconPaperclip,
 } from "@tabler/icons-react"
 
 import { toEmbedUrl } from "@/lib/embed"
@@ -70,6 +72,19 @@ function isDownloadHref(href: string, text?: string): boolean {
     if (DOWNLOAD_REGEX.test(trimmed) || /\bdownload\b/i.test(trimmed)) return true
   }
   return false
+}
+
+function stripLeadingNote(runs?: RichText): RichText | undefined {
+  if (!runs) return runs
+  if (typeof runs === "string") {
+    return runs.replace(/^notes?:\s*/i, "")
+  }
+  if (runs.length === 0) return runs
+  const [first, ...rest] = runs
+  const stripped = first.text.replace(/^notes?:\s*/i, "")
+  if (stripped === first.text) return runs
+  if (!stripped) return rest
+  return [{ ...first, text: stripped }, ...rest]
 }
 
 function withMarks(
@@ -328,29 +343,78 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
 
       if (isTakeaway) {
         return (
-          <div className="relative my-8 sm:my-10 rounded-2xl border-2 border-teal-500/30 bg-gradient-to-b from-teal-500/[0.04] via-emerald-500/[0.02] to-transparent p-5 sm:p-7 pt-7 sm:pt-8 shadow-sm dark:border-teal-500/40 dark:from-teal-950/20">
+          <div className="relative my-8 sm:my-10 rounded-2xl border-2 border-primary/25 bg-gradient-to-b from-primary/[0.04] via-primary/[0.01] to-transparent p-5 sm:p-7 pt-7 sm:pt-8 shadow-sm dark:border-primary/40 dark:from-primary/[0.08]">
             {/* Centered Theme Ribbon Banner */}
             <div className="absolute -top-5 sm:-top-5.5 left-1/2 -translate-x-1/2 z-10 w-fit max-w-[92%]">
               <div className="relative flex items-center justify-center">
                 {/* Left ribbon tail (folded shadow) */}
-                <div className="hidden sm:block absolute -left-3.5 top-2.5 h-7 w-4 bg-teal-800 -z-10 [clip-path:polygon(0_0,100%_0,100%_100%,0_100%,40%_50%)]" />
-                <div className="hidden sm:block absolute -left-1 bottom-0 h-2.5 w-1.5 bg-teal-950 -z-10 [clip-path:polygon(100%_0,0_0,100%_100%)]" />
+                <div className="hidden sm:block absolute -left-3.5 top-2.5 h-7 w-4 bg-chart-5 -z-10 [clip-path:polygon(0_0,100%_0,100%_100%,0_100%,40%_50%)]" />
+                <div className="hidden sm:block absolute -left-1 bottom-0 h-2.5 w-1.5 bg-black/40 dark:bg-black/70 -z-10 [clip-path:polygon(100%_0,0_0,100%_100%)]" />
 
                 {/* Main Ribbon */}
-                <div className="flex items-center justify-center gap-2.5 rounded-lg bg-gradient-to-r from-teal-700 via-emerald-600 to-teal-700 px-6 sm:px-9 py-2 sm:py-2.5 text-white shadow-md shadow-teal-900/25 border-t border-white/20">
+                <div className="flex items-center justify-center gap-2.5 rounded-lg bg-gradient-to-r from-chart-5 via-primary to-chart-5 px-6 sm:px-9 py-2 sm:py-2.5 text-primary-foreground shadow-md shadow-primary/20 border-t border-white/20">
                   <IconBulb className="h-5 w-5 sm:h-6 sm:w-6 text-amber-300 shrink-0 drop-shadow-xs" />
-                  <span className="text-base sm:text-lg md:text-xl font-extrabold uppercase tracking-wider text-white drop-shadow-xs whitespace-nowrap">
+                  <span className="text-base sm:text-lg md:text-xl font-extrabold uppercase tracking-wider text-primary-foreground drop-shadow-xs whitespace-nowrap">
                     {block.title || "Key Takeaways"}
                   </span>
                 </div>
 
                 {/* Right ribbon tail (folded shadow) */}
-                <div className="hidden sm:block absolute -right-3.5 top-2.5 h-7 w-4 bg-teal-800 -z-10 [clip-path:polygon(0_0,100%_0,60%_50%,100%_100%,0_100%)]" />
-                <div className="hidden sm:block absolute -right-1 bottom-0 h-2.5 w-1.5 bg-teal-950 -z-10 [clip-path:polygon(0_0,100%_0,0_100%)]" />
+                <div className="hidden sm:block absolute -right-3.5 top-2.5 h-7 w-4 bg-chart-5 -z-10 [clip-path:polygon(0_0,100%_0,60%_50%,100%_100%,0_100%)]" />
+                <div className="hidden sm:block absolute -right-1 bottom-0 h-2.5 w-1.5 bg-black/40 dark:bg-black/70 -z-10 [clip-path:polygon(0_0,100%_0,0_100%)]" />
               </div>
             </div>
 
             <div className="text-base sm:text-[1.03125rem] font-normal leading-[1.65] text-foreground/90">
+              <InlineRuns value={block.content ?? block.text} />
+            </div>
+          </div>
+        )
+      }
+
+      const isNote =
+        !isTakeaway &&
+        ((Boolean(block.title && /^notes?\b/i.test(block.title.trim()))) ||
+          ((!block.variant || block.variant === "info") &&
+            Boolean(block.text && /^notes?:/i.test(block.text.trim()))))
+
+      if (isNote) {
+        const noteTitle = block.title
+          ? block.title.endsWith(":")
+            ? block.title
+            : `${block.title}:`
+          : "Note:"
+
+        const content = block.title
+          ? (block.content ?? block.text)
+          : (stripLeadingNote(block.content) ?? (block.text ?? "").replace(/^notes?:\s*/i, ""))
+
+        return (
+          <div className="relative my-6 flex items-start gap-3 rounded-r-2xl border-l-[5px] border-primary bg-primary/[0.08] p-4 sm:p-5 shadow-md shadow-primary/20 transition-colors dark:bg-primary/[0.14] dark:shadow-black/30">
+            <IconPaperclip className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+            <div className="flex-1 text-base sm:text-[1.03125rem] font-normal leading-[1.625] text-foreground/90">
+              <span className="mr-2 font-bold text-primary">{noteTitle}</span>
+              <InlineRuns value={content} />
+            </div>
+          </div>
+        )
+      }
+
+      const isExplanation =
+        !isTakeaway &&
+        (Boolean(block.title && /explanation/i.test(block.title)) ||
+          (block.variant === "info" && Boolean(block.title)))
+
+      if (isExplanation) {
+        return (
+          <div className="relative my-7 rounded-2xl border-2 border-primary/60 bg-gradient-to-b from-primary/[0.03] to-transparent p-5 sm:p-6 pt-6 sm:pt-7 shadow-xs transition-colors dark:border-primary/50 dark:from-primary/[0.06]">
+            {/* Cutout title sitting directly on top border */}
+            <div className="absolute -top-3.5 left-5 sm:left-6 inline-flex items-center gap-2 bg-background px-2.5 text-base sm:text-[1.0625rem] font-bold tracking-tight text-primary">
+              <IconNotes className="h-5 w-5 text-primary shrink-0" />
+              <span>{block.title || "Explanation"}</span>
+            </div>
+
+            <div className="text-base sm:text-[1.03125rem] font-normal leading-[1.625] text-foreground/90">
               <InlineRuns value={block.content ?? block.text} />
             </div>
           </div>
