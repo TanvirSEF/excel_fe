@@ -23,6 +23,7 @@ import type {
 } from "@/types/api"
 
 import { CodeBlock } from "./code-block"
+import { CopyButton } from "./copy-button"
 
 interface BlockRendererProps {
   blocks: Block[]
@@ -467,6 +468,41 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
 
             <div className="text-base sm:text-[1.03125rem] font-normal leading-[1.625] text-foreground/90">
               <InlineRuns value={block.content ?? block.text} />
+            </div>
+          </div>
+        )
+      }
+
+      const isFormula =
+        !isTakeaway &&
+        !isNote &&
+        !isExplanation &&
+        ((Boolean(block.title && /formula/i.test(block.title))) ||
+          (!block.title &&
+            Boolean(
+              block.text &&
+                /^\s*(=|[A-Z_]{2,}\s*\()/i.test(block.text.trim())
+            )))
+
+      if (isFormula) {
+        const formulaText = (block.text ?? "").trim().replace(/^formula:?\s*/i, "")
+        const isMultiLine = formulaText.includes("\n")
+
+        return (
+          <div className="group relative my-5 flex items-center justify-center rounded-xl border border-border/80 bg-card py-3.5 pl-5 pr-14 sm:px-14 shadow-2xs transition-all hover:border-primary/40 hover:shadow-xs">
+            <div className="max-w-full overflow-x-auto text-center scrollbar-none">
+              <code
+                className={cn(
+                  "font-mono text-sm sm:text-base font-bold tracking-tight text-foreground selection:bg-primary/20",
+                  isMultiLine ? "block text-left whitespace-pre-wrap" : "whitespace-nowrap"
+                )}
+              >
+                {formulaText}
+              </code>
+            </div>
+
+            <div className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2">
+              <CopyButton text={formulaText} />
             </div>
           </div>
         )
