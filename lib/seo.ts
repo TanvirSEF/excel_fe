@@ -44,3 +44,28 @@ export function buildSeriesJsonLd(series: SeriesSummary, posts: PostListItem[]) 
 
   return JSON.stringify(data)
 }
+
+export function buildBreadcrumbJsonLd(
+  items: { label: string; href?: string }[]
+) {
+  const itemListElement = items.map((item, index) => {
+    const entry: Record<string, unknown> = {
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.label,
+    }
+    if (item.href) {
+      entry.item = item.href.startsWith("http")
+        ? item.href
+        : `${config.siteUrl}${item.href}`
+    }
+    return entry
+  })
+
+  return JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement,
+  })
+}
+

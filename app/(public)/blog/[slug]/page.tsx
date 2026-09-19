@@ -4,6 +4,7 @@ import { notFound, permanentRedirect } from "next/navigation"
 import { BlockRenderer } from "@/components/blocks/block-renderer"
 import { ArticleTags } from "@/components/site/article-tags"
 import { BlogArticleHeader } from "@/components/site/blog-article-header"
+import { Breadcrumb } from "@/components/site/breadcrumb"
 import { CommentsSection } from "@/components/site/comments-section"
 import { ArticleCtaBand } from "@/components/site/newsletter/article-cta-band"
 import { PostSection } from "@/components/site/post-section"
@@ -13,7 +14,7 @@ import { ApiClientError } from "@/lib/api/error"
 import { getPostBySlug, getPostComments, getPosts } from "@/lib/api/posts"
 import { isGoogleSheetsCategory } from "@/lib/category-topics"
 import { extractToc } from "@/lib/blocks"
-import { buildArticleJsonLd } from "@/lib/seo"
+import { buildArticleJsonLd, buildBreadcrumbJsonLd } from "@/lib/seo"
 import { config } from "@/lib/config"
 import type { PostDetail } from "@/types/api"
 
@@ -85,10 +86,25 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         .catch(() => [])
     : []
 
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "Blog", href: "/blog" },
+    ...(post.category_name && post.category_slug
+      ? [
+          {
+            label: post.category_name,
+            href: `/categories/${post.category_slug}`,
+          },
+        ]
+      : []),
+    { label: post.title },
+  ]
+
   return (
     <>
       <ReadingProgress />
       <div className="mx-auto w-full max-w-[860px] px-4 pt-8 sm:px-6 sm:pt-10">
+        <Breadcrumb items={breadcrumbItems} />
         <BlogArticleHeader post={post} />
       </div>
 
@@ -121,6 +137,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: buildArticleJsonLd(post) }}
+          />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: buildBreadcrumbJsonLd(breadcrumbItems),
+            }}
           />
         </article>
       </div>

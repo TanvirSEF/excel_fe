@@ -1,14 +1,20 @@
 import Link from "next/link"
 
+import { cn } from "@/lib/utils"
+
 interface BreadcrumbProps {
   items: { label: string; href?: string }[]
+  className?: string
 }
 
-export function Breadcrumb({ items }: BreadcrumbProps) {
+export function Breadcrumb({ items, className }: BreadcrumbProps) {
   return (
     <nav
       aria-label="Breadcrumb"
-      className="mb-6 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground"
+      className={cn(
+        "mb-6 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground",
+        className
+      )}
     >
       {items.map((item, index) => {
         const last = index === items.length - 1
