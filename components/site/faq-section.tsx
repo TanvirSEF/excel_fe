@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import { IconChevronDown } from "@tabler/icons-react"
 import { SectionHeading } from "@/components/site/section-heading"
 
@@ -30,6 +33,12 @@ const FAQS = [
 ]
 
 export function FaqSection() {
+  const [openIndex, setOpenIndex] = useState<number | null>(0)
+
+  const toggle = (index: number) => {
+    setOpenIndex((prev) => (prev === index ? null : index))
+  }
+
   return (
     <section className="py-12 sm:py-16">
       <SectionHeading
@@ -40,23 +49,50 @@ export function FaqSection() {
       />
 
       <div className="mx-auto max-w-4xl space-y-4">
-        {FAQS.map((faq, index) => (
-          <details
-            key={faq.question}
-            className="group rounded-2xl border border-primary/40 bg-card p-5 shadow-2xs transition-all duration-200 open:border-primary/70 open:shadow-xs hover:border-primary/60"
-            {...(index === 0 ? { open: true } : {})}
-          >
-            <summary className="flex cursor-pointer items-center justify-between gap-4 font-semibold text-foreground transition-colors group-open:text-primary hover:text-primary">
-              <span className="text-base sm:text-lg">{faq.question}</span>
-              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground transition-transform duration-200 group-open:rotate-180 group-open:bg-primary/10 group-open:text-primary">
-                <IconChevronDown className="h-4 w-4" />
+        {FAQS.map((faq, index) => {
+          const isOpen = openIndex === index
+          return (
+            <div
+              key={faq.question}
+              className={`rounded-2xl border bg-card p-5 transition-all duration-200 ${
+                isOpen
+                  ? "border-primary/70 shadow-xs"
+                  : "border-primary/40 shadow-2xs hover:border-primary/60"
+              }`}
+            >
+              <button
+                type="button"
+                onClick={() => toggle(index)}
+                aria-expanded={isOpen}
+                className="flex w-full cursor-pointer items-center justify-between gap-4 text-left font-semibold text-foreground transition-colors hover:text-primary"
+              >
+                <span className={`text-base sm:text-lg transition-colors ${isOpen ? "text-primary" : ""}`}>
+                  {faq.question}
+                </span>
+                <div
+                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted transition-all duration-200 ${
+                    isOpen
+                      ? "rotate-180 bg-primary/10 text-primary"
+                      : "text-muted-foreground"
+                  }`}
+                >
+                  <IconChevronDown className="h-4 w-4" />
+                </div>
+              </button>
+              <div
+                className={`grid transition-[grid-template-rows] duration-200 ease-out ${
+                  isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                }`}
+              >
+                <div className="overflow-hidden">
+                  <p className="pt-3.5 text-sm leading-relaxed text-muted-foreground sm:text-base">
+                    {faq.answer}
+                  </p>
+                </div>
               </div>
-            </summary>
-            <p className="mt-3.5 text-sm leading-relaxed text-muted-foreground sm:text-base">
-              {faq.answer}
-            </p>
-          </details>
-        ))}
+            </div>
+          )
+        })}
       </div>
     </section>
   )
