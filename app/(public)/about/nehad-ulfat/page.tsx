@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "About Nehad Ulfat | Founder & Strategist at Excel Insider",
     description:
-      "Spreadsheet expert, consultant, and founder of Excel Insider. 15+ years of experience in Excel, Google Sheets, VBA automation, and custom business solutions.",
+      "Spreadsheet expert, consultant, and founder of Excel Insider. 15+ years of experience in Excel, Google Sheets, automated templates, and custom business solutions.",
     url: "/about/nehad-ulfat",
     images: ["/og-default.png"],
   },
@@ -61,13 +61,13 @@ const STATS = [
 
 const EXPERTISE_AREAS = [
   "Advanced Spreadsheet Formulas",
-  "Excel & Google Sheets Interoperability",
-  "Data & Statistical Analysis",
+  "Excel & Google Sheets Solutions",
+  "Data Analysis & Statistical Modeling",
   "Automated Template Architecture",
-  "VBA & Google Apps Script",
-  "Content Strategy & Writer Mentorship",
+  "Technical Content Strategy",
+  "Writer Training & Team Leadership",
   "Custom Business Tracking Systems",
-  "Complex Workflow Simplification",
+  "Hands-On Practice Spreadsheets",
 ]
 
 export default function NehadUlfatProfilePage() {
@@ -75,7 +75,7 @@ export default function NehadUlfatProfilePage() {
     "@context": "https://schema.org",
     "@type": "Person",
     name: "Nehad Ulfat",
-    jobTitle: "Founder & Content Strategist",
+    jobTitle: "Founder & Strategist",
     worksFor: {
       "@type": "Organization",
       name: "Excel Insider",
@@ -84,7 +84,7 @@ export default function NehadUlfatProfilePage() {
     url: `${config.siteUrl}/about/nehad-ulfat`,
     sameAs: ["https://www.linkedin.com/in/nehad-ulfat-22042017b"],
     description:
-      "Spreadsheet expert, consultant, and the founder of Excel Insider specializing in advanced formulas, data analysis, and automated templates.",
+      "Nehad Ulfat is a spreadsheet expert, consultant, and the founder of Excel Insider specializing in advanced formulas, data analysis, and automated templates.",
   })
 
   return (
@@ -132,7 +132,7 @@ export default function NehadUlfatProfilePage() {
               href="https://www.linkedin.com/in/nehad-ulfat-22042017b"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl border border-border/80 bg-background/80 px-4 py-2 text-sm font-semibold text-foreground shadow-2xs backdrop-blur-xs transition-all hover:border-primary/60 hover:text-primary hover:shadow-xs"
+              className="inline-flex items-center gap-2 rounded-xl border border-border/80 bg-background/80 px-4 py-2.5 text-sm font-semibold text-foreground shadow-2xs backdrop-blur-xs transition-all hover:border-primary/60 hover:text-primary hover:shadow-xs"
             >
               <IconBrandLinkedin className="h-4 w-4 text-[#0A66C2]" />
               <span>LinkedIn Profile</span>
@@ -140,7 +140,7 @@ export default function NehadUlfatProfilePage() {
             </a>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-2xs transition-all hover:bg-primary/90 hover:shadow-xs"
+              className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-2xs transition-all hover:bg-primary/90 hover:shadow-xs"
             >
               <IconMail className="h-4 w-4" />
               <span>Get in Touch</span>
@@ -274,10 +274,10 @@ export default function NehadUlfatProfilePage() {
               </h3>
             </div>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">
-              Unlike generic content farms, every guide on Excel Insider goes through
-              strict verification. Nehad tests edge cases, formula performance on large
-              datasets, and cross-platform compatibility across Excel 365, Excel 2021, and
-              Google Sheets before anything reaches publication.
+              Focusing on intermediate and advanced challenges that lack clear solutions
+              online, every guide on Excel Insider combines hands-on examples, practice
+              spreadsheets, and video demonstrations to turn complex spreadsheet problems
+              into reliable, real-world solutions.
             </p>
           </div>
         </div>
@@ -309,7 +309,7 @@ export default function NehadUlfatProfilePage() {
             </div>
             <p className="mt-3 text-xs sm:text-sm leading-relaxed text-muted-foreground">
               Trained in <strong>Naval Architecture &amp; Marine Engineering</strong>,
-              Nehad applies rigorous engineering precision, structural logic, and data
+              Nehad applies engineering precision, structural logic, and data
               validation to complex business spreadsheet systems.
             </p>
           </div>
