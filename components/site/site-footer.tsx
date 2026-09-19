@@ -27,7 +27,6 @@ const EXPLORE_LINKS = [
 ]
 
 const COMPANY_LINKS = [
-  { label: "About Excel Insider", href: "/about" },
   { label: "Contact & Support", href: "/contact" },
   { label: "Pricing & Templates", href: "/pricing" },
   { label: "Privacy Policy", href: "/privacy" },
@@ -230,9 +229,12 @@ export function SiteFooter() {
 
           {/* Column 4: Company & Policy (2 cols) */}
           <div className="space-y-4 lg:col-span-2">
-            <p className="text-xs font-bold uppercase tracking-wider text-primary-foreground">
-              Company
-            </p>
+            <Link
+              href="/about"
+              className="text-xs font-bold uppercase tracking-wider text-primary-foreground transition-opacity hover:opacity-85 inline-block"
+            >
+              About Excel Insider
+            </Link>
             <ul className="space-y-2.5 text-sm">
               {COMPANY_LINKS.map((link) => (
                 <li key={link.label}>
