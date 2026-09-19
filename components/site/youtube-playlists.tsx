@@ -11,7 +11,7 @@ const PLAYLISTS = [
     title: "Excel Charts & Data Visualisation",
     subtitle:
       "Learn to create dynamic, presentation-ready charts, trendlines, and executive dashboard graphics.",
-    image: "/images/youtube/charts.jpg",
+    image: "/images/youtube/charts-v2.jpg",
     badge: "Charts & Visuals",
     url: "https://www.youtube.com/watch?v=ri-FTrsRRHc&list=PLTGwhh2mhHoWCZGmzERq6gwdGag58sUhc",
   },
@@ -19,7 +19,7 @@ const PLAYLISTS = [
     title: "Excel Pivot Tables & Data Analysis",
     subtitle:
       "Deep dive into summarising large datasets, calculated fields, dynamic grouping, and smart slicers.",
-    image: "/images/youtube/pivot-tables.jpg",
+    image: "/images/youtube/pivot-tables-v2.jpg",
     badge: "Data Analysis",
     url: "https://www.youtube.com/watch?v=E8E5E9GYa2M&list=PLTGwhh2mhHoUEnc2XSu9Ng3mY-vBrbxky",
   },
@@ -27,7 +27,7 @@ const PLAYLISTS = [
     title: "Excel Pro Tips & Productivity Shortcuts",
     subtitle:
       "Hidden keyboard shortcuts, smart formula tricks, and time-saving techniques used by spreadsheet pros.",
-    image: "/images/youtube/pro-tips.jpg",
+    image: "/images/youtube/pro-tips-v2.jpg",
     badge: "Pro Tips & Tricks",
     url: "https://www.youtube.com/watch?v=DRGgiZKtc6w&list=PLTGwhh2mhHoWpwxoEqSNfh7c7Feku05pW",
   },
@@ -35,7 +35,7 @@ const PLAYLISTS = [
     title: "Excel for Statistics & Forecasting",
     subtitle:
       "Master statistical distributions, standard deviations, regression trends, and analytical forecasting models.",
-    image: "/images/youtube/statistics.jpg",
+    image: "/images/youtube/statistics-v2.jpg",
     badge: "Statistical Modeling",
     url: "https://www.youtube.com/watch?v=-pduV83nuXA&list=PLTGwhh2mhHoVOXOiMQKOkco9Re-w-oAPH",
   },
@@ -78,7 +78,7 @@ export function YoutubePlaylists() {
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <div className="relative h-[52px] w-[68px] transition-all duration-300 group-hover:scale-115 drop-shadow-[0_8px_20px_rgba(0,0,0,0.5)] group-hover:drop-shadow-[0_12px_28px_rgba(220,38,38,0.75)]">
                     <Image
-                      src="/images/youtube/play-badge-3d.webp"
+                      src="/images/youtube/play-badge-straight.webp"
                       alt="Play YouTube Playlist"
                       width={68}
                       height={52}
