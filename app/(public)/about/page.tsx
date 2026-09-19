@@ -67,8 +67,9 @@ const TEAM_MEMBERS = [
     initials: "NU",
     name: "Nehad Ulfat",
     role: "Founder",
+    href: "/about/nehad-ulfat",
     gradient: "from-chart-2 to-primary",
-    bio: "Nehad, the founder of Excel Insider, brings over 12 years of practical experience with Microsoft Excel. Throughout his career, he has worked extensively with a wide range of Excel topics and real-world data problems in professional settings. His deep understanding of spreadsheets and passion for sharing knowledge inspire his mission to contribute meaningfully to the online spreadsheet community. Through Excel Insider, Nehad aims to help users master Excel and create impactful, efficient spreadsheet solutions.",
+    bio: "Nehad, the founder of Excel Insider, brings over 15 years of practical experience with Microsoft Excel and Google Sheets. Throughout his career, he has worked extensively with advanced spreadsheet formulas, data analysis, and building automated templates. He oversees every aspect of Excel Insider, helping users worldwide find reliable and practical spreadsheet solutions.",
   },
   {
     initials: "EK",
@@ -318,18 +319,39 @@ export default function AboutPage() {
                   >
                     {member.initials}
                   </div>
-                  <div className="min-w-0 space-y-1">
-                    <h3 className="text-xl font-bold tracking-tight transition-colors group-hover:text-primary">
-                      {member.name}
-                    </h3>
-                    <p className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/8 px-2.5 py-0.5 text-xs font-semibold text-primary">
-                      {member.role}
-                    </p>
+                  <div className="min-w-0 space-y-1.5">
+                    {"href" in member && member.href ? (
+                      <Link href={member.href} className="block group/link">
+                        <h3 className="text-xl font-bold tracking-tight transition-colors group-hover/link:text-primary group-hover:text-primary">
+                          {member.name}
+                        </h3>
+                      </Link>
+                    ) : (
+                      <h3 className="text-xl font-bold tracking-tight transition-colors group-hover:text-primary">
+                        {member.name}
+                      </h3>
+                    )}
+                    <div>
+                      <p className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/8 px-2.5 py-0.5 text-xs font-semibold text-primary">
+                        {member.role}
+                      </p>
+                    </div>
                   </div>
                 </div>
                 <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
                   {member.bio}
                 </p>
+                {"href" in member && member.href && (
+                  <div className="mt-5 border-t border-border/60 pt-4">
+                    <Link
+                      href={member.href}
+                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary transition-colors hover:text-primary/80"
+                    >
+                      <span>Read full profile</span>
+                      <IconArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
+                )}
               </div>
             ))}
           </div>
