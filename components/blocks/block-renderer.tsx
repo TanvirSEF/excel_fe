@@ -246,7 +246,15 @@ function alignClass(align: TextAlign | undefined) {
   return null
 }
 
-function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
+type ImageBlock = Extract<Block, { type: "image" }>
+
+interface BlockNodeProps {
+  block: Block
+  usedIds: Set<string>
+  takeawayImages?: ImageBlock[]
+}
+
+function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
   switch (block.type) {
     case "paragraph":
       return (
@@ -453,6 +461,28 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
             <div className="text-base sm:text-[1.03125rem] font-normal leading-[1.65] text-foreground/90">
               <InlineRuns value={block.content ?? block.text} />
             </div>
+
+            {takeawayImages && takeawayImages.length > 0 ? (
+              <div className="mt-5 sm:mt-6 flex flex-col items-center gap-4 pt-5 sm:pt-6 border-t border-primary/15">
+                {takeawayImages.map((img, i) => {
+                  const width = img.width ?? 783
+                  const height = img.height ?? Math.round(width * 0.5625)
+                  return (
+                    <figure key={i} className="flex flex-col items-center w-full">
+                      <Image
+                        src={img.url}
+                        alt={img.alt ?? ""}
+                        width={width}
+                        height={height}
+                        sizes="(max-width: 768px) 100vw, 768px"
+                        className="h-auto rounded-xl border border-border/80 shadow-xs"
+                        style={{ width: "100%", maxWidth: width, height: "auto" }}
+                      />
+                    </figure>
+                  )
+                })}
+              </div>
+            ) : null}
           </div>
         )
       }
@@ -629,14 +659,24 @@ export function BlockRenderer({ blocks, className, toc }: BlockRendererProps) {
   const usedIds = new Set<string>()
   const hasToc = Boolean(toc && toc.length >= 2)
 
-  const takeawayIndex = hasToc
-    ? blocks.findIndex(
-        (b) =>
-          b.type === "callout" &&
-          ((b.title && /takeaway/i.test(b.title)) ||
-            (b.variant === "tip" && Boolean(b.title)))
-      )
-    : -1
+  const takeawayIndex = blocks.findIndex(
+    (b) =>
+      b.type === "callout" &&
+      ((b.title && /takeaway/i.test(b.title)) ||
+        (b.variant === "tip" && Boolean(b.title)))
+  )
+
+  const takeawayImages: ImageBlock[] = []
+  const takeawayImageIndices = new Set<number>()
+
+  if (takeawayIndex !== -1) {
+    let nextIdx = takeawayIndex + 1
+    while (nextIdx < blocks.length && blocks[nextIdx].type === "image") {
+      takeawayImages.push(blocks[nextIdx] as ImageBlock)
+      takeawayImageIndices.add(nextIdx)
+      nextIdx++
+    }
+  }
 
   return (
     <div className={cn("space-y-3.5 sm:space-y-4", className)}>
@@ -644,14 +684,26 @@ export function BlockRenderer({ blocks, className, toc }: BlockRendererProps) {
         <InlineToc entries={toc} />
       ) : null}
 
-      {blocks.map((block, index) => (
-        <Fragment key={index}>
-          <BlockNode block={block} usedIds={usedIds} />
-          {hasToc && index === takeawayIndex && toc ? (
-            <InlineToc entries={toc} />
-          ) : null}
-        </Fragment>
-      ))}
+      {blocks.map((block, index) => {
+        if (takeawayImageIndices.has(index)) {
+          return null
+        }
+
+        const isTakeaway = index === takeawayIndex
+
+        return (
+          <Fragment key={index}>
+            <BlockNode
+              block={block}
+              usedIds={usedIds}
+              takeawayImages={isTakeaway ? takeawayImages : undefined}
+            />
+            {hasToc && isTakeaway && toc ? (
+              <InlineToc entries={toc} />
+            ) : null}
+          </Fragment>
+        )
+      })}
     </div>
   )
 }
