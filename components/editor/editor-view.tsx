@@ -93,14 +93,19 @@ export function EditorView({ postId }: EditorViewProps) {
   const dirtyRef = useRef(false)
   const seoDirtyRef = useRef(false)
   const savingRef = useRef(false)
-  const initialized = useRef(false)
+  const initializedPostId = useRef<string | null>(null)
 
   useEffect(() => {
-    if (!postId || !post || initialized.current) return
-    initialized.current = true
-    const initialDoc = blocksToDoc(post.content_json?.blocks ?? [])
-    setInitialDoc(initialDoc)
-    setDoc(initialDoc)
+    if (!postId || !post || initializedPostId.current === post.id) return
+    initializedPostId.current = post.id
+    const rawBlocks = Array.isArray(post.content_json)
+      ? post.content_json
+      : Array.isArray(post.content_json?.blocks)
+        ? post.content_json.blocks
+        : []
+    const parsedDoc = blocksToDoc(rawBlocks)
+    setInitialDoc(parsedDoc)
+    setDoc(parsedDoc)
     setFields({
       title: post.title,
       slug: post.slug,
@@ -288,7 +293,7 @@ export function EditorView({ postId }: EditorViewProps) {
     return () => window.removeEventListener("beforeunload", onBeforeUnload)
   }, [])
 
-  if (postId && isPending) {
+  if (postId && (isPending || !initialDoc)) {
     return (
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <Skeleton className="h-96" />
@@ -382,7 +387,11 @@ export function EditorView({ postId }: EditorViewProps) {
       ) : null}
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <PostEditor initialDoc={initialDoc} onDocChange={onDocChange} />
+        <PostEditor
+          key={postId ?? "new"}
+          initialDoc={initialDoc}
+          onDocChange={onDocChange}
+        />
 
         <aside>
           {postId ? (
