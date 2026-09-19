@@ -1,18 +1,19 @@
 import Link from "next/link"
-import { IconCalendar } from "@tabler/icons-react"
+import { format, isValid } from "date-fns"
 
-import { Time } from "@/components/shared/time"
 import type { PostDetail } from "@/types/api"
 
-function initials(name: string) {
-  return name
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((word) => word[0]?.toUpperCase() ?? "")
-    .join("")
+function formatDate(dateStr: string | null | undefined): string | null {
+  if (!dateStr) return null
+  const parsed = new Date(dateStr)
+  if (!isValid(parsed)) return null
+  return format(parsed, "MMMM d, yyyy")
 }
 
 export function BlogArticleHeader({ post }: { post: PostDetail }) {
+  const dateStr = post.updated_at || post.published_at
+  const lastUpdated = formatDate(dateStr)
+
   return (
     <header>
       {post.category_name && post.category_slug ? (
@@ -31,32 +32,34 @@ export function BlogArticleHeader({ post }: { post: PostDetail }) {
           {post.excerpt}
         </p>
       ) : null}
-      <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
-        {post.author_id ? (
-          <Link
-            href={`/authors/${post.author_id}`}
-            className="group flex items-center gap-2.5"
-          >
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary ring-1 ring-primary/20 transition-colors group-hover:bg-primary/20">
-              {initials(post.author_name)}
-            </span>
-            <span className="font-semibold text-foreground underline-offset-4 transition-colors group-hover:text-primary group-hover:underline">
+      <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted-foreground sm:gap-x-6">
+        <div className="flex items-center gap-1.5">
+          <span>Written by:</span>
+          {post.author_id ? (
+            <Link
+              href={`/authors/${post.author_id}`}
+              className="font-medium text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
+            >
               {post.author_name}
+            </Link>
+          ) : (
+            <span className="font-medium text-foreground">{post.author_name}</span>
+          )}
+        </div>
+
+        {lastUpdated && dateStr ? (
+          <div className="flex items-center gap-1.5">
+            <span aria-hidden className="hidden text-border sm:inline">
+              •
             </span>
-          </Link>
-        ) : (
-          <span className="flex items-center gap-2.5">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary ring-1 ring-primary/20">
-              {initials(post.author_name)}
-            </span>
-            <span className="font-semibold text-foreground">{post.author_name}</span>
-          </span>
-        )}
-        {post.published_at ? (
-          <span className="flex items-center gap-1.5 text-muted-foreground">
-            <IconCalendar className="h-4 w-4 text-primary/70" />
-            <Time date={post.published_at} variant="full" />
-          </span>
+            <span>Last Updated:</span>
+            <time
+              dateTime={new Date(dateStr).toISOString()}
+              className="font-medium text-foreground"
+            >
+              {lastUpdated}
+            </time>
+          </div>
         ) : null}
       </div>
     </header>
