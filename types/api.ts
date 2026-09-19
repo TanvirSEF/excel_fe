@@ -204,6 +204,9 @@ export interface ContentDoc {
 export type MarkType =
   | "bold"
   | "italic"
+  | "underline"
+  | "sup"
+  | "sub"
   | "strike"
   | "code"
   | "kbd"

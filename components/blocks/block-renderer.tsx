@@ -150,13 +150,22 @@ function withMarks(
   for (const mark of marks ?? []) {
     switch (mark.type) {
       case "bold":
-        node = <strong>{node}</strong>
+        node = <strong className="font-bold">{node}</strong>
         break
       case "italic":
         node = <em>{node}</em>
         break
       case "strike":
         node = <del>{node}</del>
+        break
+      case "underline":
+        node = <u className="underline underline-offset-2">{node}</u>
+        break
+      case "sup":
+        node = <sup className="text-[0.75em] leading-none align-super">{node}</sup>
+        break
+      case "sub":
+        node = <sub className="text-[0.75em] leading-none align-sub">{node}</sub>
         break
       case "kbd":
         node = (
