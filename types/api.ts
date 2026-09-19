@@ -179,6 +179,7 @@ export interface PostCreateInput {
   content_json: ContentDoc
   featured_image_url?: string | null
   category_id?: string | null
+  author_id?: string | null
   tags?: string[]
   is_trending?: boolean
   meta_title?: string
