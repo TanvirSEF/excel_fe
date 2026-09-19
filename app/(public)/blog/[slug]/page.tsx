@@ -120,7 +120,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           />
           <ArticleTags
             tags={post.tags}
-            className="rounded-2xl border border-border/70 bg-muted/40 px-5 py-4"
+            className="rounded-2xl border-0 bg-muted/40 px-5 py-4"
           />
 
           <ArticleCtaBand
