@@ -1,7 +1,9 @@
 import type { Metadata } from "next"
 import Image from "next/image"
+import Link from "next/link"
 import { notFound } from "next/navigation"
 import {
+  IconArrowRight,
   IconBrandFacebook,
   IconBrandGithub,
   IconBrandLinkedin,
@@ -10,6 +12,7 @@ import {
   IconBrandYoutube,
   IconCalendar,
   IconNews,
+  IconShieldCheck,
   IconWorld,
 } from "@tabler/icons-react"
 
@@ -166,6 +169,7 @@ export default async function AuthorPage({ params, searchParams }: AuthorPagePro
   })
 
   const socialLinks = getAuthorSocialLinks(author)
+  const isFounderAuthor = author.id === "e37945f2-9428-44bc-b9c1-f4c12d15be28"
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:py-14">
@@ -173,42 +177,84 @@ export default async function AuthorPage({ params, searchParams }: AuthorPagePro
         items={[{ label: "Home", href: "/" }, { label: author.name }]}
       />
 
-      <header className="mt-6 overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 sm:p-8">
-        <div className="flex flex-wrap items-start gap-5">
-          <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/15 text-xl font-bold text-primary ring-2 ring-primary/20">
-            {author.avatar_url ? (
-              <Image
-                src={author.avatar_url}
-                alt={author.name}
-                fill
-                sizes="80px"
-                className="object-cover"
-              />
-            ) : (
-              initials(author.name)
-            )}
+      <header className="relative mt-6 overflow-hidden rounded-3xl border border-primary/25 bg-gradient-to-br from-primary/10 via-card to-card p-6 sm:p-8 md:p-10 shadow-sm">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/15 blur-3xl"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-chart-2/15 blur-3xl"
+        />
+
+        <div className="relative flex flex-col items-center gap-6 text-center sm:flex-row sm:items-start sm:gap-8 sm:text-left">
+          <div className="relative group shrink-0">
+            <div className="relative flex h-28 w-28 sm:h-36 sm:w-36 md:h-40 md:w-40 shrink-0 items-center justify-center overflow-hidden rounded-2xl sm:rounded-3xl border-2 border-primary/25 bg-gradient-to-br from-chart-2/20 to-primary/20 shadow-xl ring-4 ring-background transition-transform duration-300 group-hover:scale-[1.02]">
+              {author.avatar_url ? (
+                <Image
+                  src={author.avatar_url}
+                  alt={author.name}
+                  fill
+                  priority
+                  sizes="(max-width: 640px) 112px, (max-width: 768px) 144px, 160px"
+                  className="object-cover"
+                />
+              ) : (
+                <span className="text-3xl sm:text-4xl font-extrabold text-primary">
+                  {initials(author.name)}
+                </span>
+              )}
+            </div>
+            <div
+              className="absolute -bottom-2 -right-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md ring-2 ring-background"
+              title="Verified Author & Consultant"
+            >
+              <IconShieldCheck className="h-4.5 w-4.5" />
+            </div>
           </div>
-          <div className="min-w-0">
-            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                Author &amp; Spreadsheet Consultant
+              </span>
+              {isFounderAuthor && (
+                <Link
+                  href="/about/nehad-ulfat"
+                  className="inline-flex items-center gap-1 rounded-full border border-border/70 bg-background/80 px-3 py-1 text-xs font-semibold text-foreground/80 shadow-2xs backdrop-blur-xs transition-colors hover:border-primary/50 hover:text-primary"
+                >
+                  <span>Founder Profile</span>
+                  <IconArrowRight className="h-3 w-3" />
+                </Link>
+              )}
+            </div>
+
+            <h1 className="mt-3 text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl md:text-4xl">
               {author.name}
             </h1>
-            <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted-foreground">
-              <span className="flex items-center gap-1.5">
-                <IconNews className="h-4 w-4 text-primary/70" />
-                {author.post_count} {author.post_count === 1 ? "article" : "articles"}
+
+            <div className="mt-2.5 flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1.5 text-xs sm:text-sm text-muted-foreground">
+              <span className="flex items-center gap-1.5 font-medium">
+                <IconNews className="h-4 w-4 text-primary" />
+                <strong className="font-bold text-foreground">{author.post_count}</strong>{" "}
+                {author.post_count === 1 ? "Guide Published" : "Guides Published"}
               </span>
-              <span className="flex items-center gap-1.5">
-                <IconCalendar className="h-4 w-4 text-primary/70" />
-                Writing here since <Time date={author.joined_at} variant="date" />
+              <span className="hidden sm:inline-block h-3 w-px bg-border/80" />
+              <span className="flex items-center gap-1.5 font-medium">
+                <IconCalendar className="h-4 w-4 text-primary" />
+                Publishing since <Time date={author.joined_at} variant="date" />
               </span>
             </div>
+
             {author.bio ? (
-              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+              <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base">
                 {author.bio}
               </p>
             ) : null}
+
             {socialLinks.length > 0 ? (
-              <div className="mt-4 flex flex-wrap items-center gap-2.5">
+              <div className="mt-5 flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
                 {socialLinks.map(({ href, icon: Icon, label, className }) => (
                   <a
                     key={label}
@@ -231,7 +277,42 @@ export default async function AuthorPage({ params, searchParams }: AuthorPagePro
         </div>
       </header>
 
-      <div className="mt-10">
+      {/* 2nd Section: Editorial & Technical Review Disclosure */}
+      <section className="mt-8 sm:mt-10 overflow-hidden rounded-2xl border border-primary/25 bg-gradient-to-br from-primary/8 via-card to-card p-5 sm:p-7 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-5">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/25">
+            <IconShieldCheck className="h-5 w-5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1 rounded-full border border-primary/25 bg-primary/10 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-primary">
+                Editorial Review
+              </span>
+            </div>
+            <h2 className="mt-2 text-lg sm:text-xl font-bold tracking-tight text-foreground">
+              {isFounderAuthor
+                ? "Articles Published by admin@excelinsider.com"
+                : `Articles Published by ${author.name}`}
+            </h2>
+            <p className="mt-2 text-sm sm:text-base leading-relaxed text-muted-foreground">
+              Articles by{" "}
+              <strong className="font-semibold text-foreground">
+                {isFounderAuthor ? "admin@excelinsider.com" : author.name}
+              </strong>{" "}
+              are developed under the guidance of ExcelInsider’s core training program and are technically reviewed by{" "}
+              <Link
+                href="/about/nehad-ulfat"
+                className="font-semibold text-primary underline underline-offset-4 decoration-primary/40 transition-colors hover:decoration-primary"
+              >
+                Nehad Ulfat
+              </Link>
+              , lead spreadsheet consultant, to ensure accuracy and user-centric value.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div className="mt-8 sm:mt-10">
         <PostGrid
           posts={posts.items}
           emptyTitle="No articles yet"
