@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils"
 interface InlineTocProps {
   entries: TocEntry[]
   className?: string
+  defaultCollapsed?: boolean
 }
 
 const ACTIVE_MARKER_OFFSET = 120
@@ -38,11 +39,15 @@ function buildSections(entries: TocEntry[]): {
   return { sections, orphans }
 }
 
-export function InlineToc({ entries, className }: InlineTocProps) {
+export function InlineToc({
+  entries,
+  className,
+  defaultCollapsed = true,
+}: InlineTocProps) {
   const [activeId, setActiveId] = useState<string | null>(null)
   const [openSectionId, setOpenSectionId] = useState<string | null>(null)
   const [prevActiveSectionId, setPrevActiveSectionId] = useState<string | null>(null)
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(false)
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(defaultCollapsed)
 
   const entryIds = entries.map((entry) => entry.id).join("|")
   const { sections, orphans } = useMemo(() => buildSections(entries), [entries])

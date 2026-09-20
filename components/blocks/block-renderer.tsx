@@ -31,6 +31,7 @@ interface BlockRendererProps {
   blocks: Block[]
   className?: string
   toc?: TocEntry[]
+  tocDefaultCollapsed?: boolean
 }
 
 const HEADING_CLASSES: Record<2 | 3 | 4, string> = {
@@ -664,7 +665,12 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
   }
 }
 
-export function BlockRenderer({ blocks, className, toc }: BlockRendererProps) {
+export function BlockRenderer({
+  blocks,
+  className,
+  toc,
+  tocDefaultCollapsed = true,
+}: BlockRendererProps) {
   const usedIds = new Set<string>()
   const hasToc = Boolean(toc && toc.length >= 2)
 
@@ -690,7 +696,7 @@ export function BlockRenderer({ blocks, className, toc }: BlockRendererProps) {
   return (
     <div className={cn("space-y-3.5 sm:space-y-4", className)}>
       {hasToc && takeawayIndex === -1 && toc ? (
-        <InlineToc entries={toc} />
+        <InlineToc entries={toc} defaultCollapsed={tocDefaultCollapsed} />
       ) : null}
 
       {blocks.map((block, index) => {
@@ -708,7 +714,7 @@ export function BlockRenderer({ blocks, className, toc }: BlockRendererProps) {
               takeawayImages={isTakeaway ? takeawayImages : undefined}
             />
             {hasToc && isTakeaway && toc ? (
-              <InlineToc entries={toc} />
+              <InlineToc entries={toc} defaultCollapsed={tocDefaultCollapsed} />
             ) : null}
           </Fragment>
         )
