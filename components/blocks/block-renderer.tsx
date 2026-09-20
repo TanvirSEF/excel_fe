@@ -319,7 +319,7 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
           <div
             id={id}
             className={cn(
-              "group flex scroll-mt-24 items-center gap-3 transition-colors cursor-pointer",
+              "group flex scroll-mt-24 items-center gap-3 transition-colors",
               HEADING_CLASSES[level]
             )}
           >
@@ -342,7 +342,7 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
         return (
           <div
             id={id}
-            className="group mt-6 sm:mt-7 mb-1.5 sm:mb-2 flex scroll-mt-24 items-start gap-2.5 first:mt-0 cursor-pointer"
+            className="group mt-6 sm:mt-7 mb-1.5 sm:mb-2 flex scroll-mt-24 items-start gap-2.5 first:mt-0"
           >
             <span
               aria-hidden="true"
@@ -364,7 +364,7 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
         <Tag
           id={id}
           className={cn(
-            "scroll-mt-24 transition-colors duration-200 hover:text-primary cursor-pointer",
+            "scroll-mt-24 transition-colors duration-200 hover:text-primary",
             HEADING_CLASSES[level],
             alignClass(block.align)
           )}
