@@ -600,15 +600,14 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
 
       if (isExplanation) {
         return (
-          <div className="relative my-7 rounded-2xl border-2 border-primary/60 bg-gradient-to-b from-primary/[0.03] to-transparent p-5 sm:p-6 pt-6 sm:pt-7 shadow-xs transition-colors dark:border-primary/50 dark:from-primary/[0.06]">
-            {/* Cutout title sitting directly on top border */}
-            <div className="absolute -top-3.5 left-5 sm:left-6 inline-flex items-center gap-2 bg-background px-2.5 text-base sm:text-[1.0625rem] font-bold tracking-tight text-primary">
+          <div className="relative my-7 rounded-2xl border-2 border-primary/50 bg-background p-5 sm:p-6 pt-7 sm:pt-8 shadow-xs transition-colors dark:border-primary/40">
+            <div className="absolute -top-3.5 left-8 sm:left-10 inline-flex items-center gap-2 bg-background px-1 text-base sm:text-[1.0625rem] font-bold tracking-tight text-primary">
               <IconNotes className="h-5 w-5 text-primary shrink-0" />
               <span>{block.title || "Explanation"}</span>
             </div>
 
             <div className="text-base sm:text-[1.03125rem] font-normal leading-[1.625] text-foreground/90">
-              <InlineRuns value={block.content ?? block.text} />
+              <InlineRuns value={cleanRichText(block.content ?? block.text)} />
             </div>
           </div>
         )
