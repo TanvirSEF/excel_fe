@@ -110,7 +110,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
       <div className="mx-auto w-full max-w-[860px] px-4 pt-8 sm:px-6">
         <article className="w-full">
-          <div className="border-y border-border/70 py-3">
+          <div className="border-y border-border/70 py-3 mb-6 sm:mb-8">
             <ShareButtons title={post.title} />
           </div>
 
