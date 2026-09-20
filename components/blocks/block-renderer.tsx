@@ -319,11 +319,11 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
           <div
             id={id}
             className={cn(
-              "group flex scroll-mt-24 items-center gap-3 transition-colors",
+              "group flex scroll-mt-24 items-start gap-3 transition-colors",
               HEADING_CLASSES[level]
             )}
           >
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground shadow-xs transition-transform duration-200 group-hover:scale-105">
+            <span className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground shadow-xs transition-transform duration-200 group-hover:scale-105">
               {block.num}
             </span>
             <Tag
