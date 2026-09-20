@@ -80,6 +80,39 @@ function isDownloadHref(href: string, text?: string): boolean {
   return false
 }
 
+function cleanRichText(value: RichText | undefined): RichText {
+  if (!value) return ""
+  if (typeof value === "string") return value.trim()
+
+  const runs: InlineText[] = value.map((r) => ({ ...r }))
+
+  while (runs.length > 0 && !runs[0].text.trim()) {
+    runs.shift()
+  }
+  if (runs.length === 0) return runs
+
+  runs[0] = { ...runs[0], text: runs[0].text.replace(/^[\s\r\n]+/, "") }
+  if (!runs[0].text) {
+    runs.shift()
+  }
+
+  while (runs.length > 0 && !runs[runs.length - 1].text.trim()) {
+    runs.pop()
+  }
+  if (runs.length === 0) return runs
+
+  const lastIdx = runs.length - 1
+  runs[lastIdx] = {
+    ...runs[lastIdx],
+    text: runs[lastIdx].text.replace(/[\s\r\n]+$/, ""),
+  }
+  if (!runs[lastIdx].text) {
+    runs.pop()
+  }
+
+  return runs
+}
+
 function cleanNoteContent(
   value: RichText | undefined,
   title?: string
@@ -119,10 +152,10 @@ function cleanNoteContent(
   }
 
   if (typeof value === "string") {
-    return strip(value).trimStart()
+    return strip(value).trim()
   }
 
-  const runs: InlineText[] = [...value]
+  const runs: InlineText[] = value.map((r) => ({ ...r }))
   while (runs.length > 0 && !runs[0].text.trim()) {
     runs.shift()
   }
@@ -134,12 +167,10 @@ function cleanNoteContent(
       runs[0] = { ...runs[0], text: stripped }
     } else {
       runs.shift()
-      while (runs.length > 0 && !runs[0].text.trim()) {
-        runs.shift()
-      }
     }
   }
-  return runs
+
+  return cleanRichText(runs)
 }
 
 function withMarks(
@@ -516,7 +547,7 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
         )
 
         return (
-          <div className="relative my-6 flex items-start gap-3 rounded-r-2xl border-l-[5px] border-primary bg-primary/[0.08] p-4 sm:p-5 shadow-md shadow-primary/20 transition-colors dark:bg-primary/[0.14] dark:shadow-black/30">
+          <div className="relative my-6 flex items-start gap-3 rounded-r-2xl border-l-[5px] border-primary bg-primary/[0.08] p-4 sm:py-4 sm:px-5 shadow-md shadow-primary/20 transition-colors dark:bg-primary/[0.14] dark:shadow-black/30">
             <IconPaperclip className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
             <div className="flex-1 text-base sm:text-[1.03125rem] font-normal leading-[1.625] text-foreground/90">
               <span className="mr-2 font-bold text-primary">{noteTitle}</span>
@@ -541,16 +572,16 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
         const isMultiLine = formulaText.includes("\n")
 
         return (
-          <div className="group relative my-5 flex items-center justify-center rounded-xl border border-border/80 bg-card py-3.5 pl-5 pr-14 sm:px-14 shadow-2xs transition-all hover:border-primary/40 hover:shadow-xs">
+          <div className="group relative my-5 flex items-center justify-center rounded-[4px] border border-border/80 bg-card py-2.5 pl-4 pr-12 sm:py-3 sm:px-14 shadow-[1.5px_1.5px_2px_rgba(0,0,0,0.35)] dark:shadow-[1.5px_1.5px_2px_rgba(0,0,0,0.7)] transition-all">
             <div className="max-w-full overflow-x-auto text-center scrollbar-none">
-              <code
+              <span
                 className={cn(
-                  "font-mono text-sm sm:text-base font-bold tracking-tight text-foreground selection:bg-primary/20",
+                  "font-serif text-base sm:text-lg font-normal tracking-normal text-foreground selection:bg-primary/20",
                   isMultiLine ? "block text-left whitespace-pre-wrap" : "whitespace-nowrap"
                 )}
               >
                 {formulaText}
-              </code>
+              </span>
             </div>
 
             <div className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2">
