@@ -1,6 +1,7 @@
 import { create } from "zustand"
 
 import * as authApi from "@/lib/api/auth"
+import { getStoredRolePermissions } from "@/lib/queries/roles"
 import type { User, UserRole } from "@/types/api"
 
 export type AuthStatus = "loading" | "authenticated" | "unauthenticated"
@@ -94,6 +95,8 @@ export function can(
   permission: string
 ): boolean {
   if (!user) return false
-  const granted = PERMISSIONS[user.role]
+  if (user.role === "super_admin") return true
+  const stored = getStoredRolePermissions()
+  const granted = (stored?.[user.role] as readonly string[] | undefined) ?? PERMISSIONS[user.role] ?? []
   return granted.includes("*") || granted.includes(permission)
 }

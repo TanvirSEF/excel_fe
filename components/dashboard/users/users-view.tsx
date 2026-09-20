@@ -5,6 +5,7 @@ import { toast } from "sonner"
 
 import { EditUserSheet, CreateUserSheet } from "@/components/dashboard/users/user-sheets"
 import { RoleBadge } from "@/components/dashboard/users/role-badge"
+import { UsersNav } from "@/components/dashboard/users/users-nav"
 import { ConfirmDialog } from "@/components/shared/confirm-dialog"
 import { EmptyState } from "@/components/shared/empty-state"
 import { ErrorState } from "@/components/shared/error-state"
@@ -66,15 +67,17 @@ export function UsersView() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Users</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Team Management</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {data?.total ?? "…"} team member{(data?.total ?? 1) === 1 ? "" : "s"}
+            {data?.total ?? "…"} team member{(data?.total ?? 1) === 1 ? "" : "s"} across active roles.
           </p>
         </div>
         <Button type="button" size="sm" onClick={() => setCreateOpen(true)}>
           New user
         </Button>
       </div>
+
+      <UsersNav />
 
       <Input
         value={search}

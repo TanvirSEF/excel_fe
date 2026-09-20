@@ -380,3 +380,30 @@ export interface WpImportResult {
   images_uploaded: number
   images_failed: number
 }
+
+export interface RoleDetail {
+  role: UserRole
+  name: string
+  description: string
+  member_count: number
+  is_system: boolean
+  is_editable: boolean
+  permissions: string[]
+}
+
+export interface PermissionDefinition {
+  id: string
+  name: string
+  description: string
+}
+
+export interface PermissionGroup {
+  id: string
+  title: string
+  description: string
+  permissions: PermissionDefinition[]
+}
+
+export interface RolePermissionsUpdateInput {
+  permissions: string[]
+}
