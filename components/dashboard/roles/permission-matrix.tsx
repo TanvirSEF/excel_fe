@@ -1,5 +1,6 @@
 "use client"
 
+import { Fragment } from "react"
 import { IconCheck, IconLock, IconMinus } from "@tabler/icons-react"
 
 import { RoleBadge } from "@/components/dashboard/users/role-badge"
@@ -48,19 +49,19 @@ export function PermissionMatrix({
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <span className="flex items-center gap-1.5">
               <span className="flex size-4 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
-                <IconCheck className="h-3 w-3" />
+                <IconCheck className="h-3 w-3 stroke-[2.5]" />
               </span>
               Granted
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="flex size-4 items-center justify-center rounded-full bg-muted text-muted-foreground">
-                <IconMinus className="h-3 w-3" />
+              <span className="flex size-4 items-center justify-center rounded-full bg-muted/80 text-muted-foreground/60">
+                <IconMinus className="h-3 w-3 stroke-[2.5]" />
               </span>
               Restricted
             </span>
             <span className="flex items-center gap-1.5">
               <span className="flex size-4 items-center justify-center rounded-full bg-purple-500/15 text-purple-600">
-                <IconLock className="h-3 w-3" />
+                <IconLock className="h-3 w-3 stroke-[2.5]" />
               </span>
               Root Access
             </span>
@@ -69,10 +70,16 @@ export function PermissionMatrix({
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="w-full min-w-[760px] text-sm border-collapse">
+          <colgroup>
+            <col className="w-auto min-w-[280px]" />
+            {ORDERED_ROLES.map((roleKey) => (
+              <col key={roleKey} className="w-36 min-w-[130px]" />
+            ))}
+          </colgroup>
           <thead>
             <tr className="border-b bg-muted/40 text-left text-xs text-muted-foreground">
-              <th className="px-5 py-3.5 font-medium min-w-72">
+              <th className="px-5 py-3.5 font-medium min-w-[280px]">
                 Capability / Permission
               </th>
               {ORDERED_ROLES.map((roleKey) => {
@@ -80,18 +87,25 @@ export function PermissionMatrix({
                 return (
                   <th
                     key={roleKey}
-                    className="px-4 py-3.5 font-medium text-center min-w-36"
+                    className="px-4 py-3.5 font-medium text-center w-36 min-w-[130px]"
                   >
-                    <div className="flex flex-col items-center gap-1">
+                    <div className="flex flex-col items-center justify-center gap-1">
                       <RoleBadge role={roleKey} />
-                      {roleObj && roleObj.role !== "super_admin" && (
+                      {roleObj && roleObj.role !== "super_admin" ? (
                         <button
                           type="button"
                           onClick={() => onEditRole(roleObj)}
-                          className="text-[11px] text-primary hover:underline"
+                          className="text-[11px] text-primary hover:underline font-normal"
                         >
                           Edit
                         </button>
+                      ) : (
+                        <span
+                          className="text-[11px] invisible select-none"
+                          aria-hidden="true"
+                        >
+                          Edit
+                        </span>
                       )}
                     </div>
                   </th>
@@ -99,73 +113,83 @@ export function PermissionMatrix({
               })}
             </tr>
           </thead>
-          <tbody className="divide-y">
+          <tbody className="divide-y divide-border/60">
             {groups.map((group) => (
-              <tr key={group.id} className="bg-muted/10">
-                <td
-                  colSpan={ORDERED_ROLES.length + 1}
-                  className="p-0 border-t first:border-t-0"
-                >
-                  <div className="bg-muted/30 px-5 py-2.5 font-semibold text-xs text-foreground uppercase tracking-wider flex items-center justify-between">
-                    <span>{group.title}</span>
-                    <span className="text-[11px] lowercase font-normal text-muted-foreground">
-                      {group.description}
-                    </span>
-                  </div>
-                  <table className="w-full">
-                    <tbody className="divide-y divide-border/60">
-                      {group.permissions.map((perm) => (
-                        <tr
-                          key={perm.id}
-                          className="transition-colors hover:bg-muted/30 text-xs"
-                        >
-                          <td className="px-5 py-3 min-w-72">
-                            <div className="space-y-0.5">
-                              <div className="flex items-center gap-2">
-                                <span className="font-medium text-foreground">
-                                  {perm.name}
-                                </span>
-                                <span className="font-mono text-[10px] text-muted-foreground/70">
-                                  {perm.id}
-                                </span>
-                              </div>
-                              <p className="text-[11px] text-muted-foreground">
-                                {perm.description}
-                              </p>
-                            </div>
-                          </td>
-                          {ORDERED_ROLES.map((roleKey) => {
-                            const roleObj = roleMap.get(roleKey)
-                            const granted = hasPermission(roleObj, perm.id)
-                            const isSuper = roleKey === "super_admin"
+              <Fragment key={group.id}>
+                <tr className="bg-muted/30 border-t border-b border-border/70">
+                  <td
+                    colSpan={ORDERED_ROLES.length + 1}
+                    className="px-5 py-2.5 font-semibold text-xs text-foreground uppercase tracking-wider"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span>{group.title}</span>
+                      <span className="text-[11px] lowercase font-normal text-muted-foreground">
+                        {group.description}
+                      </span>
+                    </div>
+                  </td>
+                </tr>
 
-                            return (
-                              <td
-                                key={roleKey}
-                                className="px-4 py-3 text-center min-w-36 align-middle"
+                {group.permissions.map((perm) => (
+                  <tr
+                    key={perm.id}
+                    className="transition-colors hover:bg-muted/30 text-xs group"
+                  >
+                    <td className="px-5 py-3 min-w-[280px]">
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-foreground">
+                            {perm.name}
+                          </span>
+                          <span className="font-mono text-[10px] text-muted-foreground/70">
+                            {perm.id}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-muted-foreground">
+                          {perm.description}
+                        </p>
+                      </div>
+                    </td>
+                    {ORDERED_ROLES.map((roleKey) => {
+                      const roleObj = roleMap.get(roleKey)
+                      const granted = hasPermission(roleObj, perm.id)
+                      const isSuper = roleKey === "super_admin"
+
+                      return (
+                        <td
+                          key={roleKey}
+                          className="px-4 py-3 text-center align-middle w-36 min-w-[130px]"
+                        >
+                          <div className="flex items-center justify-center">
+                            {isSuper ? (
+                              <div
+                                title="Root Access (Granted)"
+                                className="inline-flex items-center justify-center size-6 rounded-full bg-purple-500/10 text-purple-600 transition-transform group-hover:scale-110"
                               >
-                                {isSuper ? (
-                                  <div className="inline-flex items-center justify-center size-6 rounded-full bg-purple-500/10 text-purple-600">
-                                    <IconCheck className="h-3.5 w-3.5" />
-                                  </div>
-                                ) : granted ? (
-                                  <div className="inline-flex items-center justify-center size-6 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
-                                    <IconCheck className="h-3.5 w-3.5" />
-                                  </div>
-                                ) : (
-                                  <div className="inline-flex items-center justify-center size-6 rounded-full bg-muted/60 text-muted-foreground/50">
-                                    <IconMinus className="h-3.5 w-3.5" />
-                                  </div>
-                                )}
-                              </td>
-                            )
-                          })}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </td>
-              </tr>
+                                <IconCheck className="h-3.5 w-3.5 stroke-[2.5]" />
+                              </div>
+                            ) : granted ? (
+                              <div
+                                title="Granted"
+                                className="inline-flex items-center justify-center size-6 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 transition-transform group-hover:scale-110"
+                              >
+                                <IconCheck className="h-3.5 w-3.5 stroke-[2.5]" />
+                              </div>
+                            ) : (
+                              <div
+                                title="Restricted"
+                                className="inline-flex items-center justify-center size-6 rounded-full bg-muted/70 text-muted-foreground/50"
+                              >
+                                <IconMinus className="h-3.5 w-3.5 stroke-[2.5]" />
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                      )
+                    })}
+                  </tr>
+                ))}
+              </Fragment>
             ))}
           </tbody>
         </table>
