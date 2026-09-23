@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { EditorContent, useEditor, useEditorState, type JSONContent } from "@tiptap/react"
 import Color from "@tiptap/extension-color"
 import Highlight from "@tiptap/extension-highlight"
@@ -51,6 +51,7 @@ function countWords(text: string) {
 
 export function PostEditor({ initialDoc, onDocChange }: PostEditorProps) {
   const [insertPanel, setInsertPanel] = useState<Panel>(null)
+  const loadedDocRef = useRef<JSONContent | null>(null)
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -88,6 +89,16 @@ export function PostEditor({ initialDoc, onDocChange }: PostEditorProps) {
       onDocChange(editor.getJSON())
     },
   })
+
+  useEffect(() => {
+    if (!editor || !initialDoc || editor.isDestroyed) return
+    if (loadedDocRef.current !== initialDoc) {
+      loadedDocRef.current = initialDoc
+      if (editor.isEmpty) {
+        editor.commands.setContent(initialDoc, { emitUpdate: false })
+      }
+    }
+  }, [editor, initialDoc])
 
   const stats = useEditorState({
     editor,

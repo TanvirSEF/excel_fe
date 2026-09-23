@@ -155,6 +155,13 @@ function paragraph(rich: RichText, align?: TextAlign): JSONContent {
 }
 
 export function blocksToDoc(blocks: Block[]): JSONContent {
+  if (!blocks || blocks.length === 0) {
+    return {
+      type: "doc",
+      content: [{ type: "paragraph" }],
+    }
+  }
+
   return {
     type: "doc",
     content: blocks.map((block): JSONContent => {
@@ -183,18 +190,28 @@ export function blocksToDoc(blocks: Block[]): JSONContent {
           return {
             type: "callout",
             attrs: {
-              variant: block.variant,
+              variant: block.variant ?? "info",
               ...(block.title ? { title: block.title } : {}),
             },
-            ...(content.length ? { content: [{ type: "paragraph", content }] } : {}),
+            content: [
+              {
+                type: "paragraph",
+                ...(content.length ? { content } : {}),
+              },
+            ],
           }
         }
         case "accordion": {
           const content = inlineNodes(block.content ?? block.text)
           return {
             type: "accordion",
-            attrs: { title: block.title },
-            ...(content.length ? { content: [{ type: "paragraph", content }] } : {}),
+            attrs: { title: block.title ?? "" },
+            content: [
+              {
+                type: "paragraph",
+                ...(content.length ? { content } : {}),
+              },
+            ],
           }
         }
         case "button":

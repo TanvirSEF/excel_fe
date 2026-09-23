@@ -32,6 +32,7 @@ interface BlockRendererProps {
   blocks: Block[]
   className?: string
   toc?: TocEntry[]
+  tocDefaultCollapsed?: boolean
 }
 
 const HEADING_CLASSES: Record<2 | 3 | 4, string> = {
@@ -80,6 +81,39 @@ function isDownloadHref(href: string, text?: string): boolean {
   return false
 }
 
+function cleanRichText(value: RichText | undefined): RichText {
+  if (!value) return ""
+  if (typeof value === "string") return value.trim()
+
+  const runs: InlineText[] = value.map((r) => ({ ...r }))
+
+  while (runs.length > 0 && !runs[0].text.trim()) {
+    runs.shift()
+  }
+  if (runs.length === 0) return runs
+
+  runs[0] = { ...runs[0], text: runs[0].text.replace(/^[\s\r\n]+/, "") }
+  if (!runs[0].text) {
+    runs.shift()
+  }
+
+  while (runs.length > 0 && !runs[runs.length - 1].text.trim()) {
+    runs.pop()
+  }
+  if (runs.length === 0) return runs
+
+  const lastIdx = runs.length - 1
+  runs[lastIdx] = {
+    ...runs[lastIdx],
+    text: runs[lastIdx].text.replace(/[\s\r\n]+$/, ""),
+  }
+  if (!runs[lastIdx].text) {
+    runs.pop()
+  }
+
+  return runs
+}
+
 function cleanNoteContent(
   value: RichText | undefined,
   title?: string
@@ -119,10 +153,10 @@ function cleanNoteContent(
   }
 
   if (typeof value === "string") {
-    return strip(value).trimStart()
+    return strip(value).trim()
   }
 
-  const runs: InlineText[] = [...value]
+  const runs: InlineText[] = value.map((r) => ({ ...r }))
   while (runs.length > 0 && !runs[0].text.trim()) {
     runs.shift()
   }
@@ -134,12 +168,10 @@ function cleanNoteContent(
       runs[0] = { ...runs[0], text: stripped }
     } else {
       runs.shift()
-      while (runs.length > 0 && !runs[0].text.trim()) {
-        runs.shift()
-      }
     }
   }
-  return runs
+
+  return cleanRichText(runs)
 }
 
 function withMarks(
@@ -151,13 +183,22 @@ function withMarks(
   for (const mark of marks ?? []) {
     switch (mark.type) {
       case "bold":
-        node = <strong>{node}</strong>
+        node = <strong className="font-bold">{node}</strong>
         break
       case "italic":
         node = <em>{node}</em>
         break
       case "strike":
         node = <del>{node}</del>
+        break
+      case "underline":
+        node = <u className="underline underline-offset-2">{node}</u>
+        break
+      case "sup":
+        node = <sup className="text-[0.75em] leading-none align-super">{node}</sup>
+        break
+      case "sub":
+        node = <sub className="text-[0.75em] leading-none align-sub">{node}</sub>
         break
       case "kbd":
         node = (
@@ -247,7 +288,15 @@ function alignClass(align: TextAlign | undefined) {
   return null
 }
 
-function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
+type ImageBlock = Extract<Block, { type: "image" }>
+
+interface BlockNodeProps {
+  block: Block
+  usedIds: Set<string>
+  takeawayImages?: ImageBlock[]
+}
+
+function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
   switch (block.type) {
     case "paragraph": {
       const trimmed = block.text?.trim()
@@ -279,11 +328,11 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
           <div
             id={id}
             className={cn(
-              "group flex scroll-mt-24 items-center gap-3 transition-colors cursor-pointer",
+              "group flex scroll-mt-24 items-start gap-3 transition-colors",
               HEADING_CLASSES[level]
             )}
           >
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground shadow-xs transition-transform duration-200 group-hover:scale-105">
+            <span className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground shadow-xs transition-transform duration-200 group-hover:scale-105">
               {block.num}
             </span>
             <Tag
@@ -302,7 +351,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
         return (
           <div
             id={id}
-            className="group mt-6 sm:mt-7 mb-1.5 sm:mb-2 flex scroll-mt-24 items-start gap-2.5 first:mt-0 cursor-pointer"
+            className="group mt-6 sm:mt-7 mb-1.5 sm:mb-2 flex scroll-mt-24 items-start gap-2.5 first:mt-0"
           >
             <span
               aria-hidden="true"
@@ -324,7 +373,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
         <Tag
           id={id}
           className={cn(
-            "scroll-mt-24 transition-colors duration-200 hover:text-primary cursor-pointer",
+            "scroll-mt-24 transition-colors duration-200 hover:text-primary",
             HEADING_CLASSES[level],
             alignClass(block.align)
           )}
@@ -462,6 +511,28 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
             <div className="text-base sm:text-[1.03125rem] font-normal leading-[1.65] text-foreground/90">
               <InlineRuns value={block.content ?? block.text} />
             </div>
+
+            {takeawayImages && takeawayImages.length > 0 ? (
+              <div className="mt-5 sm:mt-6 flex flex-col items-center gap-4 pt-5 sm:pt-6 border-t border-primary/15">
+                {takeawayImages.map((img, i) => {
+                  const width = img.width ?? 783
+                  const height = img.height ?? Math.round(width * 0.5625)
+                  return (
+                    <figure key={i} className="flex flex-col items-center w-full">
+                      <Image
+                        src={img.url}
+                        alt={img.alt ?? ""}
+                        width={width}
+                        height={height}
+                        sizes="(max-width: 768px) 100vw, 768px"
+                        className="h-auto rounded-xl border border-border/80 shadow-xs"
+                        style={{ width: "100%", maxWidth: width, height: "auto" }}
+                      />
+                    </figure>
+                  )
+                })}
+              </div>
+            ) : null}
           </div>
         )
       }
@@ -485,7 +556,7 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
         )
 
         return (
-          <div className="relative my-6 flex items-start gap-3 rounded-r-2xl border-l-[5px] border-primary bg-primary/[0.08] p-4 sm:p-5 shadow-md shadow-primary/20 transition-colors dark:bg-primary/[0.14] dark:shadow-black/30">
+          <div className="relative my-6 flex items-start gap-3 rounded-r-2xl border-l-[5px] border-primary bg-primary/[0.08] p-4 sm:py-4 sm:px-5 shadow-md shadow-primary/20 transition-colors dark:bg-primary/[0.14] dark:shadow-black/30">
             <IconPaperclip className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
             <div className="flex-1 text-base sm:text-[1.03125rem] font-normal leading-[1.625] text-foreground/90">
               <span className="mr-2 font-bold text-primary">{noteTitle}</span>
@@ -510,16 +581,16 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
         const isMultiLine = formulaText.includes("\n")
 
         return (
-          <div className="group relative my-5 flex items-center justify-center rounded-xl border border-border/80 bg-card py-3.5 pl-5 pr-14 sm:px-14 shadow-2xs transition-all hover:border-primary/40 hover:shadow-xs">
+          <div className="group relative my-5 flex items-center justify-center rounded-[4px] border border-border/80 bg-card py-2.5 pl-4 pr-12 sm:py-3 sm:px-14 shadow-[1.5px_1.5px_2px_rgba(0,0,0,0.35)] dark:shadow-[1.5px_1.5px_2px_rgba(0,0,0,0.7)] transition-all">
             <div className="max-w-full overflow-x-auto text-center scrollbar-none">
-              <code
+              <span
                 className={cn(
-                  "font-mono text-sm sm:text-base font-bold tracking-tight text-foreground selection:bg-primary/20",
+                  "font-serif text-base sm:text-lg font-normal tracking-normal text-foreground selection:bg-primary/20",
                   isMultiLine ? "block text-left whitespace-pre-wrap" : "whitespace-nowrap"
                 )}
               >
                 {formulaText}
-              </code>
+              </span>
             </div>
 
             <div className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2">
@@ -538,15 +609,14 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
 
       if (isExplanation) {
         return (
-          <div className="relative my-7 rounded-2xl border-2 border-primary/60 bg-gradient-to-b from-primary/[0.03] to-transparent p-5 sm:p-6 pt-6 sm:pt-7 shadow-xs transition-colors dark:border-primary/50 dark:from-primary/[0.06]">
-            {/* Cutout title sitting directly on top border */}
-            <div className="absolute -top-3.5 left-5 sm:left-6 inline-flex items-center gap-2 bg-background px-2.5 text-base sm:text-[1.0625rem] font-bold tracking-tight text-primary">
+          <div className="relative my-7 rounded-2xl border-2 border-primary/50 bg-background p-5 sm:p-6 pt-7 sm:pt-8 shadow-xs transition-colors dark:border-primary/40">
+            <div className="absolute -top-3.5 left-8 sm:left-10 inline-flex items-center gap-2 bg-background px-1 text-base sm:text-[1.0625rem] font-bold tracking-tight text-primary">
               <IconNotes className="h-5 w-5 text-primary shrink-0" />
               <span>{block.title || "Explanation"}</span>
             </div>
 
             <div className="text-base sm:text-[1.03125rem] font-normal leading-[1.625] text-foreground/90">
-              <InlineRuns value={block.content ?? block.text} />
+              <InlineRuns value={cleanRichText(block.content ?? block.text)} />
             </div>
           </div>
         )
@@ -613,33 +683,60 @@ function BlockNode({ block, usedIds }: { block: Block; usedIds: Set<string> }) {
   }
 }
 
-export function BlockRenderer({ blocks, className, toc }: BlockRendererProps) {
+export function BlockRenderer({
+  blocks,
+  className,
+  toc,
+  tocDefaultCollapsed = true,
+}: BlockRendererProps) {
   const usedIds = new Set<string>()
   const hasToc = Boolean(toc && toc.length >= 2)
 
-  const takeawayIndex = hasToc
-    ? blocks.findIndex(
-        (b) =>
-          b.type === "callout" &&
-          ((b.title && /takeaway/i.test(b.title)) ||
-            (b.variant === "tip" && Boolean(b.title)))
-      )
-    : -1
+  const takeawayIndex = blocks.findIndex(
+    (b) =>
+      b.type === "callout" &&
+      ((b.title && /takeaway/i.test(b.title)) ||
+        (b.variant === "tip" && Boolean(b.title)))
+  )
+
+  const takeawayImages: ImageBlock[] = []
+  const takeawayImageIndices = new Set<number>()
+
+  if (takeawayIndex !== -1) {
+    let nextIdx = takeawayIndex + 1
+    while (nextIdx < blocks.length && blocks[nextIdx].type === "image") {
+      takeawayImages.push(blocks[nextIdx] as ImageBlock)
+      takeawayImageIndices.add(nextIdx)
+      nextIdx++
+    }
+  }
 
   return (
     <div className={cn("space-y-3.5 sm:space-y-4", className)}>
       {hasToc && takeawayIndex === -1 && toc ? (
-        <InlineToc entries={toc} />
+        <InlineToc entries={toc} defaultCollapsed={tocDefaultCollapsed} />
       ) : null}
 
-      {blocks.map((block, index) => (
-        <Fragment key={index}>
-          <BlockNode block={block} usedIds={usedIds} />
-          {hasToc && index === takeawayIndex && toc ? (
-            <InlineToc entries={toc} />
-          ) : null}
-        </Fragment>
-      ))}
+      {blocks.map((block, index) => {
+        if (takeawayImageIndices.has(index)) {
+          return null
+        }
+
+        const isTakeaway = index === takeawayIndex
+
+        return (
+          <Fragment key={index}>
+            <BlockNode
+              block={block}
+              usedIds={usedIds}
+              takeawayImages={isTakeaway ? takeawayImages : undefined}
+            />
+            {hasToc && isTakeaway && toc ? (
+              <InlineToc entries={toc} defaultCollapsed={tocDefaultCollapsed} />
+            ) : null}
+          </Fragment>
+        )
+      })}
     </div>
   )
 }

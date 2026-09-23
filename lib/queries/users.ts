@@ -17,6 +17,15 @@ export function useUsers(page: number) {
   })
 }
 
+export function useAuthorOptions(enabled = true) {
+  return useQuery({
+    queryKey: ["users", "authors"],
+    enabled,
+    queryFn: () => apiFetch<User[]>("/users/authors"),
+    staleTime: 60_000,
+  })
+}
+
 export interface UserUpdateInput {
   name?: string
   avatar_url?: string | null

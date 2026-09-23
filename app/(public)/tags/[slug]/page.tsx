@@ -1,4 +1,6 @@
 import type { Metadata } from "next"
+import { permanentRedirect } from "next/navigation"
+import slugify from "slugify"
 
 import { Pagination } from "@/components/shared/pagination"
 import { PageHeader } from "@/components/site/page-header"
@@ -16,13 +18,25 @@ export async function generateMetadata({
   params,
 }: TagPageProps): Promise<Metadata> {
   const { slug } = await params
+  const decoded = decodeURIComponent(slug)
+  const normalized = slugify(decoded, { lower: true, strict: true, trim: true })
+
   const tags = await getTags()
-  const label = tags.find((t) => t.slug === slug)?.name ?? slug
+  const target = tags.find(
+    (t) =>
+      t.slug === slug ||
+      t.slug === decoded ||
+      t.slug === normalized ||
+      t.name.toLowerCase() === decoded.toLowerCase()
+  )
+
+  const label = target?.name ?? decoded
+  const canonicalSlug = target?.slug ?? (normalized || slug)
 
   return {
     title: `#${label}`,
     description: `Excel Insider articles tagged with ${label}.`,
-    alternates: { canonical: `/tags/${slug}` },
+    alternates: { canonical: `/tags/${canonicalSlug}` },
   }
 }
 
@@ -33,12 +47,26 @@ export default async function TagPage({
   const [{ slug }, query] = await Promise.all([params, searchParams])
   const page = clamp(Number(firstParam(query.page) ?? 1) || 1, 1, 10_000)
 
-  const [posts, tags] = await Promise.all([
-    getPosts({ page, page_size: 12, tag: slug }),
-    getTags(),
-  ])
+  const decoded = decodeURIComponent(slug)
+  const normalized = slugify(decoded, { lower: true, strict: true, trim: true })
 
-  const label = tags.find((t) => t.slug === slug)?.name ?? slug
+  const tags = await getTags()
+  const target = tags.find(
+    (t) =>
+      t.slug === slug ||
+      t.slug === decoded ||
+      t.slug === normalized ||
+      t.name.toLowerCase() === decoded.toLowerCase()
+  )
+
+  if (target && target.slug !== slug) {
+    permanentRedirect(`/tags/${target.slug}`)
+  }
+
+  const querySlug = target?.slug ?? (normalized || slug)
+  const label = target?.name ?? decoded
+
+  const posts = await getPosts({ page, page_size: 12, tag: querySlug })
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:py-14">
@@ -63,7 +91,7 @@ export default async function TagPage({
         <Pagination
           page={page}
           totalPages={posts.total_pages}
-          pathname={`/tags/${slug}`}
+          pathname={`/tags/${querySlug}`}
         />
       </div>
     </div>

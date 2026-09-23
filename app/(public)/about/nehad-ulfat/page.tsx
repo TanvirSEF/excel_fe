@@ -102,26 +102,34 @@ export default function NehadUlfatProfilePage() {
         ]}
       />
 
-      {/* Hero Header Card */}
-      <header className="relative mt-6 overflow-hidden rounded-3xl border border-primary/30 bg-gradient-to-br from-chart-2/15 via-primary/10 to-transparent p-6 sm:p-10 shadow-xs">
+      {/* Hero Header — matches /about banner style */}
+      <header className="relative mt-6 overflow-hidden rounded-3xl bg-gradient-to-bl from-chart-2 via-primary to-chart-5 p-6 sm:p-10 shadow-xs">
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/10 blur-3xl"
+          className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-teal-300/12 blur-3xl"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-16 left-1/4 h-48 w-48 rounded-full bg-white/8 blur-3xl"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-gradient-to-bl from-white/8 via-transparent to-transparent"
         />
 
         <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-col sm:flex-row sm:items-center gap-5">
-            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-chart-2 to-primary text-2xl font-bold text-primary-foreground shadow-md">
+            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-primary-foreground/15 text-2xl font-bold text-primary-foreground shadow-md backdrop-blur-xs">
               NU
             </div>
             <div className="space-y-1.5">
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-0.5 text-xs font-semibold text-primary">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-3 py-0.5 text-xs font-semibold text-primary-foreground/90">
                 Founder &amp; Strategist
               </div>
-              <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-foreground">
+              <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-primary-foreground">
                 Nehad Ulfat
               </h1>
-              <p className="text-sm sm:text-base font-medium text-muted-foreground">
+              <p className="text-sm sm:text-base font-medium text-primary-foreground/75">
                 Founder &amp; Strategist at Excel Insider · Spreadsheet Expert &amp; Consultant
               </p>
             </div>
@@ -132,15 +140,15 @@ export default function NehadUlfatProfilePage() {
               href="https://www.linkedin.com/in/nehad-ulfat-22042017b"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl border border-border/80 bg-background/80 px-4 py-2.5 text-sm font-semibold text-foreground shadow-2xs backdrop-blur-xs transition-all hover:border-primary/60 hover:text-primary hover:shadow-xs"
+              className="inline-flex items-center gap-2 rounded-xl border border-primary-foreground/25 bg-primary-foreground/10 px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-2xs backdrop-blur-xs transition-all hover:bg-primary-foreground/20 hover:shadow-xs"
             >
-              <IconBrandLinkedin className="h-4 w-4 text-[#0A66C2]" />
+              <IconBrandLinkedin className="h-4 w-4" />
               <span>LinkedIn Profile</span>
-              <IconExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
+              <IconExternalLink className="h-3.5 w-3.5 text-primary-foreground/60" />
             </a>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-2xs transition-all hover:bg-primary/90 hover:shadow-xs"
+              className="inline-flex items-center gap-2 rounded-xl bg-primary-foreground px-4 py-2.5 text-sm font-semibold text-primary shadow-2xs transition-all hover:bg-primary-foreground/90 hover:shadow-xs"
             >
               <IconMail className="h-4 w-4" />
               <span>Get in Touch</span>

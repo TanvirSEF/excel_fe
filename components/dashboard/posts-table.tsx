@@ -95,14 +95,20 @@ export function PostsTable({ posts, canDelete, onDelete, canPin, onTogglePin }: 
           id: "actions",
           header: () => null,
           cell: ({ row }) => (
-            <div className="flex items-center justify-end gap-3">
+            <div className="flex items-center justify-end gap-2.5">
+              <Link
+                href={`/dashboard/posts/${row.original.id}`}
+                className="inline-flex items-center gap-1 rounded-md bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+              >
+                Edit
+              </Link>
               {canPin && row.original.status === "published" ? (
                 <button
                   type="button"
                   onClick={() =>
                     onTogglePin(row.original, !row.original.is_trending_pinned)
                   }
-                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                  className="text-xs font-medium text-muted-foreground transition-colors hover:text-primary"
                 >
                   {row.original.is_trending_pinned ? "Unpin" : "Pin"}
                 </button>
@@ -111,14 +117,14 @@ export function PostsTable({ posts, canDelete, onDelete, canPin, onTogglePin }: 
                 <Link
                   href={`/blog/${row.original.slug}`}
                   target="_blank"
-                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
                 >
                   View public
                 </Link>
               ) : null}
               <Link
                 href={`/dashboard/analytics?post=${row.original.id}`}
-                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
               >
                 Stats
               </Link>
@@ -126,7 +132,7 @@ export function PostsTable({ posts, canDelete, onDelete, canPin, onTogglePin }: 
                 <button
                   type="button"
                   onClick={() => onDelete(row.original)}
-                  className="text-sm text-muted-foreground transition-colors hover:text-destructive"
+                  className="text-xs font-medium text-muted-foreground transition-colors hover:text-destructive"
                 >
                   Delete
                 </button>

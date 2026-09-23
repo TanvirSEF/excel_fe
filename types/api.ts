@@ -179,6 +179,7 @@ export interface PostCreateInput {
   content_json: ContentDoc
   featured_image_url?: string | null
   category_id?: string | null
+  author_id?: string | null
   tags?: string[]
   is_trending?: boolean
   meta_title?: string
@@ -204,6 +205,9 @@ export interface ContentDoc {
 export type MarkType =
   | "bold"
   | "italic"
+  | "underline"
+  | "sup"
+  | "sub"
   | "strike"
   | "code"
   | "kbd"
@@ -375,4 +379,31 @@ export interface WpImportResult {
   redirects: number
   images_uploaded: number
   images_failed: number
+}
+
+export interface RoleDetail {
+  role: UserRole
+  name: string
+  description: string
+  member_count: number
+  is_system: boolean
+  is_editable: boolean
+  permissions: string[]
+}
+
+export interface PermissionDefinition {
+  id: string
+  name: string
+  description: string
+}
+
+export interface PermissionGroup {
+  id: string
+  title: string
+  description: string
+  permissions: PermissionDefinition[]
+}
+
+export interface RolePermissionsUpdateInput {
+  permissions: string[]
 }

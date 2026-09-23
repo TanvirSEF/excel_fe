@@ -36,6 +36,20 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+  async redirects() {
+    return [
+      {
+        source: "/about-us/nehadulfat",
+        destination: "/about/nehad-ulfat",
+        permanent: true,
+      },
+      {
+        source: "/about-us/nehadulfat/:slug*",
+        destination: "/about/nehad-ulfat",
+        permanent: true,
+      },
+    ]
+  },
 }
 
 export default nextConfig

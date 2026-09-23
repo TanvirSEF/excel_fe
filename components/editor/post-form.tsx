@@ -10,7 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useCategories } from "@/lib/queries/categories"
-import type { Category } from "@/types/api"
+import type { Category, User } from "@/types/api"
 
 export interface PostFormFields {
   title: string
@@ -18,6 +18,7 @@ export interface PostFormFields {
   autoSlug: boolean
   excerpt: string
   categoryId: string
+  authorId: string
   tags: string[]
   featuredImageUrl: string
   isTrending: boolean
@@ -28,6 +29,8 @@ interface PostFormProps {
   slugError?: string | null
   onChange: (patch: Partial<PostFormFields>) => void
   existingTags: string[]
+  authors?: User[]
+  canChangeAuthor?: boolean
 }
 
 const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/
@@ -47,6 +50,8 @@ export function PostForm({
   slugError,
   onChange,
   existingTags,
+  authors,
+  canChangeAuthor,
 }: PostFormProps) {
   const { data: categories } = useCategories()
   const [pickerOpen, setPickerOpen] = useState(false)
@@ -140,6 +145,27 @@ export function PostForm({
           className="w-full rounded-md border border-input bg-background p-2 text-sm shadow-xs focus:outline-none focus:ring-2 focus:ring-ring/50"
         />
       </div>
+
+      {canChangeAuthor && (authors ?? []).length > 0 ? (
+        <div className="space-y-2">
+          <Label htmlFor="post-author">Author</Label>
+          <select
+            id="post-author"
+            value={fields.authorId}
+            onChange={(event) => onChange({ authorId: event.target.value })}
+            className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/50"
+          >
+            {(authors ?? []).map((author) => (
+              <option key={author.id} value={author.id}>
+                {author.name} ({author.role.replace("_", " ")})
+              </option>
+            ))}
+          </select>
+          <p className="text-xs text-muted-foreground">
+            Publish or attribute this article under another author&apos;s name.
+          </p>
+        </div>
+      ) : null}
 
       <div className="space-y-2">
         <Label htmlFor="post-category">Category</Label>

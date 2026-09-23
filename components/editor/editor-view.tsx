@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useRef, useState } from "react"
 import type { JSONContent } from "@tiptap/react"
@@ -30,6 +31,7 @@ import {
   useUpdatePost,
   useUpdateSeo,
 } from "@/lib/queries/posts"
+import { useAuthorOptions } from "@/lib/queries/users"
 import { useTags as useAllTags } from "@/lib/queries/categories"
 
 const EMPTY_FIELDS: PostFormFields = {
@@ -38,6 +40,7 @@ const EMPTY_FIELDS: PostFormFields = {
   autoSlug: true,
   excerpt: "",
   categoryId: "",
+  authorId: "",
   tags: [],
   featuredImageUrl: "",
   isTrending: false,
@@ -59,13 +62,22 @@ interface EditorViewProps {
 export function EditorView({ postId }: EditorViewProps) {
   const router = useRouter()
   const user = useAuthStore((state) => state.user)
-  const { data: post, isPending } = usePost(postId)
+  const canChangeAuthor =
+    can(user, "posts:publish") ||
+    user?.role === "super_admin" ||
+    user?.role === "senior_editor"
+
+  const { data: post, isPending, isError, error, refetch } = usePost(postId)
+  const { data: authors } = useAuthorOptions(Boolean(canChangeAuthor))
   const { data: allTags } = useAllTags()
   const createPost = useCreatePost()
   const updatePost = useUpdatePost()
   const updateSeo = useUpdateSeo(postId ?? "")
 
-  const [fields, setFields] = useState<PostFormFields>(EMPTY_FIELDS)
+  const [fields, setFields] = useState<PostFormFields>(() => ({
+    ...EMPTY_FIELDS,
+    authorId: user?.id ?? "",
+  }))
   const [seo, setSeo] = useState<SeoFormFields>(EMPTY_SEO)
   const [keyphrase, setKeyphrase] = useState("")
   const [schemaType, setSchemaType] = useState(DEFAULT_SCHEMA_TYPE)
@@ -81,20 +93,26 @@ export function EditorView({ postId }: EditorViewProps) {
   const dirtyRef = useRef(false)
   const seoDirtyRef = useRef(false)
   const savingRef = useRef(false)
-  const initialized = useRef(false)
+  const initializedPostId = useRef<string | null>(null)
 
   useEffect(() => {
-    if (!postId || !post || initialized.current) return
-    initialized.current = true
-    const initialDoc = blocksToDoc(post.content_json?.blocks ?? [])
-    setInitialDoc(initialDoc)
-    setDoc(initialDoc)
+    if (!postId || !post || initializedPostId.current === post.id) return
+    initializedPostId.current = post.id
+    const rawBlocks = Array.isArray(post.content_json)
+      ? post.content_json
+      : Array.isArray(post.content_json?.blocks)
+        ? post.content_json.blocks
+        : []
+    const parsedDoc = blocksToDoc(rawBlocks)
+    setInitialDoc(parsedDoc)
+    setDoc(parsedDoc)
     setFields({
       title: post.title,
       slug: post.slug,
       autoSlug: false,
       excerpt: post.excerpt ?? "",
       categoryId: post.category_id ?? "",
+      authorId: post.author_id ?? user?.id ?? "",
       tags: post.tags,
       featuredImageUrl: post.featured_image_url ?? "",
       isTrending: post.is_trending ?? false,
@@ -107,7 +125,7 @@ export function EditorView({ postId }: EditorViewProps) {
     })
     setKeyphrase(post.focus_keyphrase ?? "")
     setSchemaType(post.schema_type || DEFAULT_SCHEMA_TYPE)
-  }, [postId, post])
+  }, [postId, post, user?.id])
 
   const markDirty = useCallback(() => {
     dirtyRef.current = true
@@ -168,6 +186,7 @@ export function EditorView({ postId }: EditorViewProps) {
           content_json: { blocks: docToBlocks(doc) },
           featured_image_url: fields.featuredImageUrl || null,
           category_id: fields.categoryId || null,
+          author_id: fields.authorId || undefined,
           tags: fields.tags,
           is_trending: fields.isTrending,
           focus_keyphrase: keyphrase.trim() || null,
@@ -274,11 +293,32 @@ export function EditorView({ postId }: EditorViewProps) {
     return () => window.removeEventListener("beforeunload", onBeforeUnload)
   }, [])
 
-  if (postId && isPending) {
+  if (postId && (isPending || !initialDoc)) {
     return (
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <Skeleton className="h-96" />
         <Skeleton className="h-96" />
+      </div>
+    )
+  }
+
+  if (postId && isError) {
+    return (
+      <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-8 text-center">
+        <h2 className="text-lg font-bold text-destructive">Could not load post</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {error instanceof ApiClientError
+            ? error.message
+            : "The requested post could not be found or failed to load."}
+        </p>
+        <div className="mt-4 flex items-center justify-center gap-3">
+          <Button type="button" variant="outline" size="sm" onClick={() => refetch()}>
+            Retry
+          </Button>
+          <Button asChild size="sm">
+            <Link href="/dashboard/posts">Back to posts</Link>
+          </Button>
+        </div>
       </div>
     )
   }
@@ -323,9 +363,18 @@ export function EditorView({ postId }: EditorViewProps) {
             />
           ) : null}
         </div>
-        <Button type="button" onClick={() => save()} disabled={saving}>
-          {saving ? "Saving…" : "Save"}
-        </Button>
+        <div className="flex items-center gap-2">
+          {postId && post && post.status === "published" ? (
+            <Button asChild variant="outline" size="sm">
+              <Link href={`/blog/${post.slug}`} target="_blank">
+                View live
+              </Link>
+            </Button>
+          ) : null}
+          <Button type="button" onClick={() => save()} disabled={saving}>
+            {saving ? "Saving…" : "Save"}
+          </Button>
+        </div>
       </div>
 
       {postId && post?.status === "rejected" && post.rejection_reason ? (
@@ -338,7 +387,11 @@ export function EditorView({ postId }: EditorViewProps) {
       ) : null}
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <PostEditor initialDoc={initialDoc} onDocChange={onDocChange} />
+        <PostEditor
+          key={postId ?? "new"}
+          initialDoc={initialDoc}
+          onDocChange={onDocChange}
+        />
 
         <aside>
           {postId ? (
@@ -361,6 +414,8 @@ export function EditorView({ postId }: EditorViewProps) {
                     slugError={slugError}
                     onChange={onFieldsChange}
                     existingTags={(allTags ?? []).map((tag) => tag.name)}
+                    authors={authors}
+                    canChangeAuthor={canChangeAuthor}
                   />
                 </div>
               </TabsContent>
@@ -403,6 +458,8 @@ export function EditorView({ postId }: EditorViewProps) {
                 slugError={slugError}
                 onChange={onFieldsChange}
                 existingTags={(allTags ?? []).map((tag) => tag.name)}
+                authors={authors}
+                canChangeAuthor={canChangeAuthor}
               />
             </div>
           )}

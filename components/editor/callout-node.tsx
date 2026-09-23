@@ -182,7 +182,7 @@ function CalloutView({ node, updateAttributes, selected }: ReactNodeViewProps) {
     return (
       <NodeViewWrapper
         className={cn(
-          "relative my-4 rounded-xl border-2 border-primary/40 bg-card p-4 shadow-2xs transition-colors",
+          "relative my-4 rounded-[4px] border border-border/80 bg-card p-4 shadow-[1.5px_1.5px_2px_rgba(0,0,0,0.35)] dark:shadow-[1.5px_1.5px_2px_rgba(0,0,0,0.7)] transition-colors",
           selected && "ring-2 ring-primary/40"
         )}
       >
@@ -193,12 +193,12 @@ function CalloutView({ node, updateAttributes, selected }: ReactNodeViewProps) {
               Formula Box
             </span>
             <span className="text-[11px] text-muted-foreground hidden sm:inline">
-              (Live post renders centered card with 1-click copy)
+              (Live post renders centered serif card with 1-click copy)
             </span>
           </div>
           {presetButtons}
         </div>
-        <NodeViewContent className="callout-content text-sm font-mono font-bold leading-6 text-foreground selection:bg-primary/20" />
+        <NodeViewContent className="callout-content text-base font-serif font-normal text-center leading-6 text-foreground selection:bg-primary/20" />
       </NodeViewWrapper>
     )
   }

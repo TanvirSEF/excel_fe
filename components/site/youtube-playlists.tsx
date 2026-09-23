@@ -2,6 +2,7 @@ import Image from "next/image"
 import {
   IconArrowUpRight,
   IconBrandYoutube,
+  IconPlayerPlayFilled,
 } from "@tabler/icons-react"
 
 import { SectionHeading } from "@/components/site/section-heading"
@@ -74,16 +75,12 @@ export function YoutubePlaylists() {
                 {/* Ambient vignette */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
-                {/* Floating 3D YouTube Play Button */}
+                {/* Floating Glassmorphic YouTube Play Button */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="relative h-[52px] w-[68px] transition-all duration-300 group-hover:scale-115 drop-shadow-[0_8px_20px_rgba(0,0,0,0.5)] group-hover:drop-shadow-[0_12px_28px_rgba(220,38,38,0.75)]">
-                    <Image
-                      src="/images/youtube/play-badge-straight.webp"
-                      alt="Play YouTube Playlist"
-                      width={68}
-                      height={52}
-                      className="object-contain"
-                    />
+                  <div className="relative flex h-12 w-[68px] items-center justify-center overflow-hidden rounded-[18px] border border-white/40 bg-gradient-to-b from-[#ff223c]/90 via-[#ff0000]/85 to-[#cc0000]/90 shadow-[inset_0_1.5px_2px_rgba(255,255,255,0.75),inset_0_-1px_2px_rgba(0,0,0,0.25),0_8px_20px_rgba(0,0,0,0.4)] backdrop-blur-md transition-all duration-300 group-hover:scale-115 group-hover:from-[#ff2b43] group-hover:to-[#e60000] group-hover:shadow-[inset_0_1.5px_2px_rgba(255,255,255,0.9),0_12px_30px_rgba(255,0,0,0.65)]">
+                    {/* Top glass gloss sheen */}
+                    <div className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-[17px] bg-gradient-to-b from-white/40 via-white/10 to-transparent" />
+                    <IconPlayerPlayFilled className="relative z-10 h-6 w-6 translate-x-0.5 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]" />
                   </div>
                 </div>
 

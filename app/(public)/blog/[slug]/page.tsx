@@ -110,7 +110,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
       <div className="mx-auto w-full max-w-[860px] px-4 pt-8 sm:px-6">
         <article className="w-full">
-          <div className="border-y border-border/70 py-3">
+          <div className="border-y border-border/70 py-3 mb-6 sm:mb-8">
             <ShareButtons title={post.title} />
           </div>
 
@@ -120,7 +120,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           />
           <ArticleTags
             tags={post.tags}
-            className="rounded-2xl border border-border/70 bg-muted/40 px-5 py-4"
+            className="rounded-2xl border-0 bg-muted/40 px-5 py-4"
           />
 
           <ArticleCtaBand

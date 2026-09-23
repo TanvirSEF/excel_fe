@@ -202,7 +202,7 @@ export default function AboutPage() {
               <span>Who We Are</span>
             </div>
             <h2 className="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
-              Accessible, actionable Excel knowledge
+              <span className="text-4xl sm:text-5xl lg:text-[3.25rem]">A</span>ccessible, actionable Excel knowledge
             </h2>
             <div className="space-y-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
               <p>
