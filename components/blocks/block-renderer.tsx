@@ -444,15 +444,15 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
     case "table": {
       const [headerRow, ...bodyRows] = block.rows
       return (
-        <div className="my-6 overflow-x-auto rounded-xl border border-border/80 bg-card shadow-2xs">
-          <table className="w-full border-collapse text-sm">
+        <div className="my-7 overflow-x-auto rounded-2xl border border-border/80 bg-card shadow-sm dark:shadow-md dark:shadow-black/20">
+          <table className="w-full min-w-full border-collapse text-sm">
             {block.header ? (
-              <thead className="border-b border-border bg-muted/60">
-                <tr>
+              <thead className="bg-primary text-primary-foreground">
+                <tr className="border-b border-primary/20">
                   {headerRow.map((cell, index) => (
                     <th
                       key={index}
-                      className="px-4 py-3 text-left font-semibold text-foreground"
+                      className="px-4 py-3.5 sm:px-5 sm:py-4 text-left text-xs sm:text-sm font-bold uppercase tracking-wider text-primary-foreground border-r border-primary-foreground/15 last:border-r-0 [&_a]:text-primary-foreground [&_a]:underline"
                     >
                       <InlineRuns value={cell} />
                     </th>
@@ -460,11 +460,22 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
                 </tr>
               </thead>
             ) : null}
-            <tbody className="divide-y divide-border/40">
+            <tbody className="divide-y divide-border/60">
               {(block.header ? bodyRows : block.rows).map((row, rowIndex) => (
-                <tr key={rowIndex} className="odd:bg-transparent even:bg-muted/20 hover:bg-muted/40 transition-colors">
+                <tr
+                  key={rowIndex}
+                  className="transition-colors duration-150 odd:bg-card even:bg-primary/[0.035] hover:bg-primary/[0.07] dark:even:bg-primary/[0.06] dark:hover:bg-primary/[0.12]"
+                >
                   {row.map((cell, cellIndex) => (
-                    <td key={cellIndex} className="px-4 py-3 align-top leading-relaxed">
+                    <td
+                      key={cellIndex}
+                      className={cn(
+                        "px-4 py-3.5 sm:px-5 sm:py-3.5 align-top leading-relaxed text-sm border-r border-border/40 last:border-r-0",
+                        cellIndex === 0
+                          ? "font-semibold text-foreground"
+                          : "font-normal text-foreground/90"
+                      )}
+                    >
                       <InlineRuns value={cell} />
                     </td>
                   ))}
