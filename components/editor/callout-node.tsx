@@ -109,7 +109,18 @@ function CalloutView({ node, updateAttributes, selected }: ReactNodeViewProps) {
           onClick={() => updateAttributes({ variant: "info", title: "Formula Explanation" })}
           className={cn(
             "rounded px-1.5 py-0.5 transition-colors hover:bg-muted hover:text-foreground",
-            isExplanation && "bg-primary/15 font-bold text-primary"
+            isExplanation && title.toLowerCase().includes("formula") && "bg-primary/15 font-bold text-primary"
+          )}
+        >
+          Formula Explain
+        </button>
+        <button
+          type="button"
+          title="Switch to Explanation card"
+          onClick={() => updateAttributes({ variant: "info", title: "Explanation" })}
+          className={cn(
+            "rounded px-1.5 py-0.5 transition-colors hover:bg-muted hover:text-foreground",
+            isExplanation && !title.toLowerCase().includes("formula") && "bg-primary/15 font-bold text-primary"
           )}
         >
           Explain
@@ -217,7 +228,7 @@ function CalloutView({ node, updateAttributes, selected }: ReactNodeViewProps) {
             <input
               value={title}
               onChange={(event) => updateAttributes({ title: event.target.value })}
-              placeholder="Formula Explanation"
+              placeholder="Explanation"
               className="w-48 border-none bg-transparent p-0 text-sm font-bold text-primary outline-none"
             />
           </div>

@@ -134,6 +134,15 @@ export const BLOCK_COMMANDS: BlockCommand[] = [
     action: (editor) => insertCallout(editor, "info", "Formula Explanation"),
   },
   {
+    id: "explanation",
+    label: "Explanation",
+    description: "Bordered explanation card with cutout header badge",
+    icon: IconNotes,
+    keywords: ["explanation", "explain", "notes", "card", "overview", "details"],
+    group: "callouts",
+    action: (editor) => insertCallout(editor, "info", "Explanation"),
+  },
+  {
     id: "callout-note",
     label: "Note Box",
     description: "Paperclip accent callout for tips and notices",

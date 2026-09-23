@@ -6,6 +6,8 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import type { JSONContent } from "@tiptap/react"
 import { toast } from "sonner"
 
+import { IconEye } from "@tabler/icons-react"
+
 import { PostStatusBadge } from "@/components/dashboard/post-status-badge"
 import { AssetsTab } from "@/components/editor/assets-tab"
 import { PostEditor } from "@/components/editor/post-editor"
@@ -13,6 +15,7 @@ import {
   PostForm,
   type PostFormFields,
 } from "@/components/editor/post-form"
+import { PostPreviewModal } from "@/components/editor/post-preview-modal"
 import { SeoAnalysisPanel } from "@/components/editor/seo-analysis-panel"
 import {
   SeoFields,
@@ -32,7 +35,7 @@ import {
   useUpdateSeo,
 } from "@/lib/queries/posts"
 import { useAuthorOptions } from "@/lib/queries/users"
-import { useTags as useAllTags } from "@/lib/queries/categories"
+import { useCategories, useTags as useAllTags } from "@/lib/queries/categories"
 
 const EMPTY_FIELDS: PostFormFields = {
   title: "",
@@ -69,6 +72,7 @@ export function EditorView({ postId }: EditorViewProps) {
 
   const { data: post, isPending, isError, error, refetch } = usePost(postId)
   const { data: authors } = useAuthorOptions(Boolean(canChangeAuthor))
+  const { data: categories } = useCategories()
   const { data: allTags } = useAllTags()
   const createPost = useCreatePost()
   const updatePost = useUpdatePost()
@@ -83,6 +87,7 @@ export function EditorView({ postId }: EditorViewProps) {
   const [schemaType, setSchemaType] = useState(DEFAULT_SCHEMA_TYPE)
   const [doc, setDoc] = useState<JSONContent | null>(null)
   const [initialDoc, setInitialDoc] = useState<JSONContent | null>(null)
+  const [previewOpen, setPreviewOpen] = useState(false)
   const [dirty, setDirty] = useState(false)
   const [seoDirty, setSeoDirty] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -371,6 +376,15 @@ export function EditorView({ postId }: EditorViewProps) {
               </Link>
             </Button>
           ) : null}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setPreviewOpen(true)}
+          >
+            <IconEye className="mr-1.5 h-4 w-4" />
+            Preview
+          </Button>
           <Button type="button" onClick={() => save()} disabled={saving}>
             {saving ? "Saving…" : "Save"}
           </Button>
@@ -479,6 +493,16 @@ export function EditorView({ postId }: EditorViewProps) {
           )}
         </aside>
       </div>
+
+      <PostPreviewModal
+        open={previewOpen}
+        onOpenChange={setPreviewOpen}
+        fields={fields}
+        doc={doc}
+        authors={authors}
+        categories={categories}
+        currentUserName={user?.name}
+      />
     </div>
   )
 }
