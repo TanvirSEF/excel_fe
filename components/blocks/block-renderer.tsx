@@ -10,7 +10,7 @@ import {
   IconPaperclip,
 } from "@tabler/icons-react"
 
-import { toEmbedUrl } from "@/lib/embed"
+import { parseVideoInfo } from "@/lib/embed"
 import { clampHeadingLevel, headingId } from "@/lib/blocks"
 import { cn } from "@/lib/utils"
 import type {
@@ -25,6 +25,7 @@ import type {
 import { CodeBlock } from "./code-block"
 import { CopyButton } from "./copy-button"
 import { InlineToc } from "./inline-toc"
+import { VideoEmbed } from "./video-embed"
 import type { TocEntry } from "@/lib/blocks"
 
 interface BlockRendererProps {
@@ -297,7 +298,14 @@ interface BlockNodeProps {
 
 function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
   switch (block.type) {
-    case "paragraph":
+    case "paragraph": {
+      const trimmed = block.text?.trim()
+      if (trimmed && (trimmed.startsWith("http://") || trimmed.startsWith("https://")) && !trimmed.includes("\n")) {
+        const video = parseVideoInfo(trimmed)
+        if (video) {
+          return <VideoEmbed url={trimmed} />
+        }
+      }
       return (
         <p
           className={cn(
@@ -308,6 +316,7 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
           <InlineRuns value={block.content ?? block.text} />
         </p>
       )
+    }
 
     case "heading": {
       const level = clampHeadingLevel(block.level)
@@ -649,29 +658,8 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
         </div>
       )
 
-    case "embed": {
-      const embedUrl = toEmbedUrl(block.url)
-      if (!embedUrl) return null
-      return (
-        <figure className="my-6">
-          <div className="overflow-hidden rounded-xl border">
-            <iframe
-              src={embedUrl}
-              title={block.caption || "Embedded video"}
-              className="aspect-video w-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              loading="lazy"
-            />
-          </div>
-          {block.caption ? (
-            <figcaption className="mt-2 text-center text-xs text-muted-foreground">
-              {block.caption}
-            </figcaption>
-          ) : null}
-        </figure>
-      )
-    }
+    case "embed":
+      return <VideoEmbed url={block.url} caption={block.caption} />
 
     case "accordion":
       return (
