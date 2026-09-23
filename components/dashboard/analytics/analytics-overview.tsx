@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 
+import { OverviewChart } from "@/components/dashboard/analytics/overview-chart"
 import {
   StatTiles,
 } from "@/components/dashboard/analytics/stat-tiles"
@@ -39,6 +40,7 @@ export function AnalyticsOverview() {
             <Skeleton key={index} className="h-24" />
           ))}
         </div>
+        <Skeleton className="h-[360px] rounded-xl" />
         <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
           <Skeleton className="h-72" />
           <Skeleton className="h-72" />
@@ -73,6 +75,8 @@ export function AnalyticsOverview() {
           },
         ]}
       />
+
+      <OverviewChart data={data} />
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <Card>

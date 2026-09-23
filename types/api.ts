@@ -355,6 +355,7 @@ export interface OverviewAnalytics {
     views: number
   }[]
   trending: { id: string; title: string; slug: string }[]
+  daily_views_7_days?: { date: string; views: number }[]
 }
 
 export interface AuditLog {
