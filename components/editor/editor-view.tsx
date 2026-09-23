@@ -387,13 +387,27 @@ export function EditorView({ postId }: EditorViewProps) {
       ) : null}
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <PostEditor
-          key={postId ?? "new"}
-          initialDoc={initialDoc}
-          onDocChange={onDocChange}
-        />
+        <div className="space-y-6 min-w-0">
+          <PostEditor
+            key={postId ?? "new"}
+            initialDoc={initialDoc}
+            onDocChange={onDocChange}
+          />
 
-        <aside>
+          <SeoAnalysisPanel
+            title={fields.title}
+            slug={fields.slug}
+            excerpt={fields.excerpt}
+            metaTitle={seo.metaTitle}
+            metaDescription={seo.metaDescription}
+            canonicalUrl={seo.canonicalUrl}
+            keyphrase={keyphrase}
+            doc={doc}
+            onKeyphraseChange={onKeyphraseChange}
+          />
+        </div>
+
+        <aside className="space-y-6">
           {postId ? (
             <Tabs defaultValue="post">
               <TabsList className="w-full">
@@ -463,18 +477,6 @@ export function EditorView({ postId }: EditorViewProps) {
               />
             </div>
           )}
-
-          <SeoAnalysisPanel
-            title={fields.title}
-            slug={fields.slug}
-            excerpt={fields.excerpt}
-            metaTitle={seo.metaTitle}
-            metaDescription={seo.metaDescription}
-            canonicalUrl={seo.canonicalUrl}
-            keyphrase={keyphrase}
-            doc={doc}
-            onKeyphraseChange={onKeyphraseChange}
-          />
         </aside>
       </div>
     </div>
