@@ -94,9 +94,7 @@ export function PostEditor({ initialDoc, onDocChange }: PostEditorProps) {
     if (!editor || !initialDoc || editor.isDestroyed) return
     if (loadedDocRef.current !== initialDoc) {
       loadedDocRef.current = initialDoc
-      if (editor.isEmpty) {
-        editor.commands.setContent(initialDoc, { emitUpdate: false })
-      }
+      editor.commands.setContent(initialDoc, { emitUpdate: false })
     }
   }, [editor, initialDoc])
 
