@@ -16,8 +16,10 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet"
 import { ApiClientError } from "@/lib/api/error"
+import { useAuthStore } from "@/lib/auth"
 import {
   useCreateUser,
+  useDeleteUserPermanently,
   useUpdateUser,
 } from "@/lib/queries/users"
 import type { User, UserRole } from "@/types/api"
@@ -159,7 +161,9 @@ interface EditUserSheetProps {
 }
 
 export function EditUserSheet({ user, onOpenChange }: EditUserSheetProps) {
+  const me = useAuthStore((state) => state.user)
   const updateUser = useUpdateUser()
+  const deleteUserPermanently = useDeleteUserPermanently()
   const [name, setName] = useState("")
   const [bio, setBio] = useState("")
   const [avatarUrl, setAvatarUrl] = useState("")
@@ -168,6 +172,7 @@ export function EditUserSheet({ user, onOpenChange }: EditUserSheetProps) {
   const [isVerified, setIsVerified] = useState(false)
   const [loadedFor, setLoadedFor] = useState<string | null>(null)
   const [roleConfirmOpen, setRoleConfirmOpen] = useState(false)
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
   const [pending, setPending] = useState(false)
 
   if (user && loadedFor !== user.id) {
@@ -225,6 +230,22 @@ export function EditUserSheet({ user, onOpenChange }: EditUserSheetProps) {
         error instanceof ApiClientError
           ? error.message
           : "Could not change the role. Please try again."
+      )
+    }
+  }
+
+  async function onDeletePermanent() {
+    if (!user) return
+    try {
+      await deleteUserPermanently.mutateAsync(user.id)
+      toast.success("User permanently deleted.")
+      setDeleteConfirmOpen(false)
+      onOpenChange(false)
+    } catch (error) {
+      toast.error(
+        error instanceof ApiClientError
+          ? error.message
+          : "Could not delete user. Please try again."
       )
     }
   }
@@ -333,6 +354,28 @@ export function EditUserSheet({ user, onOpenChange }: EditUserSheetProps) {
                   Status ({isActive ? "active" : "deactivated"}) changes from
                   the list.
                 </p>
+
+                {me?.role === "super_admin" && me?.id !== user.id ? (
+                  <div className="border-t pt-4">
+                    <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-3">
+                      <h4 className="text-xs font-semibold uppercase tracking-wider text-destructive">
+                        Danger Zone
+                      </h4>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        Permanently remove this user. Their authored posts and media will be reassigned to you.
+                      </p>
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        className="mt-3"
+                        onClick={() => setDeleteConfirmOpen(true)}
+                      >
+                        Delete user permanently
+                      </Button>
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </>
           ) : null}
@@ -347,6 +390,16 @@ export function EditUserSheet({ user, onOpenChange }: EditUserSheetProps) {
         confirmLabel="Change role"
         destructive={false}
         onConfirm={applyRoleChange}
+      />
+
+      <ConfirmDialog
+        open={deleteConfirmOpen}
+        onOpenChange={setDeleteConfirmOpen}
+        title={`Permanently delete ${user?.name ?? ""}?`}
+        description="This action cannot be undone. Their account, profile, and active sessions will be permanently removed. Any authored posts and media will be reassigned to you."
+        confirmLabel="Delete permanently"
+        destructive
+        onConfirm={onDeletePermanent}
       />
     </>
   )

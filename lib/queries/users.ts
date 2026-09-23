@@ -69,6 +69,20 @@ export function useDeactivateUser() {
   })
 }
 
+export function useDeleteUserPermanently() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (userId: string) =>
+      apiFetch<{ message: string }>(`/users/${userId}?permanent=true`, {
+        method: "DELETE",
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] })
+    },
+  })
+}
+
 export function useCreateUser() {
   const queryClient = useQueryClient()
 

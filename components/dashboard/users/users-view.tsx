@@ -15,7 +15,11 @@ import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useAuthStore } from "@/lib/auth"
 import { ApiClientError } from "@/lib/api/error"
-import { useDeactivateUser, useUsers } from "@/lib/queries/users"
+import {
+  useDeactivateUser,
+  useDeleteUserPermanently,
+  useUsers,
+} from "@/lib/queries/users"
 import type { User } from "@/types/api"
 
 function initials(name: string): string {
@@ -34,9 +38,11 @@ export function UsersView() {
   const [createOpen, setCreateOpen] = useState(false)
   const [editing, setEditing] = useState<User | null>(null)
   const [deactivating, setDeactivating] = useState<User | null>(null)
+  const [deleting, setDeleting] = useState<User | null>(null)
 
   const { data, isPending, isError, refetch } = useUsers(page)
   const deactivateUser = useDeactivateUser()
+  const deleteUserPermanently = useDeleteUserPermanently()
 
   const items = (data?.items ?? []).filter((user) =>
     search.trim()
@@ -60,6 +66,22 @@ export function UsersView() {
       )
     } finally {
       setDeactivating(null)
+    }
+  }
+
+  async function onDeletePermanent() {
+    if (!deleting) return
+    try {
+      await deleteUserPermanently.mutateAsync(deleting.id)
+      toast.success("User permanently deleted.")
+    } catch (error) {
+      toast.error(
+        error instanceof ApiClientError
+          ? error.message
+          : "Could not delete user. Please try again."
+      )
+    } finally {
+      setDeleting(null)
     }
   }
 
@@ -184,15 +206,26 @@ export function UsersView() {
                       >
                         Edit
                       </Button>
-                      {user.is_active ? (
+                      {user.is_active && me?.id !== user.id ? (
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
-                          className="text-destructive hover:text-destructive"
+                          className="text-muted-foreground hover:text-foreground"
                           onClick={() => setDeactivating(user)}
                         >
                           Deactivate
+                        </Button>
+                      ) : null}
+                      {me?.role === "super_admin" && me?.id !== user.id ? (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                          onClick={() => setDeleting(user)}
+                        >
+                          Delete
                         </Button>
                       ) : null}
                     </div>
@@ -242,6 +275,16 @@ export function UsersView() {
         description="They can no longer sign in until reactivated. Their content stays."
         confirmLabel="Deactivate"
         onConfirm={onDeactivate}
+      />
+
+      <ConfirmDialog
+        open={deleting !== null}
+        onOpenChange={(open) => !open && setDeleting(null)}
+        title={`Permanently delete ${deleting?.name ?? ""}?`}
+        description="This action cannot be undone. Their account, profile, and active sessions will be completely removed. Any authored posts and media will be reassigned to you."
+        confirmLabel="Delete permanently"
+        destructive
+        onConfirm={onDeletePermanent}
       />
     </div>
   )
