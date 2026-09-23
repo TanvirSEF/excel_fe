@@ -66,16 +66,16 @@ function CalloutView({ node, updateAttributes, selected }: ReactNodeViewProps) {
     (Boolean(title && /^notes?\b/i.test(title.trim())) ||
       (variant === "info" && title.toLowerCase() === "note"))
 
-  const isFormula =
-    !isTakeaway &&
-    !isNote &&
-    Boolean(title && /formula/i.test(title))
-
   const isExplanation =
     !isTakeaway &&
     !isNote &&
-    !isFormula &&
-    Boolean(title && /explanation/i.test(title))
+    Boolean(title && /(explanation|explain)/i.test(title))
+
+  const isFormula =
+    !isTakeaway &&
+    !isNote &&
+    !isExplanation &&
+    Boolean(title && /formula/i.test(title))
 
   const presetButtons = (
     <div className="ml-auto flex items-center gap-1">

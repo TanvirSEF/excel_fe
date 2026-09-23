@@ -557,15 +557,36 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
         )
       }
 
+      const isExplanation =
+        !isTakeaway &&
+        !isNote &&
+        Boolean(block.title && /(explanation|explain)/i.test(block.title))
+
       const isFormula =
         !isTakeaway &&
         !isNote &&
+        !isExplanation &&
         ((Boolean(block.title && /formula/i.test(block.title))) ||
           (!block.title &&
             Boolean(
               block.text &&
                 /^\s*(=|[A-Z_]{2,}\s*\()/i.test(block.text.trim())
             )))
+
+      if (isExplanation) {
+        return (
+          <div className="relative my-7 rounded-2xl border-2 border-primary/50 bg-background p-5 sm:p-6 pt-7 sm:pt-8 shadow-xs transition-colors dark:border-primary/40">
+            <div className="absolute -top-3.5 left-8 sm:left-10 inline-flex items-center gap-2 bg-background px-1 text-base sm:text-[1.0625rem] font-bold tracking-tight text-primary">
+              <IconNotes className="h-5 w-5 text-primary shrink-0" />
+              <span>{block.title || "Explanation"}</span>
+            </div>
+
+            <div className="text-base sm:text-[1.03125rem] font-normal leading-[1.625] text-foreground/90">
+              <InlineRuns value={cleanRichText(block.content ?? block.text)} />
+            </div>
+          </div>
+        )
+      }
 
       if (isFormula) {
         const formulaText = (block.text ?? "").trim().replace(/^formula:?\s*/i, "")
@@ -586,28 +607,6 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
 
             <div className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2">
               <CopyButton text={formulaText} />
-            </div>
-          </div>
-        )
-      }
-
-      const isExplanation =
-        !isTakeaway &&
-        !isNote &&
-        !isFormula &&
-        (Boolean(block.title && /explanation/i.test(block.title)) ||
-          (block.variant === "info" && Boolean(block.title)))
-
-      if (isExplanation) {
-        return (
-          <div className="relative my-7 rounded-2xl border-2 border-primary/50 bg-background p-5 sm:p-6 pt-7 sm:pt-8 shadow-xs transition-colors dark:border-primary/40">
-            <div className="absolute -top-3.5 left-8 sm:left-10 inline-flex items-center gap-2 bg-background px-1 text-base sm:text-[1.0625rem] font-bold tracking-tight text-primary">
-              <IconNotes className="h-5 w-5 text-primary shrink-0" />
-              <span>{block.title || "Explanation"}</span>
-            </div>
-
-            <div className="text-base sm:text-[1.03125rem] font-normal leading-[1.625] text-foreground/90">
-              <InlineRuns value={cleanRichText(block.content ?? block.text)} />
             </div>
           </div>
         )
