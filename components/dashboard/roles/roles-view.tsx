@@ -77,7 +77,7 @@ export function RolesView() {
                 Click &ldquo;Edit permissions&rdquo; on any non-root role to grant or revoke specific operational privileges.
               </p>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               {roleList.map((role) => (
                 <RoleCard
                   key={role.role}
