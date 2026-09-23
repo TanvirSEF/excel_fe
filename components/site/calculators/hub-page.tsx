@@ -53,7 +53,7 @@ export function HubPage({ hub }: HubPageProps) {
         </div>
       </section>
 
-      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto w-full max-w-6xl px-4 pt-10 sm:pt-14 sm:px-6">
         <div className="rounded-2xl border border-primary/25 bg-primary/5 px-5 py-4 text-sm leading-relaxed text-foreground/85 sm:px-6">
           {hub.hubNote}
         </div>
