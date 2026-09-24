@@ -128,6 +128,7 @@ export interface PostListItem {
   slug: string
   excerpt: string | null
   meta_description?: string | null
+  canonical_url?: string | null
   featured_image_url: string | null
   reading_time_minutes: number | null
   is_trending: boolean

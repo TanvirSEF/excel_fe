@@ -9,6 +9,7 @@ import { toast } from "sonner"
 import { IconEye } from "@tabler/icons-react"
 
 import { PostStatusBadge } from "@/components/dashboard/post-status-badge"
+import { postHref } from "@/components/site/post-card"
 import { AssetsTab } from "@/components/editor/assets-tab"
 import { PostEditor } from "@/components/editor/post-editor"
 import {
@@ -371,7 +372,7 @@ export function EditorView({ postId }: EditorViewProps) {
         <div className="flex items-center gap-2">
           {postId && post && post.status === "published" ? (
             <Button asChild variant="outline" size="sm">
-              <Link href={`/blog/${post.slug}`} target="_blank">
+              <Link href={postHref(post)} target="_blank">
                 View live
               </Link>
             </Button>

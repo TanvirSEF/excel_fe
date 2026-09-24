@@ -12,10 +12,24 @@ interface PostCardProps {
   className?: string
 }
 
-export function postHref(post: Pick<PostListItem, "slug" | "category">) {
-  return isGoogleSheetsCategory(post.category?.slug)
-    ? `/google-sheets/${post.slug}`
-    : `/blog/${post.slug}`
+export function postHref(
+  post: Pick<PostListItem, "slug"> & {
+    category?: { slug: string } | null
+    canonical_url?: string | null
+  }
+) {
+  let href = post.canonical_url
+    ? post.canonical_url.startsWith("/")
+      ? post.canonical_url
+      : `/${post.canonical_url}`
+    : isGoogleSheetsCategory(post.category?.slug)
+      ? `/google-sheets/${post.slug}`
+      : `/blog/${post.slug}`
+
+  if (!href.endsWith("/")) {
+    href += "/"
+  }
+  return href
 }
 
 export function PostCard({ post, className }: PostCardProps) {
