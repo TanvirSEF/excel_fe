@@ -73,10 +73,10 @@ export function PostCard({ post, className }: PostCardProps) {
               {post.title}
             </h3>
 
-            {/* Excerpt */}
-            {post.excerpt ? (
+            {/* Description */}
+            {post.meta_description || post.excerpt ? (
               <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-                {post.excerpt}
+                {post.meta_description || post.excerpt}
               </p>
             ) : null}
 

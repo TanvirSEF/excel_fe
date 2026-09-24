@@ -47,9 +47,9 @@ export function TrendingSection({ posts, className }: TrendingSectionProps) {
                   {post.title}
                 </h3>
 
-                {post.excerpt ? (
+                {post.meta_description || post.excerpt ? (
                   <p className="mt-1.5 line-clamp-1 text-sm leading-relaxed text-muted-foreground">
-                    {post.excerpt}
+                    {post.meta_description || post.excerpt}
                   </p>
                 ) : null}
 
