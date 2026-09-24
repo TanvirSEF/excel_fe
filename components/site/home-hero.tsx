@@ -21,7 +21,7 @@ const SPREADSHEET_ROWS = [
   { id: 2, month: "January",  revenue: "$12,400", growth: "8.2%",  negative: false, active: false },
   { id: 3, month: "February", revenue: "$15,800", growth: "11.4%", negative: false, active: false },
   { id: 4, month: "March",    revenue: "$19,350", growth: "22.5%", negative: false, active: true  },
-  { id: 5, month: "April",    revenue: "$17,900", growth: "–7.5%", negative: true,  active: false },
+  { id: 5, month: "April",    revenue: "$17,900", growth: "-7.5%", negative: true,  active: false },
   { id: 6, month: "May",      revenue: "$23,120", growth: "29.2%", negative: false, active: false },
 ]
 
@@ -111,11 +111,11 @@ export function HomeHero({ categories }: { categories: Category[] }) {
 
   return (
     <section className="relative w-full overflow-hidden bg-gradient-to-bl from-chart-2 via-primary to-chart-5">
-      {/* Large glow — top right, cyan tinted */}
+      {/* Large glow - top right, cyan tinted */}
       <div aria-hidden className="pointer-events-none absolute -right-40 -top-40 h-[580px] w-[580px] rounded-full bg-teal-300/12 blur-3xl" />
-      {/* Medium glow — center left */}
+      {/* Medium glow - center left */}
       <div aria-hidden className="pointer-events-none absolute left-1/4 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-white/6 blur-3xl" />
-      {/* Small glow — bottom right */}
+      {/* Small glow - bottom right */}
       <div aria-hidden className="pointer-events-none absolute -bottom-16 right-1/4 h-48 w-48 rounded-full bg-white/8 blur-2xl" />
       {/* Angular aurora ribbons */}
       <div aria-hidden className="pointer-events-none absolute -left-24 -top-1/3 h-[170%] w-64 rotate-[20deg] bg-gradient-to-b from-teal-300/10 via-teal-300/4 to-transparent" />
@@ -125,17 +125,21 @@ export function HomeHero({ categories }: { categories: Category[] }) {
       {/* Bottom fade into page */}
       <div aria-hidden className="pointer-events-none absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-background/15 to-transparent" />
 
-      <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 py-16 sm:py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-24">
+      <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 py-16 sm:py-20 lg:grid-cols-[1.35fr_1fr] lg:gap-12 xl:gap-16 lg:px-12 lg:py-24">
 
         {/* ── Left: Content ── */}
         <div className="space-y-8">
 
           {/* H1 */}
-          <h1 className="text-[2rem] font-bold leading-[1.12] tracking-tight text-primary-foreground sm:text-[2.5rem] lg:text-[2.6rem]">
-            Learn Excel &amp; Google Sheets Like a Pro,
-            <br className="hidden sm:block" />
-            <span className="text-teal-400">
-              Solve Spreadsheet Problems &amp; Get Custom Templates!
+          <h1 className="text-2xl font-bold leading-[1.14] tracking-tight text-primary-foreground sm:text-[2rem] md:text-[2.2rem] lg:text-[2.15rem] xl:text-[2.5rem]">
+            <span className="block sm:whitespace-nowrap">
+              Learn Excel &amp; Google Sheets Like a Pro,
+            </span>
+            <span className="block text-teal-400">
+              Solve Spreadsheet Problems
+            </span>
+            <span className="block text-teal-400">
+              &amp; Get Custom Templates!
             </span>
           </h1>
 
@@ -184,8 +188,8 @@ export function HomeHero({ categories }: { categories: Category[] }) {
           </div>
         </div>
 
-        {/* ── Right: Excel Mockup — hidden on mobile ── */}
-        <div className="hidden lg:block">
+        {/* -- Right: Excel Mockup - hidden on mobile -- */}
+        <div className="hidden lg:block w-full max-w-[480px] lg:justify-self-end">
           <ExcelWindowMockup />
         </div>
       </div>
