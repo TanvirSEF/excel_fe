@@ -7,12 +7,12 @@ export const metadata: Metadata = {
   title: "Accounting Calculators Hub | Excel Insider",
   description:
     "Free online accounting calculators — retail & wholesale margins, payroll with overtime, gross-up pay, Amazon seller fees, retained earnings, debt payoff and more.",
-  alternates: { canonical: "/calculators/accounting" },
+  alternates: { canonical: "/calculator/accounting/" },
   openGraph: {
     title: "Accounting Calculators Hub | Excel Insider",
     description:
       "Profit margins, payroll, commissions, business health and debt tools — universal formulas, instant results, 100% free.",
-    url: "/calculators/accounting",
+    url: "/calculator/accounting/",
     images: ["/og-default.png"],
   },
 }

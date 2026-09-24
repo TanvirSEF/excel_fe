@@ -170,7 +170,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
     pathname.startsWith("/categories") ||
     pathname.startsWith("/google-sheets")
   const isPricingActive = pathname.startsWith("/pricing")
-  const isCalculatorActive = pathname.startsWith("/calculators")
+  const isCalculatorActive = pathname.startsWith("/calculator")
 
   return (
     <nav className="hidden lg:flex items-center gap-1 xl:gap-2.5 text-[0.9375rem] xl:text-[0.96875rem] font-medium" aria-label="Main Navigation">
@@ -451,7 +451,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
           >
             <div className="w-72 p-2 rounded-xl shadow-xl border border-border/70 backdrop-blur-md bg-background/95">
               <Link
-                href="/calculators/statistics"
+                href="/calculator/statistics/"
                 onClick={() => setActiveMenu(null)}
                 className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-muted/60 transition-colors"
               >
@@ -465,7 +465,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
               </Link>
 
               <Link
-                href="/calculators/finance"
+                href="/calculator/finance/"
                 onClick={() => setActiveMenu(null)}
                 className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-muted/60 transition-colors"
               >
@@ -479,7 +479,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
               </Link>
 
               <Link
-                href="/calculators/accounting"
+                href="/calculator/accounting/"
                 onClick={() => setActiveMenu(null)}
                 className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-muted/60 transition-colors"
               >
@@ -495,7 +495,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
               <div className="my-1.5 h-px bg-border/60" />
 
               <Link
-                href="/calculators"
+                href="/calculator/"
                 onClick={() => setActiveMenu(null)}
                 className="flex items-center justify-between p-2 rounded-lg text-xs font-medium text-primary hover:text-primary hover:bg-muted/40 transition-colors"
               >

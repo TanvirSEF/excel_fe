@@ -37,7 +37,7 @@ const DOMAIN_CARDS: DomainCard[] = [
     category: "Finance Hub",
     description:
       "Model investment yields, calculate Internal Rate of Return (IRR), DRIP compounding, and analyze rental property ROI.",
-    hubHref: "/calculators/finance",
+    hubHref: "/calculator/finance",
     icon: IconReportMoney,
     count: FINANCE_HUB.groups.reduce((acc, g) => acc + g.calculators.length, 0),
     accentBg: "bg-emerald-500/10",
@@ -47,19 +47,19 @@ const DOMAIN_CARDS: DomainCard[] = [
     tools: [
       {
         name: "Internal Rate of Return (IRR)",
-        slug: "irr-calculator",
+        slug: "internal-rate-of-return",
       },
       {
         name: "Dividend Reinvestment (DRIP)",
-        slug: "dividend-reinvestment-plan-calculator",
+        slug: "dividend-reinvestment-plan",
       },
       {
         name: "Rental Property ROI",
-        slug: "rental-property-roi-calculator",
+        slug: "rental-property-roi",
       },
       {
         name: "Stock Profit & Loss",
-        slug: "share-profit-calculator",
+        slug: "share-profit",
       },
     ],
   },
@@ -69,7 +69,7 @@ const DOMAIN_CARDS: DomainCard[] = [
     category: "Accounting Hub",
     description:
       "Calculate retail margins, working capital cycles, overtime wages, and tiered sales commission schedules.",
-    hubHref: "/calculators/accounting",
+    hubHref: "/calculator/accounting",
     icon: IconScale,
     count: ACCOUNTING_HUB.groups.reduce((acc, g) => acc + g.calculators.length, 0),
     accentBg: "bg-blue-500/10",
@@ -79,19 +79,19 @@ const DOMAIN_CARDS: DomainCard[] = [
     tools: [
       {
         name: "Retail Profit Margin",
-        slug: "retail-profit-margin-calculator",
+        slug: "retail-profit-margin",
       },
       {
         name: "Payroll & Overtime Wages",
-        slug: "payroll-overtime-calculator",
+        slug: "payroll-with-overtime",
       },
       {
         name: "Cash Conversion Cycle",
-        slug: "cash-conversion-cycle-calculator",
+        slug: "cash-conversion-cycle",
       },
       {
         name: "Sales Commission Tier",
-        slug: "sales-commission-calculator",
+        slug: "sales-commission",
       },
     ],
   },
@@ -101,7 +101,7 @@ const DOMAIN_CARDS: DomainCard[] = [
     category: "Statistics Hub",
     description:
       "Run one-way ANOVA hypothesis tests, convert Z-scores to percentiles, and calculate weighted averages and geometric means.",
-    hubHref: "/calculators/statistics",
+    hubHref: "/calculator/statistics",
     icon: IconChartHistogram,
     count: STATS_HUB.groups.reduce((acc, g) => acc + g.calculators.length, 0),
     accentBg: "bg-violet-500/10",
@@ -111,19 +111,19 @@ const DOMAIN_CARDS: DomainCard[] = [
     tools: [
       {
         name: "Weighted Average Grade",
-        slug: "weighted-average-grade-calculator",
+        slug: "weighted-average-grade",
       },
       {
         name: "One-Way ANOVA Test",
-        slug: "one-way-anova-calculator",
+        slug: "one-way-analysis-of-variance",
       },
       {
         name: "Z-Score to Percentile",
-        slug: "z-score-to-percentile-calculator",
+        slug: "z-score-to-percentile",
       },
       {
         name: "Geometric Mean Rate",
-        slug: "geometric-mean-calculator",
+        slug: "geometric-mean",
       },
     ],
   },
@@ -136,7 +136,7 @@ export function CalculatorsSection() {
         badge="45 Free Tools"
         title="Instant Browser-Based Calculators"
         subtitle="Three libraries of instant, browser-based calculators for statistics, finance, and accounting — every formula explained, every result step by step."
-        action={{ label: "View All 45 Calculators", href: "/calculators" }}
+        action={{ label: "View All 45 Calculators", href: "/calculator/" }}
       />
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -181,7 +181,7 @@ export function CalculatorsSection() {
                   {card.tools.map((tool) => (
                     <Link
                       key={tool.slug}
-                      href={`${card.hubHref}/${tool.slug}`}
+                      href={`${card.hubHref}/${tool.slug}/`}
                       className="flex items-center justify-between p-2 rounded-lg text-xs font-medium text-foreground hover:bg-muted/70 hover:text-primary transition-colors group/item"
                     >
                       <span className="truncate group-hover/item:translate-x-0.5 transition-transform">
@@ -195,7 +195,7 @@ export function CalculatorsSection() {
 
               <div className="mt-5 pt-4 border-t border-border/50">
                 <Link
-                  href={card.hubHref}
+                  href={`${card.hubHref}/`}
                   className={`inline-flex items-center gap-1.5 text-xs font-semibold ${card.accentText} hover:underline`}
                 >
                   <span>Explore all {card.title} tools</span>

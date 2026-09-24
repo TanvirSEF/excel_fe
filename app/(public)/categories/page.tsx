@@ -74,7 +74,7 @@ export default async function CategoriesPage() {
         </div>
 
         <Link
-          href="/calculators"
+          href="/calculator/"
           className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-xs sm:text-sm font-semibold text-primary-foreground shadow-2xs transition-all hover:bg-primary/90 shrink-0"
         >
           <span>Explore 45 Calculators</span>

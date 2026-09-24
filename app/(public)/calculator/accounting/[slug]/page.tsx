@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { notFound } from "next/navigation"
+import { notFound, permanentRedirect } from "next/navigation"
 import type { ComponentType } from "react"
 
 import { AmazonSellerCommissionCalculator } from "@/components/site/calculators/accounting/amazon-seller-commission-calculator"
@@ -19,36 +19,40 @@ import { SalespersonProfitabilityCalculator } from "@/components/site/calculator
 import { WholesaleMarginCalculator } from "@/components/site/calculators/accounting/wholesale-margin-calculator"
 import { CalculatorPage } from "@/components/site/calculators/calculator-page"
 import {
-  ACCOUNTING_CALCULATORS,
   getAccountingCalculator,
   getAccountingGroupForCalculator,
 } from "@/lib/calculators"
-import { ACCOUNTING_DETAILS, type AccountingSlug } from "@/lib/calculator-content/accounting"
+import {
+  ACCOUNTING_DETAILS,
+  ACCOUNTING_CANONICAL_SLUG_MAP,
+  type AccountingSlug,
+} from "@/lib/calculator-content/accounting"
 import { calculatorMetadata } from "@/lib/calculator-content/metadata"
 
 export const dynamicParams = false
 export const revalidate = 300
 
 export function generateStaticParams() {
-  return ACCOUNTING_CALCULATORS.map((calculator) => ({ slug: calculator.slug }))
+  const allSlugs = Object.keys(ACCOUNTING_CANONICAL_SLUG_MAP)
+  return allSlugs.map((slug) => ({ slug }))
 }
 
 const CALCULATOR_COMPONENTS: Record<AccountingSlug, ComponentType> = {
-  "retail-profit-margin-calculator": RetailProfitMarginCalculator,
-  "wholesale-margin-calculator": WholesaleMarginCalculator,
-  "reverse-margin-calculator": ReverseMarginCalculator,
-  "amazon-seller-commission-calculator": AmazonSellerCommissionCalculator,
-  "salesperson-profitability-calculator": SalespersonProfitabilityCalculator,
-  "payroll-overtime-calculator": PayrollOvertimeCalculator,
-  "gross-up-payroll-calculator": GrossUpPayrollCalculator,
-  "prorated-bonus-calculator": ProratedBonusCalculator,
-  "sales-commission-calculator": SalesCommissionCalculator,
-  "payroll-conversion-calculator": PayrollConversionCalculator,
-  "retained-earnings-calculator": RetainedEarningsCalculator,
-  "cash-conversion-cycle-calculator": CashConversionCycleCalculator,
-  "debt-payoff-extra-payments-calculator": DebtPayoffExtraPaymentsCalculator,
-  "debt-snowball-vs-avalanche-calculator": DebtSnowballVsAvalancheCalculator,
-  "marginal-propensity-to-consume-calculator": MarginalPropensityToConsumeCalculator,
+  "retail-profit-margin": RetailProfitMarginCalculator,
+  "wholesale-margin": WholesaleMarginCalculator,
+  "reverse-margin": ReverseMarginCalculator,
+  "amazon-seller-commission": AmazonSellerCommissionCalculator,
+  "salesperson-profitability": SalespersonProfitabilityCalculator,
+  "payroll-with-overtime": PayrollOvertimeCalculator,
+  "gross-up-payroll": GrossUpPayrollCalculator,
+  "prorated-bonus": ProratedBonusCalculator,
+  "sales-commission": SalesCommissionCalculator,
+  "payroll-conversion": PayrollConversionCalculator,
+  "retained-earnings": RetainedEarningsCalculator,
+  "cash-conversion-cycle": CashConversionCycleCalculator,
+  "debt-payoff-with-extra-payments": DebtPayoffExtraPaymentsCalculator,
+  "debt-snowball-vs-avalanche": DebtSnowballVsAvalancheCalculator,
+  "marginal-propensity-to-consume": MarginalPropensityToConsumeCalculator,
 }
 
 export async function generateMetadata({
@@ -57,14 +61,17 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const entry = getAccountingCalculator(slug)
-  const detail = ACCOUNTING_DETAILS[slug as AccountingSlug]
+  const canonicalSlug = ACCOUNTING_CANONICAL_SLUG_MAP[slug]
+  if (!canonicalSlug) return {}
+
+  const entry = getAccountingCalculator(canonicalSlug)
+  const detail = ACCOUNTING_DETAILS[canonicalSlug]
   if (!entry || !detail) return {}
 
   return calculatorMetadata(
     entry.name,
     detail.metaDescription,
-    `/calculators/accounting/${slug}`
+    `/calculator/accounting/${canonicalSlug}/`
   )
 }
 
@@ -74,16 +81,23 @@ export default async function AccountingCalculatorPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const entry = getAccountingCalculator(slug)
-  const detail = ACCOUNTING_DETAILS[slug as AccountingSlug]
+  const canonicalSlug = ACCOUNTING_CANONICAL_SLUG_MAP[slug]
+  if (!canonicalSlug) notFound()
+
+  if (slug !== canonicalSlug) {
+    permanentRedirect(`/calculator/accounting/${canonicalSlug}/`)
+  }
+
+  const entry = getAccountingCalculator(canonicalSlug)
+  const detail = ACCOUNTING_DETAILS[canonicalSlug]
   if (!entry || !detail) notFound()
 
-  const group = getAccountingGroupForCalculator(slug)
-  const Calculator = CALCULATOR_COMPONENTS[slug as AccountingSlug]
+  const group = getAccountingGroupForCalculator(canonicalSlug)
+  const Calculator = CALCULATOR_COMPONENTS[canonicalSlug]
 
   return (
     <CalculatorPage
-      category={{ label: "Accounting", href: "/calculators/accounting" }}
+      category={{ label: "Accounting", href: "/calculator/accounting/" }}
       group={group}
       entry={entry}
       detail={detail}

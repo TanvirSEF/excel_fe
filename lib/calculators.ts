@@ -15,6 +15,10 @@ import {
   IconTrendingUp,
 } from "@tabler/icons-react"
 
+import { ACCOUNTING_CANONICAL_SLUG_MAP } from "@/lib/calculator-content/accounting"
+import { FINANCE_CANONICAL_SLUG_MAP } from "@/lib/calculator-content/finance"
+import { STATS_CANONICAL_SLUG_MAP } from "@/lib/calculator-content/statistics"
+
 export interface CalculatorEntry {
   slug: string
   name: string
@@ -92,7 +96,7 @@ export const STATS_HUB: CalculatorHub = {
       accent: "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10",
       calculators: [
         {
-          slug: "weighted-average-grade-calculator",
+          slug: "weighted-average-grade",
           name: "Weighted Average Grade Calculator",
           whatItIs:
             "A tool for students to calculate their final class grade when assignments carry different weights — like a Final Exam worth 50% and Homework worth 10%.",
@@ -100,7 +104,7 @@ export const STATS_HUB: CalculatorHub = {
             "Enter your grades and their percentage weights to see exactly where you stand in class.",
         },
         {
-          slug: "geometric-mean-calculator",
+          slug: "geometric-mean",
           name: "Geometric Mean Calculator",
           whatItIs:
             "A specialized way to average numbers that are multiplied together — often used for growth rates or investment returns.",
@@ -108,7 +112,7 @@ export const STATS_HUB: CalculatorHub = {
             "The correct average rate that prevents skewing by extreme high or low numbers.",
         },
         {
-          slug: "harmonic-mean-calculator",
+          slug: "harmonic-mean",
           name: "Harmonic Mean Calculator",
           whatItIs:
             "The perfect tool for averaging rates or ratios — like speed (km/h) or price-earnings ratios in finance.",
@@ -116,7 +120,7 @@ export const STATS_HUB: CalculatorHub = {
             "A precise average for fractions and rates that a normal average would get wrong.",
         },
         {
-          slug: "time-weighted-average-calculator",
+          slug: "time-weighted-average",
           name: "Time Weighted Average (TWA) Calculator",
           whatItIs:
             "Measures a worker's daily noise or chemical exposure across an 8-hour workday, with OSHA and NIOSH safety limits built in.",
@@ -132,7 +136,7 @@ export const STATS_HUB: CalculatorHub = {
       accent: "text-blue-600 dark:text-blue-400 bg-blue-500/10",
       calculators: [
         {
-          slug: "coefficient-of-variance-calculator",
+          slug: "coefficient-of-variance",
           name: "Coefficient of Variance Calculator",
           whatItIs:
             "Tells you how risky or volatile a dataset is compared to its own average.",
@@ -140,7 +144,7 @@ export const STATS_HUB: CalculatorHub = {
             "A percentage that lets you compare the risk of two different things — like two stocks — even if their prices are totally different.",
         },
         {
-          slug: "pooled-variance-calculator",
+          slug: "pooled-variance",
           name: "Pooled Variance Calculator",
           whatItIs:
             "Combines standard deviations or variances from unlimited groups into one weighted, reliable metric — with degrees of freedom handled automatically.",
@@ -148,7 +152,7 @@ export const STATS_HUB: CalculatorHub = {
             "Pooled variance and pooled standard deviation for t-tests, ANOVA and quality control.",
         },
         {
-          slug: "one-way-anova-calculator",
+          slug: "one-way-analysis-of-variance",
           name: "One Way Analysis of Variance (ANOVA) Calculator",
           whatItIs:
             "A statistical test that compares the means of three or more independent groups to see if they are significantly different.",
@@ -156,7 +160,7 @@ export const STATS_HUB: CalculatorHub = {
             "A clear F-Statistic and P-Value that tell you whether your groups actually differ — or the results just happened by chance.",
         },
         {
-          slug: "two-way-anova-calculator",
+          slug: "two-way-analysis-of-variance",
           name: "Two Way Analysis of Variance (ANOVA) Calculator",
           whatItIs:
             "A more advanced ANOVA that looks at how two different factors affect a result — for example how Diet AND Exercise affect weight loss.",
@@ -171,7 +175,7 @@ export const STATS_HUB: CalculatorHub = {
       accent: "text-purple-600 dark:text-purple-400 bg-purple-500/10",
       calculators: [
         {
-          slug: "z-score-to-percentile-calculator",
+          slug: "z-score-to-percentile",
           name: "Z Score to Percentile Calculator",
           whatItIs:
             "Converts a Z-Score (standard deviations) into a simple percentile ranking — like Top 10%.",
@@ -179,7 +183,7 @@ export const STATS_HUB: CalculatorHub = {
             "A percentage that tells you exactly what portion of the population is below or above a specific score.",
         },
         {
-          slug: "critical-z-value-calculator",
+          slug: "critical-z-value",
           name: "Critical Z Value Calculator",
           whatItIs:
             "Finds the boundary mark (cut-off point) on a bell curve needed to reject a hypothesis at a certain confidence level.",
@@ -187,7 +191,7 @@ export const STATS_HUB: CalculatorHub = {
             "The precise Z-value needed for hypothesis testing — like 1.96 for a 95% confidence level.",
         },
         {
-          slug: "p-value-from-z-score-calculator",
+          slug: "p-value-from-z-score",
           name: "P Value from Z Score Calculator",
           whatItIs:
             "The ultimate evidence calculator: the probability of finding a result as extreme as the one you observed.",
@@ -203,7 +207,7 @@ export const STATS_HUB: CalculatorHub = {
       accent: "text-amber-600 dark:text-amber-400 bg-amber-500/10",
       calculators: [
         {
-          slug: "weighted-average-overtime-calculator",
+          slug: "weighted-average-overtime",
           name: "Weighted Average Overtime Calculator",
           whatItIs:
             "FLSA blended-rate overtime calculator for employees working multiple jobs at different pay rates, with bonuses and commissions included.",
@@ -211,7 +215,7 @@ export const STATS_HUB: CalculatorHub = {
             "The DOL 4-step process: blended regular rate, half-time premium and total gross pay — computed instantly.",
         },
         {
-          slug: "vwap-calculator",
+          slug: "volume-weighted-average-price",
           name: "Volume Weighted Average Price (VWAP) Calculator",
           whatItIs:
             "A trading benchmark that shows the average price a stock traded at throughout the day, based on both price and volume.",
@@ -260,13 +264,15 @@ export const STATS_CALCULATORS: CalculatorEntry[] = STATS_HUB.groups.flatMap(
 )
 
 export function getStatsCalculator(slug: string): CalculatorEntry | undefined {
-  return STATS_CALCULATORS.find((calculator) => calculator.slug === slug)
+  const canonical = STATS_CANONICAL_SLUG_MAP[slug] ?? slug
+  return STATS_CALCULATORS.find((calculator) => calculator.slug === canonical)
 }
 
 export function getStatsGroupForCalculator(slug: string): CalculatorGroup {
+  const canonical = STATS_CANONICAL_SLUG_MAP[slug] ?? slug
   return (
     STATS_HUB.groups.find((group) =>
-      group.calculators.some((calculator) => calculator.slug === slug)
+      group.calculators.some((calculator) => calculator.slug === canonical)
     ) ?? STATS_HUB.groups[0]
   )
 }
@@ -291,7 +297,7 @@ export const FINANCE_HUB: CalculatorHub = {
       accent: "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10",
       calculators: [
         {
-          slug: "share-profit-calculator",
+          slug: "share-profit",
           name: "Share Profit Calculator",
           whatItIs:
             "Improve your trading decisions with our Share Profit Calculator. This tool simply calculates your actual profit or loss by considering your purchase price, selling price, brokerage fees, and capital gains tax.",
@@ -299,7 +305,7 @@ export const FINANCE_HUB: CalculatorHub = {
             "It gives you a clear view of your actual ROI and the amount you take home.",
         },
         {
-          slug: "dividend-reinvestment-plan-calculator",
+          slug: "dividend-reinvestment-plan",
           name: "Dividend Reinvestment Plan (DRIP) Calculator",
           whatItIs:
             "Compounding can grow your wealth faster than you think. Our Dividend Reinvestment Plan (DRIP) Calculator shows you how. It helps you see how reinvesting your dividends can build real wealth over time.",
@@ -307,7 +313,7 @@ export const FINANCE_HUB: CalculatorHub = {
             "You can also add yearly contributions and factor in stock growth. The result gives you a clear idea of where your money could be spent. It works great for retirement planning or building a passive income stream.",
         },
         {
-          slug: "dividend-snowball-calculator",
+          slug: "dividend-snowball",
           name: "Dividend Snowball Calculator",
           whatItIs:
             "Find out your path to financial freedom with our Dividend Snowball Calculator. This tool helps you track how dividend reinvestment grows your income over time.",
@@ -315,7 +321,7 @@ export const FINANCE_HUB: CalculatorHub = {
             "It also shows how monthly contributions and yearly dividend increases boost your portfolio faster. A small cash flow can grow into a strong stream of passive income.",
         },
         {
-          slug: "living-off-dividends-calculator",
+          slug: "living-off-dividends",
           name: "Living Off Dividends Calculator",
           whatItIs:
             "Want to live off dividends and leave the rat race behind? Our Living Off Dividends Calculator helps you figure out how much money you need to cover all your living expenses with dividend income.",
@@ -323,7 +329,7 @@ export const FINANCE_HUB: CalculatorHub = {
             "It also shows you how long it will take to get there. The calculator factors in taxes, inflation, and dividend growth so you get a complete and accurate result.",
         },
         {
-          slug: "cost-of-equity-calculator",
+          slug: "cost-of-equity",
           name: "Cost of Equity Calculator",
           whatItIs:
             "Use our Cost of Equity Calculator to find the return your shareholders expect. This tool gives you two simple methods for calculation. You can use the Capital Asset Pricing Model (CAPM) or the Dividend Capitalization Model.",
@@ -339,7 +345,7 @@ export const FINANCE_HUB: CalculatorHub = {
       accent: "text-blue-600 dark:text-blue-400 bg-blue-500/10",
       calculators: [
         {
-          slug: "rental-property-roi-calculator",
+          slug: "rental-property-roi",
           name: "Rental Property ROI Calculator",
           whatItIs:
             "Our Rental Property ROI Calculator helps you get the most from your real estate investment. It is built for cash investors and Shariah-compliant financing models. The calculator shows your cash-on-cash return, net operating income, and long-term profit in a simple way.",
@@ -347,7 +353,7 @@ export const FINANCE_HUB: CalculatorHub = {
             "It works without interest-based debt or complex formulas. You only enter your numbers and see clear results.",
         },
         {
-          slug: "cash-on-cash-roi-calculator",
+          slug: "cash-on-cash-roi",
           name: "Cash on Cash ROI Calculator",
           whatItIs:
             "Track your property returns with our Cash on Cash ROI Calculator. This tool helps you measure the yearly return on your own invested money. It includes down payments, closing costs, and repair expenses in the calculation.",
@@ -355,7 +361,7 @@ export const FINANCE_HUB: CalculatorHub = {
             "This helps you see the exact return on your cash investment.",
         },
         {
-          slug: "solar-roi-calculator",
+          slug: "solar-roi",
           name: "Solar ROI Calculator",
           whatItIs:
             "Plan your move to renewable energy with our Solar ROI Calculator. This tool checks your installation costs, government incentives, and rising utility rates. It helps you estimate your payback period, monthly savings, and long-term financial savings.",
@@ -372,7 +378,7 @@ export const FINANCE_HUB: CalculatorHub = {
       accent: "text-amber-600 dark:text-amber-400 bg-amber-500/10",
       calculators: [
         {
-          slug: "marketing-roi-calculator",
+          slug: "marketing-roi",
           name: "Marketing ROI Calculator",
           whatItIs:
             "Track how well your advertising campaigns are performing with our Marketing ROI Calculator. This tool breaks down your profitability by looking at ad spend, labor costs, COGS, and customer lifetime value.",
@@ -380,7 +386,7 @@ export const FINANCE_HUB: CalculatorHub = {
             "You get clear numbers that help you grow your marketing budget with confidence.",
         },
         {
-          slug: "enterprise-seo-roi-calculator",
+          slug: "enterprise-seo-roi",
           name: "Enterprise SEO ROI Calculator",
           whatItIs:
             "Forecast your organic growth with confidence using our Advanced Enterprise SEO ROI Calculator. This tool is built for marketing directors and SEO strategists who need more than basic traffic numbers. It goes deeper than simple estimates. It breaks down conversion value, resource costs, and long-term profitability.",
@@ -388,7 +394,7 @@ export const FINANCE_HUB: CalculatorHub = {
             "You can use it to build a stronger SEO budget with clear and useful data.",
         },
         {
-          slug: "b2b-roi-calculator",
+          slug: "b2b-roi",
           name: "B2B ROI Calculator",
           whatItIs:
             "Measure how well your sales team is performing with our B2B ROI Calculator. This tool is built for high-ticket business sales. It connects your marketing leads to your final revenue numbers.",
@@ -396,7 +402,7 @@ export const FINANCE_HUB: CalculatorHub = {
             "You can track SQL conversion rates, win rates, and team costs. It shows you exactly where your money goes.",
         },
         {
-          slug: "venture-capital-calculator",
+          slug: "venture-capital",
           name: "Venture Capital Calculator",
           whatItIs:
             "Our Venture Capital Calculator helps you understand startup valuations with ease. It uses the industry-standard VC Method to guide you through the numbers. You can find post-money valuations, required ownership stakes, and implied IRR.",
@@ -412,7 +418,7 @@ export const FINANCE_HUB: CalculatorHub = {
       accent: "text-purple-600 dark:text-purple-400 bg-purple-500/10",
       calculators: [
         {
-          slug: "irr-calculator",
+          slug: "internal-rate-of-return",
           name: "Internal Rate of Return (IRR) Calculator",
           whatItIs:
             "Use our Internal Rate of Return (IRR) Calculator to find the true return on your investment. This tool is useful for corporate finance, real estate deals, and private equity projects. It uses a smart method to work through different cash flows and find the annual return rate.",
@@ -420,7 +426,7 @@ export const FINANCE_HUB: CalculatorHub = {
             "You can use it to see if a project is worth the risk.",
         },
         {
-          slug: "accounting-rate-of-return-calculator",
+          slug: "accounting-rate-of-return",
           name: "Accounting Rate of Return Calculator",
           whatItIs:
             "Looks at the average profit you expect to earn from a project compared to its average cost.",
@@ -428,7 +434,7 @@ export const FINANCE_HUB: CalculatorHub = {
             "A quick snapshot to help managers approve or reject a new project.",
         },
         {
-          slug: "holding-period-return-calculator",
+          slug: "holding-period-return",
           name: "Holding Period Return Calculator",
           whatItIs:
             "Our Holding Period Return (HPR) Calculator helps you measure your investment performance accurately. It works for stocks, real estate, and more. The tool adds up your capital gains and income to give you a total percentage return.",
@@ -444,7 +450,7 @@ export const FINANCE_HUB: CalculatorHub = {
       accent: "text-teal-600 dark:text-teal-400 bg-teal-500/10",
       calculators: [
         {
-          slug: "retirement-rate-of-return-calculator",
+          slug: "retirement-rate-of-return",
           name: "Retirement Rate of Return Calculator",
           whatItIs:
             "Our Retirement Rate of Return Calculator helps you plan your financial future. It shows you how your savings can grow over time. You can add your monthly contributions and expected salary increases.",
@@ -452,7 +458,7 @@ export const FINANCE_HUB: CalculatorHub = {
             "The tool also factors in compound interest to estimate your total savings. It adjusts for inflation too, so you can see what your money will actually be worth.",
         },
         {
-          slug: "savings-withdrawal-calculator",
+          slug: "savings-withdrawal",
           name: "Savings Withdrawal Calculator",
           whatItIs:
             "Use our Savings Withdrawal Calculator to plan your financial future with confidence. This tool helps you estimate how long your savings may last. You can use it for retirement, a career break, or a fixed inheritance.",
@@ -506,13 +512,15 @@ export const FINANCE_CALCULATORS: CalculatorEntry[] = FINANCE_HUB.groups.flatMap
 )
 
 export function getFinanceCalculator(slug: string): CalculatorEntry | undefined {
-  return FINANCE_CALCULATORS.find((calculator) => calculator.slug === slug)
+  const canonical = FINANCE_CANONICAL_SLUG_MAP[slug] ?? slug
+  return FINANCE_CALCULATORS.find((calculator) => calculator.slug === canonical)
 }
 
 export function getFinanceGroupForCalculator(slug: string): CalculatorGroup {
+  const canonical = FINANCE_CANONICAL_SLUG_MAP[slug] ?? slug
   return (
     FINANCE_HUB.groups.find((group) =>
-      group.calculators.some((calculator) => calculator.slug === slug)
+      group.calculators.some((calculator) => calculator.slug === canonical)
     ) ?? FINANCE_HUB.groups[0]
   )
 }
@@ -536,7 +544,7 @@ export const ACCOUNTING_HUB: CalculatorHub = {
       accent: "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10",
       calculators: [
         {
-          slug: "retail-profit-margin-calculator",
+          slug: "retail-profit-margin",
           name: "Retail Profit Margin Calculator",
           whatItIs:
             "Wrong pricing kills businesses. If you set your price too high, customers may stop buying. If you set it too low, your business may lose money fast. Most retailers guess their prices and hope for the best.",
@@ -544,7 +552,7 @@ export const ACCOUNTING_HUB: CalculatorHub = {
             "This calculator takes the guesswork out — it compares Margin and Markup, checks your numbers, and shows you exactly what to charge to stay profitable.",
         },
         {
-          slug: "wholesale-margin-calculator",
+          slug: "wholesale-margin",
           name: "Wholesale Margin Calculator",
           whatItIs:
             "Wholesale pricing requires a careful balance. You need to cover your production costs and commissions — but you also need to leave enough profit for the retailer. If your pricing misses the mark, one side of the deal loses money.",
@@ -552,7 +560,7 @@ export const ACCOUNTING_HUB: CalculatorHub = {
             "It combines your costs, your target margin, and the retailer’s margin to calculate the correct Wholesale Price and MSRP (Recommended Retail Price).",
         },
         {
-          slug: "reverse-margin-calculator",
+          slug: "reverse-margin",
           name: "Reverse Margin Calculator",
           whatItIs:
             "Businesses make profit when they buy at the right price, not only when they sell. The Reverse Margin Calculator starts with the market price and works backward, showing the highest amount you can pay a supplier and still reach your profit goal.",
@@ -560,7 +568,7 @@ export const ACCOUNTING_HUB: CalculatorHub = {
             "The calculator also includes extra costs such as shipping, taxes & future discounts that can reduce your profit.",
         },
         {
-          slug: "amazon-seller-commission-calculator",
+          slug: "amazon-seller-commission",
           name: "Amazon Seller Commission Calculator",
           whatItIs:
             "Selling on Amazon can help you grow your business, but fees can reduce your profits faster than you expect. This Amazon Seller Commission & Profit Calculator shows you exactly what you take home after every cost.",
@@ -568,7 +576,7 @@ export const ACCOUNTING_HUB: CalculatorHub = {
             "Enter your referral fees, FBA fulfillment costs, storage fees, and sourcing expenses. You will know right away if a product is worth selling or fits your budget and business goals.",
         },
         {
-          slug: "salesperson-profitability-calculator",
+          slug: "salesperson-profitability",
           name: "Salesperson Profitability Calculator",
           whatItIs:
             "High sales numbers do not always mean high profit. The Salesperson Profitability Calculator helps you measure the actual value a sales rep brings to the business. It includes gross margin and overhead costs to show how much a rep must sell to break even.",
@@ -584,7 +592,7 @@ export const ACCOUNTING_HUB: CalculatorHub = {
       accent: "text-blue-600 dark:text-blue-400 bg-blue-500/10",
       calculators: [
         {
-          slug: "payroll-overtime-calculator",
+          slug: "payroll-with-overtime",
           name: "Payroll Calculator with Overtime",
           whatItIs:
             "Extra hours at work can increase a paycheck, but the numbers are not always easy to work out. A Payroll Calculator with Overtime helps break total earnings into regular pay, overtime pay, and double-time pay.",
@@ -592,7 +600,7 @@ export const ACCOUNTING_HUB: CalculatorHub = {
             "The calculator also shows total gross pay for a week or month, so it becomes easier to check a pay stub and plan future expenses.",
         },
         {
-          slug: "gross-up-payroll-calculator",
+          slug: "gross-up-payroll",
           name: "Gross Up Payroll Calculator",
           whatItIs:
             "Do you want to give an employee a bonus, a gift, or relocation support? You probably want them to receive a specific amount in hand. But taxes take a cut before the money reaches them — so if you want your employee to take home exactly $1,000, you need to pay more than that upfront.",
@@ -600,7 +608,7 @@ export const ACCOUNTING_HUB: CalculatorHub = {
             "This Gross-Up Calculator does the math for you. It tells you the total gross amount to pay so your employee gets the exact net amount you planned.",
         },
         {
-          slug: "prorated-bonus-calculator",
+          slug: "prorated-bonus",
           name: "Prorated Bonus Calculator",
           whatItIs:
             "Starting a new job mid-year or leaving before the year ends can affect your bonus. Either way, you probably won’t get the full bonus. You will get a fair share based on the days you actually worked.",
@@ -608,7 +616,7 @@ export const ACCOUNTING_HUB: CalculatorHub = {
             "This Prorated Bonus Calculator does the math for you and shows exactly what you have earned.",
         },
         {
-          slug: "sales-commission-calculator",
+          slug: "sales-commission",
           name: "Sales Commission Calculator",
           whatItIs:
             "Sales pay becomes hard to track when quotas and accelerators apply. This Sales Commission Calculator adds base salary, standard commission, and performance bonuses to show total earnings. The tool supports both flat rate plans and tiered commission plans.",
@@ -616,7 +624,7 @@ export const ACCOUNTING_HUB: CalculatorHub = {
             "People can use this tool to plan future paychecks with better accuracy.",
         },
         {
-          slug: "payroll-conversion-calculator",
+          slug: "payroll-conversion",
           name: "Payroll Conversion Calculator",
           whatItIs:
             "Many people need to convert their pay into a different income period. An hourly rate can be difficult to compare with a yearly salary. This Payroll Conversion Calculator makes those conversions quick and simple.",
@@ -632,7 +640,7 @@ export const ACCOUNTING_HUB: CalculatorHub = {
       accent: "text-amber-600 dark:text-amber-400 bg-amber-500/10",
       calculators: [
         {
-          slug: "retained-earnings-calculator",
+          slug: "retained-earnings",
           name: "Retained Earnings Calculator",
           whatItIs:
             "The Retained Earnings Calculator shows the “savings account” of your business. You can use it to plan equipment purchases, pay off debt, or track your company’s growth.",
@@ -640,7 +648,7 @@ export const ACCOUNTING_HUB: CalculatorHub = {
             "This tool shows how your net income and dividends affect your final equity balance.",
         },
         {
-          slug: "cash-conversion-cycle-calculator",
+          slug: "cash-conversion-cycle",
           name: "Cash Conversion Cycle (CCC) Calculator",
           whatItIs:
             "A business can show strong profits and still struggle to keep cash on hand. A Cash Conversion Cycle (CCC) Calculator helps measure that process in days. It checks inventory, customer payments, and supplier payments to show how cash moves through daily operations.",
@@ -656,7 +664,7 @@ export const ACCOUNTING_HUB: CalculatorHub = {
       accent: "text-purple-600 dark:text-purple-400 bg-purple-500/10",
       calculators: [
         {
-          slug: "debt-payoff-extra-payments-calculator",
+          slug: "debt-payoff-with-extra-payments",
           name: "Debt Payoff Calculator with Extra Payments",
           whatItIs:
             "One of the best ways to free up more money each month is to pay off debt faster — even small extra payments can make a big difference over time. An extra $50 or $100 each month can cut years from your loan and reduce the total finance charges you pay.",
@@ -664,7 +672,7 @@ export const ACCOUNTING_HUB: CalculatorHub = {
             "This Debt Payoff Calculator helps you see your payoff timeline and shows how extra payments can speed up your progress.",
         },
         {
-          slug: "debt-snowball-vs-avalanche-calculator",
+          slug: "debt-snowball-vs-avalanche",
           name: "Debt Snowball vs Avalanche Calculator",
           whatItIs:
             "Do you have several debt payments and don’t know which one to pay off first? This Snowball vs. Avalanche Calculator compares the two most popular debt payoff strategies for you.",
@@ -672,7 +680,7 @@ export const ACCOUNTING_HUB: CalculatorHub = {
             "Enter your balances and interest rates to see which method saves you more money and gets you debt-free faster.",
         },
         {
-          slug: "marginal-propensity-to-consume-calculator",
+          slug: "marginal-propensity-to-consume",
           name: "Marginal Propensity to Consume (MPC) Calculator",
           whatItIs:
             "Think you get an unexpected $100 from work bonus or birthday gifts. What’s the first thing you do with it — spend it or save it? That simple choice shows you a lot about your money habits or Marginal Propensity to Consume.",
@@ -720,13 +728,15 @@ export const ACCOUNTING_CALCULATORS: CalculatorEntry[] = ACCOUNTING_HUB.groups.f
 )
 
 export function getAccountingCalculator(slug: string): CalculatorEntry | undefined {
-  return ACCOUNTING_CALCULATORS.find((calculator) => calculator.slug === slug)
+  const canonical = ACCOUNTING_CANONICAL_SLUG_MAP[slug] ?? slug
+  return ACCOUNTING_CALCULATORS.find((calculator) => calculator.slug === canonical)
 }
 
 export function getAccountingGroupForCalculator(slug: string): CalculatorGroup {
+  const canonical = ACCOUNTING_CANONICAL_SLUG_MAP[slug] ?? slug
   return (
     ACCOUNTING_HUB.groups.find((group) =>
-      group.calculators.some((calculator) => calculator.slug === slug)
+      group.calculators.some((calculator) => calculator.slug === canonical)
     ) ?? ACCOUNTING_HUB.groups[0]
   )
 }

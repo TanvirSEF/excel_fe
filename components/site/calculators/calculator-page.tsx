@@ -30,7 +30,7 @@ export function CalculatorPage({
       <Breadcrumb
         items={[
           { label: "Home", href: "/" },
-          { label: "Calculators" },
+          { label: "Calculators", href: "/calculator/" },
           { label: category.label, href: category.href },
           { label: entry.name },
         ]}

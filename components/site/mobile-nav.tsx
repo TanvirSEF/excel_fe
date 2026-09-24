@@ -240,7 +240,7 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
               {calcExpanded && (
                 <div className="space-y-1 px-2 pb-2.5 pt-1 text-xs border-t border-border/40">
                   <Link
-                    href="/calculators/statistics"
+                    href="/calculator/statistics/"
                     onClick={handleLinkClick}
                     className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
                   >
@@ -248,7 +248,7 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
                     <span>Statistics</span>
                   </Link>
                   <Link
-                    href="/calculators/finance"
+                    href="/calculator/finance/"
                     onClick={handleLinkClick}
                     className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
                   >
@@ -256,12 +256,21 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
                     <span>Finance</span>
                   </Link>
                   <Link
-                    href="/calculators/accounting"
+                    href="/calculator/accounting/"
                     onClick={handleLinkClick}
                     className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
                   >
                     <IconScale className="h-3.5 w-3.5 text-amber-500" />
                     <span>Accounting</span>
+                  </Link>
+                  <div className="my-1 h-px bg-border/40" />
+                  <Link
+                    href="/calculator/"
+                    onClick={handleLinkClick}
+                    className="flex items-center justify-between rounded-lg px-2.5 py-2 text-primary font-medium hover:bg-background"
+                  >
+                    <span>All Calculators</span>
+                    <IconArrowRight className="h-3.5 w-3.5" />
                   </Link>
                 </div>
               )}

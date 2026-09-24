@@ -76,7 +76,7 @@ export function HubPage({ hub }: HubPageProps) {
                 {group.calculators.map((calculator) => (
                   <Link
                     key={calculator.slug}
-                    href={`/calculators/${hub.slug}/${calculator.slug}`}
+                    href={`/calculator/${hub.slug}/${calculator.slug}/`}
                     className="group flex flex-col rounded-2xl border border-primary/50 bg-card p-5 shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/80 hover:shadow-lg"
                   >
                     <div className="flex items-center justify-between">

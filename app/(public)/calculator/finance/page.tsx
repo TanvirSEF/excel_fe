@@ -7,12 +7,12 @@ export const metadata: Metadata = {
   title: "Financial Calculator Hub: Business, Real Estate & Investing | Excel Insider",
   description:
     "Free online financial calculators — investment returns, dividends, rental property and solar ROI, marketing ROI, IRR, retirement planning and more. Instant, private, no signup.",
-  alternates: { canonical: "/calculators/finance" },
+  alternates: { canonical: "/calculator/finance/" },
   openGraph: {
     title: "Financial Calculator Hub: Business, Real Estate & Investing | Excel Insider",
     description:
       "Investment, real estate, business, and retirement calculators — logical formulas, instant results, 100% free.",
-    url: "/calculators/finance",
+    url: "/calculator/finance/",
     images: ["/og-default.png"],
   },
 }

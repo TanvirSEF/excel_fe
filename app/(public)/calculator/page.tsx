@@ -13,12 +13,12 @@ export const metadata: Metadata = {
   title: "Free Online Calculators | Excel Insider",
   description:
     "45 free calculators for statistics, finance and accounting — ANOVA, IRR, dividend DRIP, payroll, debt payoff and more. Instant, private, no signup.",
-  alternates: { canonical: "/calculators" },
+  alternates: { canonical: "/calculator/" },
   openGraph: {
     title: "Free Online Calculators | Excel Insider",
     description:
       "Statistics, finance and accounting calculators — instant results, formulas explained, 100% free.",
-    url: "/calculators",
+    url: "/calculator/",
     images: ["/og-default.png"],
   },
 }
@@ -42,7 +42,7 @@ export default function CalculatorsPage() {
           return (
             <Link
               key={hub.slug}
-              href={`/calculators/${hub.slug}`}
+              href={`/calculator/${hub.slug}/`}
               className="group flex flex-col rounded-2xl border border-primary/50 bg-card p-6 shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/80 hover:shadow-lg"
             >
               <div className="flex items-center justify-between">

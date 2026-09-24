@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { notFound } from "next/navigation"
+import { notFound, permanentRedirect } from "next/navigation"
 import type { ComponentType } from "react"
 
 import { GeometricMeanCalculator } from "@/components/site/calculators/statistics/geometric-mean-calculator"
@@ -38,31 +38,32 @@ import {
   ZScoreToPercentileCalculator,
 } from "@/components/site/calculators/statistics/z-score-to-percentile-calculator"
 import { CalculatorPage } from "@/components/site/calculators/calculator-page"
-import { STATS_CALCULATORS, getStatsCalculator, getStatsGroupForCalculator } from "@/lib/calculators"
-import { STATS_DETAILS, type StatisticsSlug } from "@/lib/calculator-content/statistics"
+import { getStatsCalculator, getStatsGroupForCalculator } from "@/lib/calculators"
+import { STATS_DETAILS, STATS_CANONICAL_SLUG_MAP, type StatisticsSlug } from "@/lib/calculator-content/statistics"
 import { calculatorMetadata } from "@/lib/calculator-content/metadata"
 
 export const dynamicParams = false
 export const revalidate = 300
 
 export function generateStaticParams() {
-  return STATS_CALCULATORS.map((calculator) => ({ slug: calculator.slug }))
+  const allSlugs = Object.keys(STATS_CANONICAL_SLUG_MAP)
+  return allSlugs.map((slug) => ({ slug }))
 }
 
 const CALCULATOR_COMPONENTS: Record<StatisticsSlug, ComponentType> = {
-  "weighted-average-grade-calculator": WeightedAverageGradeCalculator,
-  "geometric-mean-calculator": GeometricMeanCalculator,
-  "harmonic-mean-calculator": HarmonicMeanCalculator,
-  "time-weighted-average-calculator": TimeWeightedAverageCalculator,
-  "coefficient-of-variance-calculator": CoefficientOfVarianceCalculator,
-  "pooled-variance-calculator": PooledVarianceCalculator,
-  "one-way-anova-calculator": OneWayAnovaCalculator,
-  "two-way-anova-calculator": TwoWayAnovaCalculator,
-  "z-score-to-percentile-calculator": ZScoreToPercentileCalculator,
-  "critical-z-value-calculator": CriticalZValueCalculator,
-  "p-value-from-z-score-calculator": PValueFromZScoreCalculator,
-  "weighted-average-overtime-calculator": WeightedAverageOvertimeCalculator,
-  "vwap-calculator": VwapCalculator,
+  "weighted-average-grade": WeightedAverageGradeCalculator,
+  "geometric-mean": GeometricMeanCalculator,
+  "harmonic-mean": HarmonicMeanCalculator,
+  "time-weighted-average": TimeWeightedAverageCalculator,
+  "coefficient-of-variance": CoefficientOfVarianceCalculator,
+  "pooled-variance": PooledVarianceCalculator,
+  "one-way-analysis-of-variance": OneWayAnovaCalculator,
+  "two-way-analysis-of-variance": TwoWayAnovaCalculator,
+  "z-score-to-percentile": ZScoreToPercentileCalculator,
+  "critical-z-value": CriticalZValueCalculator,
+  "p-value-from-z-score": PValueFromZScoreCalculator,
+  "weighted-average-overtime": WeightedAverageOvertimeCalculator,
+  "volume-weighted-average-price": VwapCalculator,
 }
 
 export async function generateMetadata({
@@ -71,14 +72,17 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const entry = getStatsCalculator(slug)
-  const detail = STATS_DETAILS[slug as StatisticsSlug]
+  const canonicalSlug = STATS_CANONICAL_SLUG_MAP[slug]
+  if (!canonicalSlug) return {}
+
+  const entry = getStatsCalculator(canonicalSlug)
+  const detail = STATS_DETAILS[canonicalSlug]
   if (!entry || !detail) return {}
 
   return calculatorMetadata(
     entry.name,
     detail.metaDescription,
-    `/calculators/statistics/${slug}`
+    `/calculator/statistics/${canonicalSlug}/`
   )
 }
 
@@ -88,16 +92,23 @@ export default async function StatisticsCalculatorPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const entry = getStatsCalculator(slug)
-  const detail = STATS_DETAILS[slug as StatisticsSlug]
+  const canonicalSlug = STATS_CANONICAL_SLUG_MAP[slug]
+  if (!canonicalSlug) notFound()
+
+  if (slug !== canonicalSlug) {
+    permanentRedirect(`/calculator/statistics/${canonicalSlug}/`)
+  }
+
+  const entry = getStatsCalculator(canonicalSlug)
+  const detail = STATS_DETAILS[canonicalSlug]
   if (!entry || !detail) notFound()
 
-  const group = getStatsGroupForCalculator(slug)
-  const Calculator = CALCULATOR_COMPONENTS[slug as StatisticsSlug]
+  const group = getStatsGroupForCalculator(canonicalSlug)
+  const Calculator = CALCULATOR_COMPONENTS[canonicalSlug]
 
   return (
     <CalculatorPage
-      category={{ label: "Statistics", href: "/calculators/statistics" }}
+      category={{ label: "Statistics", href: "/calculator/statistics/" }}
       group={group}
       entry={entry}
       detail={detail}

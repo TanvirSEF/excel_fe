@@ -11,6 +11,7 @@ const KNOWN_STATIC_PREFIXES = [
   "/api",
   "/about",
   "/blog",
+  "/calculator",
   "/calculators",
   "/categories",
   "/contact",

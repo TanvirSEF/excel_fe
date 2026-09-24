@@ -17,36 +17,76 @@ import { debtSnowballVsAvalancheCalculator } from "./debt-snowball-vs-avalanche-
 import { marginalPropensityToConsumeCalculator } from "./marginal-propensity-to-consume-calculator"
 
 export type AccountingSlug =
-  | "retail-profit-margin-calculator"
-  | "wholesale-margin-calculator"
-  | "reverse-margin-calculator"
-  | "amazon-seller-commission-calculator"
-  | "salesperson-profitability-calculator"
-  | "payroll-overtime-calculator"
-  | "gross-up-payroll-calculator"
-  | "prorated-bonus-calculator"
-  | "sales-commission-calculator"
-  | "payroll-conversion-calculator"
-  | "retained-earnings-calculator"
-  | "cash-conversion-cycle-calculator"
-  | "debt-payoff-extra-payments-calculator"
-  | "debt-snowball-vs-avalanche-calculator"
-  | "marginal-propensity-to-consume-calculator"
+  | "retail-profit-margin"
+  | "wholesale-margin"
+  | "reverse-margin"
+  | "amazon-seller-commission"
+  | "salesperson-profitability"
+  | "payroll-with-overtime"
+  | "gross-up-payroll"
+  | "prorated-bonus"
+  | "sales-commission"
+  | "payroll-conversion"
+  | "retained-earnings"
+  | "cash-conversion-cycle"
+  | "debt-payoff-with-extra-payments"
+  | "debt-snowball-vs-avalanche"
+  | "marginal-propensity-to-consume"
+
+export const ACCOUNTING_CANONICAL_SLUG_MAP: Record<string, AccountingSlug> = {
+  "retail-profit-margin": "retail-profit-margin",
+  "retail-profit-margin-calculator": "retail-profit-margin",
+  "wholesale-margin": "wholesale-margin",
+  "wholesale-margin-calculator": "wholesale-margin",
+  "reverse-margin": "reverse-margin",
+  "reverse-margin-calculator": "reverse-margin",
+  "amazon-seller-commission": "amazon-seller-commission",
+  "amazon-seller-commission-calculator": "amazon-seller-commission",
+  "salesperson-profitability": "salesperson-profitability",
+  "salesperson-profitability-calculator": "salesperson-profitability",
+  "payroll-with-overtime": "payroll-with-overtime",
+  "payroll-overtime-calculator": "payroll-with-overtime",
+  "payroll-calculator-with-overtime": "payroll-with-overtime",
+  "gross-up-payroll": "gross-up-payroll",
+  "gross-up-payroll-calculator": "gross-up-payroll",
+  "prorated-bonus": "prorated-bonus",
+  "prorated-bonus-calculator": "prorated-bonus",
+  "sales-commission": "sales-commission",
+  "sales-commission-calculator": "sales-commission",
+  "payroll-conversion": "payroll-conversion",
+  "payroll-conversion-calculator": "payroll-conversion",
+  "retained-earnings": "retained-earnings",
+  "retained-earnings-calculator": "retained-earnings",
+  "cash-conversion-cycle": "cash-conversion-cycle",
+  "cash-conversion-cycle-calculator": "cash-conversion-cycle",
+  "debt-payoff-with-extra-payments": "debt-payoff-with-extra-payments",
+  "debt-payoff-extra-payments-calculator": "debt-payoff-with-extra-payments",
+  "debt-payoff-calculator-with-extra-payments": "debt-payoff-with-extra-payments",
+  "debt-snowball-vs-avalanche": "debt-snowball-vs-avalanche",
+  "debt-snowball-vs-avalanche-calculator": "debt-snowball-vs-avalanche",
+  "marginal-propensity-to-consume": "marginal-propensity-to-consume",
+  "marginal-propensity-to-consume-calculator": "marginal-propensity-to-consume",
+}
 
 export const ACCOUNTING_DETAILS: Record<AccountingSlug, CalculatorDetail> = {
-  "retail-profit-margin-calculator": retailProfitMarginCalculator,
-  "wholesale-margin-calculator": wholesaleMarginCalculator,
-  "reverse-margin-calculator": reverseMarginCalculator,
-  "amazon-seller-commission-calculator": amazonSellerCommissionCalculator,
-  "salesperson-profitability-calculator": salespersonProfitabilityCalculator,
-  "payroll-overtime-calculator": payrollOvertimeCalculator,
-  "gross-up-payroll-calculator": grossUpPayrollCalculator,
-  "prorated-bonus-calculator": proratedBonusCalculator,
-  "sales-commission-calculator": salesCommissionCalculator,
-  "payroll-conversion-calculator": payrollConversionCalculator,
-  "retained-earnings-calculator": retainedEarningsCalculator,
-  "cash-conversion-cycle-calculator": cashConversionCycleCalculator,
-  "debt-payoff-extra-payments-calculator": debtPayoffExtraPaymentsCalculator,
-  "debt-snowball-vs-avalanche-calculator": debtSnowballVsAvalancheCalculator,
-  "marginal-propensity-to-consume-calculator": marginalPropensityToConsumeCalculator,
+  "retail-profit-margin": retailProfitMarginCalculator,
+  "wholesale-margin": wholesaleMarginCalculator,
+  "reverse-margin": reverseMarginCalculator,
+  "amazon-seller-commission": amazonSellerCommissionCalculator,
+  "salesperson-profitability": salespersonProfitabilityCalculator,
+  "payroll-with-overtime": payrollOvertimeCalculator,
+  "gross-up-payroll": grossUpPayrollCalculator,
+  "prorated-bonus": proratedBonusCalculator,
+  "sales-commission": salesCommissionCalculator,
+  "payroll-conversion": payrollConversionCalculator,
+  "retained-earnings": retainedEarningsCalculator,
+  "cash-conversion-cycle": cashConversionCycleCalculator,
+  "debt-payoff-with-extra-payments": debtPayoffExtraPaymentsCalculator,
+  "debt-snowball-vs-avalanche": debtSnowballVsAvalancheCalculator,
+  "marginal-propensity-to-consume": marginalPropensityToConsumeCalculator,
+}
+
+export function getAccountingDetail(slug: string): CalculatorDetail | undefined {
+  const canonical = ACCOUNTING_CANONICAL_SLUG_MAP[slug]
+  return canonical ? ACCOUNTING_DETAILS[canonical] : undefined
 }

@@ -49,6 +49,21 @@ const nextConfig: NextConfig = {
         destination: "/about/nehad-ulfat",
         permanent: true,
       },
+      {
+        source: "/calculators",
+        destination: "/calculator/",
+        permanent: true,
+      },
+      {
+        source: "/calculators/:path*",
+        destination: "/calculator/:path*/",
+        permanent: true,
+      },
+      {
+        source: "/accounting-calculator/:path*",
+        destination: "/calculator/accounting/:path*/",
+        permanent: true,
+      },
     ]
   },
 }
