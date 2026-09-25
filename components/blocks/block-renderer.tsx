@@ -520,11 +520,11 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
             </div>
 
             <div className="text-base sm:text-[1.03125rem] font-normal leading-[1.65] text-foreground/90">
-              <InlineRuns value={block.content ?? block.text} />
+              <InlineRuns value={cleanRichText(block.content ?? block.text)} />
             </div>
 
             {takeawayImages && takeawayImages.length > 0 ? (
-              <div className="mt-5 sm:mt-6 flex flex-col items-center gap-4 pt-5 sm:pt-6 border-t border-primary/15">
+              <div className="mt-4 sm:mt-5 flex flex-col items-center gap-4">
                 {takeawayImages.map((img, i) => {
                   const width = img.width ?? 783
                   const height = img.height ?? Math.round(width * 0.5625)
