@@ -59,7 +59,7 @@ export function parseVideoInfo(rawUrl: string): VideoInfo | null {
         provider: "youtube",
         id: videoId,
         embedUrl,
-        thumbnailUrl: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+        thumbnailUrl: `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`,
         start,
       }
     }

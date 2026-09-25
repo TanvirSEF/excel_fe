@@ -16,6 +16,7 @@ interface VideoEmbedProps {
 export function VideoEmbed({ url, caption, title, className }: VideoEmbedProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const video = parseVideoInfo(url)
+  const [thumbSrc, setThumbSrc] = useState(video?.thumbnailUrl)
 
   if (!video) return null
 
@@ -34,13 +35,18 @@ export function VideoEmbed({ url, caption, title, className }: VideoEmbedProps) 
             aria-label={`Play video: ${title || caption || "YouTube video"}`}
             className="group relative flex h-full w-full items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
-            {video.thumbnailUrl ? (
+            {thumbSrc ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={video.thumbnailUrl}
+                src={thumbSrc}
                 alt={title || caption || "Video thumbnail"}
                 className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                 loading="lazy"
+                onError={() => {
+                  if (video && thumbSrc.includes("maxresdefault.jpg")) {
+                    setThumbSrc(`https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`)
+                  }
+                }}
               />
             ) : null}
 
