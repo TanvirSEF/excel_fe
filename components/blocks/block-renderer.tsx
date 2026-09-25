@@ -613,11 +613,11 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
         const isMultiLine = formulaText.includes("\n")
 
         return (
-          <div className="group relative my-5 flex items-center justify-center rounded-[4px] border border-border/80 bg-card py-2.5 pl-4 pr-12 sm:py-3 sm:px-14 shadow-[1.5px_1.5px_2px_rgba(0,0,0,0.35)] dark:shadow-[1.5px_1.5px_2px_rgba(0,0,0,0.7)] transition-all">
+          <div className="group relative my-5 flex items-center justify-center rounded-[4px] border border-border/80 bg-card py-2 pl-4 pr-12 sm:py-2.5 sm:px-14 shadow-[1.5px_1.5px_2px_rgba(0,0,0,0.35)] dark:shadow-[1.5px_1.5px_2px_rgba(0,0,0,0.7)] transition-all">
             <div className="max-w-full overflow-x-auto text-center scrollbar-none">
               <span
                 className={cn(
-                  "font-serif text-base sm:text-lg font-normal tracking-normal text-foreground selection:bg-primary/20",
+                  "font-serif text-sm sm:text-[0.9375rem] font-normal tracking-normal text-foreground selection:bg-primary/20",
                   isMultiLine ? "block text-left whitespace-pre-wrap" : "whitespace-nowrap"
                 )}
               >
