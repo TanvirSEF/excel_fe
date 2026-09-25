@@ -277,12 +277,243 @@ function withMarks(
   return node
 }
 
+const SHORTCUT_REGEX =
+  /\b(Ctrl|Control|Alt|Option|Shift|Cmd|Command|Win|Windows)(?:[\s\u00a0]*\+[\s\u00a0]*(?:Ctrl|Control|Alt|Option|Shift|Cmd|Command|Win|Windows|F1[0-2]|F[1-9]|Enter|Return|Esc|Escape|Tab|Space|Spacebar|Backspace|Delete|Del|Insert|Ins|Home|End|Page[\s\u00a0]*Up|Page[\s\u00a0]*Down|PgUp|PgDn|Up[\s\u00a0]*Arrow|Down[\s\u00a0]*Arrow|Left[\s\u00a0]*Arrow|Right[\s\u00a0]*Arrow|Arrow[\s\u00a0]*Up|Arrow[\s\u00a0]*Down|Arrow[\s\u00a0]*Left|Arrow[\s\u00a0]*Right|Plus|Minus|[A-Za-z0-9]|[;':",.<>\/?\\`~=\-_+]))+/gi
+
+const MODIFIER_NAMES = new Set([
+  "ctrl",
+  "control",
+  "alt",
+  "option",
+  "shift",
+  "cmd",
+  "command",
+  "win",
+  "windows",
+])
+
+const VALID_KEY_NAMES = new Set([
+  "ctrl",
+  "control",
+  "alt",
+  "option",
+  "shift",
+  "cmd",
+  "command",
+  "win",
+  "windows",
+  "enter",
+  "return",
+  "esc",
+  "escape",
+  "tab",
+  "space",
+  "spacebar",
+  "backspace",
+  "delete",
+  "del",
+  "insert",
+  "ins",
+  "home",
+  "end",
+  "pageup",
+  "pagedown",
+  "page up",
+  "page down",
+  "pgup",
+  "pgdn",
+  "uparrow",
+  "downarrow",
+  "leftarrow",
+  "rightarrow",
+  "up arrow",
+  "down arrow",
+  "left arrow",
+  "right arrow",
+  "arrowup",
+  "arrowdown",
+  "arrowleft",
+  "arrowright",
+  "plus",
+  "minus",
+  "f1",
+  "f2",
+  "f3",
+  "f4",
+  "f5",
+  "f6",
+  "f7",
+  "f8",
+  "f9",
+  "f10",
+  "f11",
+  "f12",
+])
+
+function cleanKeyText(str: string): string {
+  return str.trim().replace(/^[\u00a0\s]+|[\u00a0\s]+$/g, "")
+}
+
+function isModifier(str: string): boolean {
+  return MODIFIER_NAMES.has(cleanKeyText(str).toLowerCase())
+}
+
+function isKey(str: string): boolean {
+  const clean = cleanKeyText(str).toLowerCase()
+  if (VALID_KEY_NAMES.has(clean)) return true
+  if (/^[a-z0-9]$/i.test(clean)) return true
+  if (/^[;':",.<>\/?\\`~=\-_+]$/.test(clean)) return true
+  return false
+}
+
+function parseShortcutKeys(shortcutStr: string): string[] {
+  const str = shortcutStr.replace(/[\u00a0]/g, " ").trim()
+  const matchPlus = str.match(/\+\s*\+$/)
+  if (matchPlus && matchPlus.index !== undefined) {
+    const prefix = str.slice(0, matchPlus.index)
+    const prefixKeys = prefix.split(/\s*\+\s*/).filter(Boolean).map(cleanKeyText)
+    return [...prefixKeys, "+"]
+  }
+  return str.split(/\s*\+\s*/).filter(Boolean).map(cleanKeyText)
+}
+
+function formatShortcuts(value: RichText | undefined): InlineText[] {
+  if (!value) return []
+  const initialRuns: InlineText[] =
+    typeof value === "string" ? [{ text: value }] : value.map((r) => ({ ...r }))
+
+  if (initialRuns.length === 0) return initialRuns
+
+  const intermediate: InlineText[] = []
+  let i = 0
+  while (i < initialRuns.length) {
+    const cur = initialRuns[i]
+    const curTrimmed = cleanKeyText(cur.text || "")
+
+    if (
+      isModifier(curTrimmed) &&
+      i + 2 < initialRuns.length &&
+      cleanKeyText(initialRuns[i + 1].text || "") === "+" &&
+      isKey(initialRuns[i + 2].text || "")
+    ) {
+      let j = i
+      const chainKeys: InlineText[] = []
+      while (
+        j < initialRuns.length &&
+        ((chainKeys.length === 0 && isModifier(initialRuns[j].text || "")) ||
+          (chainKeys.length > 0 &&
+            j + 1 < initialRuns.length &&
+            cleanKeyText(initialRuns[j].text || "") === "+" &&
+            isKey(initialRuns[j + 1].text || "")))
+      ) {
+        if (chainKeys.length === 0) {
+          chainKeys.push(initialRuns[j])
+          j++
+        } else {
+          chainKeys.push(initialRuns[j + 1])
+          j += 2
+        }
+      }
+
+      chainKeys.forEach((keyRun, idx) => {
+        if (idx > 0) {
+          intermediate.push({ text: " + " })
+        }
+        const marks: InlineMark[] = [
+          ...(keyRun.marks || []).filter((m) => m.type !== "kbd"),
+          { type: "kbd" },
+        ]
+        intermediate.push({ text: cleanKeyText(keyRun.text), marks })
+      })
+
+      i = j
+      continue
+    }
+
+    intermediate.push(cur)
+    i++
+  }
+
+  const result: InlineText[] = []
+  for (const run of intermediate) {
+    if (run.marks?.some((m) => m.type === "kbd")) {
+      if (run.text.includes("+")) {
+        const keys = parseShortcutKeys(run.text)
+        const otherMarks = run.marks.filter((m) => m.type !== "kbd")
+        const kbdMarks: InlineMark[] = [...otherMarks, { type: "kbd" }]
+        keys.forEach((key, idx) => {
+          if (idx > 0) {
+            result.push({ text: " + ", marks: otherMarks.length > 0 ? otherMarks : undefined })
+          }
+          result.push({ text: key, marks: kbdMarks })
+        })
+      } else {
+        result.push({ ...run, text: cleanKeyText(run.text) })
+      }
+      continue
+    }
+
+    if (run.marks?.some((m) => m.type === "code" || m.type === "link")) {
+      result.push(run)
+      continue
+    }
+
+    const text = run.text || ""
+    SHORTCUT_REGEX.lastIndex = 0
+    if (!text || !SHORTCUT_REGEX.test(text)) {
+      result.push(run)
+      continue
+    }
+
+    SHORTCUT_REGEX.lastIndex = 0
+    let lastIndex = 0
+    let match: RegExpExecArray | null
+    while ((match = SHORTCUT_REGEX.exec(text)) !== null) {
+      const matchStart = match.index
+      const matchEnd = SHORTCUT_REGEX.lastIndex
+
+      if (matchStart > lastIndex) {
+        result.push({
+          text: text.slice(lastIndex, matchStart),
+          marks: run.marks,
+        })
+      }
+
+      const shortcutText = match[0]
+      const keys = parseShortcutKeys(shortcutText)
+      const otherMarks = (run.marks || []).filter((m) => m.type !== "kbd")
+      const kbdMarks: InlineMark[] = [...otherMarks, { type: "kbd" }]
+
+      keys.forEach((key, kIdx) => {
+        if (kIdx > 0) {
+          result.push({
+            text: " + ",
+            marks: otherMarks.length > 0 ? otherMarks : undefined,
+          })
+        }
+        result.push({ text: key, marks: kbdMarks })
+      })
+
+      lastIndex = matchEnd
+    }
+
+    if (lastIndex < text.length) {
+      result.push({
+        text: text.slice(lastIndex),
+        marks: run.marks,
+      })
+    }
+  }
+
+  return result
+}
+
 function InlineRuns({ value }: { value: RichText }) {
-  if (typeof value === "string") return <>{value}</>
+  const runs = formatShortcuts(value)
 
   return (
     <>
-      {value.map((inline, index) => {
+      {runs.map((inline, index) => {
         const parts = inline.text.split("\n").map((part, partIndex) => (
           <Fragment key={partIndex}>
             {partIndex > 0 ? <br /> : null}
