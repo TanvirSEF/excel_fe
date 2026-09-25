@@ -21,7 +21,7 @@ export function ArticleHeader({ post }: { post: PostDetail }) {
         {post.category_name && post.category_slug ? (
           <Link
             href={`/categories/${post.category_slug}`}
-            className="inline-flex items-center rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary transition-colors hover:bg-primary/15"
+            className="inline-flex items-center rounded-full bg-primary px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-primary-foreground shadow-xs transition-colors hover:bg-primary/90"
           >
             {post.category_name}
           </Link>
