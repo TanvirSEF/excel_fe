@@ -28,7 +28,6 @@ const EXPLORE_LINKS = [
 
 const COMPANY_LINKS = [
   { label: "Contact & Support", href: "/contact" },
-  { label: "Pricing & Templates", href: "/pricing" },
   { label: "Privacy Policy", href: "/privacy" },
   { label: "Cookie Policy", href: "/cookie-policy" },
   { label: "Terms of Service", href: "/terms" },
