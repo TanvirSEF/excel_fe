@@ -98,7 +98,7 @@ export function NewsletterForm({
           <IconArrowRight className="h-4 w-4" />
         </Button>
       </div>
-      <p className="mt-2.5 text-[11px] text-primary-foreground/70">
+      <p className="mt-2.5 text-xs sm:text-sm font-medium text-primary-foreground/85">
         🔒 100% Free · No spam ever · Unsubscribe anytime with 1-click
       </p>
     </form>
