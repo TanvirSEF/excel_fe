@@ -3,7 +3,6 @@ import type { Metadata } from "next"
 import { HomeHero } from "@/components/site/home-hero"
 import { HeroStatsBand } from "@/components/site/hero-stats-band"
 import { LearningTrackSection } from "@/components/site/learning-track-section"
-import { PostSection } from "@/components/site/post-section"
 import { TrendingSection } from "@/components/site/trending-list"
 import { ServicesSection } from "@/components/site/services-section"
 import { TopicsExplorer } from "@/components/site/topics-explorer"
@@ -34,9 +33,8 @@ export const metadata: Metadata = {
 }
 
 export default async function HomePage() {
-  const [trending, latest, categories, trackModules] = await Promise.all([
+  const [trending, categories, trackModules] = await Promise.all([
     getPosts({ trending: true, page_size: 10 }, 300),
-    getPosts({ page_size: 3 }, 300),
     getCategories(300),
     getCurriculum(300).catch(() => [] as CurriculumModule[]),
   ])
@@ -65,11 +63,6 @@ export default async function HomePage() {
           <TrendingSection posts={trending.items} className="py-12 sm:py-16" />
         </div>
 
-        {/* 5. Interactive Spreadsheet Calculators Showcase (45 Free Tools) */}
-        <div className="border-t border-border/60">
-          <CalculatorsSection />
-        </div>
-
         {/* 6. Comprehensive Topic Directory (Category Tabs + Live Filtered Posts) */}
         <div className="border-t border-border/60">
           <TopicsExplorer
@@ -78,15 +71,10 @@ export default async function HomePage() {
           />
         </div>
 
-        {/* 7. Fresh Content Feed: Latest Articles */}
-        <PostSection
-          title="Latest Articles"
-          subtitle="Fresh spreadsheet tips, VBA automations, and downloadable templates."
-          action={{ label: "Browse archive", href: "/blog" }}
-          posts={latest.items}
-          emptyDescription="The first ones are on their way."
-          className="border-t border-border/60 py-12 sm:py-16"
-        />
+        {/* 6. Interactive Spreadsheet Calculators Showcase (45 Free Tools) */}
+        <div className="border-t border-border/60">
+          <CalculatorsSection />
+        </div>
 
         {/* 9. Frequently Asked Questions (Accordion) */}
         <div className="border-t border-border/60">
