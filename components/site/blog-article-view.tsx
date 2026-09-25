@@ -6,7 +6,7 @@ import { BlogArticleHeader } from "@/components/site/blog-article-header"
 import { Breadcrumb } from "@/components/site/breadcrumb"
 import { CommentsSection } from "@/components/site/comments-section"
 import { ArticleCtaBand } from "@/components/site/newsletter/article-cta-band"
-import { PostSection } from "@/components/site/post-section"
+import { ArticleRelatedSidebar } from "@/components/site/article-related-sidebar"
 import { ReadingProgress } from "@/components/site/reading-progress"
 import { ShareButtons } from "@/components/site/share-buttons"
 import { getPostComments, getPosts } from "@/lib/api/posts"
@@ -65,7 +65,7 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
   const related = post.category_slug
     ? await getPosts({ category: post.category_slug, page_size: 4 }, 300)
         .then((page) =>
-          page.items.filter((item) => item.id !== post.id).slice(0, 3)
+          page.items.filter((item) => item.id !== post.id).slice(0, 4)
         )
         .catch(() => [])
     : []
@@ -92,57 +92,56 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
         <BlogArticleHeader post={post} />
       </div>
 
-      <div className="mx-auto w-full max-w-[860px] px-4 pt-8 sm:px-6">
-        <article className="w-full">
-          <div className="border-y border-border/70 py-3 mb-6 sm:mb-8">
-            <ShareButtons title={post.title} />
-          </div>
+      <div className="mx-auto w-full max-w-[1340px] px-4 pt-8 sm:px-6">
+        <div className="flex items-start gap-10">
+          <article className="min-w-0 w-full max-w-[860px]">
+            <div className="border-y border-border/70 py-3 mb-6 sm:mb-8">
+              <ShareButtons title={post.title} />
+            </div>
 
-          <BlockRenderer
-            blocks={post.content_json?.blocks ?? []}
-            toc={toc}
-          />
-          <ArticleTags
-            tags={post.tags}
-            className="rounded-2xl border-0 bg-muted/40 px-5 py-4"
-          />
-
-          <ArticleCtaBand
-            source="article-footer"
-            heading="Liked this? Get one practical Excel tip every week."
-            className="rounded-3xl p-7 shadow-2xl sm:p-10"
-          />
-
-          <CommentsSection
-            postId={post.id}
-            comments={comments}
-            className="rounded-2xl border border-border/70 bg-card p-6 shadow-2xs sm:p-8"
-          />
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: buildArticleJsonLd(post) }}
-          />
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: buildBreadcrumbJsonLd(breadcrumbItems),
-            }}
-          />
-        </article>
-      </div>
-
-      {related.length > 0 ? (
-        <div className="mt-10 border-t border-border/60 bg-muted/40">
-          <div className="mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 sm:py-14">
-            <PostSection
-              title="Related Articles"
-              subtitle={`More from ${post.category_name}`}
-              badge="Keep Reading"
-              posts={related}
+            <BlockRenderer
+              blocks={post.content_json?.blocks ?? []}
+              toc={toc}
             />
-          </div>
+            <ArticleTags
+              tags={post.tags}
+              className="rounded-2xl border-0 bg-muted/40 px-5 py-4"
+            />
+
+            <ArticleCtaBand
+              source="article-footer"
+              heading="Liked this? Get one practical Excel tip every week."
+              className="rounded-3xl p-7 shadow-2xl sm:p-10"
+            />
+
+            <CommentsSection
+              postId={post.id}
+              comments={comments}
+              className="rounded-2xl border border-border/70 bg-card p-6 shadow-2xs sm:p-8"
+            />
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: buildArticleJsonLd(post) }}
+            />
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: buildBreadcrumbJsonLd(breadcrumbItems),
+              }}
+            />
+          </article>
+
+          {related.length > 0 ? (
+            <div className="hidden xl:block w-[19rem] shrink-0 pt-[4.5rem]">
+              <ArticleRelatedSidebar
+                posts={related}
+                categoryName={post.category_name}
+                categorySlug={post.category_slug}
+              />
+            </div>
+          ) : null}
         </div>
-      ) : null}
+      </div>
     </>
   )
 }
