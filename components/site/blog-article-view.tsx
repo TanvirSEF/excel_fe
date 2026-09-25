@@ -63,9 +63,9 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
   const toc = extractToc(post.content_json?.blocks ?? [])
 
   const related = post.category_slug
-    ? await getPosts({ category: post.category_slug, page_size: 4 }, 300)
+    ? await getPosts({ category: post.category_slug, page_size: 10 }, 300)
         .then((page) =>
-          page.items.filter((item) => item.id !== post.id).slice(0, 4)
+          page.items.filter((item) => item.id !== post.id).slice(0, 7)
         )
         .catch(() => [])
     : []
@@ -92,7 +92,7 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
         <BlogArticleHeader post={post} />
       </div>
 
-      <div className="mx-auto w-full max-w-[1340px] px-4 pt-8 sm:px-6">
+      <div className="mx-auto w-full max-w-[1340px] px-4 pt-8 pb-16 sm:px-6 sm:pb-24 lg:pb-32">
         <div className="flex items-start gap-10">
           <article className="min-w-0 w-full max-w-[860px]">
             <div className="border-y border-border/70 py-3 mb-6 sm:mb-8">
@@ -117,7 +117,7 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
             <CommentsSection
               postId={post.id}
               comments={comments}
-              className="rounded-2xl border border-border/70 bg-card p-6 shadow-2xs sm:p-8"
+              className="mt-10 sm:mt-12 rounded-2xl border border-border/70 bg-card p-6 shadow-2xs sm:p-8"
             />
             <script
               type="application/ld+json"
@@ -132,7 +132,7 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
           </article>
 
           {related.length > 0 ? (
-            <div className="hidden xl:block w-[19rem] shrink-0 pt-[4.5rem]">
+            <div className="hidden xl:block w-[21rem] shrink-0">
               <ArticleRelatedSidebar
                 posts={related}
                 categoryName={post.category_name}
