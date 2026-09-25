@@ -87,14 +87,15 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
   return (
     <>
       <ReadingProgress />
-      <div className="mx-auto w-full max-w-[860px] px-4 pt-8 sm:px-6 sm:pt-10">
-        <Breadcrumb items={breadcrumbItems} />
-        <BlogArticleHeader post={post} />
-      </div>
 
-      <div className="mx-auto w-full max-w-[1340px] px-4 pt-8 pb-16 sm:px-6 sm:pb-24 lg:pb-32">
-        <div className="flex items-start gap-10">
-          <article className="min-w-0 w-full max-w-[860px]">
+      <div className="mx-auto w-full max-w-[1340px] px-4 pt-8 pb-16 sm:px-6 sm:pt-10 sm:pb-24 lg:pb-32">
+        <div className="max-w-[860px] mx-auto xl:mx-0">
+          <Breadcrumb items={breadcrumbItems} />
+          <BlogArticleHeader post={post} />
+        </div>
+
+        <div className="mt-8 flex items-start justify-center xl:justify-start gap-10">
+          <article className="min-w-0 w-full max-w-[860px] mx-auto xl:mx-0">
             <div className="border-y border-border/70 py-3 mb-6 sm:mb-8">
               <ShareButtons title={post.title} />
             </div>
