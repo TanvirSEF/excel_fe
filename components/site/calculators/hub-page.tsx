@@ -121,6 +121,7 @@ export function HubPage({ hub }: HubPageProps) {
             {hub.faqs.map((faq, index) => (
               <details
                 key={faq.question}
+                name="calculator-hub-faq"
                 className="group rounded-2xl border border-primary/40 bg-card p-5 shadow-2xs transition-all duration-200 open:border-primary/70 open:shadow-xs hover:border-primary/60"
                 {...(index === 0 ? { open: true } : {})}
               >

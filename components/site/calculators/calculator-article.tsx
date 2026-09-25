@@ -297,6 +297,7 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
           {detail.faqs.map((faq, index) => (
             <details
               key={faq.question}
+              name="calculator-faq"
               className="group rounded-2xl border border-primary/40 bg-muted/20 p-5 transition-all duration-200 open:border-primary/70 hover:border-primary/60"
               {...(index === 0 ? { open: true } : {})}
             >
