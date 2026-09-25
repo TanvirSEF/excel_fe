@@ -153,9 +153,9 @@ export function TopicsExplorer({
         }}
       />
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[280px_1fr] lg:gap-10 items-start">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[280px_1fr] lg:gap-10 items-stretch">
         {/* ── Left: Vertical Category Navigation ── */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 h-full">
           {/* Mobile Horizontal Category Bar */}
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none lg:hidden">
             {displayCategories.map((category) => {
@@ -179,7 +179,7 @@ export function TopicsExplorer({
           </div>
 
           {/* Desktop Vertical Category Sidebar */}
-          <div className="hidden lg:flex flex-col gap-1.5 rounded-2xl border border-primary/50 bg-card p-3 shadow-2xs">
+          <div className="hidden lg:flex flex-col gap-1.5 rounded-2xl border border-primary/50 bg-card p-3 shadow-2xs h-full">
             <p className="px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground/60">
               Browse Topics
             </p>
@@ -225,7 +225,7 @@ export function TopicsExplorer({
         </div>
 
         {/* ── Right: Category Posts Grid ── */}
-        <div className="space-y-6">
+        <div className="flex flex-col space-y-6 h-full">
           {/* Active Category Header Bar */}
           <div className="flex items-center justify-between rounded-xl border border-border/70 bg-muted/40 px-4 py-3">
             <div className="flex items-center gap-2">
@@ -249,11 +249,11 @@ export function TopicsExplorer({
 
           {/* Posts Grid or Loading / Empty States */}
           {isPending && currentPosts.length === 0 ? (
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 flex-1 items-stretch">
               {Array.from({ length: 3 }).map((_, index) => (
                 <div
                   key={index}
-                  className="flex flex-col space-y-3 rounded-2xl border border-primary/50 bg-card p-3.5"
+                  className="flex flex-col space-y-3 rounded-2xl border border-primary/50 bg-card p-3.5 h-full"
                 >
                   <Skeleton className="aspect-16/10 w-full rounded-xl" />
                   <Skeleton className="h-4 w-1/3 rounded-sm" />
@@ -263,13 +263,13 @@ export function TopicsExplorer({
               ))}
             </div>
           ) : currentPosts.length > 0 ? (
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 flex-1 items-stretch">
               {currentPosts.map((post) => (
-                <PostCard key={post.id} post={post} />
+                <PostCard key={post.id} post={post} className="h-full" />
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-16 text-center px-4 bg-card">
+            <div className="flex flex-1 flex-col items-center justify-center rounded-2xl border border-dashed border-border py-16 text-center px-4 bg-card">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary mb-3">
                 <IconFolder className="h-6 w-6" />
               </div>
