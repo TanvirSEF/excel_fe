@@ -189,27 +189,27 @@ export default async function AuthorPage({ params, searchParams }: AuthorPagePro
 
         <div className="relative flex flex-col items-center gap-6 text-center sm:flex-row sm:items-start sm:gap-8 sm:text-left">
           <div className="relative group shrink-0">
-            <div className="relative flex h-28 w-28 sm:h-36 sm:w-36 md:h-40 md:w-40 shrink-0 items-center justify-center overflow-hidden rounded-2xl sm:rounded-3xl border-2 border-primary/25 bg-gradient-to-br from-chart-2/20 to-primary/20 shadow-xl ring-4 ring-background transition-transform duration-300 group-hover:scale-[1.02]">
+            <div className="relative flex h-36 w-36 sm:h-44 sm:w-44 md:h-48 md:w-48 shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-primary/25 bg-gradient-to-br from-chart-2/20 to-primary/20 shadow-xl ring-4 ring-background transition-transform duration-300 group-hover:scale-[1.02]">
               {author.avatar_url ? (
                 <Image
                   src={author.avatar_url}
                   alt={author.name}
                   fill
                   priority
-                  sizes="(max-width: 640px) 112px, (max-width: 768px) 144px, 160px"
+                  sizes="(max-width: 640px) 144px, (max-width: 768px) 176px, 192px"
                   className="object-cover"
                 />
               ) : (
-                <span className="text-3xl sm:text-4xl font-extrabold text-primary">
+                <span className="text-4xl sm:text-5xl font-extrabold text-primary">
                   {initials(author.name)}
                 </span>
               )}
             </div>
             <div
-              className="absolute -bottom-2 -right-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md ring-2 ring-background"
+              className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md ring-2 ring-background"
               title="Verified Author & Consultant"
             >
-              <IconShieldCheck className="h-4.5 w-4.5" />
+              <IconShieldCheck className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
             </div>
           </div>
 
