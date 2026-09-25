@@ -111,6 +111,23 @@ function cleanRichText(value: RichText | undefined): RichText {
     runs.pop()
   }
 
+  // Collapse 3+ newlines within runs to at most 2 newlines (\n\n)
+  for (let i = 0; i < runs.length; i++) {
+    runs[i].text = runs[i].text.replace(/\n{3,}/g, "\n\n")
+  }
+
+  // Collapse newlines across adjacent run boundaries so combined newlines never exceed \n\n
+  for (let i = 0; i < runs.length - 1; i++) {
+    const trailingMatch = runs[i].text.match(/\n+$/)
+    if (trailingMatch) {
+      if (trailingMatch[0].length >= 2) {
+        runs[i + 1].text = runs[i + 1].text.replace(/^\n+/, "")
+      } else if (/^\n+/.test(runs[i + 1].text)) {
+        runs[i + 1].text = runs[i + 1].text.replace(/^\n+/, "\n")
+      }
+    }
+  }
+
   return runs
 }
 
