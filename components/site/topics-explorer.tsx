@@ -117,8 +117,23 @@ export function TopicsExplorer({
   const displayCategories =
     categories.length > 0 ? categories : FALLBACK_CATEGORIES
 
+  const isGoogle = (cat: Category) => {
+    const slug = cat.slug.toLowerCase()
+    const name = cat.name.toLowerCase()
+    return (
+      slug.includes("google") ||
+      slug.includes("sheets") ||
+      name.includes("google") ||
+      name.includes("sheets")
+    )
+  }
+
+  const excelCategories = displayCategories.filter((c) => !isGoogle(c))
+  const googleCategories = displayCategories.filter((c) => isGoogle(c))
+  const sortedCategories = [...excelCategories, ...googleCategories]
+
   const [activeSlug, setActiveSlug] = useState<string>(
-    initialCategorySlug || displayCategories[0]?.slug || "formulas"
+    initialCategorySlug || sortedCategories[0]?.slug || "formulas"
   )
 
   useEffect(() => {
@@ -129,7 +144,7 @@ export function TopicsExplorer({
         const topicFromSession = sessionStorage.getItem("excelinsider_active_topic")
         const targetSlug = topicFromUrl || topicFromSession
 
-        if (targetSlug && displayCategories.some((c) => c.slug === targetSlug)) {
+        if (targetSlug && sortedCategories.some((c) => c.slug === targetSlug)) {
           setActiveSlug(targetSlug)
         }
       } catch {
@@ -144,7 +159,7 @@ export function TopicsExplorer({
       window.removeEventListener("popstate", syncTopic)
       window.removeEventListener("pageshow", syncTopic)
     }
-  }, [displayCategories])
+  }, [sortedCategories])
 
   const handleSelectCategory = (slug: string) => {
     setActiveSlug(slug)
@@ -159,8 +174,9 @@ export function TopicsExplorer({
   }
 
   const activeCategory =
-    displayCategories.find((c) => c.slug === activeSlug) ||
-    displayCategories[0]
+    sortedCategories.find((c) => c.slug === activeSlug) ||
+    sortedCategories[0] ||
+    FALLBACK_CATEGORIES[0]
 
   const { data: postsData, isPending } = usePostsByCategory(
     activeSlug,
@@ -195,7 +211,7 @@ export function TopicsExplorer({
         <div className="flex flex-col gap-2 h-full">
           {/* Mobile Horizontal Category Bar */}
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none lg:hidden">
-            {displayCategories.map((category) => {
+            {sortedCategories.map((category) => {
               const isActive = category.slug === activeSlug
               return (
                 <button
@@ -216,11 +232,11 @@ export function TopicsExplorer({
           </div>
 
           {/* Desktop Vertical Category Sidebar */}
-          <div className="hidden lg:flex flex-col gap-1.5 rounded-2xl border border-primary/50 bg-card p-3 shadow-2xs h-full">
-            <p className="px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground/60">
-              Browse Topics
+          <div className="hidden lg:flex flex-col gap-1 rounded-2xl border border-primary/50 bg-card p-3 shadow-2xs h-full">
+            <p className="px-3 pt-2 pb-1 text-[11px] font-bold uppercase tracking-wider text-muted-foreground/60">
+              Excel Topics
             </p>
-            {displayCategories.map((category) => {
+            {excelCategories.map((category) => {
               const isActive = category.slug === activeSlug
               const Icon = isActive ? IconFolderOpen : IconFolder
               return (
@@ -229,7 +245,7 @@ export function TopicsExplorer({
                   type="button"
                   onClick={() => handleSelectCategory(category.slug)}
                   className={cn(
-                    "group flex w-full items-center justify-between rounded-xl px-3.5 py-3 text-sm font-medium transition-all duration-200 text-left cursor-pointer",
+                    "group flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-200 text-left cursor-pointer",
                     isActive
                       ? "bg-primary text-primary-foreground font-semibold shadow-xs"
                       : "text-foreground/80 hover:bg-muted/70 hover:text-foreground"
@@ -258,6 +274,53 @@ export function TopicsExplorer({
                 </button>
               )
             })}
+
+            {googleCategories.length > 0 ? (
+              <>
+                <div className="my-2 border-t border-border/60" />
+                <p className="px-3 pt-1 pb-1 text-[11px] font-bold uppercase tracking-wider text-muted-foreground/60">
+                  Google Sheets
+                </p>
+                {googleCategories.map((category) => {
+                  const isActive = category.slug === activeSlug
+                  const Icon = isActive ? IconFolderOpen : IconFolder
+                  return (
+                    <button
+                      key={category.id || category.slug}
+                      type="button"
+                      onClick={() => handleSelectCategory(category.slug)}
+                      className={cn(
+                        "group flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-200 text-left cursor-pointer",
+                        isActive
+                          ? "bg-primary text-primary-foreground font-semibold shadow-xs"
+                          : "text-foreground/80 hover:bg-muted/70 hover:text-foreground"
+                      )}
+                    >
+                      <div className="flex items-center gap-2.5 truncate">
+                        <Icon
+                          className={cn(
+                            "h-4 w-4 shrink-0 transition-colors",
+                            isActive
+                              ? "text-primary-foreground"
+                              : "text-primary"
+                          )}
+                        />
+                        <span className="truncate">{category.name}</span>
+                      </div>
+
+                      <IconArrowRight
+                        className={cn(
+                          "h-3.5 w-3.5 shrink-0 transition-transform duration-200",
+                          isActive
+                            ? "text-primary-foreground translate-x-0.5"
+                            : "opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 text-muted-foreground"
+                        )}
+                      />
+                    </button>
+                  )
+                })}
+              </>
+            ) : null}
           </div>
         </div>
 

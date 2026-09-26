@@ -88,7 +88,11 @@ export default async function LessonPage({ params }: LessonPageProps) {
   const { slug } = await params
   const post = await loadLesson(slug)
 
-  if (!isGoogleSheetsCategory(post.category_slug)) {
+  if (
+    !isGoogleSheetsCategory(post.category_slug) &&
+    !post.canonical_url?.startsWith("/google-sheets/") &&
+    !post.canonical_url?.startsWith("/google-sheets-")
+  ) {
     redirect(`/blog/${post.slug}`)
   }
 

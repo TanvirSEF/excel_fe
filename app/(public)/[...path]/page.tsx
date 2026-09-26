@@ -31,7 +31,11 @@ async function resolvePost(path: string[]): Promise<
       const slug = redirectRow.new_path.replace("/blog/", "")
       try {
         const post = await getPostBySlug(slug)
-        if (isGoogleSheetsCategory(post.category_slug)) {
+        if (
+          isGoogleSheetsCategory(post.category_slug) ||
+          post.canonical_url?.startsWith("/google-sheets/") ||
+          post.canonical_url?.startsWith("/google-sheets-")
+        ) {
           return {
             type: "redirect",
             target: `/google-sheets/${post.slug}/`,
@@ -70,7 +74,11 @@ async function resolvePost(path: string[]): Promise<
   if (path.length === 1) {
     try {
       const post = await getPostBySlug(path[0])
-      if (isGoogleSheetsCategory(post.category_slug)) {
+      if (
+        isGoogleSheetsCategory(post.category_slug) ||
+        post.canonical_url?.startsWith("/google-sheets/") ||
+        post.canonical_url?.startsWith("/google-sheets-")
+      ) {
         return {
           type: "redirect",
           target: `/google-sheets/${post.slug}/`,

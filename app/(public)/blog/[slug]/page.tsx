@@ -37,7 +37,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params
   const post = await loadPost(slug)
 
-  if (isGoogleSheetsCategory(post.category_slug)) {
+  if (
+    isGoogleSheetsCategory(post.category_slug) ||
+    post.canonical_url?.startsWith("/google-sheets/") ||
+    post.canonical_url?.startsWith("/google-sheets-")
+  ) {
     permanentRedirect(`/google-sheets/${post.slug}`)
   }
 
