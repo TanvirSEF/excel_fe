@@ -19,17 +19,32 @@ import type {
 
 export interface AdminPostsParams {
   status?: PostStatus
+  categoryId?: string
+  authorId?: string
+  search?: string
   page?: number
   page_size?: number
 }
 
 export function useAdminPosts(params: AdminPostsParams = {}) {
   return useQuery({
-    queryKey: ["admin-posts", { status: params.status, page: params.page }],
+    queryKey: [
+      "admin-posts",
+      {
+        status: params.status,
+        categoryId: params.categoryId,
+        authorId: params.authorId,
+        search: params.search,
+        page: params.page,
+      },
+    ],
     queryFn: () =>
       apiFetch<Page<PostAdminItem>>("/posts/admin", {
         searchParams: {
           status: params.status,
+          category_id: params.categoryId || undefined,
+          author_id: params.authorId || undefined,
+          search: params.search || undefined,
           page: params.page,
           page_size: params.page_size,
         },

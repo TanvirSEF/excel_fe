@@ -1,8 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { useState } from "react"
-import { IconPlus } from "@tabler/icons-react"
+import { useEffect, useState } from "react"
+import { IconPlus, IconX } from "@tabler/icons-react"
 import { toast } from "sonner"
 
 import { ConfirmDialog } from "@/components/shared/confirm-dialog"
@@ -13,7 +13,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { can, useAuthStore } from "@/lib/auth"
+import { flattenCategories } from "@/lib/category-tree"
+import { useCategories } from "@/lib/queries/categories"
 import { useAdminPosts, useDeletePost, useSetTrendingPin } from "@/lib/queries/posts"
+import { useAuthorOptions } from "@/lib/queries/users"
 import { ApiClientError } from "@/lib/api/error"
 import type { PostAdminItem, PostStatus } from "@/types/api"
 
@@ -30,8 +33,11 @@ const PAGE_SIZE = 10
 
 export function PostsView() {
   const [status, setStatus] = useState<PostStatus | undefined>(undefined)
+  const [categoryId, setCategoryId] = useState<string | undefined>(undefined)
+  const [authorId, setAuthorId] = useState<string | undefined>(undefined)
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState("")
+  const [debouncedSearch, setDebouncedSearch] = useState("")
   const [pendingDelete, setPendingDelete] = useState<PostAdminItem | null>(
     null
   )
@@ -40,9 +46,25 @@ export function PostsView() {
   const canDelete = can(user, "posts:delete")
   const canCreate = can(user, "posts:manage")
   const canPin = can(user, "posts:publish")
+  const isTechnicalWriter = user?.role === "technical_writer"
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search.trim())
+      setPage(1)
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [search])
+
+  const { data: categories } = useCategories()
+  const { data: authors } = useAuthorOptions(!isTechnicalWriter)
+  const flatCategories = categories ? flattenCategories(categories) : []
 
   const { data, isPending, isError, error, refetch } = useAdminPosts({
     status,
+    categoryId,
+    authorId,
+    search: debouncedSearch || undefined,
     page,
     page_size: PAGE_SIZE,
   })
@@ -50,8 +72,9 @@ export function PostsView() {
   const deletePost = useDeletePost()
   const pinPost = useSetTrendingPin()
 
-  const items = (data?.items ?? []).filter((post) =>
-    search ? post.title.toLowerCase().includes(search.toLowerCase()) : true
+  const items = data?.items ?? []
+  const hasActiveFilters = Boolean(
+    status !== undefined || categoryId || authorId || search.trim()
   )
 
   async function onConfirmDelete() {
@@ -87,42 +110,105 @@ export function PostsView() {
     }
   }
 
+  function handleResetFilters() {
+    setStatus(undefined)
+    setCategoryId(undefined)
+    setAuthorId(undefined)
+    setSearch("")
+    setDebouncedSearch("")
+    setPage(1)
+  }
+
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-wrap items-center gap-1">
-          {STATUS_TABS.map((tab) => (
-            <button
-              key={tab.label}
-              type="button"
-              onClick={() => {
-                setStatus(tab.value)
-                setPage(1)
-              }}
-              className={
-                status === tab.value
-                  ? "rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground"
-                  : "rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-              }
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
-          <Input
-            type="search"
-            placeholder="Filter by title…"
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            className="h-9 sm:w-64"
-          />
+      <div className="flex flex-col gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-1">
+            {STATUS_TABS.map((tab) => (
+              <button
+                key={tab.label}
+                type="button"
+                onClick={() => {
+                  setStatus(tab.value)
+                  setPage(1)
+                }}
+                className={
+                  status === tab.value
+                    ? "rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground"
+                    : "rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                }
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
           {canCreate ? (
             <Button asChild size="sm" className="h-9">
               <Link href="/dashboard/posts/new">
                 <IconPlus className="h-4 w-4" />
                 New post
               </Link>
+            </Button>
+          ) : null}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <Input
+            type="search"
+            placeholder="Search posts by title…"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            className="h-9 w-full sm:w-64"
+          />
+
+          <select
+            aria-label="Filter by category"
+            value={categoryId ?? ""}
+            onChange={(event) => {
+              setCategoryId(event.target.value || undefined)
+              setPage(1)
+            }}
+            className="h-9 max-w-[200px] truncate rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/50"
+          >
+            <option value="">All categories</option>
+            {flatCategories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {"— ".repeat(cat.depth)}
+                {cat.name}
+              </option>
+            ))}
+          </select>
+
+          {!isTechnicalWriter ? (
+            <select
+              aria-label="Filter by author"
+              value={authorId ?? ""}
+              onChange={(event) => {
+                setAuthorId(event.target.value || undefined)
+                setPage(1)
+              }}
+              className="h-9 max-w-[200px] truncate rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring/50"
+            >
+              <option value="">All authors</option>
+              {authors?.map((author) => (
+                <option key={author.id} value={author.id}>
+                  {author.name || author.email}
+                </option>
+              ))}
+            </select>
+          ) : null}
+
+          {hasActiveFilters ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={handleResetFilters}
+              className="h-9 px-2 text-xs text-muted-foreground hover:text-foreground"
+            >
+              <IconX className="mr-1 h-3.5 w-3.5" />
+              Reset filters
             </Button>
           ) : null}
         </div>
@@ -154,14 +240,14 @@ export function PostsView() {
         />
       ) : items.length === 0 ? (
         <EmptyState
-          title={search ? "No matching posts" : "No posts here yet"}
+          title={hasActiveFilters ? "No matching posts" : "No posts here yet"}
           description={
-            search
-              ? "Try a different search term."
+            hasActiveFilters
+              ? "Try adjusting your filters or search term."
               : "Posts will appear here once they're created."
           }
           action={
-            !search && canCreate ? (
+            !hasActiveFilters && canCreate ? (
               <Button asChild size="sm">
                 <Link href="/dashboard/posts/new">
                   <IconPlus className="h-4 w-4" />
