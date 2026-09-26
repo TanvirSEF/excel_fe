@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import {
   IconArrowRight,
@@ -121,6 +121,43 @@ export function TopicsExplorer({
     initialCategorySlug || displayCategories[0]?.slug || "formulas"
   )
 
+  useEffect(() => {
+    const syncTopic = () => {
+      try {
+        const params = new URLSearchParams(window.location.search)
+        const topicFromUrl = params.get("topic")
+        const topicFromSession = sessionStorage.getItem("excelinsider_active_topic")
+        const targetSlug = topicFromUrl || topicFromSession
+
+        if (targetSlug && displayCategories.some((c) => c.slug === targetSlug)) {
+          setActiveSlug(targetSlug)
+        }
+      } catch {
+        // Ignore in restricted environments
+      }
+    }
+
+    syncTopic()
+    window.addEventListener("popstate", syncTopic)
+    window.addEventListener("pageshow", syncTopic)
+    return () => {
+      window.removeEventListener("popstate", syncTopic)
+      window.removeEventListener("pageshow", syncTopic)
+    }
+  }, [displayCategories])
+
+  const handleSelectCategory = (slug: string) => {
+    setActiveSlug(slug)
+    try {
+      sessionStorage.setItem("excelinsider_active_topic", slug)
+      const url = new URL(window.location.href)
+      url.searchParams.set("topic", slug)
+      window.history.replaceState(null, "", url.toString())
+    } catch {
+      // Ignore in restricted environments
+    }
+  }
+
   const activeCategory =
     displayCategories.find((c) => c.slug === activeSlug) ||
     displayCategories[0]
@@ -142,7 +179,7 @@ export function TopicsExplorer({
   const currentPosts = postsData?.items ?? (activeSlug === initialCategorySlug ? initialPosts : [])
 
   return (
-    <section className="py-14 sm:py-18">
+    <section id="topics-explorer" className="py-14 sm:py-18 scroll-mt-20">
       <SectionHeading
         badge="Topic Directory"
         title="All Topics from Excel & Google Sheets"
@@ -164,7 +201,7 @@ export function TopicsExplorer({
                 <button
                   key={category.id || category.slug}
                   type="button"
-                  onClick={() => setActiveSlug(category.slug)}
+                  onClick={() => handleSelectCategory(category.slug)}
                   className={cn(
                     "flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition-all cursor-pointer whitespace-nowrap",
                     isActive
@@ -190,7 +227,7 @@ export function TopicsExplorer({
                 <button
                   key={category.id || category.slug}
                   type="button"
-                  onClick={() => setActiveSlug(category.slug)}
+                  onClick={() => handleSelectCategory(category.slug)}
                   className={cn(
                     "group flex w-full items-center justify-between rounded-xl px-3.5 py-3 text-sm font-medium transition-all duration-200 text-left cursor-pointer",
                     isActive
