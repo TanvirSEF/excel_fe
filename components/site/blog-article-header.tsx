@@ -27,11 +27,6 @@ export function BlogArticleHeader({ post }: { post: PostDetail }) {
       <h1 className="mt-4 text-balance text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl">
         {post.title}
       </h1>
-      {post.meta_description || post.excerpt ? (
-        <p className="mt-4 text-pretty text-lg leading-relaxed text-muted-foreground">
-          {post.meta_description || post.excerpt}
-        </p>
-      ) : null}
       <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted-foreground sm:gap-x-6">
         <div className="flex items-center gap-1.5">
           <span>Written by:</span>
