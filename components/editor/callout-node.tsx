@@ -209,7 +209,7 @@ function CalloutView({ node, updateAttributes, selected }: ReactNodeViewProps) {
           </div>
           {presetButtons}
         </div>
-        <NodeViewContent className="callout-content text-sm sm:text-[0.9375rem] font-serif font-normal text-center leading-6 text-foreground selection:bg-primary/20" />
+        <NodeViewContent className="callout-content text-sm sm:text-[0.9375rem] font-serif font-normal text-center leading-6 text-foreground selection:bg-primary/20 break-words [overflow-wrap:anywhere]" />
       </NodeViewWrapper>
     )
   }

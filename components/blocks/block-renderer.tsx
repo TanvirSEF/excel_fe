@@ -226,7 +226,7 @@ function withMarks(
         break
       case "code":
         node = (
-          <code className="rounded-md bg-muted px-1.5 py-0.5 font-mono text-[0.85em]">
+          <code className="rounded-md bg-muted px-1.5 py-0.5 font-mono text-[0.85em] break-words [overflow-wrap:anywhere]">
             {node}
           </code>
         )
@@ -830,15 +830,25 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
         !isNote &&
         Boolean(block.title && /(explanation|explain)/i.test(block.title))
 
+      const rawCandidateText =
+        block.text ||
+        (typeof block.content === "string"
+          ? block.content
+          : Array.isArray(block.content)
+            ? block.content
+                .map((c) => (typeof c === "string" ? c : c.text))
+                .join("")
+            : "")
+
       const isFormula =
         !isTakeaway &&
         !isNote &&
         !isExplanation &&
-        ((Boolean(block.title && /formula/i.test(block.title))) ||
+        (Boolean(block.title && /formula/i.test(block.title)) ||
           (!block.title &&
             Boolean(
-              block.text &&
-                /^\s*(=|[A-Z_]{2,}\s*\()/i.test(block.text.trim())
+              rawCandidateText &&
+                /^\s*(=|[A-Z_]{2,}\s*\()/i.test(rawCandidateText.trim())
             )))
 
       if (isExplanation) {
@@ -857,23 +867,25 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
       }
 
       if (isFormula) {
-        const formulaText = (block.text ?? "").trim().replace(/^formula:?\s*/i, "")
+        const formulaText = rawCandidateText.trim().replace(/^formula:?\s*/i, "")
         const isMultiLine = formulaText.includes("\n")
+        const isLong = formulaText.length > 50
+        const isLongOrMulti = isMultiLine || isLong
 
         return (
-          <div className="group relative my-5 flex items-center justify-center rounded-[4px] border border-border/80 bg-card py-2 pl-4 pr-12 sm:py-2.5 sm:px-14 shadow-[1.5px_1.5px_2px_rgba(0,0,0,0.35)] dark:shadow-[1.5px_1.5px_2px_rgba(0,0,0,0.7)] transition-all">
-            <div className="max-w-full overflow-x-auto text-center scrollbar-none">
+          <div className="group relative my-5 flex items-start justify-between gap-3 rounded-[6px] border border-border/80 bg-card py-2.5 pl-4 pr-3 sm:py-3 sm:pl-5 sm:pr-3.5 shadow-[1.5px_1.5px_2px_rgba(0,0,0,0.25)] dark:shadow-[1.5px_1.5px_2px_rgba(0,0,0,0.6)] transition-all hover:border-primary/40">
+            <div className="min-w-0 flex-1">
               <span
                 className={cn(
-                  "font-serif text-sm sm:text-[0.9375rem] font-normal tracking-normal text-foreground selection:bg-primary/20",
-                  isMultiLine ? "block text-left whitespace-pre-wrap" : "whitespace-nowrap"
+                  "block font-serif text-sm sm:text-[0.9375rem] font-normal tracking-normal text-foreground selection:bg-primary/20 break-words [overflow-wrap:anywhere] whitespace-pre-wrap leading-relaxed",
+                  isLongOrMulti ? "text-left" : "text-center sm:pl-16"
                 )}
               >
                 {formulaText}
               </span>
             </div>
 
-            <div className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2">
+            <div className="shrink-0 self-start pt-0.5">
               <CopyButton text={formulaText} />
             </div>
           </div>

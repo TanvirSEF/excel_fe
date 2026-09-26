@@ -33,7 +33,7 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
           <p className="text-xs font-semibold uppercase tracking-wider text-primary">
             Formula
           </p>
-          <p className="mt-1.5 font-mono text-sm leading-relaxed text-foreground">
+          <p className="mt-1.5 font-mono text-sm leading-relaxed text-foreground break-words [overflow-wrap:anywhere]">
             {detail.formula}
           </p>
         </div>
@@ -100,7 +100,7 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
                       {item.note}
                     </p>
                   ) : null}
-                  <p className="mt-2 rounded-lg border border-primary/20 bg-background px-3 py-2 font-mono text-sm leading-relaxed text-foreground">
+                  <p className="mt-2 rounded-lg border border-primary/20 bg-background px-3 py-2 font-mono text-sm leading-relaxed text-foreground break-words [overflow-wrap:anywhere]">
                     {item.equation}
                   </p>
                   {item.terms ? (
