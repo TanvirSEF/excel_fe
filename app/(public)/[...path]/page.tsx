@@ -7,6 +7,7 @@ import {
 } from "@/components/site/blog-article-view"
 import { getPostBySlug } from "@/lib/api/posts"
 import { getWpRedirect, looksLikeWpPath } from "@/lib/api/redirects"
+import { isGoogleSheetsCategory } from "@/lib/category-topics"
 import type { PostDetail } from "@/types/api"
 
 interface CatchAllPageProps {
@@ -30,6 +31,13 @@ async function resolvePost(path: string[]): Promise<
       const slug = redirectRow.new_path.replace("/blog/", "")
       try {
         const post = await getPostBySlug(slug)
+        if (isGoogleSheetsCategory(post.category_slug)) {
+          return {
+            type: "redirect",
+            target: `/google-sheets/${post.slug}/`,
+            isPermanent: true,
+          }
+        }
         return { type: "post", post }
       } catch {
         return null
@@ -37,12 +45,14 @@ async function resolvePost(path: string[]): Promise<
     }
 
     if (redirectRow.new_path.startsWith("/google-sheets/")) {
-      const slug = redirectRow.new_path.replace("/google-sheets/", "")
-      try {
-        const post = await getPostBySlug(slug)
-        return { type: "post", post }
-      } catch {
-        return null
+      const target = redirectRow.new_path.startsWith("/")
+        ? redirectRow.new_path
+        : `/${redirectRow.new_path}`
+      const finalTarget = target.endsWith("/") ? target : `${target}/`
+      return {
+        type: "redirect",
+        target: finalTarget,
+        isPermanent: redirectRow.redirect_type === 301,
       }
     }
 
@@ -60,6 +70,13 @@ async function resolvePost(path: string[]): Promise<
   if (path.length === 1) {
     try {
       const post = await getPostBySlug(path[0])
+      if (isGoogleSheetsCategory(post.category_slug)) {
+        return {
+          type: "redirect",
+          target: `/google-sheets/${post.slug}/`,
+          isPermanent: true,
+        }
+      }
       return { type: "post", post }
     } catch {
       return null

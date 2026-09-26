@@ -15,16 +15,24 @@ interface PostCardProps {
 export function postHref(
   post: Pick<PostListItem, "slug"> & {
     category?: { slug: string } | null
+    category_slug?: string | null
     canonical_url?: string | null
   }
 ) {
+  const categorySlug = post.category?.slug ?? post.category_slug
+  if (
+    isGoogleSheetsCategory(categorySlug) ||
+    post.canonical_url?.startsWith("/google-sheets/") ||
+    post.canonical_url?.startsWith("/google-sheets-")
+  ) {
+    return `/google-sheets/${post.slug}/`
+  }
+
   let href = post.canonical_url
     ? post.canonical_url.startsWith("/")
       ? post.canonical_url
       : `/${post.canonical_url}`
-    : isGoogleSheetsCategory(post.category?.slug)
-      ? `/google-sheets/${post.slug}`
-      : `/blog/${post.slug}`
+    : `/blog/${post.slug}`
 
   if (!href.endsWith("/")) {
     href += "/"

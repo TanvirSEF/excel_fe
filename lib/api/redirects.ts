@@ -16,7 +16,6 @@ const KNOWN_STATIC_PREFIXES = [
   "/categories",
   "/contact",
   "/dashboard",
-  "/google-sheets",
   "/login",
   "/register",
   "/forgot-password",
@@ -33,7 +32,7 @@ const KNOWN_STATIC_PREFIXES = [
 ]
 
 export function looksLikeWpPath(pathname: string): boolean {
-  if (pathname === "/") return false
+  if (pathname === "/" || pathname === "/google-sheets") return false
   if (pathname.includes(".")) return false // assets (.png, .ico, .txt, etc.)
   for (const prefix of KNOWN_STATIC_PREFIXES) {
     if (pathname === prefix || pathname.startsWith(`${prefix}/`)) {
