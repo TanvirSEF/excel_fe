@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef } from "react"
-import { IconChevronDown, IconList } from "@tabler/icons-react"
+import { IconChevronDown, IconListNumbers } from "@tabler/icons-react"
 
 import type { TocEntry } from "@/lib/blocks"
 
@@ -50,13 +50,18 @@ export function MobileToc({ entries }: MobileTocProps) {
   return (
     <details
       ref={detailsRef}
-      className="group mb-8 rounded-xl border border-border/80 bg-card shadow-2xs xl:hidden"
+      className="group mb-8 rounded-2xl border border-border/80 bg-card/70 shadow-xs backdrop-blur-xs transition-colors xl:hidden dark:bg-card/40"
     >
-      <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-semibold text-foreground [&::-webkit-details-marker]:hidden">
-        <span className="flex items-center gap-2">
-          <IconList className="h-4 w-4 text-primary" />
-          On this page
-        </span>
+      <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3.5 text-sm font-semibold text-foreground [&::-webkit-details-marker]:hidden">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/25">
+            <IconListNumbers className="h-4 w-4" />
+          </div>
+          <span className="font-bold text-foreground">On this page</span>
+          <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-semibold text-primary">
+            {sections.length} Sections
+          </span>
+        </div>
         <IconChevronDown className="h-4 w-4 text-muted-foreground transition-transform duration-200 group-open:rotate-180" />
       </summary>
       <nav

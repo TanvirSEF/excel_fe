@@ -2,8 +2,7 @@ import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 
 import { BlockRenderer } from "@/components/blocks/block-renderer"
-import { MobileToc } from "@/components/blocks/mobile-toc"
-import { Toc } from "@/components/blocks/toc"
+import { InlineToc } from "@/components/blocks/inline-toc"
 import { ArticleHeader } from "@/components/site/article-header"
 import { ArticleTags } from "@/components/site/article-tags"
 import { CommentsSection } from "@/components/site/comments-section"
@@ -109,7 +108,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
   return (
     <>
-      <div className="mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-8 px-4 py-10 sm:py-12 xl:grid-cols-[264px_minmax(0,1fr)_220px]">
+      <div className="mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-8 px-4 py-10 sm:py-12 xl:grid-cols-[264px_minmax(0,1fr)]">
         <aside className="hidden xl:block">
           <div className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto pr-1">
             <CurriculumSidebar modules={modules} activeLessonSlug={post.slug} />
@@ -119,7 +118,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
         <article className="mx-auto w-full max-w-[860px] xl:mx-0">
           <ArticleHeader post={post} />
 
-          <MobileToc entries={toc} />
+          <InlineToc entries={toc} className="mt-0 mb-8" />
 
           <BlockRenderer blocks={post.content_json?.blocks ?? []} />
           <ArticleTags tags={post.tags} />
@@ -139,12 +138,6 @@ export default async function LessonPage({ params }: LessonPageProps) {
             }}
           />
         </article>
-
-        <aside className="hidden xl:block">
-          <div className="sticky top-20">
-            <Toc entries={toc} />
-          </div>
-        </aside>
       </div>
 
       <CurriculumDrawer modules={modules} activeLessonSlug={post.slug} />

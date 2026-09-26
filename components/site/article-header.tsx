@@ -1,4 +1,3 @@
-import Image from "next/image"
 import Link from "next/link"
 import { IconCalendar } from "@tabler/icons-react"
 
@@ -52,19 +51,6 @@ export function ArticleHeader({ post }: { post: PostDetail }) {
           <ShareButtons title={post.title} />
         </div>
       </header>
-
-      {post.featured_image_url ? (
-        <div className="relative mb-8 aspect-video overflow-hidden rounded-xl border">
-          <Image
-            src={post.featured_image_url}
-            alt=""
-            fill
-            priority
-            sizes="(max-width: 768px) 100vw, 768px"
-            className="object-cover"
-          />
-        </div>
-      ) : null}
     </>
   )
 }
