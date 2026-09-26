@@ -825,11 +825,6 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
         )
       }
 
-      const isExplanation =
-        !isTakeaway &&
-        !isNote &&
-        Boolean(block.title && /(explanation|explain)/i.test(block.title))
-
       const rawCandidateText =
         block.text ||
         (typeof block.content === "string"
@@ -840,16 +835,35 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
                 .join("")
             : "")
 
+      const trimmedText = rawCandidateText.trim()
+      const startsWithBullet = /^[\s\r\n]*[➥➧➤•\-\*]/i.test(trimmedText)
+
+      const isFormulaTitle =
+        Boolean(
+          block.title &&
+            /^(excel\s+)?formula(\s+box)?$/i.test(block.title.trim())
+        )
+
+      const isExplanation =
+        !isTakeaway &&
+        !isNote &&
+        !isFormulaTitle &&
+        Boolean(
+          block.title &&
+            (startsWithBullet ||
+              /(explanation|explain|breakdown|interpretation|findings|differences)/i.test(
+                block.title
+              ))
+        )
+
       const isFormula =
         !isTakeaway &&
         !isNote &&
         !isExplanation &&
-        (Boolean(block.title && /formula/i.test(block.title)) ||
+        !startsWithBullet &&
+        (isFormulaTitle ||
           (!block.title &&
-            Boolean(
-              rawCandidateText &&
-                /^\s*(=|[A-Z_]{2,}\s*\()/i.test(rawCandidateText.trim())
-            )))
+            Boolean(trimmedText && /^\s*(=|[A-Z_]{2,}\s*\()/i.test(trimmedText))))
 
       if (isExplanation) {
         return (
