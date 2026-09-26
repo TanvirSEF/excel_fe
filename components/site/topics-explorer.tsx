@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import {
   IconArrowRight,
@@ -109,6 +109,17 @@ const FALLBACK_CATEGORIES: Category[] = [
   },
 ]
 
+function isGoogle(cat: Category) {
+  const slug = cat.slug.toLowerCase()
+  const name = cat.name.toLowerCase()
+  return (
+    slug.includes("google") ||
+    slug.includes("sheets") ||
+    name.includes("google") ||
+    name.includes("sheets")
+  )
+}
+
 export function TopicsExplorer({
   categories = [],
   initialCategorySlug,
@@ -117,20 +128,15 @@ export function TopicsExplorer({
   const displayCategories =
     categories.length > 0 ? categories : FALLBACK_CATEGORIES
 
-  const isGoogle = (cat: Category) => {
-    const slug = cat.slug.toLowerCase()
-    const name = cat.name.toLowerCase()
-    return (
-      slug.includes("google") ||
-      slug.includes("sheets") ||
-      name.includes("google") ||
-      name.includes("sheets")
-    )
-  }
-
-  const excelCategories = displayCategories.filter((c) => !isGoogle(c))
-  const googleCategories = displayCategories.filter((c) => isGoogle(c))
-  const sortedCategories = [...excelCategories, ...googleCategories]
+  const { excelCategories, googleCategories, sortedCategories } = useMemo(() => {
+    const excel = displayCategories.filter((c) => !isGoogle(c))
+    const google = displayCategories.filter((c) => isGoogle(c))
+    return {
+      excelCategories: excel,
+      googleCategories: google,
+      sortedCategories: [...excel, ...google],
+    }
+  }, [displayCategories])
 
   const [activeSlug, setActiveSlug] = useState<string>(
     initialCategorySlug || sortedCategories[0]?.slug || "formulas"
