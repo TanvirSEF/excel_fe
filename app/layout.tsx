@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Figtree, Geist_Mono } from "next/font/google"
+import { Geist_Mono, Poppins } from "next/font/google"
 
 import "./globals.css"
 import { Providers } from "@/components/providers"
@@ -8,8 +8,9 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { config } from "@/lib/config"
 import { cn } from "@/lib/utils"
 
-const figtree = Figtree({
+const poppins = Poppins({
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
   variable: "--font-sans",
   display: "swap",
   preload: true,
@@ -56,7 +57,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", figtree.variable, fontMono.variable, "font-sans")}
+      className={cn("antialiased", poppins.variable, fontMono.variable, "font-sans")}
     >
       <body suppressHydrationWarning>
         <ThemeProvider>
