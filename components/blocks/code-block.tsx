@@ -18,17 +18,6 @@ function resolveLanguage(
 } {
   const req = langInput?.toLowerCase().trim()
 
-  // Replace default/erroneous javascript with VBA on Excel tutorials
-  if (
-    !req ||
-    req === "javascript" ||
-    req === "js" ||
-    req === "vba" ||
-    req === "vb"
-  ) {
-    return { shikiLang: "vb", displayLabel: "VBA Code" }
-  }
-
   if (req === "excel" || req === "formula" || req === "xls") {
     return { shikiLang: "text", displayLabel: "Excel Formula" }
   }
@@ -61,17 +50,46 @@ function resolveLanguage(
     return { shikiLang: "css", displayLabel: "CSS" }
   }
 
-  // If marked plaintext or generic, check if code contains VBA keywords
-  if (
-    codeSnippet &&
-    /\b(Sub|Function|Dim|Range|MsgBox|End Sub|End If|Next|Worksheet|Workbook|Cells|ActiveSheet)\b/i.test(
-      codeSnippet
-    )
-  ) {
+  if (req === "vba" || req === "vb") {
     return { shikiLang: "vb", displayLabel: "VBA Code" }
   }
 
-  return { shikiLang: req, displayLabel: req.toUpperCase() }
+  if (
+    req &&
+    req !== "javascript" &&
+    req !== "js" &&
+    req !== "text" &&
+    req !== "plaintext"
+  ) {
+    return { shikiLang: req, displayLabel: req.toUpperCase() }
+  }
+
+  if (codeSnippet) {
+    if (/^\s*(=|@)\s*[A-Z_]+\(/i.test(codeSnippet)) {
+      return { shikiLang: "text", displayLabel: "Excel Formula" }
+    }
+    if (
+      /\b(def\s+[a-zA-Z_]|import\s+pandas|import\s+numpy)\b/i.test(codeSnippet)
+    ) {
+      return { shikiLang: "python", displayLabel: "Python" }
+    }
+    if (
+      /\b(SELECT\s+[\s\S]+FROM|INSERT\s+INTO|UPDATE\s+[\s\S]+SET)\b/i.test(
+        codeSnippet
+      )
+    ) {
+      return { shikiLang: "sql", displayLabel: "SQL" }
+    }
+    if (
+      /\b(Sub|Function|Dim|Range|MsgBox|End Sub|End If|Next|Worksheet|Workbook|Cells|ActiveSheet)\b/i.test(
+        codeSnippet
+      )
+    ) {
+      return { shikiLang: "vb", displayLabel: "VBA Code" }
+    }
+  }
+
+  return { shikiLang: "vb", displayLabel: "VBA Code" }
 }
 
 export async function CodeBlock({

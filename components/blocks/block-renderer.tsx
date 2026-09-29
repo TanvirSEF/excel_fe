@@ -508,13 +508,152 @@ function formatShortcuts(value: RichText | undefined): InlineText[] {
   return result
 }
 
+const FENCED_CODE_REGEX = /```([a-zA-Z0-9_#-]*)\r?\n([\s\S]*?)```/g
+
+interface CodeBlockItem {
+  type: "code"
+  code: string
+  language?: string
+}
+
+interface InlineItem {
+  type: "inline"
+  text: string
+  marks?: InlineMark[]
+}
+
+type ProcessedRunItem = CodeBlockItem | InlineItem
+
+function isCodeBlockRun(run: InlineText): boolean {
+  if (run.marks?.some((m) => m.type === "code")) {
+    const text = run.text.replace(/\r\n/g, "\n")
+    if (text.trim().includes("\n")) {
+      return true
+    }
+    if (/\b(Sub|Function)\b[\s\S]+\b(End Sub|End Function)\b/i.test(text)) {
+      return true
+    }
+    if (/^```([a-zA-Z0-9_#-]*)\r?\n?([\s\S]*?)```$/.test(text.trim())) {
+      return true
+    }
+  }
+  return false
+}
+
+function extractCodeAndLanguage(text: string): {
+  code: string
+  language?: string
+} {
+  const trimmed = text.trim()
+  const fenceMatch = trimmed.match(/^```([a-zA-Z0-9_#-]*)\r?\n?([\s\S]*?)```$/)
+  if (fenceMatch) {
+    return {
+      language: fenceMatch[1] || undefined,
+      code: fenceMatch[2].replace(/\r\n/g, "\n").trim(),
+    }
+  }
+  return {
+    code: text.replace(/\r\n/g, "\n").trim(),
+  }
+}
+
+function processRichTextItems(runs: InlineText[]): ProcessedRunItem[] {
+  const items: ProcessedRunItem[] = []
+
+  for (const run of runs) {
+    if (isCodeBlockRun(run)) {
+      const { code, language } = extractCodeAndLanguage(run.text)
+      items.push({ type: "code", code, language })
+      continue
+    }
+
+    if (run.text.includes("```")) {
+      FENCED_CODE_REGEX.lastIndex = 0
+      let lastIndex = 0
+      let match: RegExpExecArray | null
+      while ((match = FENCED_CODE_REGEX.exec(run.text)) !== null) {
+        const before = run.text.slice(lastIndex, match.index)
+        if (before) {
+          items.push({ type: "inline", text: before, marks: run.marks })
+        }
+        items.push({
+          type: "code",
+          code: match[2].trim(),
+          language: match[1] || undefined,
+        })
+        lastIndex = FENCED_CODE_REGEX.lastIndex
+      }
+      const after = run.text.slice(lastIndex)
+      if (after) {
+        items.push({ type: "inline", text: after, marks: run.marks })
+      }
+      continue
+    }
+
+    items.push({ type: "inline", text: run.text, marks: run.marks })
+  }
+
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].type === "code") {
+      let prevIdx = i - 1
+      while (prevIdx >= 0 && items[prevIdx].type === "inline") {
+        const item = items[prevIdx] as InlineItem
+        item.text = item.text.replace(/[\r\n]+$/, "")
+        if (item.text.length > 0) {
+          break
+        }
+        prevIdx--
+      }
+
+      let nextIdx = i + 1
+      while (nextIdx < items.length && items[nextIdx].type === "inline") {
+        const item = items[nextIdx] as InlineItem
+        item.text = item.text.replace(/^[\r\n]+/, "")
+        if (item.text.length > 0) {
+          break
+        }
+        nextIdx++
+      }
+    }
+  }
+
+  return items
+}
+
+function hasCodeBlock(value: RichText | undefined): boolean {
+  if (!value) return false
+  if (typeof value === "string") {
+    return value.includes("```")
+  }
+  for (const run of value) {
+    if (run.text.includes("```")) return true
+    if (isCodeBlockRun(run)) return true
+  }
+  return false
+}
+
 function InlineRuns({ value }: { value: RichText }) {
   const runs = formatShortcuts(value)
+  const items = processRichTextItems(runs)
 
   return (
     <>
-      {runs.map((inline, index) => {
-        const parts = inline.text.split("\n").map((part, partIndex) => (
+      {items.map((item, index) => {
+        if (item.type === "code") {
+          return (
+            <CodeBlock
+              key={index}
+              code={item.code}
+              language={item.language}
+            />
+          )
+        }
+
+        if (!item.text) {
+          return null
+        }
+
+        const parts = item.text.split("\n").map((part, partIndex) => (
           <Fragment key={partIndex}>
             {partIndex > 0 ? <br /> : null}
             {part}
@@ -522,7 +661,7 @@ function InlineRuns({ value }: { value: RichText }) {
         ))
         return (
           <Fragment key={index}>
-            {withMarks(parts, inline.marks, inline.text)}
+            {withMarks(parts, item.marks, item.text)}
           </Fragment>
         )
       })}
@@ -554,15 +693,17 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
           return <VideoEmbed url={trimmed} />
         }
       }
+      const content = block.content ?? block.text
+      const Tag = hasCodeBlock(content) ? "div" : "p"
       return (
-        <p
+        <Tag
           className={cn(
             "text-[17px] sm:text-[18px] font-normal leading-[1.75] text-foreground/90",
             alignClass(block.align)
           )}
         >
-          <InlineRuns value={block.content ?? block.text} />
-        </p>
+          <InlineRuns value={content} />
+        </Tag>
       )
     }
 
@@ -918,9 +1059,9 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
             {block.title ? (
               <p className="font-semibold text-foreground text-base sm:text-[17px]">{block.title}</p>
             ) : null}
-            <p className="font-normal leading-relaxed text-foreground/90">
+            <div className="font-normal leading-relaxed text-foreground/90">
               <InlineRuns value={block.content ?? block.text} />
-            </p>
+            </div>
           </div>
         </div>
       )
