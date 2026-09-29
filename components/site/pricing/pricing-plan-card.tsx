@@ -17,8 +17,8 @@ export function PricingPlanCard({ plan }: { plan: PaidPlan }) {
       )}
     >
       {plan.popular ? (
-        <div className="absolute -top-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-primary px-3 py-1 text-[11px] font-bold text-primary-foreground shadow-xs">
-          <IconSparkles className="h-3 w-3" />
+        <div className="absolute -top-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground shadow-xs">
+          <IconSparkles className="h-3.5 w-3.5" />
           Most Popular
         </div>
       ) : null}
@@ -27,23 +27,23 @@ export function PricingPlanCard({ plan }: { plan: PaidPlan }) {
         <Icon className="h-[22px] w-[22px]" />
       </div>
 
-      <h3 className="mt-4 text-lg font-bold tracking-tight text-foreground">
+      <h3 className="mt-4 text-lg sm:text-xl font-bold tracking-tight text-foreground">
         {plan.name}
       </h3>
-      <p className="mt-1 text-xs text-muted-foreground">{plan.tagline}</p>
+      <p className="mt-1 text-[13px] sm:text-sm text-muted-foreground">{plan.tagline}</p>
 
       <div className="mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-1">
         <span className="text-3xl font-bold tracking-tight text-foreground">
           {plan.priceLabel}
         </span>
-        <span className="text-xs text-muted-foreground">{plan.unit}</span>
+        <span className="text-sm text-muted-foreground">{plan.unit}</span>
       </div>
 
       <ul className="mt-5 space-y-2.5 border-t border-border/60 pt-5">
         {plan.features.map((feature) => (
-          <li key={feature} className="flex items-start gap-2.5 text-sm text-foreground/85">
-            <div className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-              <IconCheck className="h-2.5 w-2.5 stroke-[3]" />
+          <li key={feature} className="flex items-start gap-2.5 text-[15px] text-foreground/85">
+            <div className="mt-0.5 flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <IconCheck className="h-3 w-3 stroke-[3]" />
             </div>
             <span className="leading-snug">{feature}</span>
           </li>

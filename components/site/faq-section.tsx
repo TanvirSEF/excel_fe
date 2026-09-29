@@ -66,7 +66,7 @@ export function FaqSection() {
                 aria-expanded={isOpen}
                 className="flex w-full cursor-pointer items-center justify-between gap-4 text-left font-semibold text-foreground transition-colors hover:text-primary"
               >
-                <span className={`text-base sm:text-lg transition-colors ${isOpen ? "text-primary" : ""}`}>
+                <span className={`text-[17px] sm:text-lg font-semibold transition-colors ${isOpen ? "text-primary" : ""}`}>
                   {faq.question}
                 </span>
                 <div
@@ -85,7 +85,7 @@ export function FaqSection() {
                 }`}
               >
                 <div className="overflow-hidden">
-                  <p className="pt-3.5 text-sm leading-relaxed text-muted-foreground sm:text-base">
+                  <p className="pt-3.5 text-[15px] leading-relaxed text-muted-foreground sm:text-[17px]">
                     {faq.answer}
                   </p>
                 </div>

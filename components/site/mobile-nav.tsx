@@ -107,10 +107,10 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
               </button>
 
               {blogsExpanded && (
-                <div className="space-y-3 px-2 pb-3 pt-2 text-xs border-t border-border/40">
+                <div className="space-y-3 px-2 pb-3 pt-2 text-sm border-t border-border/40">
                   {/* Excel Group */}
                   <div className="space-y-1">
-                    <p className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                    <p className="px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
                       <IconBrandOffice className="h-3.5 w-3.5" />
                       <span>Microsoft Excel</span>
                     </p>
@@ -119,7 +119,7 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
                         key={item.slug}
                         href={`/categories/${item.slug}`}
                         onClick={handleLinkClick}
-                        className="flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-muted-foreground hover:bg-background hover:text-foreground"
+                        className="flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[15px] text-muted-foreground hover:bg-background hover:text-foreground"
                       >
                         <span className="truncate">{item.name}</span>
                       </Link>
@@ -128,7 +128,7 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
 
                   {/* Google Sheets Group */}
                   <div className="space-y-1 pt-1.5 border-t border-border/30">
-                    <p className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 flex items-center gap-1.5">
+                    <p className="px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 flex items-center gap-1.5">
                       <IconBrandGoogle className="h-3.5 w-3.5" />
                       <span>Google Sheets</span>
                     </p>
@@ -152,7 +152,7 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
                         key={item.slug}
                         href={`/google-sheets#${item.slug}`}
                         onClick={handleLinkClick}
-                        className="flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-muted-foreground hover:bg-background hover:text-foreground"
+                        className="flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[15px] text-muted-foreground hover:bg-background hover:text-foreground"
                       >
                         <span className="truncate">{item.name}</span>
                       </Link>
@@ -163,7 +163,7 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
                     <Link
                       href="/categories"
                       onClick={handleLinkClick}
-                      className="flex items-center justify-between rounded-lg px-2.5 py-2 font-semibold text-emerald-600 dark:text-emerald-400 hover:bg-background"
+                      className="flex items-center justify-between rounded-lg px-2.5 py-2 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:bg-background"
                     >
                       <span className="flex items-center gap-2">
                         <IconBook2 className="h-3.5 w-3.5 shrink-0" />
@@ -192,7 +192,7 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
               </button>
 
               {pricingExpanded && (
-                <div className="space-y-1 px-2 pb-2.5 pt-1 text-xs border-t border-border/40">
+                <div className="space-y-1 px-2 pb-2.5 pt-1 text-sm border-t border-border/40">
                   <Link
                     href="/pricing"
                     onClick={handleLinkClick}
@@ -238,7 +238,7 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
               </button>
 
               {calcExpanded && (
-                <div className="space-y-1 px-2 pb-2.5 pt-1 text-xs border-t border-border/40">
+                <div className="space-y-1 px-2 pb-2.5 pt-1 text-sm border-t border-border/40">
                   <Link
                     href="/calculator/statistics/"
                     onClick={handleLinkClick}
@@ -269,7 +269,7 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
                     onClick={handleLinkClick}
                     className="flex items-center justify-between rounded-lg px-2.5 py-2 text-primary font-medium hover:bg-background"
                   >
-                    <span>All Calculators</span>
+                    <span>View All Calculators</span>
                     <IconArrowRight className="h-3.5 w-3.5" />
                   </Link>
                 </div>

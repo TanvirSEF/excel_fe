@@ -85,8 +85,8 @@ export function YoutubePlaylists() {
                 </div>
 
                 {/* Playlist Category Badge */}
-                <div className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-background/90 px-3 py-1 text-xs font-semibold text-foreground shadow-xs backdrop-blur-xs">
-                  <IconBrandYoutube className="h-3.5 w-3.5 text-primary" />
+                <div className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-background/90 px-3 py-1 text-xs sm:text-[13px] font-semibold text-foreground shadow-xs backdrop-blur-xs">
+                  <IconBrandYoutube className="h-4 w-4 text-primary" />
                   <span>{playlist.badge}</span>
                 </div>
               </div>
@@ -96,14 +96,14 @@ export function YoutubePlaylists() {
                 <h3 className="text-lg font-bold leading-snug tracking-tight text-foreground transition-colors group-hover:text-primary sm:text-xl">
                   {playlist.title}
                 </h3>
-                <p className="text-sm leading-relaxed text-muted-foreground">
+                <p className="text-[15px] leading-relaxed text-muted-foreground">
                   {playlist.subtitle}
                 </p>
               </div>
             </div>
 
             {/* Bottom Link Action */}
-            <div className="p-5 sm:p-6 pt-0 flex items-center justify-between border-t border-border/60 mt-3 pt-4 text-xs font-bold text-primary">
+            <div className="p-5 sm:p-6 pt-0 flex items-center justify-between border-t border-border/60 mt-3 pt-4 text-[13px] sm:text-sm font-bold text-primary">
               <span className="inline-flex items-center gap-1.5">
                 <IconBrandYoutube className="h-4 w-4" />
                 <span>Watch full playlist on YouTube</span>

@@ -24,7 +24,7 @@ export function ArticleTags({
           <Link
             key={tag}
             href={`/tags/${slug}`}
-            className="rounded-full border px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+            className="rounded-full border px-3 py-1 text-xs sm:text-[13px] font-medium text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
           >
             #{tag}
           </Link>

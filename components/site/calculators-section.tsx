@@ -155,39 +155,39 @@ export function CalculatorsSection() {
                     <Icon className="h-5 w-5" />
                   </div>
                   <span
-                    className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${card.badgeClass}`}
+                    className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs sm:text-[13px] font-semibold ${card.badgeClass}`}
                   >
                     {card.count} Free Tools
                   </span>
                 </div>
 
                 <div className="mt-4 space-y-1">
-                  <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  <p className="text-xs sm:text-[13px] font-bold uppercase tracking-wider text-muted-foreground">
                     {card.category}
                   </p>
-                  <h3 className="text-lg font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
+                  <h3 className="text-lg sm:text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
                     {card.title}
                   </h3>
                 </div>
 
-                <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground sm:text-sm">
                   {card.description}
                 </p>
 
                 <div className="mt-5 space-y-1.5 pt-4 border-t border-border/50">
-                  <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/80 mb-2">
+                  <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground/80 mb-2">
                     Popular Calculators
                   </p>
                   {card.tools.map((tool) => (
                     <Link
                       key={tool.slug}
                       href={`${card.hubHref}/${tool.slug}/`}
-                      className="flex items-center justify-between p-2 rounded-lg text-xs font-medium text-foreground hover:bg-muted/70 hover:text-primary transition-colors group/item"
+                      className="flex items-center justify-between p-2 rounded-lg text-[13px] sm:text-sm font-medium text-foreground hover:bg-muted/70 hover:text-primary transition-colors group/item"
                     >
                       <span className="truncate group-hover/item:translate-x-0.5 transition-transform">
                         {tool.name}
                       </span>
-                      <IconChevronRight className="h-3.5 w-3.5 text-muted-foreground group-hover/item:text-primary transition-colors shrink-0 ml-2" />
+                      <IconChevronRight className="h-4 w-4 text-muted-foreground group-hover/item:text-primary transition-colors shrink-0 ml-2" />
                     </Link>
                   ))}
                 </div>
@@ -196,10 +196,10 @@ export function CalculatorsSection() {
               <div className="mt-5 pt-4 border-t border-border/50">
                 <Link
                   href={`${card.hubHref}/`}
-                  className={`inline-flex items-center gap-1.5 text-xs font-semibold ${card.accentText} hover:underline`}
+                  className={`inline-flex items-center gap-1.5 text-[13px] sm:text-sm font-semibold ${card.accentText} hover:underline`}
                 >
                   <span>Explore all {card.title} tools</span>
-                  <IconArrowRight className="h-3.5 w-3.5" />
+                  <IconArrowRight className="h-4 w-4" />
                 </Link>
               </div>
             </div>

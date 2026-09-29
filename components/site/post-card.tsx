@@ -73,7 +73,7 @@ export function PostCard({ post, className }: PostCardProps) {
 
           {/* Trending Badge Overlay */}
           {post.is_trending ? (
-            <div className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full border border-primary/20 bg-background/90 px-2.5 py-1 text-[11px] font-semibold text-primary shadow-xs backdrop-blur-xs">
+            <div className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full border border-primary/20 bg-background/90 px-2.5 py-1 text-xs font-semibold text-primary shadow-xs backdrop-blur-xs">
               <IconFlame className="h-3.5 w-3.5 text-primary" />
               <span>Trending</span>
             </div>
@@ -85,7 +85,7 @@ export function PostCard({ post, className }: PostCardProps) {
           <div className="space-y-2">
             {/* Category kicker */}
             {post.category ? (
-              <span className="inline-flex line-clamp-1 text-[11px] font-semibold uppercase tracking-wider text-primary">
+              <span className="inline-flex line-clamp-1 text-xs font-semibold uppercase tracking-wider text-primary">
                 {post.category.name}
               </span>
             ) : null}
@@ -97,21 +97,21 @@ export function PostCard({ post, className }: PostCardProps) {
 
             {/* Description */}
             {post.meta_description || post.excerpt ? (
-              <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+              <p className="line-clamp-2 text-[15px] leading-relaxed text-muted-foreground">
                 {post.meta_description || post.excerpt}
               </p>
             ) : null}
 
             {/* Meta Row */}
             {post.published_at ? (
-              <div className="flex items-center gap-2 pt-1 text-xs text-muted-foreground">
+              <div className="flex items-center gap-2 pt-1 text-[13px] text-muted-foreground">
                 <Time date={post.published_at} variant="date" />
               </div>
             ) : null}
           </div>
 
           {/* Read article arrow indicator */}
-          <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-primary opacity-0 transition-all duration-200 group-hover:opacity-100">
+          <div className="mt-4 flex items-center gap-1 text-[13px] font-semibold text-primary opacity-0 transition-all duration-200 group-hover:opacity-100">
             <span>Read guide</span>
             <IconArrowUpRight className="h-3.5 w-3.5" />
           </div>

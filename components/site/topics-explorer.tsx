@@ -225,7 +225,7 @@ export function TopicsExplorer({
                   type="button"
                   onClick={() => handleSelectCategory(category.slug)}
                   className={cn(
-                    "flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition-all cursor-pointer whitespace-nowrap",
+                    "flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all cursor-pointer whitespace-nowrap",
                     isActive
                       ? "bg-primary text-primary-foreground shadow-xs"
                       : "border border-border/80 bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground"
@@ -239,7 +239,7 @@ export function TopicsExplorer({
 
           {/* Desktop Vertical Category Sidebar */}
           <div className="hidden lg:flex flex-col gap-1 rounded-2xl border border-primary/50 bg-card p-3 shadow-2xs h-full">
-            <p className="px-3 pt-2 pb-1 text-[11px] font-bold uppercase tracking-wider text-muted-foreground/60">
+            <p className="px-3 pt-2 pb-1 text-xs font-bold uppercase tracking-wider text-muted-foreground/75">
               Excel Topics
             </p>
             {excelCategories.map((category) => {
@@ -251,7 +251,7 @@ export function TopicsExplorer({
                   type="button"
                   onClick={() => handleSelectCategory(category.slug)}
                   className={cn(
-                    "group flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-200 text-left cursor-pointer",
+                    "group flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-[15px] font-medium transition-all duration-200 text-left cursor-pointer",
                     isActive
                       ? "bg-primary text-primary-foreground font-semibold shadow-xs"
                       : "text-foreground/80 hover:bg-muted/70 hover:text-foreground"
@@ -284,7 +284,7 @@ export function TopicsExplorer({
             {googleCategories.length > 0 ? (
               <>
                 <div className="my-2 border-t border-border/60" />
-                <p className="px-3 pt-1 pb-1 text-[11px] font-bold uppercase tracking-wider text-muted-foreground/60">
+                <p className="px-3 pt-1 pb-1 text-xs font-bold uppercase tracking-wider text-muted-foreground/75">
                   Google Sheets
                 </p>
                 {googleCategories.map((category) => {
@@ -296,7 +296,7 @@ export function TopicsExplorer({
                       type="button"
                       onClick={() => handleSelectCategory(category.slug)}
                       className={cn(
-                        "group flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-200 text-left cursor-pointer",
+                        "group flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-[15px] font-medium transition-all duration-200 text-left cursor-pointer",
                         isActive
                           ? "bg-primary text-primary-foreground font-semibold shadow-xs"
                           : "text-foreground/80 hover:bg-muted/70 hover:text-foreground"

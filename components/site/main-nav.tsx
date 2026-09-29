@@ -225,8 +225,8 @@ export function MainNav({ categories = [] }: MainNavProps) {
                   <IconUserCheck className="h-4 w-4" />
                 </div>
                 <div className="space-y-0.5">
-                  <p className="text-xs font-semibold text-foreground">Services & Solutions</p>
-                  <p className="text-[11px] text-muted-foreground">Expert help plans from $19 — Basic, Premium & Advanced</p>
+                  <p className="text-sm font-semibold text-foreground">Services & Solutions</p>
+                  <p className="text-xs text-muted-foreground">Expert help plans from $19 — Basic, Premium & Advanced</p>
                 </div>
               </Link>
 
@@ -239,8 +239,8 @@ export function MainNav({ categories = [] }: MainNavProps) {
                   <IconFileSpreadsheet className="h-4 w-4" />
                 </div>
                 <div className="space-y-0.5">
-                  <p className="text-xs font-semibold text-foreground">Custom Templates</p>
-                  <p className="text-[11px] text-muted-foreground">Bespoke templates from $25 — Excel or Google Sheets</p>
+                  <p className="text-sm font-semibold text-foreground">Custom Templates</p>
+                  <p className="text-xs text-muted-foreground">Bespoke templates from $25 — Excel or Google Sheets</p>
                 </div>
               </Link>
 
@@ -253,8 +253,8 @@ export function MainNav({ categories = [] }: MainNavProps) {
                   <IconCode className="h-4 w-4" />
                 </div>
                 <div className="space-y-0.5">
-                  <p className="text-xs font-semibold text-foreground">Custom Spreadsheet Tools</p>
-                  <p className="text-[11px] text-muted-foreground">Custom tools & Workspace add-ons from $500</p>
+                  <p className="text-sm font-semibold text-foreground">Custom Spreadsheet Tools</p>
+                  <p className="text-xs text-muted-foreground">Custom tools & Workspace add-ons from $500</p>
                 </div>
               </Link>
 
@@ -312,10 +312,10 @@ export function MainNav({ categories = [] }: MainNavProps) {
                       <IconBrandOffice className="h-4.5 w-4.5" />
                     </div>
                     <div>
-                      <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                      <h3 className="text-[13px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
                         Microsoft Excel
                       </h3>
-                      <p className="text-[11px] text-muted-foreground">Formulas, VBA macros & deep-dives</p>
+                      <p className="text-xs text-muted-foreground">Formulas, VBA macros & deep-dives</p>
                     </div>
                   </div>
 
@@ -333,10 +333,10 @@ export function MainNav({ categories = [] }: MainNavProps) {
                             <Icon className="h-3.5 w-3.5" />
                           </div>
                           <div className="min-w-0 space-y-0.5">
-                            <p className="truncate text-xs font-semibold text-foreground group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                            <p className="truncate text-sm font-semibold text-foreground group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                               {item.name}
                             </p>
-                            <p className="line-clamp-1 text-[11px] text-muted-foreground">
+                            <p className="line-clamp-1 text-xs text-muted-foreground">
                               {item.description}
                             </p>
                           </div>
@@ -353,10 +353,10 @@ export function MainNav({ categories = [] }: MainNavProps) {
                       <IconBrandGoogle className="h-4.5 w-4.5" />
                     </div>
                     <div>
-                      <h3 className="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">
+                      <h3 className="text-[13px] font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">
                         Google Sheets
                       </h3>
-                      <p className="text-[11px] text-muted-foreground">Cloud functions & web workflows</p>
+                      <p className="text-xs text-muted-foreground">Cloud functions & web workflows</p>
                     </div>
                   </div>
 
@@ -365,7 +365,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
                     onClick={() => setActiveMenu(null)}
                     className="flex items-center justify-between gap-2 rounded-lg border border-teal-500/30 bg-teal-500/10 p-2 transition-colors hover:bg-teal-500/20"
                   >
-                    <span className="text-xs font-bold text-teal-700 dark:text-teal-300">
+                    <span className="text-[13px] font-bold text-teal-700 dark:text-teal-300">
                       Learning Track — step-by-step course
                     </span>
                     <IconArrowRight className="h-3.5 w-3.5 shrink-0 text-teal-600 dark:text-teal-400" />
@@ -385,10 +385,10 @@ export function MainNav({ categories = [] }: MainNavProps) {
                             <Icon className="h-3.5 w-3.5" />
                           </div>
                           <div className="min-w-0 space-y-0.5">
-                            <p className="truncate text-xs font-semibold text-foreground group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+                            <p className="truncate text-sm font-semibold text-foreground group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
                               {item.name}
                             </p>
-                            <p className="line-clamp-1 text-[11px] text-muted-foreground">
+                            <p className="line-clamp-1 text-xs text-muted-foreground">
                               {item.description}
                             </p>
                           </div>
@@ -401,14 +401,14 @@ export function MainNav({ categories = [] }: MainNavProps) {
 
               {/* Bottom Footer Bar */}
               <div className="mt-4 pt-3 border-t border-border/60 flex items-center justify-between">
-                <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+                <p className="text-[13px] text-muted-foreground flex items-center gap-1.5">
                   <IconBook2 className="h-3.5 w-3.5 text-primary" />
                   <span>Looking for more? Explore all 1,600+ spreadsheet guides.</span>
                 </p>
                 <Link
                   href="/categories"
                   onClick={() => setActiveMenu(null)}
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-primary/80 transition-colors px-2.5 py-1 rounded-md hover:bg-primary/10"
+                  className="inline-flex items-center gap-1 text-[13px] font-semibold text-primary hover:text-primary/80 transition-colors px-2.5 py-1 rounded-md hover:bg-primary/10"
                 >
                   <span>Browse All Categories</span>
                   <IconArrowRight className="h-3 w-3" />
@@ -459,8 +459,8 @@ export function MainNav({ categories = [] }: MainNavProps) {
                   <IconChartHistogram className="h-4 w-4" />
                 </div>
                 <div className="space-y-0.5">
-                  <p className="text-xs font-semibold text-foreground">Statistics</p>
-                  <p className="text-[11px] text-muted-foreground">Mean, median, deviation & probability tools</p>
+                  <p className="text-sm font-semibold text-foreground">Statistics</p>
+                  <p className="text-xs text-muted-foreground">Mean, median, deviation & probability tools</p>
                 </div>
               </Link>
 
@@ -473,8 +473,8 @@ export function MainNav({ categories = [] }: MainNavProps) {
                   <IconReportMoney className="h-4 w-4" />
                 </div>
                 <div className="space-y-0.5">
-                  <p className="text-xs font-semibold text-foreground">Finance</p>
-                  <p className="text-[11px] text-muted-foreground">Loans, interest, investments & valuation</p>
+                  <p className="text-sm font-semibold text-foreground">Finance</p>
+                  <p className="text-xs text-muted-foreground">Loans, interest, investments & valuation</p>
                 </div>
               </Link>
 
@@ -487,8 +487,8 @@ export function MainNav({ categories = [] }: MainNavProps) {
                   <IconScale className="h-4 w-4" />
                 </div>
                 <div className="space-y-0.5">
-                  <p className="text-xs font-semibold text-foreground">Accounting</p>
-                  <p className="text-[11px] text-muted-foreground">Margin, markup, depreciation & tax</p>
+                  <p className="text-sm font-semibold text-foreground">Accounting</p>
+                  <p className="text-xs text-muted-foreground">Margin, markup, depreciation & tax</p>
                 </div>
               </Link>
 

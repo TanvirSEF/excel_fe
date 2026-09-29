@@ -33,7 +33,7 @@ export function SearchDialog() {
       >
         <IconSearch className="h-4 w-4" />
         <span className="hidden sm:inline">Search</span>
-        <kbd className="hidden sm:inline-flex items-center rounded border border-border/80 bg-background px-1.5 py-0.5 font-mono text-[10px] font-medium text-muted-foreground">
+        <kbd className="hidden sm:inline-flex items-center rounded border border-border/80 bg-background px-1.5 py-0.5 font-mono text-xs font-medium text-muted-foreground">
           Ctrl K
         </kbd>
       </button>

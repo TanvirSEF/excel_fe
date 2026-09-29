@@ -12,7 +12,7 @@ export function Breadcrumb({ items, className }: BreadcrumbProps) {
     <nav
       aria-label="Breadcrumb"
       className={cn(
-        "mb-6 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground",
+        "mb-6 flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground",
         className
       )}
     >

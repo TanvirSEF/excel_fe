@@ -35,8 +35,8 @@ export function NewsletterBand({
         {/* ── Left Column: Value Copy & Form ── */}
         <div className="space-y-6 lg:col-span-7">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-3.5 py-1.5 text-xs font-semibold text-primary-foreground shadow-xs">
-            <IconMail className="h-3.5 w-3.5" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-3.5 py-1.5 text-xs sm:text-[13px] font-semibold text-primary-foreground shadow-xs">
+            <IconMail className="h-4 w-4" />
             <span>Weekly Excel Insider Newsletter</span>
           </div>
 
@@ -46,7 +46,7 @@ export function NewsletterBand({
           </h2>
 
           {/* Subtitle */}
-          <p className="max-w-xl text-balance text-sm leading-relaxed text-primary-foreground/85 sm:text-base">
+          <p className="max-w-xl text-balance text-[15px] sm:text-base leading-relaxed text-primary-foreground/90 lg:text-[17px]">
             Join <strong className="text-white font-bold">40,000+</strong> data analysts, finance managers, and spreadsheet learners. Bite-sized formula breakdowns and free templates sent directly to your inbox every week.
           </p>
 
@@ -55,10 +55,10 @@ export function NewsletterBand({
             {BENEFITS.map((benefit) => (
               <li
                 key={benefit}
-                className="flex items-center gap-2.5 text-xs font-medium text-primary-foreground/90 sm:text-sm"
+                className="flex items-center gap-2.5 text-sm sm:text-[15px] font-medium text-primary-foreground/90"
               >
-                <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-primary-foreground/20 text-primary-foreground">
-                  <IconCheck className="h-2.5 w-2.5 stroke-[3]" />
+                <div className="flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full bg-primary-foreground/20 text-primary-foreground">
+                  <IconCheck className="h-3 w-3 stroke-[3]" />
                 </div>
                 <span>{benefit}</span>
               </li>
@@ -82,8 +82,8 @@ export function NewsletterBand({
               className="object-cover rounded-xl"
             />
             {/* Tag overlay */}
-            <div className="absolute bottom-4 left-4 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-background/90 px-3 py-1 text-xs font-bold text-foreground shadow-md backdrop-blur-xs">
-              <IconDownload className="h-3.5 w-3.5 text-primary" />
+            <div className="absolute bottom-4 left-4 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-background/90 px-3 py-1.5 text-xs sm:text-[13px] font-bold text-foreground shadow-md backdrop-blur-xs">
+              <IconDownload className="h-4 w-4 text-primary" />
               <span>Free Instant Download</span>
             </div>
           </div>

@@ -22,14 +22,14 @@ export function HeroSpreadsheetCard() {
               <span className="h-3 w-3 rounded-full bg-amber-400/80 inline-block" />
               <span className="h-3 w-3 rounded-full bg-emerald-400/80 inline-block" />
             </div>
-            <span className="ml-2 hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-foreground">
+            <span className="ml-2 hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-foreground">
               <IconFileSpreadsheet className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
               <span>Financial_Model_v4.xlsx</span>
             </span>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-medium text-emerald-700 dark:text-emerald-300">
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-700 dark:text-emerald-300">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
               AutoSave ON
             </span>
@@ -37,13 +37,13 @@ export function HeroSpreadsheetCard() {
         </div>
 
         {/* Formula Bar */}
-        <div className="flex items-center gap-2 border-b border-border/60 bg-background/60 px-3.5 py-2 text-xs font-mono">
+        <div className="flex items-center gap-2 border-b border-border/60 bg-background/60 px-3.5 py-2 text-xs sm:text-sm font-mono">
           <div className="flex items-center gap-1 rounded bg-muted/70 px-2 py-1 font-semibold text-muted-foreground">
             <IconMathFunction className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
             <span>D4</span>
           </div>
           <span className="text-muted-foreground font-bold">fx</span>
-          <div className="flex-1 overflow-x-auto whitespace-nowrap text-foreground font-semibold text-xs tracking-tight">
+          <div className="flex-1 overflow-x-auto whitespace-nowrap text-foreground font-semibold text-xs sm:text-sm tracking-tight">
             <span className="text-emerald-600 dark:text-emerald-400">=XLOOKUP</span>
             <span className="text-muted-foreground">(</span>
             <span className="text-blue-600 dark:text-blue-400">&quot;Enterprise&quot;</span>
@@ -57,9 +57,9 @@ export function HeroSpreadsheetCard() {
 
         {/* Spreadsheet Data Grid */}
         <div className="overflow-x-auto p-3 sm:p-4">
-          <table className="w-full text-left text-xs">
+          <table className="w-full text-left text-xs sm:text-sm">
             <thead>
-              <tr className="border-b border-border/50 text-[11px] font-semibold text-muted-foreground">
+              <tr className="border-b border-border/50 text-xs font-semibold text-muted-foreground">
                 <th className="w-8 pb-2 text-center font-mono text-muted-foreground/60">#</th>
                 <th className="pb-2 pl-2 font-medium">A (Region)</th>
                 <th className="pb-2 pl-2 font-medium">B (Plan)</th>
@@ -68,7 +68,7 @@ export function HeroSpreadsheetCard() {
                 <th className="pb-2 pl-2 text-right font-medium">E (Growth)</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border/40 font-mono text-[11px]">
+            <tbody className="divide-y divide-border/40 font-mono text-xs sm:text-[13px]">
               <tr className="hover:bg-muted/20">
                 <td className="py-2 text-center text-muted-foreground/50">2</td>
                 <td className="py-2 pl-2 text-foreground font-sans font-medium">North America</td>
@@ -116,7 +116,7 @@ export function HeroSpreadsheetCard() {
         </div>
 
         {/* Footer info bar inside card */}
-        <div className="flex items-center justify-between border-t border-border/50 bg-muted/30 px-4 py-2.5 text-[11px] text-muted-foreground">
+        <div className="flex items-center justify-between border-t border-border/50 bg-muted/30 px-4 py-2.5 text-xs text-muted-foreground">
           <span className="flex items-center gap-1.5">
             <span className="font-semibold text-foreground">Sheet1:</span>
             <span>Summary Matrix</span>
@@ -133,8 +133,8 @@ export function HeroSpreadsheetCard() {
           <IconCheck className="h-3.5 w-3.5" />
         </div>
         <div className="space-y-0.5">
-          <p className="text-[11px] font-bold text-foreground">100% Tested Formulas</p>
-          <p className="text-[10px] text-muted-foreground font-normal">Excel 365 & Sheets Compatible</p>
+          <p className="text-xs font-bold text-foreground">100% Tested Formulas</p>
+          <p className="text-xs text-muted-foreground font-normal">Excel 365 & Sheets Compatible</p>
         </div>
       </div>
 
@@ -144,8 +144,8 @@ export function HeroSpreadsheetCard() {
           <IconBolt className="h-3.5 w-3.5" />
         </div>
         <div className="space-y-0.5">
-          <p className="text-[11px] font-bold text-foreground">Work 10x Faster</p>
-          <p className="text-[10px] text-muted-foreground font-normal">Ready-to-Use Templates</p>
+          <p className="text-xs font-bold text-foreground">Work 10x Faster</p>
+          <p className="text-xs text-muted-foreground font-normal">Ready-to-Use Templates</p>
         </div>
       </div>
     </div>

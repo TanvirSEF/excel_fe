@@ -19,7 +19,7 @@ export function BlogArticleHeader({ post }: { post: PostDetail }) {
       {post.category_name && post.category_slug ? (
         <Link
           href={`/categories/${post.category_slug}`}
-          className="inline-flex items-center rounded-full bg-primary px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-primary-foreground shadow-xs transition-colors hover:bg-primary/90"
+          className="inline-flex items-center rounded-full bg-primary px-3.5 py-1.5 text-xs sm:text-[13px] font-bold uppercase tracking-wider text-primary-foreground shadow-xs transition-colors hover:bg-primary/90"
         >
           {post.category_name}
         </Link>
@@ -27,7 +27,7 @@ export function BlogArticleHeader({ post }: { post: PostDetail }) {
       <h1 className="mt-4 text-balance text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl">
         {post.title}
       </h1>
-      <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted-foreground sm:gap-x-6">
+      <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[15px] sm:text-base text-muted-foreground sm:gap-x-6">
         <div className="flex items-center gap-1.5">
           <span>Written by:</span>
           {post.author_id ? (

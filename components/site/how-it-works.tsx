@@ -52,10 +52,10 @@ export function HowItWorks({
                   {step.step}
                 </span>
               </div>
-              <h3 className="mt-4 text-lg font-bold tracking-tight text-foreground">
+              <h3 className="mt-4 text-lg sm:text-xl font-bold tracking-tight text-foreground">
                 {step.title}
               </h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-1.5 text-[15px] leading-relaxed text-muted-foreground">
                 {step.description}
               </p>
             </div>

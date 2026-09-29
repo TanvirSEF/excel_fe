@@ -159,11 +159,11 @@ export function InlineToc({
             <IconListNumbers className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-base sm:text-lg font-bold tracking-tight text-foreground">
+            <h2 className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
               Table of Contents
             </h2>
           </div>
-          <span className="hidden sm:inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+          <span className="hidden sm:inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs sm:text-[13px] font-semibold text-primary">
             {sections.length} Sections
           </span>
         </div>
@@ -171,7 +171,7 @@ export function InlineToc({
         <button
           type="button"
           onClick={() => setIsCollapsed((prev) => !prev)}
-          className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-border/60 bg-background/80 px-3 py-1.5 text-xs font-semibold text-muted-foreground shadow-2xs transition-all hover:bg-muted hover:text-foreground active:scale-95"
+          className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-border/60 bg-background/80 px-3 py-1.5 text-xs sm:text-sm font-semibold text-muted-foreground shadow-2xs transition-all hover:bg-muted hover:text-foreground active:scale-95"
           aria-expanded={!isCollapsed}
         >
           <span>{isCollapsed ? "Show Outline" : "Hide"}</span>
@@ -194,7 +194,7 @@ export function InlineToc({
                     href={`#${entry.id}`}
                     onClick={(event) => goToSection(event, entry.id)}
                     className={cn(
-                      "block rounded-lg py-1.5 px-3 text-sm transition-colors hover:bg-muted/60 hover:text-foreground",
+                      "block rounded-lg py-1.5 px-3 text-[15px] sm:text-base transition-colors hover:bg-muted/60 hover:text-foreground",
                       activeId === entry.id
                         ? "font-medium text-primary"
                         : "text-muted-foreground"
@@ -225,7 +225,7 @@ export function InlineToc({
                       >
                         <span
                           className={cn(
-                            "flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-xs font-bold transition-colors",
+                            "flex h-6.5 w-6.5 shrink-0 items-center justify-center rounded-lg text-xs font-bold transition-colors",
                             isCurrentHeading
                               ? "bg-primary text-primary-foreground"
                               : "bg-primary/10 text-primary group-hover/item:bg-primary group-hover/item:text-primary-foreground"
@@ -235,7 +235,7 @@ export function InlineToc({
                         </span>
                         <span
                           className={cn(
-                            "min-w-0 flex-1 text-sm sm:text-[0.9375rem] font-semibold transition-colors",
+                            "min-w-0 flex-1 text-[15px] sm:text-base font-semibold transition-colors",
                             isCurrentHeading
                               ? "text-primary"
                               : "text-foreground/90 group-hover/item:text-foreground"
@@ -264,7 +264,7 @@ export function InlineToc({
                       href={`#${section.entry.id}`}
                       onClick={(event) => goToSection(event, section.entry.id)}
                       className={cn(
-                        "flex cursor-pointer items-center gap-3 rounded-xl p-2 text-sm sm:text-[0.9375rem] font-semibold transition-colors hover:bg-primary/[0.04] dark:hover:bg-primary/[0.08]",
+                        "flex cursor-pointer items-center gap-3 rounded-xl p-2 text-[15px] sm:text-base font-semibold transition-colors hover:bg-primary/[0.04] dark:hover:bg-primary/[0.08]",
                         isCurrentHeading
                           ? "text-primary"
                           : "text-foreground/90 hover:text-foreground"
@@ -272,7 +272,7 @@ export function InlineToc({
                     >
                       <span
                         className={cn(
-                          "flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-xs font-bold transition-colors",
+                          "flex h-6.5 w-6.5 shrink-0 items-center justify-center rounded-lg text-xs font-bold transition-colors",
                           isCurrentHeading
                             ? "bg-primary text-primary-foreground"
                             : "bg-primary/10 text-primary group-hover/item:bg-primary group-hover/item:text-primary-foreground"
@@ -294,7 +294,7 @@ export function InlineToc({
                               href={`#${child.id}`}
                               onClick={(event) => goToSection(event, child.id)}
                               className={cn(
-                                "group/sub block rounded-lg py-1.5 px-2 text-sm transition-colors hover:bg-muted/60 hover:text-foreground",
+                                "group/sub block rounded-lg py-1.5 px-2 text-[14px] sm:text-[15px] transition-colors hover:bg-muted/60 hover:text-foreground",
                                 isChildActive
                                   ? "font-semibold text-primary"
                                   : "text-muted-foreground"

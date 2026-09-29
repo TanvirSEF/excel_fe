@@ -35,11 +35,11 @@ export function CategoriesNavPills({ groups }: CategoriesNavPillsProps) {
       <button
         type="button"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-muted/60 px-4 py-1.5 text-xs font-semibold text-foreground transition-all hover:bg-muted hover:border-border cursor-pointer shadow-2xs"
+        className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-muted/60 px-4 py-1.5 text-xs sm:text-sm font-semibold text-foreground transition-all hover:bg-muted hover:border-border cursor-pointer shadow-2xs"
       >
-        <IconLayoutGrid className="h-3.5 w-3.5 text-muted-foreground" />
+        <IconLayoutGrid className="h-4 w-4 text-muted-foreground" />
         <span>All Categories</span>
-        <span className="rounded-full bg-background px-2 py-0.5 text-[10px] font-bold text-muted-foreground">
+        <span className="rounded-full bg-background px-2 py-0.5 text-xs font-semibold text-muted-foreground">
           {totalCount}
         </span>
       </button>
@@ -55,7 +55,7 @@ export function CategoriesNavPills({ groups }: CategoriesNavPillsProps) {
             type="button"
             onClick={() => scrollToSection(group.id)}
             className={cn(
-              "inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold transition-all cursor-pointer shadow-2xs",
+              "inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-2xs",
               isExcel &&
                 "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/20 hover:border-emerald-500/50",
               isGoogle &&
@@ -65,11 +65,11 @@ export function CategoriesNavPills({ groups }: CategoriesNavPillsProps) {
                 "border-border/80 bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground"
             )}
           >
-            <Icon className="h-3.5 w-3.5 shrink-0" />
+            <Icon className="h-4 w-4 shrink-0" />
             <span>{group.title}</span>
             <span
               className={cn(
-                "rounded-full px-2 py-0.5 text-[10px] font-bold",
+                "rounded-full px-2 py-0.5 text-xs font-semibold",
                 isExcel && "bg-emerald-500/20 text-emerald-800 dark:text-emerald-200",
                 isGoogle && "bg-teal-500/20 text-teal-800 dark:text-teal-200",
                 !isExcel && !isGoogle && "bg-background text-muted-foreground"

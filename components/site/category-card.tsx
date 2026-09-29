@@ -20,13 +20,13 @@ export function CategoryCard({ category }: { category: Category }) {
           {category.name}
         </h2>
         {category.is_featured ? (
-          <span className="ml-auto rounded-full bg-primary/10 px-2 py-0.5 text-[0.675rem] font-medium text-primary">
+          <span className="ml-auto rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
             Featured
           </span>
         ) : null}
       </div>
       {category.description ? (
-        <p className="line-clamp-2 text-sm text-muted-foreground">
+        <p className="line-clamp-2 text-[15px] leading-relaxed text-muted-foreground">
           {category.description}
         </p>
       ) : null}
@@ -35,7 +35,7 @@ export function CategoryCard({ category }: { category: Category }) {
           {category.children.map((child) => (
             <span
               key={child.id}
-              className="rounded-full border px-2 py-0.5 text-xs text-muted-foreground"
+              className="rounded-full border px-2 py-0.5 text-xs sm:text-[13px] text-muted-foreground"
             >
               {child.name}
             </span>

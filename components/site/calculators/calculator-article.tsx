@@ -21,7 +21,7 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
         {detail.whenToUse.map((paragraph) => (
           <p
             key={paragraph.slice(0, 40)}
-            className="text-sm leading-relaxed text-muted-foreground sm:text-base"
+            className="text-base sm:text-[17px] leading-[1.75] text-muted-foreground"
           >
             {paragraph}
           </p>
@@ -30,10 +30,10 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
 
       {detail.formula ? (
         <div className="mt-6 rounded-xl border border-primary/25 bg-primary/5 px-4 py-3">
-          <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+          <p className="text-xs sm:text-[13px] font-semibold uppercase tracking-wider text-primary">
             Formula
           </p>
-          <p className="mt-1.5 font-mono text-sm leading-relaxed text-foreground break-words [overflow-wrap:anywhere]">
+          <p className="mt-1.5 font-mono text-sm sm:text-base leading-relaxed text-foreground break-words [overflow-wrap:anywhere]">
             {detail.formula}
           </p>
         </div>
@@ -47,10 +47,10 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
           <ol className="mt-3 space-y-2.5">
             {detail.howToUse.map((step, index) => (
               <li key={step.slice(0, 40)} className="flex gap-3">
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[11px] font-bold text-primary">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
                   {index + 1}
                 </span>
-                <p className="text-sm leading-relaxed text-foreground/85">{step}</p>
+                <p className="text-[15px] sm:text-base leading-relaxed text-foreground/85">{step}</p>
               </li>
             ))}
           </ol>
@@ -59,10 +59,10 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
 
       {detail.example ? (
         <div className="mt-6 rounded-xl border border-border/70 bg-muted/30 p-4 sm:p-5">
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <p className="text-xs sm:text-[13px] font-semibold uppercase tracking-wider text-muted-foreground">
             {detail.example.title}
           </p>
-          <p className="mt-2 text-sm leading-relaxed text-foreground/85">
+          <p className="mt-2 text-[15px] sm:text-base leading-relaxed text-foreground/85">
             {detail.example.body}
           </p>
         </div>
@@ -70,7 +70,7 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
 
       {detail.method ? (
         <div className="mt-6 rounded-xl border border-primary/25 bg-primary/5 p-4 sm:p-5">
-          <h3 className="text-sm font-bold tracking-tight text-foreground">
+          <h3 className="text-base font-bold tracking-tight text-foreground">
             {detail.method.title}
           </h3>
           {detail.method.paragraphs ? (
@@ -78,7 +78,7 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
               {detail.method.paragraphs.map((paragraph) => (
                 <p
                   key={paragraph.slice(0, 40)}
-                  className="text-sm leading-relaxed text-muted-foreground"
+                  className="text-[15px] sm:text-base leading-relaxed text-muted-foreground"
                 >
                   {paragraph}
                 </p>
@@ -92,25 +92,25 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
                   key={item.label}
                   className="rounded-xl border border-border/70 bg-background/60 p-3.5"
                 >
-                  <p className="text-sm font-bold tracking-tight text-foreground">
+                  <p className="text-sm sm:text-base font-bold tracking-tight text-foreground">
                     {item.label}
                   </p>
                   {item.note ? (
-                    <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
+                    <p className="mt-0.5 text-xs sm:text-[13px] leading-relaxed text-muted-foreground">
                       {item.note}
                     </p>
                   ) : null}
-                  <p className="mt-2 rounded-lg border border-primary/20 bg-background px-3 py-2 font-mono text-sm leading-relaxed text-foreground break-words [overflow-wrap:anywhere]">
+                  <p className="mt-2 rounded-lg border border-primary/20 bg-background px-3 py-2 font-mono text-sm sm:text-base leading-relaxed text-foreground break-words [overflow-wrap:anywhere]">
                     {item.equation}
                   </p>
                   {item.terms ? (
                     <dl className="mt-2.5 space-y-1.5">
                       {item.terms.map((term) => (
                         <div key={term.name} className="flex gap-2">
-                          <dt className="shrink-0 font-mono text-xs font-semibold text-foreground/80">
+                          <dt className="shrink-0 font-mono text-xs sm:text-[13px] font-semibold text-foreground/80">
                             {term.name}:
                           </dt>
-                          <dd className="text-xs leading-relaxed text-muted-foreground">
+                          <dd className="text-xs sm:text-[13px] leading-relaxed text-muted-foreground">
                             {term.description}
                           </dd>
                         </div>
@@ -135,7 +135,7 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
             {detail.parameters.title}
           </h3>
           {detail.parameters.intro ? (
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            <p className="mt-2 text-[15px] sm:text-base leading-relaxed text-muted-foreground">
               {detail.parameters.intro}
             </p>
           ) : null}
@@ -145,10 +145,10 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
                 key={item.name}
                 className="rounded-xl border border-border/70 bg-muted/20 p-4"
               >
-                <dt className="text-sm font-bold tracking-tight text-foreground">
+                <dt className="text-[15px] font-bold tracking-tight text-foreground">
                   {item.name}
                 </dt>
-                <dd className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                <dd className="mt-1 text-[15px] leading-relaxed text-muted-foreground">
                   {item.description}
                 </dd>
               </div>
@@ -169,7 +169,7 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
               </h3>
             ) : null}
             {group.intro ? (
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-2 text-[15px] sm:text-base leading-relaxed text-muted-foreground">
                 {group.intro}
               </p>
             ) : null}
@@ -179,10 +179,10 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
                   key={fact.title}
                   className="rounded-xl border border-border/70 bg-muted/20 p-4"
                 >
-                  <p className="text-sm font-bold tracking-tight text-foreground">
+                  <p className="text-[15px] font-bold tracking-tight text-foreground">
                     {fact.title}
                   </p>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                  <p className="mt-1.5 text-[15px] leading-relaxed text-muted-foreground">
                     {fact.body}
                   </p>
                 </div>
@@ -198,7 +198,7 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
             </h3>
           ) : null}
           {detail.factsIntro ? (
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            <p className="mt-2 text-[15px] sm:text-base leading-relaxed text-muted-foreground">
               {detail.factsIntro}
             </p>
           ) : null}
@@ -208,10 +208,10 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
                 key={fact.title}
                 className="rounded-xl border border-border/70 bg-muted/20 p-4"
               >
-                <p className="text-sm font-bold tracking-tight text-foreground">
+                <p className="text-[15px] font-bold tracking-tight text-foreground">
                   {fact.title}
                 </p>
-                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                <p className="mt-1.5 text-[15px] leading-relaxed text-muted-foreground">
                   {fact.body}
                 </p>
               </div>
@@ -222,7 +222,7 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
 
       {detail.factsTable ? (
         <div className="mt-6 rounded-xl border border-border/70 bg-muted/20 p-4 sm:p-5">
-          <p className="text-sm font-bold tracking-tight text-foreground">
+          <p className="text-[15px] sm:text-base font-bold tracking-tight text-foreground">
             {detail.factsTable.title}
           </p>
           <div className="mt-3">
@@ -230,7 +230,7 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
               <TableHeader>
                 <TableRow>
                   {detail.factsTable.headers.map((header) => (
-                    <TableHead key={header}>{header}</TableHead>
+                    <TableHead key={header} className="text-xs sm:text-[13px] font-bold">{header}</TableHead>
                   ))}
                 </TableRow>
               </TableHeader>
@@ -242,8 +242,8 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
                         key={cell}
                         className={
                           cellIndex === row.length - 1
-                            ? "whitespace-normal"
-                            : "font-medium"
+                            ? "whitespace-normal text-sm sm:text-[15px]"
+                            : "font-medium text-sm sm:text-[15px]"
                         }
                       >
                         {cell}
@@ -268,10 +268,10 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
                 key={useCase.title}
                 className="rounded-xl border border-primary/40 bg-card p-4 shadow-2xs"
               >
-                <p className="text-sm font-bold tracking-tight text-primary">
+                <p className="text-[15px] font-bold tracking-tight text-primary">
                   {useCase.title}
                 </p>
-                <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+                <p className="mt-1.5 text-xs sm:text-[13px] leading-relaxed text-muted-foreground">
                   {useCase.body}
                 </p>
               </div>
@@ -282,7 +282,7 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
 
       {detail.excelNote ? (
         <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-primary/15 bg-primary/5 p-4">
-          <p className="text-sm leading-relaxed text-foreground/85">
+          <p className="text-[15px] sm:text-base leading-relaxed text-foreground/85">
             <span className="font-semibold text-primary">In Excel: </span>
             {detail.excelNote}
           </p>
@@ -302,12 +302,12 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
               {...(index === 0 ? { open: true } : {})}
             >
               <summary className="flex cursor-pointer items-center justify-between gap-4 font-semibold text-foreground transition-colors group-open:text-primary hover:text-primary">
-                <span className="text-sm sm:text-base">{faq.question}</span>
+                <span className="text-base sm:text-lg">{faq.question}</span>
                 <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground transition-transform duration-200 group-open:rotate-180 group-open:bg-primary/10 group-open:text-primary">
                   <IconChevronDown className="h-4 w-4" />
                 </div>
               </summary>
-              <p className="mt-3.5 text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-3.5 text-[15px] sm:text-base leading-relaxed text-muted-foreground">
                 {faq.answer}
               </p>
             </details>

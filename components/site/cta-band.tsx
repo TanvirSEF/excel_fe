@@ -32,13 +32,13 @@ export function CtaBand({
         <h2 className="text-balance text-2xl font-bold leading-tight tracking-tight sm:text-3xl lg:text-4xl">
           {title}
         </h2>
-        <p className="text-balance text-sm leading-relaxed text-primary-foreground/85 sm:text-base">
+        <p className="text-balance text-base leading-relaxed text-primary-foreground/85 sm:text-lg">
           {description}
         </p>
         <RequestDialog
           label={label}
           service={service}
-          className="rounded-xl bg-primary-foreground font-semibold text-primary hover:bg-primary-foreground/90"
+          className="rounded-xl bg-primary-foreground text-sm sm:text-base font-semibold text-primary hover:bg-primary-foreground/90"
         />
       </div>
     </section>

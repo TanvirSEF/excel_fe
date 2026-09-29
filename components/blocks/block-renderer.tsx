@@ -36,9 +36,9 @@ interface BlockRendererProps {
 }
 
 const HEADING_CLASSES: Record<2 | 3 | 4, string> = {
-  2: "mt-8 sm:mt-10 mb-2 sm:mb-3 text-2xl sm:text-[1.7rem] font-bold tracking-tight text-foreground leading-snug first:mt-0",
-  3: "mt-6 sm:mt-7 mb-1.5 sm:mb-2 text-xl sm:text-[1.3rem] font-semibold tracking-tight text-foreground leading-snug first:mt-0",
-  4: "mt-5 sm:mt-6 mb-1 text-lg sm:text-xl font-semibold text-foreground leading-snug first:mt-0",
+  2: "mt-8 sm:mt-10 mb-2 sm:mb-3 text-2xl sm:text-[1.85rem] font-bold tracking-tight text-foreground leading-snug first:mt-0",
+  3: "mt-6 sm:mt-7 mb-1.5 sm:mb-2 text-xl sm:text-[1.4rem] font-semibold tracking-tight text-foreground leading-snug first:mt-0",
+  4: "mt-5 sm:mt-6 mb-1 text-lg sm:text-[1.2rem] font-semibold text-foreground leading-snug first:mt-0",
 }
 
 const SAFE_HREF = /^(https?:\/\/|mailto:|\/|#)/i
@@ -219,14 +219,14 @@ function withMarks(
         break
       case "kbd":
         node = (
-          <kbd className="relative -top-[1.5px] mx-1 inline-flex min-w-[1.8em] select-none items-center justify-center rounded-[6px] border border-primary bg-card px-2 py-0.5 font-sans text-[0.8em] font-bold uppercase tracking-wide text-foreground shadow-[0_2.5px_0_0_var(--color-primary),0_3px_4px_rgba(0,0,0,0.08)] align-baseline dark:shadow-[0_2.5px_0_0_var(--color-primary),0_3px_6px_rgba(0,0,0,0.35)]">
+          <kbd className="relative -top-[1.5px] mx-1 inline-flex min-w-[1.8em] select-none items-center justify-center rounded-[6px] border border-primary bg-card px-2 py-0.5 font-sans text-[0.85em] font-bold uppercase tracking-wide text-foreground shadow-[0_2.5px_0_0_var(--color-primary),0_3px_4px_rgba(0,0,0,0.08)] align-baseline dark:shadow-[0_2.5px_0_0_var(--color-primary),0_3px_6px_rgba(0,0,0,0.35)]">
             {node}
           </kbd>
         )
         break
       case "code":
         node = (
-          <code className="rounded-md bg-muted px-1.5 py-0.5 font-mono text-[0.85em] break-words [overflow-wrap:anywhere]">
+          <code className="rounded-md bg-muted px-1.5 py-0.5 font-mono text-[0.9em] break-words [overflow-wrap:anywhere]">
             {node}
           </code>
         )
@@ -557,7 +557,7 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
       return (
         <p
           className={cn(
-            "text-base sm:text-[1.03125rem] font-normal leading-[1.625] text-foreground/90",
+            "text-[17px] sm:text-[18px] font-normal leading-[1.75] text-foreground/90",
             alignClass(block.align)
           )}
         >
@@ -607,7 +607,7 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
             />
             <Tag
               className={cn(
-                "text-xl sm:text-[1.3rem] font-semibold tracking-tight text-foreground leading-snug transition-all duration-200 group-hover:text-primary group-hover:translate-x-0.5",
+                "text-xl sm:text-[1.4rem] font-semibold tracking-tight text-foreground leading-snug transition-all duration-200 group-hover:text-primary group-hover:translate-x-0.5",
                 alignClass(block.align)
               )}
             >
@@ -633,7 +633,7 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
 
     case "quote":
       return (
-        <blockquote className="my-4 border-l-4 border-primary/70 bg-primary/5 rounded-r-xl py-2.5 px-4 text-base italic font-normal leading-[1.6] text-muted-foreground">
+        <blockquote className="my-4 border-l-4 border-primary/70 bg-primary/5 rounded-r-xl py-2.5 px-4 text-[17px] sm:text-[18px] italic font-normal leading-[1.7] text-muted-foreground">
           <InlineRuns value={block.content ?? block.text} />
         </blockquote>
       )
@@ -646,7 +646,7 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
       return (
         <ListTag
           className={cn(
-            "my-3 space-y-1.5 pl-6 text-base sm:text-[1.03125rem] font-normal leading-[1.625] text-foreground/90",
+            "my-3 space-y-1.5 pl-6 text-[17px] sm:text-[18px] font-normal leading-[1.75] text-foreground/90",
             block.marker === "arrow"
               ? "[list-style-type:'➤']"
               : block.ordered
@@ -693,14 +693,14 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
       const [headerRow, ...bodyRows] = block.rows
       return (
         <div className="my-7 overflow-x-auto rounded-2xl border border-border/80 bg-card shadow-sm dark:shadow-md dark:shadow-black/20">
-          <table className="w-full min-w-full border-collapse text-sm">
+          <table className="w-full min-w-full border-collapse text-[15px]">
             {block.header ? (
               <thead className="bg-primary text-primary-foreground">
                 <tr className="border-b border-primary/20">
                   {headerRow.map((cell, index) => (
                     <th
                       key={index}
-                      className="px-4 py-3.5 sm:px-5 sm:py-4 text-left text-xs sm:text-sm font-bold uppercase tracking-wider text-primary-foreground border-r border-primary-foreground/15 last:border-r-0 [&_a]:text-primary-foreground [&_a]:underline"
+                      className="px-4 py-3.5 sm:px-5 sm:py-4 text-left text-[13px] sm:text-sm font-bold uppercase tracking-wider text-primary-foreground border-r border-primary-foreground/15 last:border-r-0 [&_a]:text-primary-foreground [&_a]:underline"
                     >
                       <InlineRuns value={cell} />
                     </th>
@@ -718,7 +718,7 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
                     <td
                       key={cellIndex}
                       className={cn(
-                        "px-4 py-3.5 sm:px-5 sm:py-3.5 align-top leading-relaxed text-sm border-r border-border/40 last:border-r-0",
+                        "px-4 py-3.5 sm:px-5 sm:py-3.5 align-top leading-relaxed text-[15px] sm:text-base border-r border-border/40 last:border-r-0",
                         cellIndex === 0
                           ? "font-semibold text-foreground"
                           : "font-normal text-foreground/90"
@@ -763,11 +763,11 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
 
                 {/* Right ribbon tail (folded shadow) */}
                 <div className="hidden sm:block absolute -right-3.5 top-2.5 h-7 w-4 bg-chart-5 -z-10 [clip-path:polygon(0_0,100%_0,60%_50%,100%_100%,0_100%)]" />
-                <div className="hidden sm:block absolute -right-1 bottom-0 h-2.5 w-1.5 bg-black/40 dark:bg-black/70 -z-10 [clip-path:polygon(0_0,100%_0,0_100%)]" />
+                <div className="hidden sm:block absolute -right-1 bottom-0 h-2.5 w-1.5 bg-black/40 dark:bg-black/70 -z-10 [clip-path:polygon(100%_0,0_0,100%_100%)]" />
               </div>
             </div>
 
-            <div className="text-base sm:text-[1.03125rem] font-normal leading-[1.65] text-foreground/90">
+            <div className="text-[17px] sm:text-[18px] font-normal leading-[1.75] text-foreground/90">
               <InlineRuns value={cleanRichText(block.content ?? block.text)} />
             </div>
 
@@ -817,7 +817,7 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
         return (
           <div className="relative my-6 flex items-start gap-3 rounded-r-2xl border-l-[5px] border-primary bg-primary/[0.08] p-4 sm:py-4 sm:px-5 shadow-md shadow-primary/20 transition-colors dark:bg-primary/[0.14] dark:shadow-black/30">
             <IconPaperclip className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-            <div className="flex-1 text-base sm:text-[1.03125rem] font-normal leading-[1.625] text-foreground/90">
+            <div className="flex-1 text-[16px] sm:text-[17px] font-normal leading-[1.7] text-foreground/90">
               <span className="mr-2 font-bold text-primary">{noteTitle}</span>
               <InlineRuns value={content} />
             </div>
@@ -868,12 +868,12 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
       if (isExplanation) {
         return (
           <div className="relative my-7 rounded-2xl border-2 border-primary/50 bg-background p-5 sm:p-6 pt-7 sm:pt-8 shadow-xs transition-colors dark:border-primary/40">
-            <div className="absolute -top-3.5 left-8 sm:left-10 inline-flex items-center gap-2 bg-background px-1 text-base sm:text-[1.0625rem] font-bold tracking-tight text-primary">
+            <div className="absolute -top-3.5 left-8 sm:left-10 inline-flex items-center gap-2 bg-background px-1 text-base sm:text-[1.125rem] font-bold tracking-tight text-primary">
               <IconNotes className="h-5 w-5 text-primary shrink-0" />
               <span>{block.title || "Explanation"}</span>
             </div>
 
-            <div className="text-base sm:text-[1.03125rem] font-normal leading-[1.625] text-foreground/90">
+            <div className="text-[16px] sm:text-[17px] font-normal leading-[1.7] text-foreground/90">
               <InlineRuns value={cleanRichText(block.content ?? block.text)} />
             </div>
           </div>
@@ -891,7 +891,7 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
             <div className="min-w-0 flex-1">
               <span
                 className={cn(
-                  "block font-serif text-sm sm:text-[0.9375rem] font-normal tracking-normal text-foreground selection:bg-primary/20 break-words [overflow-wrap:anywhere] whitespace-pre-wrap leading-relaxed",
+                  "block font-serif text-[15px] sm:text-[16px] font-normal tracking-normal text-foreground selection:bg-primary/20 break-words [overflow-wrap:anywhere] whitespace-pre-wrap leading-relaxed",
                   isLongOrMulti ? "text-left" : "text-center sm:pl-16"
                 )}
               >
@@ -909,14 +909,14 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
       return (
         <div
           className={cn(
-            "flex items-start gap-3 rounded-xl border p-4 text-base",
+            "flex items-start gap-3 rounded-xl border p-4 text-[16px] sm:text-[17px]",
             meta.box
           )}
         >
           <Icon className={cn("mt-0.5 h-5 w-5 shrink-0", meta.iconClass)} />
           <div className="flex-1 space-y-1">
             {block.title ? (
-              <p className="font-semibold text-foreground">{block.title}</p>
+              <p className="font-semibold text-foreground text-base sm:text-[17px]">{block.title}</p>
             ) : null}
             <p className="font-normal leading-relaxed text-foreground/90">
               <InlineRuns value={block.content ?? block.text} />
@@ -949,11 +949,11 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
     case "accordion":
       return (
         <details className="group my-4 rounded-xl border border-border/80 bg-card shadow-2xs">
-          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-foreground [&::-webkit-details-marker]:hidden">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-base font-semibold text-foreground [&::-webkit-details-marker]:hidden">
             {block.title}
             <IconChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />
           </summary>
-          <div className="border-t border-border/60 px-4 py-3 text-base font-normal leading-relaxed text-foreground/90">
+          <div className="border-t border-border/60 px-4 py-3 text-[16px] sm:text-[17px] font-normal leading-relaxed text-foreground/90">
             <InlineRuns value={block.content ?? block.text} />
           </div>
         </details>

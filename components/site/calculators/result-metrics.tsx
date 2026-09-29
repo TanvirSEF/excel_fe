@@ -23,14 +23,14 @@ export function GradientHeroMetric({
         className
       )}
     >
-      <p className="text-xs font-semibold uppercase tracking-wider text-primary-foreground/75">
+      <p className="text-xs sm:text-[13px] font-semibold uppercase tracking-wider text-primary-foreground/75">
         {label}
       </p>
       <p className="mt-1.5 font-mono text-3xl font-bold tabular-nums tracking-tight sm:text-4xl">
         {value}
       </p>
       {sub ? (
-        <p className="mt-1 text-xs text-primary-foreground/75">{sub}</p>
+        <p className="mt-1 text-[13px] sm:text-sm text-primary-foreground/85">{sub}</p>
       ) : null}
     </div>
   )
@@ -45,14 +45,14 @@ interface MetricTileProps {
 export function MetricTile({ label, value, sub }: MetricTileProps) {
   return (
     <div className="rounded-xl border border-border/80 bg-muted/30 p-4">
-      <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+      <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
         {label}
       </p>
-      <p className="mt-1 font-mono text-lg font-bold tabular-nums text-foreground">
+      <p className="mt-1 font-mono text-lg sm:text-xl font-bold tabular-nums text-foreground">
         {value}
       </p>
       {sub ? (
-        <p className="mt-0.5 text-[11px] text-muted-foreground">{sub}</p>
+        <p className="mt-0.5 text-xs text-muted-foreground">{sub}</p>
       ) : null}
     </div>
   )
@@ -69,8 +69,8 @@ export function ResultsPlaceholder({
 }: ResultsPlaceholderProps) {
   return (
     <div className="flex min-h-48 flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-border/80 bg-muted/20 p-8 text-center">
-      <p className="text-sm font-semibold text-foreground">{title}</p>
-      <p className="max-w-xs text-xs leading-relaxed text-muted-foreground">
+      <p className="text-base font-semibold text-foreground">{title}</p>
+      <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
         {description}
       </p>
     </div>

@@ -43,18 +43,18 @@ export function CalculatorPage({
           >
             <GroupIcon className="h-[22px] w-[22px]" />
           </div>
-          <span className="rounded-full border border-primary/20 bg-primary/8 px-3 py-1 text-xs font-semibold text-primary">
+          <span className="rounded-full border border-primary/20 bg-primary/8 px-3 py-1 text-xs sm:text-[13px] font-semibold text-primary">
             {group.title}
           </span>
         </div>
         <h1 className="text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
           {entry.name}
         </h1>
-        <p className="text-pretty text-sm leading-relaxed text-muted-foreground sm:text-base">
+        <p className="text-pretty text-[15px] leading-relaxed text-muted-foreground sm:text-base">
           {entry.whatItIs}
         </p>
         <div className="flex items-start gap-2 rounded-xl border border-primary/15 bg-primary/5 px-4 py-3">
-          <p className="text-sm leading-relaxed text-foreground/85">
+          <p className="text-[15px] sm:text-base leading-relaxed text-foreground/90">
             {entry.whatToExpect}
           </p>
         </div>

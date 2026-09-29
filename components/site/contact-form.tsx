@@ -88,14 +88,14 @@ export function ContactForm({ service = null, className, onSuccess }: ContactFor
     >
       <div className="space-y-1">
         <h2 className="text-xl font-bold tracking-tight">Send Message</h2>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-[15px] sm:text-base text-muted-foreground">
           Fill out the form and our spreadsheet experts will get back to you by
           email.
         </p>
       </div>
 
       {serviceLabel ? (
-        <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/8 px-3.5 py-1.5 text-xs font-semibold text-primary">
+        <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/8 px-3.5 py-1.5 text-xs sm:text-[13px] font-semibold text-primary">
           <span className="h-1.5 w-1.5 rounded-full bg-primary" />
           Asking about: {serviceLabel}
         </div>
@@ -150,14 +150,14 @@ export function ContactForm({ service = null, className, onSuccess }: ContactFor
       </div>
 
       <div className="mt-6 flex flex-col-reverse items-start justify-between gap-4 sm:flex-row sm:items-center">
-        <p className="text-xs leading-relaxed text-muted-foreground">
+        <p className="text-[13px] sm:text-sm leading-relaxed text-muted-foreground">
           We usually respond within 24–48 hours on business days.
         </p>
         <Button
           type="submit"
           size="lg"
           disabled={isSubmitting}
-          className="inline-flex items-center gap-2"
+          className="inline-flex items-center gap-2 text-sm sm:text-base font-semibold"
         >
           {isSubmitting ? "Sending…" : "Send"}
           {!isSubmitting ? <IconSend className="h-4 w-4" /> : null}

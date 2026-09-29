@@ -33,7 +33,7 @@ export function DataSetField({
 
   return (
     <div className="space-y-1.5">
-      <Label htmlFor={id} className="text-xs font-medium text-muted-foreground">
+      <Label htmlFor={id} className="text-sm font-medium text-foreground/80">
         {label}
       </Label>
       <Textarea
@@ -45,21 +45,21 @@ export function DataSetField({
         spellCheck={false}
         aria-invalid={showError ? true : undefined}
         className={cn(
-          "min-h-20 bg-background font-mono text-sm tabular-nums",
+          "min-h-20 bg-background font-mono text-sm sm:text-base tabular-nums",
           showError && "border-destructive/60 focus-visible:ring-destructive/30"
         )}
       />
       {message ? (
         <p
           className={cn(
-            "text-[11px] leading-snug",
+            "text-xs leading-snug",
             badTokens.length ? "text-destructive" : "text-muted-foreground/80"
           )}
         >
           {message}
         </p>
       ) : values.length > 1 ? (
-        <p className="text-[11px] leading-snug text-muted-foreground/80">
+        <p className="text-xs leading-snug text-muted-foreground/80">
           {values.length} values · mean{" "}
           {(values.reduce((t, x) => t + x, 0) / values.length).toFixed(2)} · range{" "}
           {Math.min(...values).toFixed(2)} – {Math.max(...values).toFixed(2)}

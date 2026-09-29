@@ -149,13 +149,13 @@ export function Toc({ entries, className }: TocProps) {
       <div className="mb-3 flex items-center justify-between gap-2 border-b border-border/60 pb-2.5">
         <div className="flex items-center gap-2">
           <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/25">
-            <IconListNumbers className="h-3.5 w-3.5" />
+            <IconListNumbers className="h-4 w-4" />
           </div>
-          <span className="text-xs font-bold uppercase tracking-wider text-foreground">
+          <span className="text-xs sm:text-[13px] font-bold uppercase tracking-wider text-foreground">
             On this page
           </span>
         </div>
-        <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
+        <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
           {sections.length} Sections
         </span>
       </div>
@@ -167,7 +167,7 @@ export function Toc({ entries, className }: TocProps) {
               href={`#${entry.id}`}
               onClick={(event) => goToSection(event, entry.id)}
               className={cn(
-                "block rounded-lg px-2.5 py-1.5 text-xs transition-colors hover:bg-muted/60",
+                "block rounded-lg px-2.5 py-1.5 text-sm transition-colors hover:bg-muted/60",
                 activeId === entry.id
                   ? "font-semibold text-primary bg-primary/10"
                   : "text-muted-foreground hover:text-foreground"
@@ -201,7 +201,7 @@ export function Toc({ entries, className }: TocProps) {
                   >
                     <span
                       className={cn(
-                        "flex h-5 w-5 shrink-0 items-center justify-center rounded text-[10px] font-bold transition-colors",
+                        "flex h-5 w-5 shrink-0 items-center justify-center rounded text-xs font-bold transition-colors",
                         isCurrentHeading
                           ? "bg-primary text-primary-foreground"
                           : "bg-primary/10 text-primary"
@@ -209,7 +209,7 @@ export function Toc({ entries, className }: TocProps) {
                     >
                       {numberFormatted}
                     </span>
-                    <span className="line-clamp-2 text-xs font-semibold leading-tight">
+                    <span className="line-clamp-2 text-sm font-semibold leading-tight">
                       {section.entry.text}
                     </span>
                   </a>
@@ -232,7 +232,7 @@ export function Toc({ entries, className }: TocProps) {
                   href={`#${section.entry.id}`}
                   onClick={(event) => goToSection(event, section.entry.id)}
                   className={cn(
-                    "flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs transition-colors",
+                    "flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm transition-colors",
                     isCurrentHeading
                       ? "bg-primary/10 font-semibold text-primary"
                       : "text-foreground/90 hover:bg-muted/60 hover:text-foreground"
@@ -240,7 +240,7 @@ export function Toc({ entries, className }: TocProps) {
                 >
                   <span
                     className={cn(
-                      "flex h-5 w-5 shrink-0 items-center justify-center rounded text-[10px] font-bold transition-colors",
+                      "flex h-5 w-5 shrink-0 items-center justify-center rounded text-xs font-bold transition-colors",
                       isCurrentHeading
                         ? "bg-primary text-primary-foreground"
                         : "bg-primary/10 text-primary"
@@ -262,7 +262,7 @@ export function Toc({ entries, className }: TocProps) {
                         href={`#${child.id}`}
                         onClick={(event) => goToSection(event, child.id)}
                         className={cn(
-                          "block rounded py-1 px-1.5 text-[11px] leading-snug transition-colors hover:bg-muted/60",
+                          "block rounded py-1 px-1.5 text-xs sm:text-[13px] leading-snug transition-colors hover:bg-muted/60",
                           activeId === child.id
                             ? "font-semibold text-primary bg-primary/10"
                             : "text-muted-foreground hover:text-foreground"

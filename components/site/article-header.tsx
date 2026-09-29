@@ -20,7 +20,7 @@ export function ArticleHeader({ post }: { post: PostDetail }) {
         {post.category_name && post.category_slug ? (
           <Link
             href={`/categories/${post.category_slug}`}
-            className="inline-flex items-center rounded-full bg-primary px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-primary-foreground shadow-xs transition-colors hover:bg-primary/90"
+            className="inline-flex items-center rounded-full bg-primary px-3.5 py-1.5 text-xs sm:text-[13px] font-bold uppercase tracking-wider text-primary-foreground shadow-xs transition-colors hover:bg-primary/90"
           >
             {post.category_name}
           </Link>
@@ -28,12 +28,12 @@ export function ArticleHeader({ post }: { post: PostDetail }) {
         <h1 className="mt-4 text-balance text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
           {post.title}
         </h1>
-        <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
+        <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-[15px] sm:text-base text-muted-foreground">
           <Link
             href={`/authors/${post.author_id}`}
             className="group flex items-center gap-2.5"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-primary transition-colors group-hover:bg-primary/25">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 text-sm font-bold text-primary transition-colors group-hover:bg-primary/25">
               {initials(post.author_name)}
             </span>
             <span className="font-medium text-foreground/80 underline-offset-4 transition-colors group-hover:text-primary group-hover:underline">

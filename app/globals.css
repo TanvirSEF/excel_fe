@@ -310,7 +310,7 @@
   background: var(--primary);
   color: var(--primary-foreground);
   font-weight: 700;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 0.875rem 1rem;
@@ -330,7 +330,7 @@
   padding: 0.75rem 1rem;
   text-align: left;
   vertical-align: top;
-  font-size: 0.875rem;
+  font-size: 0.95rem;
 }
 
 .post-editor .tiptap td:last-child {
@@ -380,7 +380,7 @@
 
 .legal-prose p {
   color: color-mix(in oklab, var(--foreground) 82%, transparent);
-  font-size: 0.95rem;
+  font-size: 1.03125rem;
   line-height: 1.75;
 }
 
@@ -391,7 +391,7 @@
 
 .legal-prose ul {
   color: color-mix(in oklab, var(--foreground) 82%, transparent);
-  font-size: 0.95rem;
+  font-size: 1.03125rem;
   line-height: 1.75;
   list-style-type: disc;
   padding-left: 1.5rem;
@@ -431,7 +431,7 @@ article kbd,
   background-color: var(--card);
   padding: 0.125rem 0.5rem;
   font-family: var(--font-sans);
-  font-size: 0.8em;
+  font-size: 0.85em;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;

@@ -52,14 +52,14 @@ export function LearningTrackSection({ modules }: LearningTrackSectionProps) {
             >
               Master Google Sheets, Lesson by Lesson
             </h2>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">
+            <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground sm:text-[17px]">
               A complete structured course — from your first spreadsheet to Apps
               Script automation — with every lesson in the right order.
             </p>
 
             <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2">
               {stats.map((stat) => (
-                <span key={stat.label} className="text-sm">
+                <span key={stat.label} className="text-[15px]">
                   <span className="font-bold text-foreground">{stat.value}</span>
                   <span className="ml-1.5 text-muted-foreground">{stat.label}</span>
                 </span>
@@ -108,20 +108,20 @@ export function LearningTrackSection({ modules }: LearningTrackSectionProps) {
               </div>
 
               <div className="mt-4 space-y-1">
-                <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Module {index + 1}
                 </p>
                 <h3 className="text-lg font-bold leading-snug tracking-tight text-foreground transition-colors group-hover:text-teal-700 dark:group-hover:text-teal-300">
                   {module.name}
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-[15px] text-muted-foreground">
                   {topics.length} {topics.length === 1 ? "topic" : "topics"} ·{" "}
                   {module.lesson_count}{" "}
                   {module.lesson_count === 1 ? "lesson" : "lessons"}
                 </p>
               </div>
 
-              <div className="mt-5 flex items-center gap-1.5 text-xs font-semibold text-teal-700 dark:text-teal-300">
+              <div className="mt-5 flex items-center gap-1.5 text-[13px] font-semibold text-teal-700 dark:text-teal-300">
                 <span>Explore module</span>
                 <IconArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-1" />
               </div>

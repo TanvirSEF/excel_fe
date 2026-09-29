@@ -93,8 +93,8 @@ export function ServicesSection() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                   
                   {/* Badge */}
-                  <div className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-background/90 px-3 py-1 text-xs font-semibold text-foreground shadow-xs backdrop-blur-xs">
-                    <Icon className="h-3.5 w-3.5 text-primary" />
+                  <div className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-background/90 px-3 py-1 text-xs sm:text-[13px] font-semibold text-foreground shadow-xs backdrop-blur-xs">
+                    <Icon className="h-4 w-4 text-primary" />
                     <span>{service.badge}</span>
                   </div>
                 </div>
@@ -105,7 +105,7 @@ export function ServicesSection() {
                     {service.title}
                   </h3>
 
-                  <p className="text-sm leading-relaxed text-muted-foreground">
+                  <p className="text-[15px] leading-relaxed text-muted-foreground">
                     {service.subtitle}
                   </p>
 
@@ -114,10 +114,10 @@ export function ServicesSection() {
                     {service.features.map((feature) => (
                       <li
                         key={feature}
-                        className="flex items-start gap-2.5 text-xs text-foreground/85 font-medium"
+                        className="flex items-start gap-2.5 text-sm text-foreground/90 font-medium"
                       >
-                        <div className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                          <IconCheck className="h-2.5 w-2.5 stroke-[3]" />
+                        <div className="mt-0.5 flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                          <IconCheck className="h-3 w-3 stroke-[3]" />
                         </div>
                         <span>{feature}</span>
                       </li>
@@ -130,7 +130,7 @@ export function ServicesSection() {
               <div className="p-6 pt-0">
                 <Button
                   asChild
-                  className="w-full rounded-xl bg-primary text-primary-foreground font-semibold shadow-xs transition-all duration-200 hover:bg-primary/90"
+                  className="w-full rounded-xl bg-primary text-primary-foreground font-semibold text-sm sm:text-base shadow-xs transition-all duration-200 hover:bg-primary/90"
                 >
                   <Link
                     href={service.ctaHref}

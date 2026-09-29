@@ -19,8 +19,8 @@ export function HeroStatsBand() {
                 key={stat.label}
                 className="flex items-center justify-center gap-3 px-6 py-5"
               >
-                <Icon className="h-4 w-4 shrink-0 text-primary" />
-                <div className="text-sm">
+                <Icon className="h-5 w-5 shrink-0 text-primary" />
+                <div className="text-sm sm:text-[15px]">
                   <span className="font-bold text-foreground">{stat.value}</span>
                   <span className="ml-1.5 text-muted-foreground">{stat.label}</span>
                 </div>

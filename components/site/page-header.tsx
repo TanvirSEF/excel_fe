@@ -23,12 +23,12 @@ export function PageHeader({
         {title}
       </h1>
       {description ? (
-        <p className="mt-3 max-w-2xl text-balance text-sm text-muted-foreground sm:text-base">
+        <p className="mt-3 max-w-2xl text-balance text-base sm:text-[17px] leading-relaxed text-muted-foreground">
           {description}
         </p>
       ) : null}
       {meta ? (
-        <p className="mt-3 text-sm text-muted-foreground">{meta}</p>
+        <p className="mt-3 text-sm sm:text-[15px] text-muted-foreground">{meta}</p>
       ) : null}
     </header>
   )

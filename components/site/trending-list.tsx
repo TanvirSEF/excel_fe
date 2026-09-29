@@ -38,7 +38,7 @@ export function TrendingSection({ posts, className }: TrendingSectionProps) {
 
               <div className="min-w-0 flex-1">
                 {post.category ? (
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-primary">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-primary">
                     {post.category.name}
                   </span>
                 ) : null}
@@ -48,12 +48,12 @@ export function TrendingSection({ posts, className }: TrendingSectionProps) {
                 </h3>
 
                 {post.meta_description || post.excerpt ? (
-                  <p className="mt-1.5 line-clamp-1 text-sm leading-relaxed text-muted-foreground">
+                  <p className="mt-1.5 line-clamp-1 text-[15px] leading-relaxed text-muted-foreground">
                     {post.meta_description || post.excerpt}
                   </p>
                 ) : null}
 
-                <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
+                <div className="mt-2 flex items-center gap-2 text-[13px] text-muted-foreground">
                   {post.published_at ? <Time date={post.published_at} variant="date" /> : null}
                   {post.reading_time_minutes ? (
                     <>
@@ -75,7 +75,7 @@ export function TrendingSection({ posts, className }: TrendingSectionProps) {
                   />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-primary/15 via-primary/5 to-muted">
-                    <span className="font-mono text-[9px] font-semibold uppercase tracking-wider text-primary/70">
+                    <span className="font-mono text-xs font-semibold uppercase tracking-wider text-primary/70">
                       Excel Insider
                     </span>
                   </div>

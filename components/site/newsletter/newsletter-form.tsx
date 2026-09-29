@@ -85,14 +85,14 @@ export function NewsletterForm({
             aria-label="Email address"
             autoComplete="email"
             required
-            className="h-12 w-full rounded-xl border border-primary-foreground/25 bg-background pl-10 pr-4 text-sm text-foreground shadow-xs placeholder:text-muted-foreground focus:border-primary-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary-foreground/40"
+            className="h-12 w-full rounded-xl border border-primary-foreground/25 bg-background pl-10 pr-4 text-sm sm:text-base text-foreground shadow-xs placeholder:text-muted-foreground focus:border-primary-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary-foreground/40"
           />
         </div>
         <Button
           type="submit"
           disabled={pending}
           size="lg"
-          className="h-12 shrink-0 rounded-xl bg-primary-foreground px-6 text-sm font-bold text-primary shadow-xs transition-all duration-200 hover:bg-primary-foreground/90 hover:shadow-md cursor-pointer"
+          className="h-12 shrink-0 rounded-xl bg-primary-foreground px-6 text-sm sm:text-base font-bold text-primary shadow-xs transition-all duration-200 hover:bg-primary-foreground/90 hover:shadow-md cursor-pointer"
         >
           <span>{pending ? "Subscribing..." : "Get Free Access"}</span>
           <IconArrowRight className="h-4 w-4" />

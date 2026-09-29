@@ -30,7 +30,7 @@ export function HubPage({ hub }: HubPageProps) {
         />
 
         <div className="relative mx-auto w-full max-w-6xl px-4 py-16 text-center sm:px-6 sm:py-24">
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-3 py-1 text-xs font-semibold text-primary-foreground/90 backdrop-blur-xs">
+          <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-3 py-1 text-xs sm:text-[13px] font-semibold text-primary-foreground/90 backdrop-blur-xs">
             <span className="h-1.5 w-1.5 rounded-full bg-primary-foreground/80" />
             {hub.badge}
           </span>
@@ -44,7 +44,7 @@ export function HubPage({ hub }: HubPageProps) {
             {hub.intro.map((paragraph) => (
               <p
                 key={paragraph.slice(0, 40)}
-                className="text-pretty text-sm leading-relaxed text-primary-foreground/80 sm:text-base"
+                className="text-pretty text-base leading-relaxed text-primary-foreground/85 sm:text-lg"
               >
                 {paragraph}
               </p>
@@ -54,7 +54,7 @@ export function HubPage({ hub }: HubPageProps) {
       </section>
 
       <div className="mx-auto w-full max-w-6xl px-4 pt-10 sm:pt-14 sm:px-6">
-        <div className="rounded-2xl border border-primary/25 bg-primary/5 px-5 py-4 text-sm leading-relaxed text-foreground/85 sm:px-6">
+        <div className="rounded-2xl border border-primary/25 bg-primary/5 px-5 py-4 text-[15px] sm:text-base leading-relaxed text-foreground/85 sm:px-6">
           {hub.hubNote}
         </div>
 
@@ -88,17 +88,17 @@ export function HubPage({ hub }: HubPageProps) {
                       <IconArrowRight className="h-4 w-4 text-muted-foreground transition-all duration-200 group-hover:translate-x-1 group-hover:text-primary" />
                     </div>
 
-                    <h3 className="mt-4 text-base font-bold leading-snug tracking-tight text-foreground transition-colors group-hover:text-primary sm:text-lg">
+                    <h3 className="mt-4 text-[17px] sm:text-lg font-bold leading-snug tracking-tight text-foreground transition-colors group-hover:text-primary">
                       {calculator.name}
                     </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">
                       {calculator.whatItIs}
                     </p>
 
                     <div className="mt-auto pt-4">
                       <div className="flex items-start gap-2 rounded-xl border border-primary/15 bg-primary/5 px-3 py-2.5">
                         <IconTarget className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
-                        <p className="text-xs leading-relaxed text-foreground/80">
+                        <p className="text-xs sm:text-[13px] leading-relaxed text-foreground/85">
                           {calculator.whatToExpect}
                         </p>
                       </div>
@@ -126,12 +126,12 @@ export function HubPage({ hub }: HubPageProps) {
                 {...(index === 0 ? { open: true } : {})}
               >
                 <summary className="flex cursor-pointer items-center justify-between gap-4 font-semibold text-foreground transition-colors group-open:text-primary hover:text-primary">
-                  <span className="text-base sm:text-lg">{faq.question}</span>
+                  <span className="text-[17px] sm:text-lg font-semibold">{faq.question}</span>
                   <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground transition-transform duration-200 group-open:rotate-180 group-open:bg-primary/10 group-open:text-primary">
                     <IconChevronDown className="h-4 w-4" />
                   </div>
                 </summary>
-                <p className="mt-3.5 text-sm leading-relaxed text-muted-foreground sm:text-base">
+                <p className="mt-3.5 text-[15px] sm:text-[17px] leading-relaxed text-muted-foreground">
                   {faq.answer}
                 </p>
                 {faq.bullets ? (
@@ -139,7 +139,7 @@ export function HubPage({ hub }: HubPageProps) {
                     {faq.bullets.map((bullet) => (
                       <li
                         key={bullet}
-                        className="flex items-start gap-2.5 rounded-xl border border-primary/15 bg-primary/5 px-3.5 py-2.5 text-sm text-foreground/85"
+                        className="flex items-start gap-2.5 rounded-xl border border-primary/15 bg-primary/5 px-3.5 py-2.5 text-sm sm:text-[15px] text-foreground/85"
                       >
                         <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
                         {bullet}

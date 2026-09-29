@@ -141,7 +141,7 @@ export function SiteFooter() {
               />
             </Link>
 
-            <p className="max-w-sm text-sm leading-relaxed text-primary-foreground/80">
+            <p className="max-w-sm text-[15px] leading-relaxed text-primary-foreground/85">
               Your go-to authority resource for mastering essential spreadsheet formulas, solving complex workbook challenges, and accessing bespoke business templates.
             </p>
 
@@ -149,7 +149,7 @@ export function SiteFooter() {
             <div>
               <a
                 href="mailto:contact@excelinsider.com"
-                className="group inline-flex items-center gap-2.5 rounded-xl border border-primary-foreground/25 bg-primary-foreground/10 px-4 py-2.5 text-xs font-semibold text-primary-foreground shadow-xs backdrop-blur-xs transition-all duration-200 hover:border-primary-foreground/50 hover:bg-primary-foreground hover:text-primary hover:shadow-md"
+                className="group inline-flex items-center gap-2.5 rounded-xl border border-primary-foreground/25 bg-primary-foreground/10 px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-xs backdrop-blur-xs transition-all duration-200 hover:border-primary-foreground/50 hover:bg-primary-foreground hover:text-primary hover:shadow-md"
               >
                 <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-primary-foreground/20 text-primary-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                   <IconMail className="h-3.5 w-3.5" />
@@ -160,7 +160,7 @@ export function SiteFooter() {
 
             {/* Social Media Glass Icons */}
             <div className="space-y-2.5 pt-1">
-              <p className="text-xs font-bold uppercase tracking-wider text-primary-foreground/70">
+              <p className="text-[13px] font-bold uppercase tracking-wider text-primary-foreground/75">
                 Follow Excel Insider
               </p>
               <div className="flex flex-wrap items-center gap-2.5">
@@ -188,10 +188,10 @@ export function SiteFooter() {
 
           {/* Column 2: Explore Tutorials (2.5 cols) */}
           <div className="space-y-4 lg:col-span-3">
-            <p className="text-xs font-bold uppercase tracking-wider text-primary-foreground">
+            <p className="text-[13px] font-bold uppercase tracking-wider text-primary-foreground">
               Tutorials &amp; Guides
             </p>
-            <ul className="space-y-2.5 text-sm">
+            <ul className="space-y-2.5 text-[15px]">
               {EXPLORE_LINKS.map((link) => (
                 <li key={link.label}>
                   <Link
@@ -208,10 +208,10 @@ export function SiteFooter() {
 
           {/* Column 3: Custom Services (2.5 cols) */}
           <div className="space-y-4 lg:col-span-2">
-            <p className="text-xs font-bold uppercase tracking-wider text-primary-foreground">
+            <p className="text-[13px] font-bold uppercase tracking-wider text-primary-foreground">
               Services
             </p>
-            <ul className="space-y-2.5 text-sm">
+            <ul className="space-y-2.5 text-[15px]">
               {SERVICES_LINKS.map((link) => (
                 <li key={link.label}>
                   <Link
@@ -230,11 +230,11 @@ export function SiteFooter() {
           <div className="space-y-4 lg:col-span-2">
             <Link
               href="/about"
-              className="text-xs font-bold uppercase tracking-wider text-primary-foreground transition-opacity hover:opacity-85 inline-block"
+              className="text-[13px] font-bold uppercase tracking-wider text-primary-foreground transition-opacity hover:opacity-85 inline-block"
             >
               About Excel Insider
             </Link>
-            <ul className="space-y-2.5 text-sm">
+            <ul className="space-y-2.5 text-[15px]">
               {COMPANY_LINKS.map((link) => (
                 <li key={link.label}>
                   <Link
@@ -250,7 +250,7 @@ export function SiteFooter() {
         </div>
 
         {/* ── Bottom Bar: Copyright ── */}
-        <div className="mt-14 flex flex-col items-center justify-center border-t border-primary-foreground/20 pt-8 text-xs text-primary-foreground/75 text-center">
+        <div className="mt-14 flex flex-col items-center justify-center border-t border-primary-foreground/20 pt-8 text-[13px] sm:text-sm text-primary-foreground/75 text-center">
           <p>
             © {new Date().getFullYear()} <strong className="font-semibold text-primary-foreground">Excel Insider</strong>. All rights reserved.
           </p>

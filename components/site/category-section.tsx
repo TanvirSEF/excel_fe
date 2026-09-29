@@ -50,7 +50,7 @@ export function CategorySection({ group }: CategorySectionProps) {
               <div className="flex items-center gap-2">
                 <span
                   className={cn(
-                    "text-[11px] font-bold uppercase tracking-wider",
+                    "text-xs font-bold uppercase tracking-wider",
                     isExcel && "text-emerald-600 dark:text-emerald-400",
                     isGoogle && "text-teal-600 dark:text-teal-400",
                     !isExcel && !isGoogle && "text-muted-foreground"
@@ -59,14 +59,14 @@ export function CategorySection({ group }: CategorySectionProps) {
                   {group.badge}
                 </span>
                 <span className="text-muted-foreground/40">•</span>
-                <span className="text-xs font-semibold text-muted-foreground">
+                <span className="text-xs sm:text-[13px] font-semibold text-muted-foreground">
                   {group.items.length} {group.items.length === 1 ? "Topic" : "Topics"}
                 </span>
               </div>
               <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
                 {group.title}
               </h2>
-              <p className="max-w-2xl text-xs sm:text-sm text-muted-foreground leading-relaxed">
+              <p className="max-w-2xl text-sm sm:text-base text-muted-foreground leading-relaxed">
                 {group.description}
               </p>
             </div>
@@ -123,7 +123,7 @@ export function CategorySection({ group }: CategorySectionProps) {
                 <div>
                   <h3
                     className={cn(
-                      "text-sm sm:text-base font-semibold tracking-tight text-foreground transition-colors",
+                      "text-base sm:text-[17px] font-semibold tracking-tight text-foreground transition-colors",
                       isExcel && "group-hover:text-emerald-600 dark:group-hover:text-emerald-400",
                       isGoogle && "group-hover:text-teal-600 dark:group-hover:text-teal-400",
                       !isExcel && !isGoogle && "group-hover:text-primary"
@@ -131,7 +131,7 @@ export function CategorySection({ group }: CategorySectionProps) {
                   >
                     {item.name}
                   </h3>
-                  <p className="mt-1 line-clamp-2 text-xs text-muted-foreground leading-relaxed">
+                  <p className="mt-1 line-clamp-2 text-[13px] sm:text-sm text-muted-foreground leading-relaxed">
                     {item.description}
                   </p>
                 </div>
@@ -141,13 +141,13 @@ export function CategorySection({ group }: CategorySectionProps) {
                     {item.children.slice(0, 4).map((child) => (
                       <span
                         key={child.id}
-                        className="rounded-md border border-border/60 bg-muted/40 px-2 py-0.5 text-[10px] font-medium text-muted-foreground"
+                        className="rounded-md border border-border/60 bg-muted/40 px-2 py-0.5 text-xs font-medium text-muted-foreground"
                       >
                         {child.name}
                       </span>
                     ))}
                     {item.children.length > 4 && (
-                      <span className="text-[10px] text-muted-foreground self-center">
+                      <span className="text-xs text-muted-foreground self-center">
                         +{item.children.length - 4} more
                       </span>
                     )}
@@ -157,7 +157,7 @@ export function CategorySection({ group }: CategorySectionProps) {
 
               <div
                 className={cn(
-                  "mt-4 flex items-center justify-between border-t border-border/40 pt-3 text-xs font-semibold transition-colors",
+                  "mt-4 flex items-center justify-between border-t border-border/40 pt-3 text-[13px] font-semibold transition-colors",
                   isExcel && "text-emerald-600 dark:text-emerald-400",
                   isGoogle && "text-teal-600 dark:text-teal-400",
                   !isExcel && !isGoogle && "text-primary"

@@ -27,24 +27,24 @@ const SPREADSHEET_ROWS = [
 
 function ExcelWindowMockup() {
   return (
-    <div className="w-full overflow-hidden rounded-xl border border-primary-foreground/20 bg-primary-foreground text-xs shadow-xl">
+    <div className="w-full overflow-hidden rounded-xl border border-primary-foreground/20 bg-primary-foreground text-xs sm:text-sm shadow-xl">
       {/* Window chrome */}
       <div className="flex items-center gap-2 border-b border-border bg-muted/60 px-4 py-3">
         <span className="h-2.5 w-2.5 rounded-full bg-destructive/70" />
         <span className="h-2.5 w-2.5 rounded-full bg-chart-1/80" />
         <span className="h-2.5 w-2.5 rounded-full bg-primary/80" />
-        <span className="ml-3 truncate font-mono text-[10px] text-muted-foreground">
+        <span className="ml-3 truncate font-mono text-xs text-muted-foreground">
           Revenue_Analysis_2025.xlsx
         </span>
       </div>
 
       {/* Formula bar */}
       <div className="flex items-center gap-1.5 border-b border-border bg-background px-3 py-2">
-        <div className="flex w-10 shrink-0 items-center justify-center rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+        <div className="flex w-10 shrink-0 items-center justify-center rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-xs text-muted-foreground">
           B4
         </div>
-        <span className="font-mono text-[11px] font-bold text-primary">fx</span>
-        <span className="font-mono text-[11px] text-foreground/80">
+        <span className="font-mono text-xs font-bold text-primary">fx</span>
+        <span className="font-mono text-xs text-foreground/80">
           =<span className="text-primary">XLOOKUP</span>
           <span className="text-muted-foreground">(A4, </span>
           <span className="text-chart-2">Months</span>
@@ -55,7 +55,7 @@ function ExcelWindowMockup() {
       </div>
 
       {/* Column headers */}
-      <div className="grid grid-cols-[32px_1fr_96px_72px] border-b border-border bg-muted/40 text-[10px] font-semibold tracking-wide text-muted-foreground">
+      <div className="grid grid-cols-[32px_1fr_96px_72px] border-b border-border bg-muted/40 text-xs font-semibold tracking-wide text-muted-foreground">
         <div className="border-r border-border py-1.5 text-center">#</div>
         <div className="border-r border-border px-3 py-1.5">Month</div>
         <div className="border-r border-border px-3 py-1.5 text-right">Revenue</div>
@@ -66,17 +66,17 @@ function ExcelWindowMockup() {
       {SPREADSHEET_ROWS.map((row) => (
         <div
           key={row.id}
-          className={`grid grid-cols-[32px_1fr_96px_72px] border-b border-border/50 text-[11px] last:border-0 transition-colors ${
+          className={`grid grid-cols-[32px_1fr_96px_72px] border-b border-border/50 text-xs last:border-0 transition-colors ${
             row.active ? "bg-primary/8 font-medium" : "bg-background hover:bg-muted/30"
           }`}
         >
-          <div className={`border-r border-border/50 py-2.5 text-center font-mono text-[10px] ${row.active ? "font-bold text-primary" : "text-muted-foreground/40"}`}>
+          <div className={`border-r border-border/50 py-2.5 text-center font-mono text-xs ${row.active ? "font-bold text-primary" : "text-muted-foreground/40"}`}>
             {row.id}
           </div>
           <div className={`border-r border-border/50 px-3 py-2.5 ${row.active ? "font-semibold text-foreground" : "text-foreground/80"}`}>
             {row.month}
             {row.active && (
-              <span className="ml-2 inline-flex items-center rounded bg-primary/12 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-primary">
+              <span className="ml-2 inline-flex items-center rounded bg-primary/12 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary">
                 active
               </span>
             )}
@@ -91,7 +91,7 @@ function ExcelWindowMockup() {
       ))}
 
       {/* Status bar */}
-      <div className="flex items-center justify-between border-t border-border bg-muted/30 px-4 py-2 text-[10px] text-muted-foreground">
+      <div className="flex items-center justify-between border-t border-border bg-muted/30 px-4 py-2 text-xs text-muted-foreground">
         <span>Sheet1 · 5 rows · Formula verified</span>
         <span className="font-semibold text-primary">Excel 365</span>
       </div>
@@ -156,7 +156,7 @@ export function HomeHero({ categories }: { categories: Category[] }) {
             <Button
               asChild
               size="lg"
-              className="h-11 rounded-lg bg-primary-foreground px-6 text-sm font-semibold text-primary hover:bg-primary-foreground/90 shadow-none"
+              className="h-11 rounded-lg bg-primary-foreground px-6 text-sm sm:text-base font-semibold text-primary hover:bg-primary-foreground/90 shadow-none"
             >
               <Link href="/blog" className="flex items-center gap-2">
                 Browse Tutorials
@@ -167,7 +167,7 @@ export function HomeHero({ categories }: { categories: Category[] }) {
 
           {/* Topic chips */}
           <div className="border-t border-primary-foreground/15 pt-6 space-y-3">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-primary-foreground/50">
+            <p className="text-xs font-semibold uppercase tracking-widest text-primary-foreground/60">
               Topics
             </p>
             <div className="flex flex-wrap gap-2">
@@ -177,9 +177,9 @@ export function HomeHero({ categories }: { categories: Category[] }) {
                   <Link
                     key={pill.label}
                     href={pill.href}
-                    className="flex items-center gap-1.5 rounded-md border border-primary-foreground/20 bg-primary-foreground/8 px-3 py-1.5 text-[11px] font-medium text-primary-foreground/75 transition-colors hover:border-primary-foreground/40 hover:bg-primary-foreground/15 hover:text-primary-foreground"
+                    className="flex items-center gap-1.5 rounded-md border border-primary-foreground/20 bg-primary-foreground/8 px-3 py-1.5 text-xs sm:text-[13px] font-medium text-primary-foreground/80 transition-colors hover:border-primary-foreground/40 hover:bg-primary-foreground/15 hover:text-primary-foreground"
                   >
-                    <Icon className="h-3.5 w-3.5 shrink-0" />
+                    <Icon className="h-4 w-4 shrink-0" />
                     {pill.label}
                   </Link>
                 )
