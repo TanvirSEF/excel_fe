@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 
 import { HomeHero } from "@/components/site/home-hero"
-import { HeroStatsBand } from "@/components/site/hero-stats-band"
 import { LearningTrackSection } from "@/components/site/learning-track-section"
 import { TrendingSection } from "@/components/site/trending-list"
 import { ServicesSection } from "@/components/site/services-section"
@@ -45,9 +44,6 @@ export default async function HomePage() {
     <>
       {/* 1. Authority Hero Section & Live Excel Window Mockup */}
       <HomeHero categories={featuredCategories} />
-
-      {/* 2. Social Proof & Trust Metrics Band */}
-      <HeroStatsBand />
 
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* 3. Professional Excel & Sheets Services (3 Bespoke 3D Cards) */}
