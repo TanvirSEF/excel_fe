@@ -7,7 +7,28 @@ const mediaHosts = (process.env.NEXT_PUBLIC_MEDIA_HOSTS ?? "")
   .map((host) => host.trim())
   .filter(Boolean)
 
+const mediaHostCsp = mediaHosts.length
+  ? mediaHosts.map((h) => `https://${h}`).join(" ")
+  : ""
+
+const isDev = process.env.NODE_ENV === "development"
+
+const cspValue = [
+  `default-src 'self'`,
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
+  `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
+  `font-src 'self' https://fonts.gstatic.com`,
+  `img-src 'self' data: blob: https://i.ytimg.com ${mediaHostCsp}`.trimEnd(),
+  `frame-src https://www.youtube-nocookie.com https://player.vimeo.com`,
+  `connect-src 'self' ${apiUrl}${isDev ? " http://localhost:* ws://localhost:* wss://localhost:* webpack://" : ""}`,
+  `object-src 'none'`,
+  `base-uri 'self'`,
+  `form-action 'self'`,
+  ...(!isDev ? [`upgrade-insecure-requests`] : []),
+].join("; ")
+
 const securityHeaders = [
+  { key: "Content-Security-Policy", value: cspValue },
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "DENY" },
