@@ -23,7 +23,7 @@ import type {
 } from "@/types/api"
 
 import { CodeBlock } from "./code-block"
-import { CopyButton } from "./copy-button"
+import { FormulaCodeBlock } from "./formula-code-block"
 import { InlineToc } from "./inline-toc"
 import { VideoEmbed } from "./video-embed"
 import type { TocEntry } from "@/lib/blocks"
@@ -1023,28 +1023,7 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
 
       if (isFormula) {
         const formulaText = rawCandidateText.trim().replace(/^formula:?\s*/i, "")
-        const isMultiLine = formulaText.includes("\n")
-        const isLong = formulaText.length > 50
-        const isLongOrMulti = isMultiLine || isLong
-
-        return (
-          <div className="group relative my-5 flex items-start justify-between gap-3 rounded-[6px] border border-border/80 bg-card py-2.5 pl-4 pr-3 sm:py-3 sm:pl-5 sm:pr-3.5 shadow-[1.5px_1.5px_2px_rgba(0,0,0,0.25)] dark:shadow-[1.5px_1.5px_2px_rgba(0,0,0,0.6)] transition-all hover:border-primary/40">
-            <div className="min-w-0 flex-1">
-              <span
-                className={cn(
-                  "block font-serif text-[15px] sm:text-[16px] font-normal tracking-normal text-foreground selection:bg-primary/20 break-words [overflow-wrap:anywhere] whitespace-pre-wrap leading-relaxed",
-                  isLongOrMulti ? "text-left" : "text-center sm:pl-16"
-                )}
-              >
-                {formulaText}
-              </span>
-            </div>
-
-            <div className="shrink-0 self-start pt-0.5">
-              <CopyButton text={formulaText} />
-            </div>
-          </div>
-        )
+        return <FormulaCodeBlock formula={formulaText} />
       }
 
       return (

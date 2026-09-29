@@ -118,7 +118,7 @@ export const BLOCK_COMMANDS: BlockCommand[] = [
   {
     id: "formula-box",
     label: "Formula Box",
-    description: "Centered formula card with copy button",
+    description: "Code-styled formula block with 1-click copy",
     icon: IconMathFunction,
     keywords: ["formula", "syntax", "function", "excel", "math", "vlookup", "box"],
     group: "callouts",

@@ -13,7 +13,6 @@ import {
   IconInfoCircle,
   IconAlertOctagon,
   IconSparkles,
-  IconMathFunction,
   IconNotes,
   IconPaperclip,
 } from "@tabler/icons-react"
@@ -198,23 +197,27 @@ function CalloutView({ node, updateAttributes, selected }: ReactNodeViewProps) {
     return (
       <NodeViewWrapper
         className={cn(
-          "relative my-4 rounded-[4px] border border-border/80 bg-card p-4 shadow-[1.5px_1.5px_2px_rgba(0,0,0,0.35)] dark:shadow-[1.5px_1.5px_2px_rgba(0,0,0,0.7)] transition-colors",
+          "relative my-4 rounded-xl border border-[#30363d] bg-[#0d1117] p-3 sm:p-4 shadow-md transition-colors",
           selected && "ring-2 ring-primary/40"
         )}
       >
-        <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2 border-b border-border/50 pb-2">
+        <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2 border-b border-[#30363d] pb-2">
           <div className="flex items-center gap-1.5">
-            <span className="inline-flex items-center gap-1.5 rounded-md bg-primary/10 px-2 py-0.5 text-xs font-bold text-primary font-mono">
-              <IconMathFunction className="h-3.5 w-3.5" />
-              Formula Box
+            <span className="flex h-5 w-6 shrink-0 items-center justify-center rounded bg-emerald-500/15 font-mono text-[11px] font-extrabold italic text-emerald-400 select-none ring-1 ring-emerald-500/30">
+              fx
             </span>
-            <span className="text-[11px] text-muted-foreground hidden sm:inline">
-              (Live post renders centered serif card with 1-click copy)
+            <span className="inline-flex items-center gap-1.5 rounded-md bg-emerald-500/10 px-2 py-0.5 text-xs font-bold text-emerald-400 font-mono">
+              Formula Code Box
+            </span>
+            <span className="text-[11px] text-zinc-400 hidden sm:inline">
+              (Live post renders as code block with 1-click copy)
             </span>
           </div>
           {presetButtons}
         </div>
-        <NodeViewContent className="callout-content text-sm sm:text-[0.9375rem] font-serif font-normal text-center leading-6 text-foreground selection:bg-primary/20 break-words [overflow-wrap:anywhere]" />
+        <div className="rounded-lg border border-[#30363d]/80 bg-[#161b22] px-3.5 py-2.5">
+          <NodeViewContent className="callout-content font-mono text-[14px] sm:text-[15px] font-normal leading-relaxed text-[#e6edf3] selection:bg-emerald-500/30 break-all [overflow-wrap:anywhere]" />
+        </div>
       </NodeViewWrapper>
     )
   }
