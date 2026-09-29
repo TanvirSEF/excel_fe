@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Geist_Mono, Poppins } from "next/font/google"
+import { Analytics } from "@vercel/analytics/react"
 
 import "./globals.css"
 import { Providers } from "@/components/providers"
@@ -65,6 +66,7 @@ export default function RootLayout({
             <Providers>{children}</Providers>
           </TooltipProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   )
