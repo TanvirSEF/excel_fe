@@ -42,14 +42,6 @@ async function loadAuthor(id: string) {
   }
 }
 
-function initials(name: string) {
-  return name
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((word) => word[0]?.toUpperCase() ?? "")
-    .join("")
-}
-
 function getAuthorSocialLinks(author: {
   linkedin_url?: string | null
   twitter_url?: string | null
@@ -187,10 +179,17 @@ export default async function AuthorPage({ params, searchParams }: AuthorPagePro
           className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-chart-2/15 blur-3xl"
         />
 
-        <div className="relative flex flex-col items-center gap-6 text-center sm:flex-row sm:items-start sm:gap-8 sm:text-left">
-          <div className="relative group shrink-0">
-            <div className="relative flex h-36 w-36 sm:h-44 sm:w-44 md:h-48 md:w-48 shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-primary/25 bg-gradient-to-br from-chart-2/20 to-primary/20 shadow-xl ring-4 ring-background transition-transform duration-300 group-hover:scale-[1.02]">
-              {author.avatar_url ? (
+        <div
+          className={cn(
+            "relative flex flex-col gap-6",
+            author.avatar_url
+              ? "items-center text-center sm:flex-row sm:items-start sm:gap-8 sm:text-left"
+              : "items-start text-left"
+          )}
+        >
+          {author.avatar_url && (
+            <div className="relative group shrink-0">
+              <div className="relative flex h-36 w-36 sm:h-44 sm:w-44 md:h-48 md:w-48 shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-primary/25 bg-gradient-to-br from-chart-2/20 to-primary/20 shadow-xl ring-4 ring-background transition-transform duration-300 group-hover:scale-[1.02]">
                 <Image
                   src={author.avatar_url}
                   alt={author.name}
@@ -199,22 +198,23 @@ export default async function AuthorPage({ params, searchParams }: AuthorPagePro
                   sizes="(max-width: 640px) 144px, (max-width: 768px) 176px, 192px"
                   className="object-cover"
                 />
-              ) : (
-                <span className="text-4xl sm:text-5xl font-extrabold text-primary">
-                  {initials(author.name)}
-                </span>
-              )}
+              </div>
+              <div
+                className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md ring-2 ring-background"
+                title="Verified Author & Consultant"
+              >
+                <IconShieldCheck className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
+              </div>
             </div>
-            <div
-              className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md ring-2 ring-background"
-              title="Verified Author & Consultant"
-            >
-              <IconShieldCheck className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
-            </div>
-          </div>
+          )}
 
           <div className="min-w-0 flex-1">
-            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
+            <div
+              className={cn(
+                "flex flex-wrap items-center gap-2.5",
+                author.avatar_url ? "justify-center sm:justify-start" : "justify-start"
+              )}
+            >
               <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
                 <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
                 Author &amp; Spreadsheet Consultant
@@ -234,7 +234,12 @@ export default async function AuthorPage({ params, searchParams }: AuthorPagePro
               {author.name}
             </h1>
 
-            <div className="mt-2.5 flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1.5 text-xs sm:text-sm text-muted-foreground">
+            <div
+              className={cn(
+                "mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs sm:text-sm text-muted-foreground",
+                author.avatar_url ? "justify-center sm:justify-start" : "justify-start"
+              )}
+            >
               <span className="flex items-center gap-1.5 font-medium">
                 <IconNews className="h-4 w-4 text-primary" />
                 <strong className="font-bold text-foreground">{author.post_count}</strong>{" "}
@@ -254,7 +259,12 @@ export default async function AuthorPage({ params, searchParams }: AuthorPagePro
             ) : null}
 
             {socialLinks.length > 0 ? (
-              <div className="mt-5 flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
+              <div
+                className={cn(
+                  "mt-5 flex flex-wrap items-center gap-2.5",
+                  author.avatar_url ? "justify-center sm:justify-start" : "justify-start"
+                )}
+              >
                 {socialLinks.map(({ href, icon: Icon, label, className }) => (
                   <a
                     key={label}
