@@ -109,7 +109,7 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
     }
   }
 
-  related = related.slice(0, 50)
+  related = related.slice(0, 6)
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },

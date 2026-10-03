@@ -59,7 +59,7 @@ export function ArticleRelatedSidebar({
       </div>
 
       {/* Article Cards List with Scrollbar */}
-      <ul className="divide-y divide-border/60 max-h-[560px] overflow-y-auto overscroll-contain pr-0.5 [scrollbar-width:thin] [scrollbar-color:var(--color-primary-40)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-primary/20 hover:[&::-webkit-scrollbar-thumb]:bg-primary/40">
+      <ul className="divide-y divide-border/60 max-h-[460px] overflow-y-auto overscroll-contain pr-0.5 [scrollbar-width:thin] [scrollbar-color:var(--color-primary-40)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-primary/20 hover:[&::-webkit-scrollbar-thumb]:bg-primary/40">
         {posts.map((post) => (
           <li key={post.id}>
             <Link
