@@ -36,25 +36,30 @@ export function ArticleRelatedSidebar({
               Related Articles
             </h2>
           </div>
-          {categorySlug ? (
+          <span className="rounded-full bg-white/20 px-2.5 py-0.5 text-[11px] font-bold tracking-tight text-primary-foreground backdrop-blur-xs">
+            {posts.length} {posts.length === 1 ? "guide" : "guides"}
+          </span>
+        </div>
+        {categoryName && categorySlug ? (
+          <p className="mt-2 text-[13px] text-primary-foreground/85">
+            More guides from{" "}
             <Link
               href={`/categories/${categorySlug}`}
-              className="inline-flex items-center gap-1 rounded-full bg-white/15 px-2.5 py-0.5 text-xs font-semibold text-primary-foreground backdrop-blur-xs transition-colors hover:bg-white/25"
+              className="inline-flex items-center gap-1 font-semibold text-primary-foreground underline decoration-white/40 underline-offset-2 transition-colors hover:decoration-white hover:text-white"
             >
-              <span>See all</span>
-              <IconArrowRight className="h-3 w-3" />
+              <span>{categoryName}</span>
+              <IconArrowRight className="h-3 w-3 inline" />
             </Link>
-          ) : null}
-        </div>
-        {categoryName ? (
+          </p>
+        ) : categoryName ? (
           <p className="mt-1.5 text-[13px] text-primary-foreground/80 line-clamp-1">
             More guides from <span className="font-semibold text-primary-foreground">{categoryName}</span>
           </p>
         ) : null}
       </div>
 
-      {/* Article Cards List */}
-      <ul className="divide-y divide-border/60">
+      {/* Article Cards List with Scrollbar */}
+      <ul className="divide-y divide-border/60 max-h-[560px] overflow-y-auto overscroll-contain pr-0.5 [scrollbar-width:thin] [scrollbar-color:var(--color-primary-40)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-primary/20 hover:[&::-webkit-scrollbar-thumb]:bg-primary/40">
         {posts.map((post) => (
           <li key={post.id}>
             <Link
@@ -104,19 +109,6 @@ export function ArticleRelatedSidebar({
           </li>
         ))}
       </ul>
-
-      {/* Footer Link */}
-      {categorySlug ? (
-        <div className="border-t border-border/60 bg-muted/20 p-2.5 text-center">
-          <Link
-            href={`/categories/${categorySlug}`}
-            className="inline-flex items-center justify-center gap-1.5 text-[13px] font-semibold text-primary transition-colors hover:underline"
-          >
-            <span>Explore all in {categoryName ?? "this category"}</span>
-            <IconArrowRight className="h-3.5 w-3.5" />
-          </Link>
-        </div>
-      ) : null}
     </aside>
   )
 }

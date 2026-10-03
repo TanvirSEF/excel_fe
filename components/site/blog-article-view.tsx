@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import slugify from "slugify"
 
 import { BlockRenderer } from "@/components/blocks/block-renderer"
 import { ArticleTags } from "@/components/site/article-tags"
@@ -13,7 +14,7 @@ import { getPostComments, getPosts } from "@/lib/api/posts"
 import { extractToc } from "@/lib/blocks"
 import { config } from "@/lib/config"
 import { buildArticleJsonLd, buildBreadcrumbJsonLd } from "@/lib/seo"
-import type { PostDetail } from "@/types/api"
+import type { PostDetail, PostListItem } from "@/types/api"
 
 export function buildPostMetadata(
   post: PostDetail,
@@ -62,13 +63,53 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
   const comments = await getPostComments(post.id).catch(() => [])
   const toc = extractToc(post.content_json?.blocks ?? [])
 
-  const related = post.category_slug
-    ? await getPosts({ category: post.category_slug, page_size: 10 }, 300)
-        .then((page) =>
-          page.items.filter((item) => item.id !== post.id).slice(0, 7)
+  // Fetch related articles based on tags first
+  let related: PostListItem[] = []
+
+  if (post.tags && post.tags.length > 0) {
+    const tagSlugs = post.tags
+      .map((tag) => slugify(tag, { lower: true, strict: true, trim: true }))
+      .filter(Boolean)
+
+    if (tagSlugs.length > 0) {
+      try {
+        const results = await Promise.all(
+          tagSlugs.map((tagSlug) =>
+            getPosts({ tag: tagSlug, page_size: 50 }, 300).catch(() => ({
+              items: [],
+            }))
+          )
         )
-        .catch(() => [])
-    : []
+
+        const seenIds = new Set<string>([post.id])
+        for (const res of results) {
+          for (const item of res.items) {
+            if (!seenIds.has(item.id)) {
+              seenIds.add(item.id)
+              related.push(item)
+            }
+          }
+        }
+      } catch {
+        related = []
+      }
+    }
+  }
+
+  // Graceful fallback to category if no tag-matched articles found
+  if (related.length === 0 && post.category_slug) {
+    try {
+      const page = await getPosts(
+        { category: post.category_slug, page_size: 50 },
+        300
+      )
+      related = page.items.filter((item) => item.id !== post.id)
+    } catch {
+      related = []
+    }
+  }
+
+  related = related.slice(0, 50)
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },
@@ -133,7 +174,7 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
           </article>
 
           {related.length > 0 ? (
-            <div className="hidden xl:block w-[21rem] shrink-0">
+            <div className="hidden xl:block w-[21rem] shrink-0 sticky top-24 self-start">
               <ArticleRelatedSidebar
                 posts={related}
                 categoryName={post.category_name}

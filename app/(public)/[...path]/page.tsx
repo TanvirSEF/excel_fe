@@ -25,6 +25,14 @@ async function resolvePost(path: string[]): Promise<
     return null
   }
 
+  if (path.length === 1 && path[0] === "excel-functions-and-formulas") {
+    return {
+      type: "redirect",
+      target: "/categories/excel-functions-formulas/",
+      isPermanent: true,
+    }
+  }
+
   const redirectRow = await getWpRedirect(pathname)
   if (redirectRow?.new_path) {
     if (redirectRow.new_path.startsWith("/blog/")) {
