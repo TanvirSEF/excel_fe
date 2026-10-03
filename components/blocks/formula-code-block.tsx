@@ -107,7 +107,7 @@ export function FormulaCodeBlock({ formula, className }: FormulaCodeBlockProps) 
             className="border-[#30363d] bg-[#21262d] text-zinc-300 hover:border-[#484f58] hover:bg-[#30363d] hover:text-white shadow-none text-xs"
           />
         </div>
-        <div className="overflow-x-auto p-4 font-mono text-[14px] sm:text-[15px] leading-relaxed text-[#e6edf3] select-all whitespace-pre">
+        <div className="p-4 font-mono text-[14px] sm:text-[15px] leading-relaxed text-[#e6edf3] select-all whitespace-pre-wrap break-words [word-break:break-word]">
           <code>{renderedTokens}</code>
         </div>
       </figure>
@@ -117,22 +117,22 @@ export function FormulaCodeBlock({ formula, className }: FormulaCodeBlockProps) 
   return (
     <div
       className={cn(
-        "group relative my-5 flex items-center justify-between gap-3 overflow-hidden rounded-xl border border-[#30363d] bg-[#0d1117] px-3.5 py-2.5 sm:px-4 sm:py-3 shadow-md transition-all hover:border-[#484f58]",
+        "group relative my-5 flex items-start justify-between gap-3 overflow-hidden rounded-xl border border-[#30363d] bg-[#0d1117] px-3.5 py-2.5 sm:px-4 sm:py-3 shadow-md transition-all hover:border-[#484f58]",
         className
       )}
     >
-      <div className="flex min-w-0 flex-1 items-center gap-3">
-        <span className="flex h-7 w-8 shrink-0 items-center justify-center rounded-md bg-emerald-500/15 font-mono text-xs font-extrabold italic text-emerald-400 select-none ring-1 ring-emerald-500/30">
+      <div className="flex min-w-0 flex-1 items-start gap-3">
+        <span className="mt-0.5 flex h-7 w-8 shrink-0 items-center justify-center rounded-md bg-emerald-500/15 font-mono text-xs font-extrabold italic text-emerald-400 select-none ring-1 ring-emerald-500/30">
           fx
         </span>
-        <div className="min-w-0 flex-1 overflow-x-auto py-0.5">
-          <code className="block font-mono text-[14px] sm:text-[15.5px] font-normal leading-relaxed text-[#e6edf3] whitespace-pre select-all">
+        <div className="min-w-0 flex-1 py-0.5">
+          <code className="block font-mono text-[14px] sm:text-[15.5px] font-normal leading-relaxed text-[#e6edf3] whitespace-pre-wrap break-words [word-break:break-word] select-all">
             {renderedTokens}
           </code>
         </div>
       </div>
 
-      <div className="shrink-0 pl-1">
+      <div className="shrink-0 self-start pl-1">
         <CopyButton
           text={cleanCode}
           className="border-[#30363d] bg-[#21262d] text-zinc-300 hover:border-[#484f58] hover:bg-[#30363d] hover:text-white shadow-none text-xs"
