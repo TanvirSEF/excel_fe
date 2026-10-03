@@ -39,7 +39,7 @@ export function CurriculumSidebar({
   }
 
   return (
-    <nav aria-label="Curriculum" className={cn("space-y-2", className)}>
+    <nav aria-label="Curriculum" className={cn("space-y-2.5", className)}>
       {modules.map((module) => {
         const moduleActive = module.slug === activeModule?.slug
         const isOpen = openModuleSlug === module.slug
@@ -48,7 +48,12 @@ export function CurriculumSidebar({
           <details
             key={module.slug}
             open={isOpen}
-            className="group rounded-xl border border-border/60 bg-card"
+            className={cn(
+              "group overflow-hidden rounded-xl border transition-all duration-200",
+              isOpen
+                ? "border-primary/40 bg-primary shadow-md"
+                : "border-primary/20 bg-primary shadow-xs hover:border-primary/40 hover:shadow-md"
+            )}
           >
             <summary
               onClick={(e) => {
@@ -58,18 +63,30 @@ export function CurriculumSidebar({
                 )
               }}
               aria-expanded={isOpen}
-              className="flex cursor-pointer list-none items-center justify-between gap-2 px-4 py-3.5 text-sm font-bold text-foreground select-none [&::-webkit-details-marker]:hidden"
+              className={cn(
+                "flex cursor-pointer list-none items-center justify-between gap-2.5 px-4 py-3.5 text-sm font-bold text-white select-none transition-colors duration-150 [&::-webkit-details-marker]:hidden",
+                "bg-primary hover:bg-primary/90",
+                moduleActive && !isOpen && "ring-1 ring-white/30"
+              )}
             >
-              <span className="line-clamp-2">{module.name}</span>
+              <div className="flex items-center gap-2 min-w-0">
+                {moduleActive && (
+                  <span
+                    className="h-2 w-2 shrink-0 rounded-full bg-emerald-300 shadow-xs"
+                    aria-hidden="true"
+                  />
+                )}
+                <span className="line-clamp-2 leading-snug">{module.name}</span>
+              </div>
               <IconChevronDown
                 className={cn(
-                  "h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200",
-                  isOpen && "rotate-180"
+                  "h-4 w-4 shrink-0 text-white/80 transition-transform duration-200 group-hover:text-white",
+                  isOpen && "rotate-180 text-white"
                 )}
               />
             </summary>
 
-            <ul className="space-y-0.5 border-t border-border/50 px-2.5 py-2.5">
+            <ul className="space-y-1 border-t border-white/15 bg-primary/95 px-2.5 py-2.5">
               {curatedTopics(module.slug, module.topics).map((topic) => {
                 const topicActive =
                   moduleActive && topic.slug === activeTopic?.slug
@@ -84,10 +101,10 @@ export function CurriculumSidebar({
                       }
                       aria-current={topicActive ? "page" : undefined}
                       className={cn(
-                        "block rounded-lg px-2.5 py-2 text-sm leading-snug transition-colors",
+                        "block rounded-lg px-2.5 py-2 text-sm leading-snug transition-all duration-150",
                         topicActive
-                          ? "bg-teal-500/15 font-semibold text-teal-700 dark:text-teal-300"
-                          : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                          ? "bg-white/20 font-semibold text-white shadow-2xs"
+                          : "text-white/80 hover:bg-white/10 hover:text-white"
                       )}
                     >
                       {topic.name}
