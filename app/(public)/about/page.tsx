@@ -210,7 +210,7 @@ export default function AboutPage() {
               <span>Who We Are</span>
             </div>
             <h2 className="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
-              <span className="text-4xl sm:text-5xl lg:text-[3.25rem]">A</span>ccessible, actionable Excel knowledge
+              <span className="text-4xl sm:text-5xl lg:text-[3.25rem]">A</span>ccessible, Actionable Excel Knowledge
             </h2>
             <div className="space-y-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
               <p>
@@ -265,7 +265,7 @@ export default function AboutPage() {
         <section className="border-t border-border/60 py-14 sm:py-18">
           <SectionHeading
             badge="Our Mission"
-            title="Our goal is simple"
+            title="Our Goal is Simple"
             subtitle="Everything we publish follows one plan — and three promises we hold ourselves to."
           />
 
