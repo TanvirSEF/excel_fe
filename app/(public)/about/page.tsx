@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 
 const SNAPSHOT_FACTS = [
   { value: "2024", label: "Founded" },
-  { value: "1,600+", label: "Guides published" },
+  { value: "1,600+", label: "Articles published" },
   { value: "40k+", label: "Monthly readers" },
   { value: "100+", label: "Free templates" },
 ]
@@ -130,7 +130,7 @@ function SiteSnapshotCard() {
 
       <div className="absolute -top-5 left-8 flex -rotate-2 items-center gap-2 rounded-full border border-border/70 bg-background px-3.5 py-1.5 text-xs font-semibold text-foreground shadow-lg">
         <IconShieldCheck className="h-4 w-4 text-primary" />
-        Expert-written guides
+        Expert-written articles
       </div>
       <div className="absolute -bottom-5 right-6 flex rotate-2 items-center gap-2 rounded-full border border-border/70 bg-background px-3.5 py-1.5 text-xs font-semibold text-foreground shadow-lg">
         <IconRocket className="h-4 w-4 text-primary" />
@@ -312,7 +312,7 @@ export default function AboutPage() {
           <SectionHeading
             badge="Our Team"
             title="Meet the Team Behind the Screen"
-            subtitle="A small, focused team writing the guides and answering your questions."
+            subtitle="A small, focused team writing the articles and answering your questions."
           />
 
           <div className="grid gap-6 lg:grid-cols-2">

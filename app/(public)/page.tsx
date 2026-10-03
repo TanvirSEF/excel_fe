@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Excel Insider — Excel formulas, tips & deep dives",
     description:
-      "Practical, example-driven Excel guides — formulas, shortcuts, Power Query, VBA and more.",
+      "Practical, example-driven Excel articles — formulas, shortcuts, Power Query, VBA and more.",
     url: "/",
     images: ["/og-default.png"],
   },

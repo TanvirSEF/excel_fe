@@ -42,7 +42,7 @@ export default async function CategoriesPage() {
             Spreadsheet Topics & Categories
           </h1>
           <p className="max-w-2xl text-sm sm:text-base text-muted-foreground leading-relaxed">
-            Browse our complete library of spreadsheet guides separated by platform. Master formula syntax, automation scripts, and executive dashboards in Microsoft Excel or Google Sheets.
+            Browse our complete library of spreadsheet articles separated by platform. Master formula syntax, automation scripts, and executive dashboards in Microsoft Excel or Google Sheets.
           </p>
         </div>
 

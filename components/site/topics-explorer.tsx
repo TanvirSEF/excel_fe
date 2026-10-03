@@ -29,7 +29,7 @@ const FALLBACK_CATEGORIES: Category[] = [
     slug: "formulas",
     parent_id: null,
     order_index: 1,
-    description: "Formulas and functions guides",
+    description: "Formulas and functions articles",
     icon_url: null,
     color_hex: null,
     is_featured: true,
@@ -380,7 +380,7 @@ export function TopicsExplorer({
                 <IconFolder className="h-6 w-6" />
               </div>
               <h4 className="text-base font-bold text-foreground">
-                No guides in {activeCategory.name} yet
+                No articles in {activeCategory.name} yet
               </h4>
               <p className="mt-1 max-w-sm text-xs text-muted-foreground">
                 We are currently writing fresh tutorials for this topic. Check back soon or explore other categories.

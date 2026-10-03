@@ -20,7 +20,7 @@ export function TrendingSection({ posts, className }: TrendingSectionProps) {
     <section className={cn(className)}>
       <SectionHeading
         title="Trending Spreadsheet Tutorials"
-        subtitle="Top formula breakdowns and spreadsheet guides most read this week."
+        subtitle="Top formula breakdowns and spreadsheet articles most read this week."
         badge="Popular this week"
         action={{ label: "View all tutorials", href: "/blog" }}
       />

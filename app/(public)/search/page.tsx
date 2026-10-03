@@ -21,7 +21,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:py-14">
       <PageHeader
         title="Search"
-        description="Find the Excel guide you need."
+        description="Find the Excel article you need."
       />
       <div className="mt-8">
         <SearchView query={query} page={pageNumber} />

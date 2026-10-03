@@ -145,7 +145,7 @@ export function HomeHero({ categories }: { categories: Category[] }) {
 
           {/* Subtitle */}
           <p className="max-w-lg text-base leading-relaxed text-primary-foreground/75 sm:text-lg">
-            Excel Insider helps you learn Excel and Google Sheets with clear guides and video
+            Excel Insider helps you learn Excel and Google Sheets with clear articles and video
             tutorials. Get expert spreadsheet support, personalized tools, and custom templates.
             Download free or premium templates designed to improve accuracy, efficiency, and
             productivity.

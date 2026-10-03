@@ -163,7 +163,7 @@ export function CategorySection({ group }: CategorySectionProps) {
                   !isExcel && !isGoogle && "text-primary"
                 )}
               >
-                <span>Explore guides</span>
+                <span>Explore articles</span>
                 <IconArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-1" />
               </div>
             </Link>

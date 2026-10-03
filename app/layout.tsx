@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     template: "%s | Excel Insider",
   },
   description:
-    "Practical, example-driven Excel guides — formulas, shortcuts, Power Query, VBA and more.",
+    "Practical, example-driven Excel articles — formulas, shortcuts, Power Query, VBA and more.",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },

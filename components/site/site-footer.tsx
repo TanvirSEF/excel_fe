@@ -189,7 +189,7 @@ export function SiteFooter() {
           {/* Column 2: Explore Tutorials (2.5 cols) */}
           <div className="space-y-4 lg:col-span-3">
             <p className="text-[13px] font-bold uppercase tracking-wider text-primary-foreground">
-              Tutorials &amp; Guides
+              Tutorials &amp; Articles
             </p>
             <ul className="space-y-2.5 text-[15px]">
               {EXPLORE_LINKS.map((link) => (

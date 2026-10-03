@@ -43,7 +43,7 @@ const STATS = [
     value: "100+",
     label: "Tutorials Authored",
     icon: IconFileSpreadsheet,
-    description: "In-depth Excel guides at ExcelDemy",
+    description: "In-depth Excel articles at ExcelDemy",
   },
   {
     value: "80+",
@@ -236,7 +236,7 @@ export default function NehadUlfatProfilePage() {
                 Through Excel Insider, Nehad focuses primarily on intermediate and
                 advanced spreadsheet challenges rather than basic tutorials. His approach
                 is to identify real user problems that often lack clear solutions online
-                and develop well-researched guides that combine existing knowledge with
+                and develop well-researched articles that combine existing knowledge with
                 newly tested methods. Each tutorial is designed with hands-on examples,
                 practice spreadsheets, and supporting video content to ensure readers can
                 apply the solutions effectively.
@@ -283,7 +283,7 @@ export default function NehadUlfatProfilePage() {
             </div>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">
               Focusing on intermediate and advanced challenges that lack clear solutions
-              online, every guide on Excel Insider combines hands-on examples, practice
+              online, every article on Excel Insider combines hands-on examples, practice
               spreadsheets, and video demonstrations to turn complex spreadsheet problems
               into reliable, real-world solutions.
             </p>

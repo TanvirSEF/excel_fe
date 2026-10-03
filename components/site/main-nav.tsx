@@ -403,7 +403,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
               <div className="mt-4 pt-3 border-t border-border/60 flex items-center justify-between">
                 <p className="text-[13px] text-muted-foreground flex items-center gap-1.5">
                   <IconBook2 className="h-3.5 w-3.5 text-primary" />
-                  <span>Looking for more? Explore all 1,600+ spreadsheet guides.</span>
+                  <span>Looking for more? Explore all 1,600+ spreadsheet articles.</span>
                 </p>
                 <Link
                   href="/categories"

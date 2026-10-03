@@ -131,7 +131,7 @@ export async function generateMetadata({
     title: `${author.name} — Articles & Tutorials | Excel Insider`,
     description:
       author.bio ??
-      `${author.post_count} spreadsheet guides and tutorials written by ${author.name}.`,
+      `${author.post_count} spreadsheet articles and tutorials written by ${author.name}.`,
     alternates: { canonical: `/authors/${author.id}` },
   }
 }
@@ -243,7 +243,7 @@ export default async function AuthorPage({ params, searchParams }: AuthorPagePro
               <span className="flex items-center gap-1.5 font-medium">
                 <IconNews className="h-4 w-4 text-primary" />
                 <strong className="font-bold text-foreground">{author.post_count}</strong>{" "}
-                {author.post_count === 1 ? "Guide Published" : "Guides Published"}
+                {author.post_count === 1 ? "Article Published" : "Articles Published"}
               </span>
               <span className="hidden sm:inline-block h-3 w-px bg-border/80" />
               <span className="flex items-center gap-1.5 font-medium">

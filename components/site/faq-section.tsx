@@ -11,7 +11,7 @@ const FAQS = [
       "Yes! The vast majority of our tutorials, formula breakdowns, and foundational spreadsheet templates are 100% free to read, copy, and use for personal or commercial projects with no paywall.",
   },
   {
-    question: "Do your guides work on both Microsoft Excel and Google Sheets?",
+    question: "Do your articles work on both Microsoft Excel and Google Sheets?",
     answer:
       "Absolutely. Every tutorial clearly indicates version compatibility across Microsoft Excel (Excel 365, 2021, 2019) and Google Sheets. When functions differ (such as XLOOKUP vs VLOOKUP or Google Sheets QUERY), we provide dedicated syntax for both platforms.",
   },
@@ -28,7 +28,7 @@ const FAQS = [
   {
     question: "How frequently is new content published on Excel Insider?",
     answer:
-      "We publish multiple comprehensive guides, formula deep-dives, and downloadable business templates every week, constantly updating our library to reflect the newest Excel 365 and Google Sheets capabilities.",
+      "We publish multiple comprehensive articles, formula deep-dives, and downloadable business templates every week, constantly updating our library to reflect the newest Excel 365 and Google Sheets capabilities.",
   },
 ]
 
