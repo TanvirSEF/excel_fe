@@ -1,4 +1,4 @@
-import { IconSparkles } from "@tabler/icons-react"
+import { IconMail } from "@tabler/icons-react"
 
 import { NewsletterForm } from "@/components/site/newsletter/newsletter-form"
 import { cn } from "@/lib/utils"
@@ -31,7 +31,7 @@ export function ArticleCtaBand({ source, heading, className }: ArticleCtaBandPro
       />
       <div className="relative">
         <span className="inline-flex items-center gap-1.5 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-3 py-1 text-xs font-semibold text-primary-foreground/90">
-          <IconSparkles className="h-3.5 w-3.5" />
+          <IconMail className="h-3.5 w-3.5" />
           Free Weekly Tips
         </span>
         <p className="mt-3 text-lg font-bold tracking-tight text-balance">{heading}</p>
