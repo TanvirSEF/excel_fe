@@ -174,7 +174,7 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
           </article>
 
           {related.length > 0 ? (
-            <div className="hidden xl:block w-[21rem] shrink-0 sticky top-24 self-start">
+            <div className="hidden xl:block w-[21rem] shrink-0">
               <ArticleRelatedSidebar
                 posts={related}
                 categoryName={post.category_name}
