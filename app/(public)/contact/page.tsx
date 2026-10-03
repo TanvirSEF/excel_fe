@@ -25,9 +25,9 @@ const CONTACT_DETAILS = [
   },
   {
     label: "Phone",
-    value: "+880 1314 999 034",
+    value: "+880 1886 806 860",
     icon: IconPhone,
-    href: "tel:+8801314999034",
+    href: "tel:+8801886806860",
   },
   {
     label: "Email",
