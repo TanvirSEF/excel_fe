@@ -37,12 +37,12 @@ export function ArticleRelatedSidebar({
             </h2>
           </div>
           <span className="rounded-full bg-white/20 px-2.5 py-0.5 text-[11px] font-bold tracking-tight text-primary-foreground backdrop-blur-xs">
-            {posts.length} {posts.length === 1 ? "guide" : "guides"}
+            {posts.length} {posts.length === 1 ? "article" : "articles"}
           </span>
         </div>
         {categoryName && categorySlug ? (
           <p className="mt-2 text-[13px] text-primary-foreground/85">
-            More guides from{" "}
+            More articles from{" "}
             <Link
               href={`/categories/${categorySlug}`}
               className="inline-flex items-center gap-1 font-semibold text-primary-foreground underline decoration-white/40 underline-offset-2 transition-colors hover:decoration-white hover:text-white"
@@ -53,7 +53,7 @@ export function ArticleRelatedSidebar({
           </p>
         ) : categoryName ? (
           <p className="mt-1.5 text-[13px] text-primary-foreground/80 line-clamp-1">
-            More guides from <span className="font-semibold text-primary-foreground">{categoryName}</span>
+            More articles from <span className="font-semibold text-primary-foreground">{categoryName}</span>
           </p>
         ) : null}
       </div>
