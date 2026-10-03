@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Image from "next/image"
 import Link from "next/link"
 import {
   IconArrowRight,
@@ -92,8 +93,15 @@ function SiteSnapshotCard() {
     <div className="relative hidden lg:block">
       <div className="relative rounded-2xl border border-primary-foreground/20 bg-primary-foreground/10 p-6 backdrop-blur-xs">
         <div className="flex items-center gap-4">
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary-foreground text-xl font-bold text-primary">
-            EI
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white p-2 shadow-sm ring-1 ring-black/5">
+            <Image
+              src="/icon-192.png"
+              alt="Excel Insider Logo"
+              width={40}
+              height={40}
+              className="h-full w-full object-contain"
+              priority
+            />
           </div>
           <div className="min-w-0 space-y-1">
             <p className="font-bold text-primary-foreground">Excel Insider</p>
