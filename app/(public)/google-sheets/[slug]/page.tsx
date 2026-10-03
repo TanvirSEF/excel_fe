@@ -8,14 +8,11 @@ import { ArticleTags } from "@/components/site/article-tags"
 import { CommentsSection } from "@/components/site/comments-section"
 import { CurriculumSidebar } from "@/components/site/learning-track/curriculum-sidebar"
 import { CurriculumDrawer } from "@/components/site/learning-track/curriculum-drawer"
-import {
-  LessonPager,
-  type PagerLesson,
-} from "@/components/site/learning-track/lesson-pager"
+import { GoogleSheetsCarousel } from "@/components/site/learning-track/google-sheets-carousel"
 import { ArticleCtaBand } from "@/components/site/newsletter/article-cta-band"
 import { ApiClientError } from "@/lib/api/error"
 import { getCurriculum } from "@/lib/api/curriculum"
-import { getPostBySlug, getPostComments } from "@/lib/api/posts"
+import { getPostBySlug, getPostComments, getPosts } from "@/lib/api/posts"
 import { isGoogleSheetsCategory } from "@/lib/category-topics"
 import { extractToc } from "@/lib/blocks"
 import { buildArticleJsonLd } from "@/lib/seo"
@@ -35,19 +32,6 @@ async function loadLesson(slug: string): Promise<PostDetail> {
     }
     throw error
   }
-}
-
-function flattenTrack(modules: CurriculumModule[]) {
-  return modules.flatMap((module) =>
-    module.topics.flatMap((topic) =>
-      topic.lessons.map((lesson) => ({
-        slug: lesson.slug,
-        title: lesson.title,
-        topicName: topic.name,
-        moduleName: module.name,
-      }))
-    )
-  )
 }
 
 export async function generateMetadata({
@@ -96,17 +80,17 @@ export default async function LessonPage({ params }: LessonPageProps) {
     redirect(`/blog/${post.slug}`)
   }
 
-  const [comments, modules] = await Promise.all([
+  const [comments, modules, basicsPage] = await Promise.all([
     getPostComments(post.id).catch(() => []),
     getCurriculum(300).catch(() => [] as CurriculumModule[]),
+    getPosts({ category: "google-sheets-basics", page_size: 15 }, 300).catch(
+      () => null
+    ),
   ])
+  const relatedBasics = (basicsPage?.items ?? []).filter(
+    (item) => item.id !== post.id
+  )
   const toc = extractToc(post.content_json?.blocks ?? [])
-
-  const flat = flattenTrack(modules)
-  const index = flat.findIndex((lesson) => lesson.slug === post.slug)
-  const prev: PagerLesson | null = index > 0 ? flat[index - 1] : null
-  const next: PagerLesson | null =
-    index >= 0 && index < flat.length - 1 ? flat[index + 1] : null
 
   const lessonPath = `/google-sheets/${post.slug}`
 
@@ -127,7 +111,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
           <BlockRenderer blocks={post.content_json?.blocks ?? []} />
           <ArticleTags tags={post.tags} />
 
-          <LessonPager prev={prev} next={next} />
+          <GoogleSheetsCarousel posts={relatedBasics} />
 
           <ArticleCtaBand
             source="lesson-footer"

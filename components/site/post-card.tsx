@@ -112,7 +112,7 @@ export function PostCard({ post, className }: PostCardProps) {
 
           {/* Read article arrow indicator */}
           <div className="mt-4 flex items-center gap-1 text-[13px] font-semibold text-primary opacity-0 transition-all duration-200 group-hover:opacity-100">
-            <span>Read guide</span>
+            <span>Read article</span>
             <IconArrowUpRight className="h-3.5 w-3.5" />
           </div>
         </div>
