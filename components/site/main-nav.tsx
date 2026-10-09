@@ -169,7 +169,9 @@ export function MainNav({ categories = [] }: MainNavProps) {
     pathname.startsWith("/blog") ||
     pathname.startsWith("/categories") ||
     pathname.startsWith("/google-sheets")
-  const isPricingActive = pathname.startsWith("/pricing")
+  const isPricingActive =
+    pathname.startsWith("/spreadsheet-solutions") ||
+    pathname.startsWith("/pricing")
   const isCalculatorActive = pathname.startsWith("/calculator")
 
   return (
@@ -217,7 +219,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
           >
             <div className="w-72 p-2 rounded-xl shadow-xl border border-border/70 backdrop-blur-md bg-background/95">
               <Link
-                href="/pricing"
+                href="/spreadsheet-solutions/"
                 onClick={() => setActiveMenu(null)}
                 className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-muted/60 transition-colors"
               >
@@ -261,11 +263,11 @@ export function MainNav({ categories = [] }: MainNavProps) {
               <div className="my-1.5 h-px bg-border/60" />
 
               <Link
-                href="/pricing"
+                href="/spreadsheet-solutions/"
                 onClick={() => setActiveMenu(null)}
                 className="flex items-center justify-between p-2 rounded-lg text-xs font-medium text-primary hover:text-primary hover:bg-muted/40 transition-colors"
               >
-                <span>View All Pricing & Plans</span>
+                <span>View All Solutions & Plans</span>
                 <IconArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>

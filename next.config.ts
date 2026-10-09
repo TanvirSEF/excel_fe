@@ -85,6 +85,16 @@ const nextConfig: NextConfig = {
         destination: "/calculator/accounting/:path*/",
         permanent: true,
       },
+      {
+        source: "/pricing",
+        destination: "/spreadsheet-solutions/",
+        permanent: true,
+      },
+      {
+        source: "/pricing/:path*",
+        destination: "/spreadsheet-solutions/",
+        permanent: true,
+      },
     ]
   },
 }

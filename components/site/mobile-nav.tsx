@@ -194,7 +194,7 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
               {pricingExpanded && (
                 <div className="space-y-1 px-2 pb-2.5 pt-1 text-sm border-t border-border/40">
                   <Link
-                    href="/pricing"
+                    href="/spreadsheet-solutions/"
                     onClick={handleLinkClick}
                     className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
                   >

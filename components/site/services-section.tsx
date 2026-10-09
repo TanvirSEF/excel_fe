@@ -26,7 +26,7 @@ const SERVICES = [
       "Advanced lookup & dynamic array models",
     ],
     ctaLabel: "Request Solution",
-    ctaHref: "/spreadsheet-solutions/request-help?service=consulting",
+    ctaHref: "/spreadsheet-solutions/",
   },
   {
     id: "templates",
@@ -42,7 +42,7 @@ const SERVICES = [
       "Interactive Pivot Tables & smart slicers",
     ],
     ctaLabel: "Order Custom Template",
-    ctaHref: "/spreadsheet-solutions/request-help?service=templates",
+    ctaHref: "/services/custom-templates",
   },
   {
     id: "automation",
@@ -58,7 +58,7 @@ const SERVICES = [
       "Google Apps Script & API integrations",
     ],
     ctaLabel: "Build Custom Tool",
-    ctaHref: "/spreadsheet-solutions/request-help?service=automation",
+    ctaHref: "/services/custom-tools",
   },
 ]
 
@@ -69,7 +69,7 @@ export function ServicesSection() {
         badge="Custom Solutions & Consulting"
         title="Professional Excel & Sheets Services"
         subtitle="Need customized help? From diagnosing stubborn formula bugs to building executive dashboards and automated pipelines — get fast, expert spreadsheet solutions."
-        action={{ label: "Request a Custom Quote", href: "/spreadsheet-solutions/request-help" }}
+        action={{ label: "Request a Custom Quote", href: "/spreadsheet-solutions/" }}
       />
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -102,7 +102,9 @@ export function ServicesSection() {
                 {/* Content */}
                 <div className="p-6 space-y-4">
                   <h3 className="text-xl font-bold leading-snug tracking-tight text-foreground transition-colors group-hover:text-primary">
-                    {service.title}
+                    <Link href={service.ctaHref}>
+                      {service.title}
+                    </Link>
                   </h3>
 
                   <p className="text-[15px] leading-relaxed text-muted-foreground">

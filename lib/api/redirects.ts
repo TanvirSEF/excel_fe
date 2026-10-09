@@ -23,6 +23,7 @@ const KNOWN_STATIC_PREFIXES = [
   "/verify-email",
   "/newsletter",
   "/pricing",
+  "/spreadsheet-solutions",
   "/privacy",
   "/terms",
   "/services",
