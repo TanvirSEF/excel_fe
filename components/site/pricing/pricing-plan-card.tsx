@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { IconArrowRight, IconCheck, IconSparkles } from "@tabler/icons-react"
+import { IconArrowRight, IconCheck, IconStar } from "@tabler/icons-react"
 
 import { Button } from "@/components/ui/button"
 import type { PaidPlan } from "@/lib/pricing"
@@ -39,7 +39,7 @@ export function PricingPlanCard({
     >
       {plan.popular ? (
         <div className="absolute -top-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground shadow-xs">
-          <IconSparkles className="h-3.5 w-3.5" />
+          <IconStar className="h-3.5 w-3.5 fill-current" />
           Most Popular
         </div>
       ) : null}
