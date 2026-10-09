@@ -48,6 +48,9 @@ export function SectionHeading({
       {action ? (
         <Link
           href={action.href}
+          {...(action.href.startsWith("http")
+            ? { target: "_blank", rel: "noopener noreferrer" }
+            : {})}
           className="group inline-flex shrink-0 items-center gap-2 rounded-full border border-border/90 bg-card px-4 py-2 text-sm font-semibold text-foreground shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/50 hover:bg-primary/5 hover:text-primary hover:shadow-xs"
         >
           <span>{action.label}</span>

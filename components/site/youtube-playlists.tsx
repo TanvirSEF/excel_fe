@@ -49,7 +49,10 @@ export function YoutubePlaylists() {
         badge="Video Masterclasses"
         title="YouTube Playlists & Video Tutorials"
         subtitle="Explore our YouTube channel for step-by-step Excel video masterclasses. Watch complete playlists on popular formulas and spreadsheet challenges."
-        action={{ label: "Visit YouTube Channel", href: "https://youtube.com" }}
+        action={{
+          label: "Visit YouTube Channel",
+          href: "https://www.youtube.com/@ExcelInsider32",
+        }}
       />
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
