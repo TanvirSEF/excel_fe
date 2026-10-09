@@ -1,11 +1,32 @@
-import { IconCheck, IconSparkles } from "@tabler/icons-react"
+import Link from "next/link"
+import { IconArrowRight, IconCheck, IconSparkles } from "@tabler/icons-react"
 
-import { RequestDialog } from "@/components/site/pricing/request-dialog"
+import { Button } from "@/components/ui/button"
 import type { PaidPlan } from "@/lib/pricing"
 import { cn } from "@/lib/utils"
 
-export function PricingPlanCard({ plan }: { plan: PaidPlan }) {
+function getPlanHref(planId: string): string {
+  if (planId === "basic" || planId === "premium" || planId === "advanced") {
+    return "/spreadsheet-solutions/request-help/?service=consulting"
+  }
+  if (planId.startsWith("template-")) {
+    return "/custom-templates/request-template/"
+  }
+  if (planId.startsWith("tool-")) {
+    return "/custom-tools/request-tool/"
+  }
+  return "/spreadsheet-solutions/request-help/?service=consulting"
+}
+
+export function PricingPlanCard({
+  plan,
+  href,
+}: {
+  plan: PaidPlan
+  href?: string
+}) {
   const Icon = plan.icon
+  const targetHref = href || getPlanHref(plan.id)
 
   return (
     <div
@@ -51,11 +72,15 @@ export function PricingPlanCard({ plan }: { plan: PaidPlan }) {
       </ul>
 
       <div className="mt-auto pt-6">
-        <RequestDialog
-          label={plan.ctaLabel}
-          service={plan.id}
-          className="w-full rounded-xl bg-primary font-semibold shadow-xs hover:bg-primary/90"
-        />
+        <Button
+          asChild
+          className="w-full rounded-xl bg-primary font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 cursor-pointer"
+        >
+          <Link href={targetHref} className="flex items-center justify-center gap-1.5">
+            <span>{plan.ctaLabel}</span>
+            <IconArrowRight className="h-4 w-4" />
+          </Link>
+        </Button>
       </div>
     </div>
   )

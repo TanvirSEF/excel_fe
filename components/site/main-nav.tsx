@@ -261,17 +261,6 @@ export function MainNav({ categories = [] }: MainNavProps) {
                   <p className="text-xs text-muted-foreground">Custom tools & Workspace add-ons from $500</p>
                 </div>
               </Link>
-
-              <div className="my-1.5 h-px bg-border/60" />
-
-              <Link
-                href="/spreadsheet-solutions/"
-                onClick={() => setActiveMenu(null)}
-                className="flex items-center justify-between p-2 rounded-lg text-xs font-medium text-primary hover:text-primary hover:bg-muted/40 transition-colors"
-              >
-                <span>View All Solutions & Plans</span>
-                <IconArrowRight className="h-3.5 w-3.5" />
-              </Link>
             </div>
           </div>
         )}

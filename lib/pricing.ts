@@ -71,7 +71,7 @@ export const FREE_PLAN: FreePlan = {
     "Weekly 3-minute tips & cheat sheet",
   ],
   primaryCta: { label: "Explore Free Tutorials", href: "/blog" },
-  secondaryCta: { label: "Get Free Templates", href: "/pricing#templates" },
+  secondaryCta: { label: "Get Free Templates", href: "/spreadsheet-solutions#templates" },
 }
 
 export const HELP_PLANS: PaidPlan[] = [

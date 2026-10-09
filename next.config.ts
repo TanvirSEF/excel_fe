@@ -115,6 +115,36 @@ const nextConfig: NextConfig = {
         destination: "/custom-tools/",
         permanent: true,
       },
+      {
+        source: "/services/request-help",
+        destination: "/spreadsheet-solutions/request-help/",
+        permanent: true,
+      },
+      {
+        source: "/services/request-help/:path*",
+        destination: "/spreadsheet-solutions/request-help/",
+        permanent: true,
+      },
+      {
+        source: "/services/request-template",
+        destination: "/custom-templates/request-template/",
+        permanent: true,
+      },
+      {
+        source: "/services/request-template/:path*",
+        destination: "/custom-templates/request-template/",
+        permanent: true,
+      },
+      {
+        source: "/services/request-tool",
+        destination: "/custom-tools/request-tool/",
+        permanent: true,
+      },
+      {
+        source: "/services/request-tool/:path*",
+        destination: "/custom-tools/request-tool/",
+        permanent: true,
+      },
     ]
   },
 }

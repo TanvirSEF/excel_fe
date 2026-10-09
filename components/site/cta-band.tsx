@@ -1,10 +1,24 @@
-import { RequestDialog } from "@/components/site/pricing/request-dialog"
+import Link from "next/link"
+import { IconArrowRight } from "@tabler/icons-react"
+
+import { Button } from "@/components/ui/button"
 
 interface CtaBandProps {
   title?: string
   description?: string
   label?: string
   service?: string | null
+  href?: string
+}
+
+function getCtaHref(service?: string | null): string {
+  if (service === "custom-template" || service === "templates") {
+    return "/custom-templates/request-template/"
+  }
+  if (service === "automation" || service === "tools" || service === "custom-tools") {
+    return "/custom-tools/request-tool/"
+  }
+  return "/spreadsheet-solutions/request-help/?service=consulting"
 }
 
 export function CtaBand({
@@ -12,7 +26,10 @@ export function CtaBand({
   description = "Submit your request and we'll review your needs and start working. It's fast, simple, and completely personalized.",
   label = "Request for Help",
   service = null,
+  href,
 }: CtaBandProps) {
+  const targetHref = href || getCtaHref(service)
+
   return (
     <section className="relative my-8 overflow-hidden rounded-3xl bg-gradient-to-br from-chart-2 via-primary to-chart-5 p-8 text-center text-primary-foreground shadow-xl sm:p-14">
       <div
@@ -35,11 +52,15 @@ export function CtaBand({
         <p className="text-balance text-base leading-relaxed text-primary-foreground/85 sm:text-lg">
           {description}
         </p>
-        <RequestDialog
-          label={label}
-          service={service}
-          className="rounded-xl bg-primary-foreground text-sm sm:text-base font-semibold text-primary hover:bg-primary-foreground/90"
-        />
+        <Button
+          asChild
+          className="rounded-xl bg-primary-foreground text-sm sm:text-base font-semibold text-primary hover:bg-primary-foreground/90 cursor-pointer"
+        >
+          <Link href={targetHref} className="inline-flex items-center gap-2">
+            <span>{label}</span>
+            <IconArrowRight className="h-4 w-4" />
+          </Link>
+        </Button>
       </div>
     </section>
   )

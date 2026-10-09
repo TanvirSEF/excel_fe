@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils"
 
 export interface ServiceRequestWizardProps {
   preselectedService?: string | null
+  preselectedPlan?: string | null
   className?: string
 }
 
@@ -30,6 +31,26 @@ const SERVICE_MAP: Record<string, string> = {
   "custom-template": "Custom Templates & Dashboards",
   automation: "VBA Macros & Custom Tools",
   tools: "VBA Macros & Custom Tools",
+  "custom-tools": "VBA Macros & Custom Tools",
+  basic: "Spreadsheet Troubleshooting & Bug Fixing",
+  premium: "Spreadsheet Troubleshooting & Bug Fixing",
+  advanced: "Spreadsheet Troubleshooting & Bug Fixing",
+  "template-basic": "Custom Templates & Dashboards",
+  "template-premium": "Custom Templates & Dashboards",
+  "template-advanced": "Custom Templates & Dashboards",
+  "tool-professional": "VBA Macros & Custom Tools",
+  "tool-advanced": "VBA Macros & Custom Tools",
+}
+
+const PLAN_BUDGET_MAP: Record<string, string> = {
+  basic: "Less Than $20",
+  premium: "$20 - $50",
+  advanced: "$50 - $100",
+  "template-basic": "$20 - $50",
+  "template-premium": "$50 - $100",
+  "template-advanced": "$100 - $250",
+  "tool-professional": "$500+ (Complex Automation / Enterprise Tool)",
+  "tool-advanced": "$500+ (Complex Automation / Enterprise Tool)",
 }
 
 const SPREADSHEET_TYPES = [
@@ -95,6 +116,7 @@ const COUNTRIES = [
 
 export function ServiceRequestWizard({
   preselectedService,
+  preselectedPlan,
   className,
 }: ServiceRequestWizardProps) {
   const [step, setStep] = useState<1 | 2 | 3>(1)
@@ -104,7 +126,9 @@ export function ServiceRequestWizard({
   const [serviceCategory, setServiceCategory] = useState<string>(
     preselectedService && SERVICE_MAP[preselectedService]
       ? SERVICE_MAP[preselectedService]
-      : "Spreadsheet Troubleshooting & Bug Fixing"
+      : preselectedPlan && SERVICE_MAP[preselectedPlan]
+        ? SERVICE_MAP[preselectedPlan]
+        : "Spreadsheet Troubleshooting & Bug Fixing"
   )
   const [subject, setSubject] = useState("")
   const [requirements, setRequirements] = useState("")
@@ -119,7 +143,11 @@ export function ServiceRequestWizard({
   const [preferredContact, setPreferredContact] = useState("Email")
   const [contactHandle, setContactHandle] = useState("")
 
-  const [budgetRange, setBudgetRange] = useState(BUDGET_RANGES[0])
+  const [budgetRange, setBudgetRange] = useState<string>(
+    preselectedPlan && PLAN_BUDGET_MAP[preselectedPlan]
+      ? PLAN_BUDGET_MAP[preselectedPlan]
+      : BUDGET_RANGES[0]
+  )
   const [agreedToTerms, setAgreedToTerms] = useState(false)
 
   const [errors, setErrors] = useState<Record<string, string>>({})
