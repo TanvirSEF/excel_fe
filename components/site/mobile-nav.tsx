@@ -202,7 +202,7 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
                     <span>Services & Solutions</span>
                   </Link>
                   <Link
-                    href="/services/custom-templates"
+                    href="/custom-templates/"
                     onClick={handleLinkClick}
                     className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
                   >
@@ -210,7 +210,7 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
                     <span>Custom Templates</span>
                   </Link>
                   <Link
-                    href="/services/custom-tools"
+                    href="/custom-tools/"
                     onClick={handleLinkClick}
                     className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-muted-foreground hover:bg-background hover:text-foreground"
                   >

@@ -171,6 +171,8 @@ export function MainNav({ categories = [] }: MainNavProps) {
     pathname.startsWith("/google-sheets")
   const isPricingActive =
     pathname.startsWith("/spreadsheet-solutions") ||
+    pathname.startsWith("/custom-templates") ||
+    pathname.startsWith("/custom-tools") ||
     pathname.startsWith("/pricing")
   const isCalculatorActive = pathname.startsWith("/calculator")
 
@@ -233,7 +235,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
               </Link>
 
               <Link
-                href="/services/custom-templates"
+                href="/custom-templates/"
                 onClick={() => setActiveMenu(null)}
                 className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-muted/60 transition-colors"
               >
@@ -247,7 +249,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
               </Link>
 
               <Link
-                href="/services/custom-tools"
+                href="/custom-tools/"
                 onClick={() => setActiveMenu(null)}
                 className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-muted/60 transition-colors"
               >

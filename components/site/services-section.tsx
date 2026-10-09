@@ -42,7 +42,7 @@ const SERVICES = [
       "Interactive Pivot Tables & smart slicers",
     ],
     ctaLabel: "Order Custom Template",
-    ctaHref: "/services/custom-templates",
+    ctaHref: "/custom-templates/",
   },
   {
     id: "automation",
@@ -58,7 +58,7 @@ const SERVICES = [
       "Google Apps Script & API integrations",
     ],
     ctaLabel: "Build Custom Tool",
-    ctaHref: "/services/custom-tools",
+    ctaHref: "/custom-tools/",
   },
 ]
 

@@ -95,6 +95,26 @@ const nextConfig: NextConfig = {
         destination: "/spreadsheet-solutions/",
         permanent: true,
       },
+      {
+        source: "/services/custom-templates",
+        destination: "/custom-templates/",
+        permanent: true,
+      },
+      {
+        source: "/services/custom-templates/:path*",
+        destination: "/custom-templates/",
+        permanent: true,
+      },
+      {
+        source: "/services/custom-tools",
+        destination: "/custom-tools/",
+        permanent: true,
+      },
+      {
+        source: "/services/custom-tools/:path*",
+        destination: "/custom-tools/",
+        permanent: true,
+      },
     ]
   },
 }

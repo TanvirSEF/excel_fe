@@ -14,8 +14,8 @@ import { cn } from "@/lib/utils"
 
 const SERVICES_LINKS = [
   { label: "Services & Solutions", href: "/spreadsheet-solutions/" },
-  { label: "Custom Spreadsheet Templates", href: "/services/custom-templates" },
-  { label: "Custom Spreadsheet Tools", href: "/services/custom-tools" },
+  { label: "Custom Spreadsheet Templates", href: "/custom-templates/" },
+  { label: "Custom Spreadsheet Tools", href: "/custom-tools/" },
   { label: "Request a Custom Quote", href: "/contact" },
 ]
 

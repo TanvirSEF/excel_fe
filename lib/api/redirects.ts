@@ -24,6 +24,8 @@ const KNOWN_STATIC_PREFIXES = [
   "/newsletter",
   "/pricing",
   "/spreadsheet-solutions",
+  "/custom-templates",
+  "/custom-tools",
   "/privacy",
   "/terms",
   "/services",
