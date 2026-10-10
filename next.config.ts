@@ -47,7 +47,23 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
+        source: "/sitemap_index.xml",
+        destination: `${apiUrl}/sitemap.xml`,
+      },
+      {
         source: "/sitemap.xml",
+        destination: `${apiUrl}/sitemap.xml`,
+      },
+      {
+        source: "/post-sitemap.xml",
+        destination: `${apiUrl}/sitemap.xml`,
+      },
+      {
+        source: "/page-sitemap.xml",
+        destination: `${apiUrl}/sitemap.xml`,
+      },
+      {
+        source: "/category-sitemap.xml",
         destination: `${apiUrl}/sitemap.xml`,
       },
     ]
