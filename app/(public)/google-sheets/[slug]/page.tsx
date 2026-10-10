@@ -14,7 +14,11 @@ import { ApiClientError } from "@/lib/api/error"
 import { getCurriculum } from "@/lib/api/curriculum"
 import { getPostBySlug, getPostComments, getPosts } from "@/lib/api/posts"
 import { isGoogleSheetsCategory } from "@/lib/category-topics"
-import { extractToc, normalizePostBlocks } from "@/lib/blocks"
+import {
+  extractToc,
+  getFeaturedImageFromBlocks,
+  normalizePostBlocks,
+} from "@/lib/blocks"
 import { buildArticleJsonLd } from "@/lib/seo"
 import { config } from "@/lib/config"
 import type { CurriculumModule, PostDetail } from "@/types/api"
@@ -92,19 +96,24 @@ export default async function LessonPage({ params }: LessonPageProps) {
   )
   const normalizedBlocks = normalizePostBlocks(post.content_json?.blocks ?? [])
   const toc = extractToc(normalizedBlocks)
+  const effectiveFeaturedImage =
+    post.featured_image_url ?? getFeaturedImageFromBlocks(normalizedBlocks)
 
   const lessonPath = `/google-sheets/${post.slug}`
 
   return (
     <>
-      <div className="mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-8 px-4 py-10 sm:py-12 xl:grid-cols-[264px_minmax(0,1fr)]">
+      <div className="single-post mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-8 px-4 py-10 sm:py-12 xl:grid-cols-[264px_minmax(0,1fr)]">
         <aside className="hidden xl:block">
           <div className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto pr-1">
             <CurriculumSidebar modules={modules} activeLessonSlug={post.slug} />
           </div>
         </aside>
 
-        <article className="mx-auto w-full max-w-[860px] xl:mx-0">
+        <article
+          data-content-area="true"
+          className="post mx-auto w-full max-w-[860px] xl:mx-0 elementor-widget-theme-post-content rh-post-wrapper"
+        >
           <ArticleHeader post={post} />
 
           <InlineToc entries={toc} className="mt-0 mb-8" />
@@ -123,7 +132,10 @@ export default async function LessonPage({ params }: LessonPageProps) {
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
-              __html: buildArticleJsonLd(post, lessonPath),
+              __html: buildArticleJsonLd(
+                { ...post, featured_image_url: effectiveFeaturedImage },
+                lessonPath
+              ),
             }}
           />
         </article>

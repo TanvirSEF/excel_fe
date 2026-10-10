@@ -73,7 +73,7 @@ const SOCIAL_LINKS = [
 
 export function SiteFooter() {
   return (
-    <footer className="relative w-full overflow-hidden bg-gradient-to-br from-chart-2 via-primary to-chart-5 text-primary-foreground">
+    <footer className="elementor-location-footer relative w-full overflow-hidden bg-gradient-to-br from-chart-2 via-primary to-chart-5 text-primary-foreground">
       {/* ── Background Geometric Shapes & Ambient Glows ── */}
       
       {/* Top Border Glow Line */}

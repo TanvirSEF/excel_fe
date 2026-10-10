@@ -140,14 +140,17 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
     <>
       <ReadingProgress />
 
-      <div className="mx-auto w-full max-w-[1340px] px-4 pt-8 pb-16 sm:px-6 sm:pt-10 sm:pb-24 lg:pb-32">
+      <div className="single-post mx-auto w-full max-w-[1340px] px-4 pt-8 pb-16 sm:px-6 sm:pt-10 sm:pb-24 lg:pb-32">
         <div className="max-w-[860px] mx-auto xl:mx-0">
           <Breadcrumb items={breadcrumbItems} />
           <BlogArticleHeader post={post} />
         </div>
 
         <div className="mt-8 flex items-start justify-center xl:justify-start gap-10">
-          <article className="min-w-0 w-full max-w-[860px] mx-auto xl:mx-0">
+          <article
+            data-content-area="true"
+            className="post min-w-0 w-full max-w-[860px] mx-auto xl:mx-0 elementor-widget-theme-post-content rh-post-wrapper"
+          >
             <div className="border-y border-border/70 py-3 mb-6 sm:mb-8">
               <ShareButtons title={post.title} />
             </div>
@@ -191,7 +194,7 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
 
           <div
             id="sidebar"
-            className="sidebar sidebar-primary hidden xl:block w-[21rem] shrink-0 space-y-6"
+            className="sidebar elementor-widget-sidebar sidebar-primary hidden xl:block w-[21rem] shrink-0 space-y-6"
           >
             {related.length > 0 ? (
               <ArticleRelatedSidebar

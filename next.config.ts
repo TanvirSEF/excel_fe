@@ -15,6 +15,7 @@ const cspValue = [
   `style-src 'self' 'unsafe-inline' https:`,
   `font-src 'self' https: data:`,
   `img-src 'self' https: data: blob:`,
+  `media-src 'self' https: data: blob:`,
   `frame-src 'self' https: data:`,
   `connect-src 'self' https: wss:${isDev ? " http://localhost:* ws://localhost:* webpack://" : ""}`,
   `object-src 'none'`,
