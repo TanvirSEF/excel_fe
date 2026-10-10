@@ -15,12 +15,12 @@ const isDev = process.env.NODE_ENV === "development"
 
 const cspValue = [
   `default-src 'self'`,
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://va.vercel-scripts.com`,
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://va.vercel-scripts.com https://www.googletagmanager.com`,
   `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
   `font-src 'self' https://fonts.gstatic.com`,
-  `img-src 'self' data: blob: https://i.ytimg.com ${mediaHostCsp}`.trimEnd(),
+  `img-src 'self' data: blob: https://i.ytimg.com https://*.google-analytics.com https://*.googletagmanager.com ${mediaHostCsp}`.trimEnd(),
   `frame-src https://www.youtube-nocookie.com https://player.vimeo.com`,
-  `connect-src 'self' ${apiUrl} https://vitals.vercel-insights.com${isDev ? " http://localhost:* ws://localhost:* wss://localhost:* webpack://" : ""}`,
+  `connect-src 'self' ${apiUrl} https://vitals.vercel-insights.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com${isDev ? " http://localhost:* ws://localhost:* wss://localhost:* webpack://" : ""}`,
   `object-src 'none'`,
   `base-uri 'self'`,
   `form-action 'self'`,

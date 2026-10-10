@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react"
 
 import "./globals.css"
 import { Providers } from "@/components/providers"
+import { GoogleAnalytics } from "@/components/shared/google-analytics"
 import { ThemeProvider } from "@/components/theme-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { config } from "@/lib/config"
@@ -67,6 +68,7 @@ export default function RootLayout({
           </TooltipProvider>
         </ThemeProvider>
         <Analytics />
+        <GoogleAnalytics measurementId={config.gaMeasurementId} />
       </body>
     </html>
   )
