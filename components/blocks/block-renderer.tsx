@@ -1116,7 +1116,7 @@ export function BlockRenderer({
   }
 
   return (
-    <div className={cn("space-y-3.5 sm:space-y-4", className)}>
+    <div className={cn("entry-content post-content space-y-3.5 sm:space-y-4", className)}>
       {hasToc && takeawayIndex === -1 && toc ? (
         <InlineToc entries={toc} defaultCollapsed={tocDefaultCollapsed} />
       ) : null}

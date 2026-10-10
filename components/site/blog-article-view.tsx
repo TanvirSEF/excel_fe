@@ -173,15 +173,18 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
             />
           </article>
 
-          {related.length > 0 ? (
-            <div className="hidden xl:block w-[21rem] shrink-0">
+          <div
+            id="sidebar"
+            className="sidebar sidebar-primary hidden xl:block w-[21rem] shrink-0 space-y-6"
+          >
+            {related.length > 0 ? (
               <ArticleRelatedSidebar
                 posts={related}
                 categoryName={post.category_name}
                 categorySlug={post.category_slug}
               />
-            </div>
-          ) : null}
+            ) : null}
+          </div>
         </div>
       </div>
     </>
