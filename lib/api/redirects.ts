@@ -14,6 +14,7 @@ const KNOWN_STATIC_PREFIXES = [
   "/calculator",
   "/calculators",
   "/categories",
+  "/category",
   "/contact",
   "/dashboard",
   "/login",

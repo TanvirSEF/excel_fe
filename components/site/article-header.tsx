@@ -19,7 +19,7 @@ export function ArticleHeader({ post }: { post: PostDetail }) {
       <header className="mb-8">
         {post.category_name && post.category_slug ? (
           <Link
-            href={`/categories/${post.category_slug}`}
+            href={`/category/${post.category_slug}`}
             className="inline-flex items-center rounded-full bg-primary px-3.5 py-1.5 text-xs sm:text-[13px] font-bold uppercase tracking-wider text-primary-foreground shadow-xs transition-colors hover:bg-primary/90"
           >
             {post.category_name}

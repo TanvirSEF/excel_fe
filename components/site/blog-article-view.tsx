@@ -118,7 +118,7 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
       ? [
           {
             label: post.category_name,
-            href: `/categories/${post.category_slug}`,
+            href: `/category/${post.category_slug}`,
           },
         ]
       : []),

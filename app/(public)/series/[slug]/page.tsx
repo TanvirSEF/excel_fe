@@ -49,12 +49,12 @@ export default async function SeriesPage({ params, searchParams }: SeriesPagePro
   const { series, posts } = await loadSeries(slug, page)
 
   const breadcrumbItems = [
-    { label: "Categories", href: "/categories" },
+    { label: "Categories", href: "/category" },
     ...(series.category
       ? [
           {
             label: series.category.name,
-            href: `/categories/${series.category.slug}`,
+            href: `/category/${series.category.slug}`,
           },
         ]
       : []),

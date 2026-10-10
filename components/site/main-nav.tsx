@@ -167,7 +167,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
 
   const isBlogActive =
     pathname.startsWith("/blog") ||
-    pathname.startsWith("/categories") ||
+    pathname.startsWith("/category") ||
     pathname.startsWith("/google-sheets")
   const isPricingActive =
     pathname.startsWith("/spreadsheet-solutions") ||
@@ -318,7 +318,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
                       return (
                         <Link
                           key={item.slug}
-                          href={`/categories/${item.slug}`}
+                          href={`/category/${item.slug}`}
                           onClick={() => setActiveMenu(null)}
                           className="flex items-start gap-2.5 p-2 rounded-lg hover:bg-muted/60 transition-colors group"
                         >
@@ -399,7 +399,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
                   <span>Looking for more? Explore all 1,600+ spreadsheet articles.</span>
                 </p>
                 <Link
-                  href="/categories"
+                  href="/category"
                   onClick={() => setActiveMenu(null)}
                   className="inline-flex items-center gap-1 text-[13px] font-semibold text-primary hover:text-primary/80 transition-colors px-2.5 py-1 rounded-md hover:bg-primary/10"
                 >

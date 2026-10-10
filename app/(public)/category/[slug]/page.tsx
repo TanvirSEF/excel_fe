@@ -37,7 +37,7 @@ export async function generateMetadata({
       category.seo_description ??
       category.description ??
       `Excel Insider articles in ${category.name}.`,
-    alternates: { canonical: `/categories/${category.slug}` },
+    alternates: { canonical: `/category/${category.slug}` },
   }
 }
 
@@ -54,7 +54,7 @@ export default async function CategoryPage({
     <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:py-14">
       <Breadcrumb
         items={[
-          { label: "Categories", href: "/categories" },
+          { label: "Categories", href: "/category" },
           { label: category.name },
         ]}
       />
@@ -87,7 +87,7 @@ export default async function CategoryPage({
         <Pagination
           page={page}
           totalPages={posts.total_pages}
-          pathname={`/categories/${category.slug}`}
+          pathname={`/category/${category.slug}`}
         />
       </div>
     </div>

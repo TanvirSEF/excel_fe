@@ -28,7 +28,7 @@ async function resolvePost(path: string[]): Promise<
   if (path.length === 1 && path[0] === "excel-functions-and-formulas") {
     return {
       type: "redirect",
-      target: "/categories/excel-functions-formulas/",
+      target: "/category/excel-functions-formulas/",
       isPermanent: true,
     }
   }

@@ -208,7 +208,7 @@ export function TopicsExplorer({
         subtitle="Explore in-depth articles across every Excel and Google Sheets category. Select any topic to view the latest tutorials."
         action={{
           label: `Browse ${activeCategory.name} archive`,
-          href: `/categories/${activeCategory.slug}`,
+          href: `/category/${activeCategory.slug}`,
         }}
       />
 
@@ -345,7 +345,7 @@ export function TopicsExplorer({
             </div>
 
             <Link
-              href={`/categories/${activeCategory.slug}`}
+              href={`/category/${activeCategory.slug}`}
               className="group inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-primary/80"
             >
               <span>View full archive</span>

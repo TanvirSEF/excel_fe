@@ -82,7 +82,7 @@ export function CategorySection({ group }: CategorySectionProps) {
           return (
             <Link
               key={item.slug}
-              href={`/categories/${item.slug}`}
+              href={`/category/${item.slug}`}
               className={cn(
                 "group relative flex flex-col justify-between rounded-xl border bg-card p-5 shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
                 isExcel &&

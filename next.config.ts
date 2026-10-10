@@ -55,6 +55,21 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/categories",
+        destination: "/category/",
+        permanent: true,
+      },
+      {
+        source: "/categories/:path*",
+        destination: "/category/:path*/",
+        permanent: true,
+      },
+      {
+        source: "/blog/category/:path*",
+        destination: "/category/:path*/",
+        permanent: true,
+      },
+      {
         source: "/about-us/nehadulfat",
         destination: "/about/nehad-ulfat",
         permanent: true,

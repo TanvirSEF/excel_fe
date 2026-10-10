@@ -104,7 +104,7 @@ export function HomeHero({ categories }: { categories: Category[] }) {
     categories.length > 0
       ? categories.slice(0, 5).map((c) => ({
           label: c.name,
-          href: `/categories/${c.slug}`,
+          href: `/category/${c.slug}`,
           icon: IconMathFunction,
         }))
       : FALLBACK_PILLS

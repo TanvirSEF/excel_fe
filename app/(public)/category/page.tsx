@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: "Spreadsheet Categories & Learning Tracks | Excel Insider",
   description:
     "Explore in-depth tutorials, formulas, and automation workflows separated by platform — choose between Microsoft Excel and Google Sheets.",
-  alternates: { canonical: "/categories" },
+  alternates: { canonical: "/category" },
 }
 
 export default async function CategoriesPage() {

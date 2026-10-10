@@ -21,10 +21,10 @@ import {
 } from "@/components/ui/dialog"
 
 const QUICK_CATEGORIES = [
-  { label: "Excel Formulas", href: "/categories/excel-functions-formulas", icon: IconMathFunction, color: "text-emerald-500 bg-emerald-500/10" },
-  { label: "Google Sheets", href: "/categories/google-sheets-basics", icon: IconTable, color: "text-green-500 bg-green-500/10" },
-  { label: "VBA & Macros", href: "/categories/excel-vba", icon: IconCode, color: "text-amber-500 bg-amber-500/10" },
-  { label: "Charts & Visuals", href: "/categories/excel-charts", icon: IconChartBar, color: "text-purple-500 bg-purple-500/10" },
+  { label: "Excel Formulas", href: "/category/excel-functions-formulas", icon: IconMathFunction, color: "text-emerald-500 bg-emerald-500/10" },
+  { label: "Google Sheets", href: "/category/google-sheets-basics", icon: IconTable, color: "text-green-500 bg-green-500/10" },
+  { label: "VBA & Macros", href: "/category/excel-vba", icon: IconCode, color: "text-amber-500 bg-amber-500/10" },
+  { label: "Charts & Visuals", href: "/category/excel-charts", icon: IconChartBar, color: "text-purple-500 bg-purple-500/10" },
 ]
 
 const POPULAR_SEARCHES = [
