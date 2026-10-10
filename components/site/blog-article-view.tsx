@@ -11,7 +11,11 @@ import { ArticleRelatedSidebar } from "@/components/site/article-related-sidebar
 import { ReadingProgress } from "@/components/site/reading-progress"
 import { ShareButtons } from "@/components/site/share-buttons"
 import { getPostComments, getPosts } from "@/lib/api/posts"
-import { extractToc } from "@/lib/blocks"
+import {
+  extractToc,
+  getFeaturedImageFromBlocks,
+  normalizePostBlocks,
+} from "@/lib/blocks"
 import { config } from "@/lib/config"
 import { buildArticleJsonLd, buildBreadcrumbJsonLd } from "@/lib/seo"
 import type { PostDetail, PostListItem } from "@/types/api"
@@ -22,7 +26,11 @@ export function buildPostMetadata(
 ): Metadata {
   const title = post.meta_title ?? post.title
   const description = post.meta_description ?? post.excerpt ?? undefined
-  const image = post.og_image_url ?? post.featured_image_url ?? "/og-default.png"
+  const effectiveFeaturedImage =
+    post.featured_image_url ??
+    getFeaturedImageFromBlocks(post.content_json?.blocks ?? [])
+  const image =
+    post.og_image_url ?? effectiveFeaturedImage ?? "/og-default.png"
   const rawPath = explicitCanonicalPath
     ? explicitCanonicalPath.startsWith("/")
       ? explicitCanonicalPath
@@ -61,7 +69,10 @@ interface BlogArticleViewProps {
 
 export async function BlogArticleView({ post }: BlogArticleViewProps) {
   const comments = await getPostComments(post.id).catch(() => [])
-  const toc = extractToc(post.content_json?.blocks ?? [])
+  const normalizedBlocks = normalizePostBlocks(post.content_json?.blocks ?? [])
+  const toc = extractToc(normalizedBlocks)
+  const effectiveFeaturedImage =
+    post.featured_image_url ?? getFeaturedImageFromBlocks(normalizedBlocks)
 
   // Fetch related articles based on tags first
   let related: PostListItem[] = []
@@ -142,7 +153,7 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
             </div>
 
             <BlockRenderer
-              blocks={post.content_json?.blocks ?? []}
+              blocks={normalizedBlocks}
               toc={toc}
             />
             <ArticleTags
@@ -163,7 +174,12 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
             />
             <script
               type="application/ld+json"
-              dangerouslySetInnerHTML={{ __html: buildArticleJsonLd(post) }}
+              dangerouslySetInnerHTML={{
+                __html: buildArticleJsonLd({
+                  ...post,
+                  featured_image_url: effectiveFeaturedImage,
+                }),
+              }}
             />
             <script
               type="application/ld+json"

@@ -14,7 +14,7 @@ import { ApiClientError } from "@/lib/api/error"
 import { getCurriculum } from "@/lib/api/curriculum"
 import { getPostBySlug, getPostComments, getPosts } from "@/lib/api/posts"
 import { isGoogleSheetsCategory } from "@/lib/category-topics"
-import { extractToc } from "@/lib/blocks"
+import { extractToc, normalizePostBlocks } from "@/lib/blocks"
 import { buildArticleJsonLd } from "@/lib/seo"
 import { config } from "@/lib/config"
 import type { CurriculumModule, PostDetail } from "@/types/api"
@@ -90,7 +90,8 @@ export default async function LessonPage({ params }: LessonPageProps) {
   const relatedBasics = (basicsPage?.items ?? []).filter(
     (item) => item.id !== post.id
   )
-  const toc = extractToc(post.content_json?.blocks ?? [])
+  const normalizedBlocks = normalizePostBlocks(post.content_json?.blocks ?? [])
+  const toc = extractToc(normalizedBlocks)
 
   const lessonPath = `/google-sheets/${post.slug}`
 
@@ -108,7 +109,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
           <InlineToc entries={toc} className="mt-0 mb-8" />
 
-          <BlockRenderer blocks={post.content_json?.blocks ?? []} />
+          <BlockRenderer blocks={normalizedBlocks} />
           <ArticleTags tags={post.tags} />
 
           <GoogleSheetsCarousel posts={relatedBasics} />
