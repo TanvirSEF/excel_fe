@@ -8,6 +8,7 @@ import {
   IconAlertOctagon,
   IconDownload,
   IconFileSpreadsheet,
+  IconListNumbers,
   IconNotes,
   IconPaperclip,
 } from "@tabler/icons-react"
@@ -726,6 +727,17 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
         }
       }
 
+      if (block.text && /^\s*steps?:?\s*$/i.test(block.text.trim())) {
+        return (
+          <div className="mt-7 mb-2.5 flex items-center gap-2 text-sm sm:text-base font-bold uppercase tracking-wider text-primary">
+            <span className="flex h-6 w-6 items-center justify-center rounded-md bg-primary/10 text-primary">
+              <IconListNumbers className="h-4 w-4" />
+            </span>
+            <span>Steps</span>
+          </div>
+        )
+      }
+
       const content = block.content ?? block.text
       const Tag = hasCodeBlock(content) ? "div" : "p"
       return (
@@ -1072,7 +1084,7 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
               <p className="font-semibold text-foreground text-base sm:text-[17px]">{block.title}</p>
             ) : null}
             <div className="font-normal leading-relaxed text-foreground/90">
-              <InlineRuns value={block.content ?? block.text} />
+              <InlineRuns value={cleanNoteContent(block.content ?? block.text, block.title)} />
             </div>
           </div>
         </div>

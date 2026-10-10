@@ -155,6 +155,36 @@ export function normalizePostBlocks(blocks: Block[]): Block[] {
       continue
     }
 
+    // 5. Detect paragraphs starting with Note:, Important:, Warning:, Caution:, Tip:, Pro Tip:
+    if (block.type === "paragraph") {
+      const text = block.text?.trim() ?? ""
+      const noteMatch = text.match(
+        /^(note|important|warning|caution|tip|pro\s+tip):?(\s*[\r\n]+|\s+)([\s\S]*)$/i
+      )
+      if (noteMatch) {
+        const rawKeyword = noteMatch[1].toLowerCase().replace(/\s+/g, " ")
+        const isWarning =
+          rawKeyword === "warning" ||
+          rawKeyword === "caution" ||
+          rawKeyword === "important"
+        const isTip = rawKeyword === "tip" || rawKeyword === "pro tip"
+        const title =
+          rawKeyword === "pro tip"
+            ? "Pro Tip"
+            : rawKeyword.charAt(0).toUpperCase() + rawKeyword.slice(1)
+
+        result.push({
+          type: "callout",
+          variant: isWarning ? "warning" : isTip ? "tip" : "info",
+          title,
+          text: block.text,
+          content: block.content,
+        })
+        i++
+        continue
+      }
+    }
+
     result.push(block)
     i++
   }
