@@ -7,20 +7,16 @@ const mediaHosts = (process.env.NEXT_PUBLIC_MEDIA_HOSTS ?? "")
   .map((host) => host.trim())
   .filter(Boolean)
 
-const mediaHostCsp = mediaHosts.length
-  ? mediaHosts.map((h) => `https://${h}`).join(" ")
-  : ""
-
 const isDev = process.env.NODE_ENV === "development"
 
 const cspValue = [
   `default-src 'self'`,
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://va.vercel-scripts.com https://www.googletagmanager.com https://scripts.mediavine.com https://*.mediavine.com https://*.doubleclick.net https://*.googlesyndication.com https://*.amazon-adsystem.com`,
-  `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.mediavine.com`,
-  `font-src 'self' https://fonts.gstatic.com`,
-  `img-src 'self' https: data: blob: https://i.ytimg.com https://*.google-analytics.com https://*.googletagmanager.com ${mediaHostCsp}`.trimEnd(),
-  `frame-src https://*.mediavine.com https://*.doubleclick.net https://*.googlesyndication.com https://*.amazon-adsystem.com https://*.rubiconproject.com https://*.pubmatic.com https://*.openx.net https://www.youtube-nocookie.com https://player.vimeo.com`,
-  `connect-src 'self' ${apiUrl} https://vitals.vercel-insights.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.mediavine.com https://*.doubleclick.net https://*.amazon-adsystem.com${isDev ? " http://localhost:* ws://localhost:* wss://localhost:* webpack://" : ""}`,
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https: data: blob:`,
+  `style-src 'self' 'unsafe-inline' https:`,
+  `font-src 'self' https: data:`,
+  `img-src 'self' https: data: blob:`,
+  `frame-src 'self' https: data:`,
+  `connect-src 'self' https: wss:${isDev ? " http://localhost:* ws://localhost:* webpack://" : ""}`,
   `object-src 'none'`,
   `base-uri 'self'`,
   `form-action 'self'`,
