@@ -20,10 +20,10 @@ const SERVICES_LINKS = [
 ]
 
 const EXPLORE_LINKS = [
-  { label: "Excel Formulas & Functions", href: "/blog" },
-  { label: "VBA & Macro Tutorials", href: "/blog" },
-  { label: "Pivot Tables & Dashboards", href: "/blog" },
-  { label: "Google Sheets & Apps Script", href: "/blog" },
+  { label: "Excel Formulas & Functions", href: "/category/excel-functions-formulas/" },
+  { label: "VBA & Macro Tutorials", href: "/category/excel-vba/" },
+  { label: "Pivot Tables & Dashboards", href: "/category/excel-pivot-table/" },
+  { label: "Google Sheets & Apps Script", href: "/google-sheets/" },
 ]
 
 const COMPANY_LINKS = [

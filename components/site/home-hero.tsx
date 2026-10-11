@@ -10,11 +10,11 @@ import {
 import type { Category } from "@/types/api"
 import { Button } from "@/components/ui/button"
 
-const FALLBACK_PILLS = [
-  { label: "Excel Formulas", href: "/blog", icon: IconMathFunction },
-  { label: "Google Sheets", href: "/blog", icon: IconTable },
-  { label: "VBA & Macros", href: "/blog", icon: IconCode },
-  { label: "Charts & Dashboards", href: "/blog", icon: IconChartBar },
+const TOPIC_PILLS = [
+  { label: "Excel Formulas", href: "/category/excel-functions-formulas/", icon: IconMathFunction },
+  { label: "Google Sheets", href: "/google-sheets/", icon: IconTable },
+  { label: "VBA & Macros", href: "/category/excel-vba/", icon: IconCode },
+  { label: "Charts & Dashboards", href: "/category/excel-charts/", icon: IconChartBar },
 ]
 
 const SPREADSHEET_ROWS = [
@@ -99,15 +99,8 @@ function ExcelWindowMockup() {
   )
 }
 
-export function HomeHero({ categories }: { categories: Category[] }) {
-  const pills =
-    categories.length > 0
-      ? categories.slice(0, 5).map((c) => ({
-          label: c.name,
-          href: `/category/${c.slug}`,
-          icon: IconMathFunction,
-        }))
-      : FALLBACK_PILLS
+export function HomeHero({ categories: _categories }: { categories?: Category[] } = {}) {
+  const pills = TOPIC_PILLS
 
   return (
     <section className="relative w-full overflow-hidden bg-gradient-to-bl from-chart-2 via-primary to-chart-5">
