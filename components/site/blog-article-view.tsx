@@ -191,7 +191,7 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
 
           <div
             id="sidebar"
-            className="sidebar sidebar-primary hidden xl:block w-[21rem] shrink-0 space-y-6"
+            className="sidebar sidebar-primary elementor-widget-sidebar hidden xl:block w-[21rem] shrink-0 space-y-6"
           >
             {related.length > 0 ? (
               <ArticleRelatedSidebar

@@ -1,3 +1,4 @@
+import { MediavineRouteListener } from "@/components/site/mediavine-route-listener"
 import { MediavineTag } from "@/components/site/mediavine-tag"
 import { SiteFooter } from "@/components/site/site-footer"
 import { SiteHeader } from "@/components/site/site-header"
@@ -13,6 +14,7 @@ export default function PublicLayout({
       <SiteHeader />
       <main className="flex-1">{children}</main>
       <SiteFooter />
+      <MediavineRouteListener />
       <MediavineTag tagId={config.mediavineTagId} />
     </div>
   )

@@ -10,6 +10,7 @@ export function MediavineTag({ tagId }: MediavineTagProps) {
   return (
     <>
       <link rel="dns-prefetch" href="https://scripts.mediavine.com" />
+      <link rel="preconnect" href="https://scripts.mediavine.com" crossOrigin="" />
       <script
         id="mediavine-preconfig"
         dangerouslySetInnerHTML={{
@@ -17,22 +18,44 @@ export function MediavineTag({ tagId }: MediavineTagProps) {
             window.$adManagementConfig = window.$adManagementConfig || {};
             try {
               var _adm = window.$adManagementConfig;
-              function _applyGrowOptOut(target) {
-                if (target && target.web && target.web.model) {
-                  target.web.model.enable_grow = false;
-                  target.web.model.enable_grow_slidebar = false;
+              function _sanitizeModel(m) {
+                if (m && typeof m === "object") {
+                  m.enable_grow = false;
+                  m.enable_grow_slidebar = false;
                 }
               }
-              Object.defineProperty(window, '$adManagementConfig', {
-                configurable: true,
-                enumerable: true,
-                get: function() { return _adm; },
-                set: function(val) {
-                  _adm = val;
-                  _applyGrowOptOut(_adm);
-                }
-              });
-              _applyGrowOptOut(_adm);
+
+              function _setupModelTrap(w) {
+                if (!w || typeof w !== "object") return;
+                var _m = w.model;
+                if (_m) _sanitizeModel(_m);
+                try {
+                  Object.defineProperty(w, "model", {
+                    configurable: true,
+                    enumerable: true,
+                    get: function() { return _m; },
+                    set: function(val) {
+                      _m = val;
+                      _sanitizeModel(_m);
+                    }
+                  });
+                } catch(e) {}
+              }
+
+              var _web = _adm.web || {};
+              _setupModelTrap(_web);
+
+              try {
+                Object.defineProperty(_adm, "web", {
+                  configurable: true,
+                  enumerable: true,
+                  get: function() { return _web; },
+                  set: function(val) {
+                    _web = val;
+                    _setupModelTrap(_web);
+                  }
+                });
+              } catch(e) {}
             } catch (e) {}
           `,
         }}
@@ -40,7 +63,7 @@ export function MediavineTag({ tagId }: MediavineTagProps) {
       <Script
         id="mediavine-tag"
         src={`https://scripts.mediavine.com/tags/${tagId}.js`}
-        strategy="lazyOnload"
+        strategy="afterInteractive"
         data-noptimize="1"
         data-cfasync="false"
       />

@@ -72,6 +72,16 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/privacy-policy",
+        destination: "/privacy/",
+        permanent: true,
+      },
+      {
+        source: "/privacy-policy/:path*",
+        destination: "/privacy/",
+        permanent: true,
+      },
+      {
         source: "/categories",
         destination: "/category/",
         permanent: true,
