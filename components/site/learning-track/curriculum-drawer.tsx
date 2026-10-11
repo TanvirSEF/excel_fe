@@ -36,9 +36,9 @@ export function CurriculumDrawer({
       </SheetTrigger>
       <SheetContent side="right" className="w-full overflow-y-auto p-0 sm:max-w-sm">
         <SheetHeader className="border-b border-border/60 px-4 py-3">
-          <SheetTitle className="text-base">Browse Topics</SheetTitle>
+          <SheetTitle className="text-base">Learning Path</SheetTitle>
           <SheetDescription className="text-xs">
-            Google Sheets course topics
+            From Basic to Advanced
           </SheetDescription>
         </SheetHeader>
         <div
