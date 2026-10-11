@@ -99,8 +99,15 @@ function ExcelWindowMockup() {
   )
 }
 
-export function HomeHero({ categories: _categories }: { categories?: Category[] } = {}) {
-  const pills = TOPIC_PILLS
+export function HomeHero({ categories }: { categories?: Category[] } = {}) {
+  const pills =
+    categories && categories.length > 0
+      ? categories.slice(0, 4).map((c) => ({
+          label: c.name,
+          href: `/category/${c.slug}/`,
+          icon: IconMathFunction,
+        }))
+      : TOPIC_PILLS
 
   return (
     <section className="relative w-full overflow-hidden bg-gradient-to-bl from-chart-2 via-primary to-chart-5">
