@@ -17,9 +17,12 @@ import type { Category, CurriculumModule, Page, PostListItem } from "@/types/api
 export const revalidate = 300
 
 export const metadata: Metadata = {
+  title: {
+    absolute: "Excel Insider | Spreadsheet Services, Templates & Courses",
+  },
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Excel Insider — Excel formulas, tips & deep dives",
+    title: "Excel Insider | Spreadsheet Services, Templates & Courses",
     description:
       "Practical, example-driven Excel articles — formulas, shortcuts, Power Query, VBA and more.",
     url: "/",
@@ -27,6 +30,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    title: "Excel Insider | Spreadsheet Services, Templates & Courses",
     images: ["/og-default.png"],
   },
 }

@@ -29,7 +29,7 @@ const fontMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(config.siteUrl),
   title: {
-    default: "Excel Insider — Excel formulas, tips & deep dives",
+    default: "Excel Insider | Spreadsheet Services, Templates & Courses",
     template: "%s | Excel Insider",
   },
   description:
