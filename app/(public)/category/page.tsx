@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 }
 
 export default async function CategoriesPage() {
-  const categories = await getCategories()
+  const categories = await getCategories().catch(() => [])
   const groups = partitionCategories(categories)
 
   const navGroups = groups.map((group) => ({
