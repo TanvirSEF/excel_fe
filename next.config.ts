@@ -11,12 +11,14 @@ const isDev = process.env.NODE_ENV === "development"
 
 const cspValue = [
   `default-src 'self'`,
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https: data: blob:`,
+  `script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https: data: blob:`,
   `style-src 'self' 'unsafe-inline' https:`,
   `font-src 'self' https: data:`,
   `img-src 'self' https: data: blob:`,
   `media-src 'self' https: data: blob:`,
-  `frame-src 'self' https: data:`,
+  `frame-src 'self' https: data: blob:`,
+  `worker-src 'self' blob: https:`,
+  `child-src 'self' blob: https:`,
   `connect-src 'self' https: wss:${isDev ? " http://localhost:* ws://localhost:* webpack://" : ""}`,
   `object-src 'none'`,
   `base-uri 'self'`,
@@ -28,7 +30,7 @@ const securityHeaders = [
   { key: "Content-Security-Policy", value: cspValue },
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
   { key: "X-Content-Type-Options", value: "nosniff" },
-  { key: "X-Frame-Options", value: "DENY" },
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
 ]
