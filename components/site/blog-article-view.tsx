@@ -147,7 +147,7 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
         </div>
 
         <div className="mt-8 flex items-start justify-center xl:justify-start gap-10">
-          <article className="post min-w-0 w-full max-w-[860px] mx-auto xl:mx-0 rh-post-wrapper">
+          <article className="min-w-0 w-full max-w-[860px] mx-auto xl:mx-0">
             <div className="border-y border-border/70 py-3 mb-6 sm:mb-8">
               <ShareButtons title={post.title} />
             </div>
@@ -191,7 +191,7 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
 
           <div
             id="sidebar"
-            className="sidebar elementor-widget-sidebar sidebar-primary hidden xl:block w-[21rem] shrink-0 space-y-6 sticky top-24 self-start"
+            className="sidebar sidebar-primary hidden xl:block w-[21rem] shrink-0 space-y-6"
           >
             {related.length > 0 ? (
               <ArticleRelatedSidebar

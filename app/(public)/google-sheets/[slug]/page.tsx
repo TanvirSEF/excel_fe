@@ -110,7 +110,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
           </div>
         </aside>
 
-        <article className="post mx-auto w-full max-w-[860px] xl:mx-0 rh-post-wrapper">
+        <article className="mx-auto w-full max-w-[860px] xl:mx-0">
           <ArticleHeader post={post} />
 
           <InlineToc entries={toc} className="mt-0 mb-8" />
