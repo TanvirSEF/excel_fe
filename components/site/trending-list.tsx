@@ -67,7 +67,7 @@ export function TrendingSection({ posts, className }: TrendingSectionProps) {
               <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-lg border border-border/40 bg-muted sm:h-[4.5rem] sm:w-28">
                 {post.featured_image_url ? (
                   <Image
-                    src={post.featured_image_url}
+                    src={encodeURI(decodeURI(post.featured_image_url))}
                     alt={post.title}
                     fill
                     sizes="112px"

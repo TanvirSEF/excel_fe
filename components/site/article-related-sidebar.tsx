@@ -69,7 +69,7 @@ export function ArticleRelatedSidebar({
               <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-lg border border-border/50 bg-muted">
                 {post.featured_image_url ? (
                   <Image
-                    src={post.featured_image_url}
+                    src={encodeURI(decodeURI(post.featured_image_url))}
                     alt={post.title}
                     fill
                     sizes="80px"

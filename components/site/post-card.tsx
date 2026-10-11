@@ -41,6 +41,10 @@ export function postHref(
 }
 
 export function PostCard({ post, className }: PostCardProps) {
+  const imageUrl = post.featured_image_url
+    ? encodeURI(decodeURI(post.featured_image_url))
+    : null
+
   return (
     <article
       className={cn(
@@ -51,9 +55,9 @@ export function PostCard({ post, className }: PostCardProps) {
       <Link href={postHref(post)} className="flex h-full flex-col">
         {/* Featured Image or Gradient Fallback */}
         <div className="relative aspect-16/10 w-full overflow-hidden rounded-xl border border-border/40 bg-muted">
-          {post.featured_image_url ? (
+          {imageUrl ? (
             <Image
-              src={post.featured_image_url}
+              src={imageUrl}
               alt={post.title}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
