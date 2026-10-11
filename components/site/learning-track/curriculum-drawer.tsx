@@ -29,16 +29,16 @@ export function CurriculumDrawer({
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         className="fixed bottom-6 right-4 z-40 inline-flex h-12 items-center gap-2 rounded-full bg-teal-600 px-4 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-teal-700 xl:hidden"
-        aria-label="Open curriculum"
+        aria-label="Browse Topics"
       >
         <IconListTree className="h-4.5 w-4.5" />
-        Curriculum
+        Browse Topics
       </SheetTrigger>
       <SheetContent side="right" className="w-full overflow-y-auto p-0 sm:max-w-sm">
         <SheetHeader className="border-b border-border/60 px-4 py-3">
-          <SheetTitle className="text-base">Learning Track</SheetTitle>
+          <SheetTitle className="text-base">Browse Topics</SheetTitle>
           <SheetDescription className="text-xs">
-            Google Sheets course curriculum
+            Google Sheets course topics
           </SheetDescription>
         </SheetHeader>
         <div
