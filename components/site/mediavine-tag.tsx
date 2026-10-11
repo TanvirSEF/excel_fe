@@ -11,6 +11,8 @@ export function MediavineTag({ tagId }: MediavineTagProps) {
     <>
       <link rel="dns-prefetch" href="https://scripts.mediavine.com" />
       <link rel="preconnect" href="https://scripts.mediavine.com" crossOrigin="" />
+      <link rel="preconnect" href="https://securepubads.g.doubleclick.net" crossOrigin="" />
+      <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="" />
       <script
         id="mediavine-preconfig"
         dangerouslySetInnerHTML={{
