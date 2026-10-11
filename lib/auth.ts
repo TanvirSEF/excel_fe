@@ -34,7 +34,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   hydrate: async () => {
     try {
       const session = await authApi.refreshSession()
-      set({ accessToken: session.access_token, user: session.user, status: "authenticated" })
+      if (session?.access_token && session.user) {
+        set({ accessToken: session.access_token, user: session.user, status: "authenticated" })
+      } else {
+        set({ accessToken: null, user: null, status: "unauthenticated" })
+      }
     } catch {
       set({ accessToken: null, user: null, status: "unauthenticated" })
     }

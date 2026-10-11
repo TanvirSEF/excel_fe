@@ -4,7 +4,6 @@ import {
   REFRESH_COOKIE,
   backendFetch,
   clearRefreshCookie,
-  errorPassthrough,
   fetchMe,
   jsonError,
   setRefreshCookie,
@@ -14,7 +13,11 @@ import type { TokenResponse } from "@/types/api"
 export async function POST(request: NextRequest) {
   const refreshToken = request.cookies.get(REFRESH_COOKIE)?.value
   if (!refreshToken) {
-    return jsonError(401, "NO_SESSION", "No active session.")
+    return NextResponse.json({
+      authenticated: false,
+      access_token: null,
+      user: null,
+    })
   }
 
   const forwardedFor = request.headers.get("x-forwarded-for")
@@ -26,7 +29,11 @@ export async function POST(request: NextRequest) {
   })
 
   if (!refreshResponse.ok) {
-    const response = await errorPassthrough(refreshResponse)
+    const response = NextResponse.json({
+      authenticated: false,
+      access_token: null,
+      user: null,
+    })
     clearRefreshCookie(response)
     return response
   }

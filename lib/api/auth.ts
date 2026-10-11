@@ -6,9 +6,10 @@ interface LoginResponse {
   user: User
 }
 
-interface SessionResponse {
-  access_token: string
-  user: User
+export interface SessionResponse {
+  authenticated?: boolean
+  access_token: string | null
+  user: User | null
 }
 
 async function request<T>(path: string, body?: unknown): Promise<T> {

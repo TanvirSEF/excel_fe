@@ -17,10 +17,13 @@ async function refreshAccessToken() {
     refreshPromise = authApi
       .refreshSession()
       .then((session) => {
-        useAuthStore
-          .getState()
-          .setSession(session.access_token, session.user)
-        return true
+        if (session?.access_token && session.user) {
+          useAuthStore
+            .getState()
+            .setSession(session.access_token, session.user)
+          return true
+        }
+        return false
       })
       .catch(() => false)
       .finally(() => {
