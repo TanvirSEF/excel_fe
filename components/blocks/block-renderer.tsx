@@ -1161,7 +1161,13 @@ export function BlockRenderer({
   }
 
   return (
-    <div className={cn("entry-content post-content space-y-3.5 sm:space-y-4", className)}>
+    <div
+      data-content-area="true"
+      className={cn(
+        "entry-content post-content elementor-widget-theme-post-content space-y-3.5 sm:space-y-4",
+        className
+      )}
+    >
       {hasToc && takeawayIndex === -1 && toc ? (
         <InlineToc entries={toc} defaultCollapsed={tocDefaultCollapsed} />
       ) : null}

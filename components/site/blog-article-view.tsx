@@ -147,10 +147,7 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
         </div>
 
         <div className="mt-8 flex items-start justify-center xl:justify-start gap-10">
-          <article
-            data-content-area="true"
-            className="post min-w-0 w-full max-w-[860px] mx-auto xl:mx-0 elementor-widget-theme-post-content rh-post-wrapper"
-          >
+          <article className="post min-w-0 w-full max-w-[860px] mx-auto xl:mx-0 rh-post-wrapper">
             <div className="border-y border-border/70 py-3 mb-6 sm:mb-8">
               <ShareButtons title={post.title} />
             </div>

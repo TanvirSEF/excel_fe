@@ -110,10 +110,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
           </div>
         </aside>
 
-        <article
-          data-content-area="true"
-          className="post mx-auto w-full max-w-[860px] xl:mx-0 elementor-widget-theme-post-content rh-post-wrapper"
-        >
+        <article className="post mx-auto w-full max-w-[860px] xl:mx-0 rh-post-wrapper">
           <ArticleHeader post={post} />
 
           <InlineToc entries={toc} className="mt-0 mb-8" />
