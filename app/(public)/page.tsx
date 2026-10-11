@@ -12,7 +12,7 @@ import { NewsletterBand } from "@/components/site/newsletter/newsletter-band"
 import { getCategories } from "@/lib/api/categories"
 import { getCurriculum } from "@/lib/api/curriculum"
 import { getPosts } from "@/lib/api/posts"
-import type { CurriculumModule } from "@/types/api"
+import type { Category, CurriculumModule, Page, PostListItem } from "@/types/api"
 
 export const revalidate = 300
 
@@ -31,10 +31,18 @@ export const metadata: Metadata = {
   },
 }
 
+const emptyPosts: Page<PostListItem> = {
+  items: [],
+  total: 0,
+  page: 1,
+  page_size: 10,
+  total_pages: 0,
+}
+
 export default async function HomePage() {
   const [trending, categories, trackModules] = await Promise.all([
-    getPosts({ trending: true, page_size: 10 }, 300),
-    getCategories(300),
+    getPosts({ trending: true, page_size: 10 }, 300).catch(() => emptyPosts),
+    getCategories(300).catch(() => [] as Category[]),
     getCurriculum(300).catch(() => [] as CurriculumModule[]),
   ])
 

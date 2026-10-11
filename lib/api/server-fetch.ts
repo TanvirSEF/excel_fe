@@ -25,7 +25,13 @@ export async function serverFetch<T>(
 
   let response: Response
   try {
-    response = await fetch(url, { next: { revalidate, tags } })
+    response = await fetch(url, {
+      next: { revalidate, tags },
+      headers: {
+        Accept: "application/json",
+        "User-Agent": "ExcelInsider-Web/1.0",
+      },
+    })
   } catch {
     throw new ApiClientError(
       503,
