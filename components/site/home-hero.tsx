@@ -132,23 +132,19 @@ export function HomeHero({ categories }: { categories?: Category[] } = {}) {
 
           {/* H1 */}
           <h1 className="text-2xl font-bold leading-[1.14] tracking-tight text-primary-foreground sm:text-[2rem] md:text-[2.2rem] lg:text-[2.15rem] xl:text-[2.5rem]">
-            <span className="block sm:whitespace-nowrap">
-              Learn Excel &amp; Google Sheets Like a Pro,
+            <span className="block">
+              Custom Excel &amp; Google Sheets Solutions
             </span>
             <span className="block text-teal-400">
-              Solve Spreadsheet Problems
-            </span>
-            <span className="block text-teal-400">
-              &amp; Get Custom Templates!
+              Tools, Automation, Templates, Advanced Courses &amp; Free Tutorials
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="max-w-lg text-base leading-relaxed text-primary-foreground/75 sm:text-lg">
-            Excel Insider helps you learn Excel and Google Sheets with clear articles and video
-            tutorials. Get expert spreadsheet support, personalized tools, and custom templates.
-            Download free or premium templates designed to improve accuracy, efficiency, and
-            productivity.
+          <p className="max-w-xl text-base leading-relaxed text-primary-foreground/75 sm:text-lg">
+            Need a spreadsheet built, fixed, or automated? Our experts create solutions designed
+            around your business. Prefer to learn on your own? Start with our Power Query course or
+            explore 1,500+ free tutorials.
           </p>
 
           {/* CTAs */}
