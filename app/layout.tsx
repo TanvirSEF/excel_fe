@@ -8,6 +8,7 @@ import { Providers } from "@/components/providers"
 import { GoogleAnalytics } from "@/components/shared/google-analytics"
 import { ThemeProvider } from "@/components/theme-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { MediavineTag } from "@/components/site/mediavine-tag"
 import { config } from "@/lib/config"
 import { cn } from "@/lib/utils"
 
@@ -62,6 +63,9 @@ export default function RootLayout({
       suppressHydrationWarning
       className={cn("antialiased", poppins.variable, fontMono.variable, "font-sans")}
     >
+      <head>
+        <MediavineTag tagId={config.mediavineTagId} />
+      </head>
       <body suppressHydrationWarning>
         <ThemeProvider>
           <TooltipProvider delayDuration={0}>
