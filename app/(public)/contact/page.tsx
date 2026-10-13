@@ -9,6 +9,8 @@ interface ContactPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
+export const revalidate = 300
+
 export const metadata: Metadata = {
   title: "Contact Us | Excel Insider",
   description:

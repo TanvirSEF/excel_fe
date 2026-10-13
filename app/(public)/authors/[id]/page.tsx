@@ -26,6 +26,8 @@ import { ApiClientError } from "@/lib/api/error"
 import { clamp, cn, firstParam } from "@/lib/utils"
 import { config } from "@/lib/config"
 
+export const revalidate = 300
+
 interface AuthorPageProps {
   params: Promise<{ id: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
