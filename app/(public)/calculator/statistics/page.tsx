@@ -3,6 +3,8 @@ import type { Metadata } from "next"
 import { HubPage } from "@/components/site/calculators/hub-page"
 import { STATS_HUB } from "@/lib/calculators"
 
+export const revalidate = 300
+
 export const metadata: Metadata = {
   title: "Statistics Calculators for Students & Professionals | Excel Insider",
   description:

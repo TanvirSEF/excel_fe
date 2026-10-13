@@ -10,6 +10,8 @@ import { getPostBySlug } from "@/lib/api/posts"
 import { isGoogleSheetsCategory } from "@/lib/category-topics"
 import type { PostDetail } from "@/types/api"
 
+export const revalidate = 300
+
 interface ArticlePageProps {
   params: Promise<{ slug: string }>
 }

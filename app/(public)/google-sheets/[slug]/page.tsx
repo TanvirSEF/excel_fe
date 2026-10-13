@@ -23,6 +23,8 @@ import { buildArticleJsonLd } from "@/lib/seo"
 import { config } from "@/lib/config"
 import type { CurriculumModule, PostDetail } from "@/types/api"
 
+export const revalidate = 300
+
 interface LessonPageProps {
   params: Promise<{ slug: string }>
 }

@@ -53,6 +53,8 @@ export const metadata: Metadata = {
   },
 }
 
+export const revalidate = 300
+
 export default function SpreadsheetSolutionsPage() {
   return (
     <>

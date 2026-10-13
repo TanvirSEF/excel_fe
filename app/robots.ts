@@ -18,6 +18,19 @@ export default function robots(): MetadataRoute.Robots {
           "/newsletter/unsubscribe",
         ],
       },
+      {
+        userAgent: ["GPTBot", "ChatGPT-User", "ClaudeBot", "PerplexityBot", "Google-Extended"],
+        allow: ["/", "/llms.txt"],
+        disallow: [
+          "/dashboard",
+          "/api",
+          "/login",
+          "/forgot-password",
+          "/reset-password",
+          "/verify-email",
+          "/newsletter/unsubscribe",
+        ],
+      },
     ],
     sitemap: [
       `${config.siteUrl}/sitemap_index.xml`,

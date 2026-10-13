@@ -3,6 +3,8 @@ import type { Metadata } from "next"
 import { HubPage } from "@/components/site/calculators/hub-page"
 import { FINANCE_HUB } from "@/lib/calculators"
 
+export const revalidate = 300
+
 export const metadata: Metadata = {
   title: "Financial Calculator Hub: Business, Real Estate & Investing | Excel Insider",
   description:

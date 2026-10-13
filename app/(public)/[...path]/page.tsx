@@ -10,6 +10,8 @@ import { getWpRedirect, looksLikeWpPath } from "@/lib/api/redirects"
 import { isGoogleSheetsCategory } from "@/lib/category-topics"
 import type { PostDetail } from "@/types/api"
 
+export const revalidate = 300
+
 interface CatchAllPageProps {
   params: Promise<{ path: string[] }>
 }

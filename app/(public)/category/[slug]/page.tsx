@@ -9,6 +9,8 @@ import { getCategoryWithPosts } from "@/lib/api/categories"
 import { ApiClientError } from "@/lib/api/error"
 import { clamp, firstParam } from "@/lib/utils"
 
+export const revalidate = 300
+
 interface CategoryPageProps {
   params: Promise<{ slug: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>

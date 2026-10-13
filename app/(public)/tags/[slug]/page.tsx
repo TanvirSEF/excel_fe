@@ -9,6 +9,8 @@ import { getPosts } from "@/lib/api/posts"
 import { getTags } from "@/lib/api/tags"
 import { clamp, firstParam } from "@/lib/utils"
 
+export const revalidate = 300
+
 interface TagPageProps {
   params: Promise<{ slug: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>

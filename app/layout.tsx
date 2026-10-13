@@ -45,8 +45,12 @@ export const metadata: Metadata = {
     siteName: "Excel Insider",
     type: "website",
     url: config.siteUrl,
+    images: [{ url: "/icon.png", width: 512, height: 512, alt: "Excel Insider" }],
   },
-  twitter: { card: "summary" },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/icon.png"],
+  },
   manifest: "/manifest.json",
 }
 

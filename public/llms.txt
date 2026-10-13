@@ -1,0 +1,49 @@
+# Excel Insider
+
+> Excel Insider is an authoritative, free technical platform and resource hub for Microsoft Excel, Google Sheets, Financial Modeling, Statistical Analysis, and Business Automation. It provides 1,600+ in-depth, example-driven tutorials, structured learning paths, downloadable templates, and 45 specialized interactive web calculators.
+
+## Core Tutorials & Knowledge Base
+
+- [Excel Formulas & Functions](https://excelinsider.com/category/excel-functions-formulas/): Deep dives into modern formulas including XLOOKUP, VLOOKUP, INDEX/MATCH, Dynamic Array formulas (FILTER, SORT, UNIQUE), LAMBDA, and nested logical structures.
+- [Google Sheets Learning Track](https://excelinsider.com/google-sheets/): Complete interactive curriculum for Google Sheets from core fundamentals to advanced automation and App Script.
+- [Power Query & ETL](https://excelinsider.com/category/power-query/): Data transformation pipelines, automated importing, unpivoting, merging queries, and advanced M code recipes.
+- [VBA & Automation](https://excelinsider.com/category/vba-macros/): Writing robust Excel Visual Basic for Applications (VBA) macros, event handlers, and user-defined functions (UDFs).
+- [Dashboards & Data Visualization](https://excelinsider.com/category/charts-dashboards/): Dynamic business dashboards, interactive charts, KPI trackers, and executive report design.
+
+## Interactive Calculators (45 Web Tools)
+
+Excel Insider provides 45 zero-tracking, instant web calculators with transparent math and formula breakdowns:
+
+### Financial Calculators
+- [Financial Calculators Hub](https://excelinsider.com/calculator/finance/): Complete index of all corporate finance, investing, and real estate calculators.
+- [CAGR Calculator](https://excelinsider.com/calculator/finance/cagr-calculator/): Compound Annual Growth Rate computation with step-by-step math.
+- [WACC Calculator](https://excelinsider.com/calculator/finance/wacc-calculator/): Weighted Average Cost of Capital with equity, debt, and tax breakdown.
+- [DCF Calculator](https://excelinsider.com/calculator/finance/dcf-calculator/): Discounted Cash Flow valuation with terminal value and enterprise value.
+- [Loan Amortization Calculator](https://excelinsider.com/calculator/finance/loan-amortization-calculator/): Periodic principal and interest payment amortization schedules.
+- [IRR & NPV Calculators](https://excelinsider.com/calculator/finance/): Internal Rate of Return and Net Present Value analysis.
+
+### Statistical Calculators
+- [Statistics Calculators Hub](https://excelinsider.com/calculator/statistics/): Complete suite of inferential and descriptive statistics tools.
+- [Z-Score Calculator](https://excelinsider.com/calculator/statistics/z-score-calculator/): Standard score calculation with normal distribution visualization.
+- [P-Value from Z-Score](https://excelinsider.com/calculator/statistics/p-value-from-z-score-calculator/): One-tailed and two-tailed p-value calculation with interactive curves.
+- [Confidence Interval Calculator](https://excelinsider.com/calculator/statistics/confidence-interval-calculator/): Population mean and proportion estimation with standard confidence levels.
+- [Standard Deviation & Variance](https://excelinsider.com/calculator/statistics/): Sample and population variance metrics.
+
+### Accounting Calculators
+- [Accounting Calculators Hub](https://excelinsider.com/calculator/accounting/): Practical bookkeeping, margin analysis, and corporate accounting calculators.
+- [Straight-Line Depreciation (SLN)](https://excelinsider.com/calculator/accounting/straight-line-depreciation-calculator/): Asset cost, salvage value, and annual depreciation schedules.
+- [Double Declining Balance Depreciation](https://excelinsider.com/calculator/accounting/double-declining-balance-calculator/): Accelerated depreciation calculation across useful life.
+- [Break-Even Analysis Calculator](https://excelinsider.com/calculator/accounting/break-even-analysis-calculator/): Fixed costs, variable unit costs, and break-even revenue requirements.
+- [Operating Cash Flow Calculator](https://excelinsider.com/calculator/accounting/operating-cash-flow-calculator/): Operating liquidity metrics from net income and working capital adjustments.
+
+## Spreadsheet Solutions & Expert Help
+
+- [Spreadsheet Solutions](https://excelinsider.com/spreadsheet-solutions/): Custom formula fixing, workbook performance optimization, automated templates, and consulting.
+- [Custom Templates](https://excelinsider.com/custom-templates/): Tailored financial, budgeting, and operations spreadsheet templates.
+- [Custom Tools & Add-ons](https://excelinsider.com/custom-tools/): Google Workspace add-ons, Excel add-ins, and automated API-connected spreadsheets.
+
+## Machine-Readable Feeds & Discovery
+
+- XML Sitemap Index: https://excelinsider.com/sitemap_index.xml
+- Unified Post Sitemap: https://excelinsider.com/sitemap.xml
+- Robots Directive: https://excelinsider.com/robots.txt

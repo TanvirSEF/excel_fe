@@ -10,6 +10,8 @@ import { ApiClientError } from "@/lib/api/error"
 import { buildSeriesJsonLd } from "@/lib/seo"
 import { clamp, firstParam } from "@/lib/utils"
 
+export const revalidate = 300
+
 interface SeriesPageProps {
   params: Promise<{ slug: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
