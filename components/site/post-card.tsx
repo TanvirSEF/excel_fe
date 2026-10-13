@@ -10,6 +10,7 @@ import type { PostListItem } from "@/types/api"
 interface PostCardProps {
   post: PostListItem
   className?: string
+  priority?: boolean
 }
 
 export function postHref(
@@ -40,7 +41,7 @@ export function postHref(
   return href
 }
 
-export function PostCard({ post, className }: PostCardProps) {
+export function PostCard({ post, className, priority = false }: PostCardProps) {
   const imageUrl = post.featured_image_url
     ? encodeURI(decodeURI(post.featured_image_url))
     : null
@@ -62,6 +63,7 @@ export function PostCard({ post, className }: PostCardProps) {
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className="object-cover transition-transform duration-500 will-change-transform group-hover:scale-105"
+              priority={priority}
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-primary/15 via-primary/5 to-muted">

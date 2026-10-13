@@ -39,7 +39,7 @@ const nextConfig: NextConfig = {
   output: "standalone",
   trailingSlash: true,
   images: {
-    unoptimized: true,
+    formats: ["image/avif", "image/webp"],
     remotePatterns: mediaHosts.length
       ? mediaHosts.map((hostname) => ({ protocol: "https" as const, hostname }))
       : [{ protocol: "https" as const, hostname: "**" }],
