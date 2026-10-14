@@ -15,6 +15,7 @@ import {
   extractToc,
   getFeaturedImageFromBlocks,
   normalizePostBlocks,
+  toCdnUrl,
 } from "@/lib/blocks"
 import { config } from "@/lib/config"
 import { buildArticleJsonLd, buildBreadcrumbJsonLd } from "@/lib/seo"
@@ -27,7 +28,7 @@ export function buildPostMetadata(
   const title = post.meta_title ?? post.title
   const description = post.meta_description ?? post.excerpt ?? undefined
   const effectiveFeaturedImage =
-    post.featured_image_url ??
+    toCdnUrl(post.featured_image_url) ||
     getFeaturedImageFromBlocks(post.content_json?.blocks ?? [])
   const image =
     post.og_image_url ?? effectiveFeaturedImage ?? "/og-default.png"
@@ -72,7 +73,8 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
   const normalizedBlocks = normalizePostBlocks(post.content_json?.blocks ?? [])
   const toc = extractToc(normalizedBlocks)
   const effectiveFeaturedImage =
-    post.featured_image_url ?? getFeaturedImageFromBlocks(normalizedBlocks)
+    toCdnUrl(post.featured_image_url) ||
+    getFeaturedImageFromBlocks(normalizedBlocks)
 
   // Fetch related articles based on tags first
   let related: PostListItem[] = []

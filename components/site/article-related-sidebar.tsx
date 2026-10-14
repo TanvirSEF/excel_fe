@@ -3,6 +3,7 @@ import Link from "next/link"
 import { IconArticle, IconArrowRight } from "@tabler/icons-react"
 
 import { Time } from "@/components/shared/time"
+import { toCdnUrl } from "@/lib/blocks"
 import type { PostListItem } from "@/types/api"
 
 import { postHref } from "./post-card"
@@ -69,7 +70,7 @@ export function ArticleRelatedSidebar({
               <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-lg border border-border/50 bg-muted">
                 {post.featured_image_url ? (
                   <Image
-                    src={encodeURI(decodeURI(post.featured_image_url))}
+                    src={toCdnUrl(encodeURI(decodeURI(post.featured_image_url)))}
                     alt={post.title}
                     fill
                     sizes="80px"

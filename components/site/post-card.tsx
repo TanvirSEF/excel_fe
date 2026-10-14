@@ -3,6 +3,7 @@ import Link from "next/link"
 import { IconArrowUpRight, IconFlame } from "@tabler/icons-react"
 
 import { Time } from "@/components/shared/time"
+import { toCdnUrl } from "@/lib/blocks"
 import { isGoogleSheetsCategory } from "@/lib/category-topics"
 import { cn } from "@/lib/utils"
 import type { PostListItem } from "@/types/api"
@@ -43,7 +44,7 @@ export function postHref(
 
 export function PostCard({ post, className, priority = false }: PostCardProps) {
   const imageUrl = post.featured_image_url
-    ? encodeURI(decodeURI(post.featured_image_url))
+    ? toCdnUrl(encodeURI(decodeURI(post.featured_image_url)))
     : null
 
   return (

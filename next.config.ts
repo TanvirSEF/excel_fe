@@ -39,7 +39,8 @@ const nextConfig: NextConfig = {
   output: "standalone",
   trailingSlash: true,
   images: {
-    formats: ["image/avif", "image/webp"],
+    formats: ["image/webp", "image/avif"],
+    minimumCacheTTL: 31536000,
     remotePatterns: mediaHosts.length
       ? mediaHosts.map((hostname) => ({ protocol: "https" as const, hostname }))
       : [{ protocol: "https" as const, hostname: "**" }],

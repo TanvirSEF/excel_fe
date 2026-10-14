@@ -42,10 +42,18 @@ export function extractToc(blocks: Block[]): TocEntry[] {
   return entries
 }
 
+const R2_DEV_HOST = "pub-b39c974f4c124a36a2fb517be38076ec.r2.dev"
+const MEDIA_CDN_HOST = "media.excelinsider.com"
+
+export function toCdnUrl(url: string | null | undefined): string {
+  if (!url) return ""
+  return url.replace(R2_DEV_HOST, MEDIA_CDN_HOST)
+}
+
 export function getFeaturedImageFromBlocks(blocks: Block[]): string | null {
   for (const block of blocks) {
     if (block.type === "image" && block.url) {
-      return block.url
+      return toCdnUrl(block.url)
     }
   }
   return null
@@ -59,6 +67,15 @@ export function normalizePostBlocks(blocks: Block[]): Block[] {
 
   while (i < blocks.length) {
     const block = blocks[i]
+
+    if (block.type === "image") {
+      result.push({
+        ...block,
+        url: toCdnUrl(block.url),
+      })
+      i++
+      continue
+    }
 
     // 1. Detect standalone Key Takeaways section from legacy imports
     if (

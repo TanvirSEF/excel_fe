@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 
 import { Time } from "@/components/shared/time"
+import { toCdnUrl } from "@/lib/blocks"
 import { cn } from "@/lib/utils"
 import type { PostListItem } from "@/types/api"
 
@@ -67,7 +68,7 @@ export function TrendingSection({ posts, className }: TrendingSectionProps) {
               <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-lg border border-border/40 bg-muted sm:h-[4.5rem] sm:w-28">
                 {post.featured_image_url ? (
                   <Image
-                    src={encodeURI(decodeURI(post.featured_image_url))}
+                    src={toCdnUrl(encodeURI(decodeURI(post.featured_image_url)))}
                     alt={post.title}
                     fill
                     sizes="112px"
