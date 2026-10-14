@@ -1132,6 +1132,54 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
   }
 }
 
+const FAQ_HEADING_REGEX = /^\s*(frequently\s+asked\s+questions?|faqs?)\b/i
+
+function isFaqSectionHeading(block: Block): boolean {
+  return (
+    block.type === "heading" &&
+    block.level === 2 &&
+    FAQ_HEADING_REGEX.test(block.text.trim())
+  )
+}
+
+interface FaqItem {
+  question: Block
+  answers: Block[]
+}
+
+interface FaqSectionGroup {
+  heading: Block
+  introBlocks: Block[]
+  items: FaqItem[]
+}
+
+function parseFaqSection(faqBlocks: Block[]): FaqSectionGroup {
+  const heading = faqBlocks[0]
+  const content = faqBlocks.slice(1)
+  const introBlocks: Block[] = []
+  const items: FaqItem[] = []
+  let currentItem: FaqItem | null = null
+
+  for (const b of content) {
+    if (b.type === "heading" && b.level >= 3) {
+      if (currentItem) {
+        items.push(currentItem)
+      }
+      currentItem = { question: b, answers: [] }
+    } else if (currentItem) {
+      currentItem.answers.push(b)
+    } else {
+      introBlocks.push(b)
+    }
+  }
+
+  if (currentItem) {
+    items.push(currentItem)
+  }
+
+  return { heading, introBlocks, items }
+}
+
 export function BlockRenderer({
   blocks,
   className,
@@ -1160,6 +1208,32 @@ export function BlockRenderer({
     }
   }
 
+  // Pre-identify FAQ section range if present
+  const faqStartIndex = blocks.findIndex(isFaqSectionHeading)
+  const faqBlockIndices = new Set<number>()
+  let faqGroup: FaqSectionGroup | null = null
+
+  if (faqStartIndex !== -1) {
+    let end = faqStartIndex + 1
+    while (end < blocks.length) {
+      const b = blocks[end]
+      if (b.type === "heading" && b.level === 2) {
+        break
+      }
+      if (b.type === "hr" && end + 1 < blocks.length) {
+        const nextB = blocks[end + 1]
+        if (nextB.type === "heading" && nextB.level === 2) {
+          break
+        }
+      }
+      end++
+    }
+    faqGroup = parseFaqSection(blocks.slice(faqStartIndex, end))
+    for (let idx = faqStartIndex; idx < end; idx++) {
+      faqBlockIndices.add(idx)
+    }
+  }
+
   return (
     <div
       className={cn(
@@ -1174,6 +1248,33 @@ export function BlockRenderer({
       {blocks.map((block, index) => {
         if (takeawayImageIndices.has(index)) {
           return null
+        }
+
+        if (faqBlockIndices.has(index)) {
+          if (index !== faqStartIndex || !faqGroup) {
+            return null
+          }
+
+          return (
+            <div
+              key="faq-section-container"
+              id="faq-section"
+              className="faq-block faq-section my-6 sm:my-8 space-y-4"
+            >
+              <BlockNode block={faqGroup.heading} usedIds={usedIds} />
+              {faqGroup.introBlocks.map((b, i) => (
+                <BlockNode key={`faq-intro-${i}`} block={b} usedIds={usedIds} />
+              ))}
+              {faqGroup.items.map((item, itemIdx) => (
+                <div key={`faq-item-${itemIdx}`} className="faq-item space-y-2">
+                  <BlockNode block={item.question} usedIds={usedIds} />
+                  {item.answers.map((ans, ansIdx) => (
+                    <BlockNode key={`faq-ans-${ansIdx}`} block={ans} usedIds={usedIds} />
+                  ))}
+                </div>
+              ))}
+            </div>
+          )
         }
 
         const isTakeaway = index === takeawayIndex
