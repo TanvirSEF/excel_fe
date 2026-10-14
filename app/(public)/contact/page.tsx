@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   title: "Contact Us | Excel Insider",
   description:
     "Questions, custom template requests, or spreadsheet troubleshooting — reach the Excel Insider team by form, phone, or email.",
-  alternates: { canonical: "/contact" },
+  alternates: { canonical: "/contact/" },
 }
 
 const CONTACT_DETAILS = [

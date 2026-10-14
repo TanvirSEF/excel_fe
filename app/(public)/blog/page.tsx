@@ -23,7 +23,7 @@ export async function generateMetadata({
     description:
       "All Excel Insider articles — formulas, shortcuts, Power Query, VBA and more.",
     alternates: {
-      canonical: page > 1 ? `/blog?page=${page}` : "/blog",
+      canonical: page > 1 ? `/blog/?page=${page}` : "/blog/",
     },
   }
 }

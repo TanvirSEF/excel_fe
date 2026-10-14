@@ -22,12 +22,12 @@ export const metadata: Metadata = {
   title: "About Nehad Ulfat | Founder & Strategist at Excel Insider",
   description:
     "Nehad Ulfat is a spreadsheet expert, consultant, and founder of Excel Insider with 15+ years of experience solving real-world spreadsheet problems through advanced formulas, automation, and consulting.",
-  alternates: { canonical: "/about/nehad-ulfat" },
+  alternates: { canonical: "/about/nehad-ulfat/" },
   openGraph: {
     title: "About Nehad Ulfat | Founder & Strategist at Excel Insider",
     description:
       "Spreadsheet expert, consultant, and founder of Excel Insider. 15+ years of experience in Excel, Google Sheets, automated templates, and custom business solutions.",
-    url: "/about/nehad-ulfat",
+    url: "/about/nehad-ulfat/",
     images: ["/og-default.png"],
   },
 }
@@ -81,7 +81,7 @@ export default function NehadUlfatProfilePage() {
       name: "Excel Insider",
       url: config.siteUrl,
     },
-    url: `${config.siteUrl}/about/nehad-ulfat`,
+    url: `${config.siteUrl}/about/nehad-ulfat/`,
     sameAs: ["https://www.linkedin.com/in/nehad-ulfat-22042017b"],
     description:
       "Nehad Ulfat is a spreadsheet expert, consultant, and the founder of Excel Insider specializing in advanced formulas, data analysis, and automated templates.",
@@ -97,7 +97,7 @@ export default function NehadUlfatProfilePage() {
       <Breadcrumb
         items={[
           { label: "Home", href: "/" },
-          { label: "About", href: "/about" },
+          { label: "About", href: "/about/" },
           { label: "Nehad Ulfat" },
         ]}
       />

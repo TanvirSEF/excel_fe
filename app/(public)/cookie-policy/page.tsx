@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "Cookie Policy | Excel Insider",
   description:
     "What cookies Excel Insider uses, why we use them, and how you can control cookies in your browser.",
-  alternates: { canonical: "/cookie-policy" },
+  alternates: { canonical: "/cookie-policy/" },
 }
 
 export default function CookiePolicyPage() {

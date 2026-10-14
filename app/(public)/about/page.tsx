@@ -20,12 +20,12 @@ export const metadata: Metadata = {
   title: "About Us | Excel Insider",
   description:
     "Founded in 2024, Excel Insider makes advanced Excel and Google Sheets knowledge accessible and actionable — tutorials, YouTube videos, templates, courses, and dedicated email support.",
-  alternates: { canonical: "/about" },
+  alternates: { canonical: "/about/" },
   openGraph: {
     title: "About Us | Excel Insider",
     description:
       "Meet the team behind Excel Insider — practical, in-depth tutorials and templates for intermediate to advanced Excel users.",
-    url: "/about",
+    url: "/about/",
     images: ["/og-default.png"],
   },
 }

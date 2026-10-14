@@ -40,7 +40,7 @@ export async function generateMetadata({
       series.seo_description ??
       series.description ??
       `${series.name} — step-by-step lessons in order.`,
-    alternates: { canonical: `/series/${series.slug}` },
+    alternates: { canonical: `/series/${series.slug}/` },
   }
 }
 
@@ -51,12 +51,12 @@ export default async function SeriesPage({ params, searchParams }: SeriesPagePro
   const { series, posts } = await loadSeries(slug, page)
 
   const breadcrumbItems = [
-    { label: "Categories", href: "/category" },
+    { label: "Categories", href: "/category/" },
     ...(series.category
       ? [
           {
             label: series.category.name,
-            href: `/category/${series.category.slug}`,
+            href: `/category/${series.category.slug}/`,
           },
         ]
       : []),
@@ -88,7 +88,7 @@ export default async function SeriesPage({ params, searchParams }: SeriesPagePro
         <Pagination
           page={page}
           totalPages={posts.total_pages}
-          pathname={`/series/${series.slug}`}
+          pathname={`/series/${series.slug}/`}
         />
       </div>
     </div>

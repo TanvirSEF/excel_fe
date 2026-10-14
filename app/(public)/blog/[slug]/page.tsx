@@ -44,10 +44,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     post.canonical_url?.startsWith("/google-sheets/") ||
     post.canonical_url?.startsWith("/google-sheets-")
   ) {
-    permanentRedirect(`/google-sheets/${post.slug}`)
+    permanentRedirect(`/google-sheets/${post.slug}/`)
   }
 
-  if (post.canonical_url && post.canonical_url !== `/blog/${post.slug}`) {
+  if (
+    post.canonical_url &&
+    post.canonical_url !== `/blog/${post.slug}` &&
+    post.canonical_url !== `/blog/${post.slug}/`
+  ) {
     const target = post.canonical_url.endsWith("/")
       ? post.canonical_url
       : `${post.canonical_url}/`

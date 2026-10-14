@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "Terms & Conditions | Excel Insider",
   description:
     "The terms of service for using Excel Insider — services, payments and refunds, intellectual property, and user responsibilities.",
-  alternates: { canonical: "/terms" },
+  alternates: { canonical: "/terms/" },
 }
 
 export default function TermsPage() {

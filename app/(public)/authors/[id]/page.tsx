@@ -134,7 +134,7 @@ export async function generateMetadata({
     description:
       author.bio ??
       `${author.post_count} spreadsheet articles and tutorials written by ${author.name}.`,
-    alternates: { canonical: `/authors/${author.id}` },
+    alternates: { canonical: `/authors/${author.id}/` },
   }
 }
 
@@ -156,7 +156,7 @@ export default async function AuthorPage({ params, searchParams }: AuthorPagePro
     "@context": "https://schema.org",
     "@type": "Person",
     name: author.name,
-    url: `${config.siteUrl}/authors/${author.id}`,
+    url: `${config.siteUrl}/authors/${author.id}/`,
     image: author.avatar_url ?? undefined,
     description: author.bio ?? undefined,
     ...(sameAs.length > 0 && { sameAs }),
@@ -336,7 +336,7 @@ export default async function AuthorPage({ params, searchParams }: AuthorPagePro
         <Pagination
           page={page}
           totalPages={posts.total_pages}
-          pathname={`/authors/${author.id}`}
+          pathname={`/authors/${author.id}/`}
         />
       </div>
 

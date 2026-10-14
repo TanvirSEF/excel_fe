@@ -124,12 +124,12 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },
-    { label: "Blog", href: "/blog" },
+    { label: "Blog", href: "/blog/" },
     ...(post.category_name && post.category_slug
       ? [
           {
             label: post.category_name,
-            href: `/category/${post.category_slug}`,
+            href: `/category/${post.category_slug}/`,
           },
         ]
       : []),

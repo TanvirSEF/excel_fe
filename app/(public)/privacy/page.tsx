@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "Privacy Policy | Excel Insider",
   description:
     "How Excel Insider collects, uses, and protects your personal data, including cookie practices, third-party advertising partners, and your privacy rights.",
-  alternates: { canonical: "/privacy" },
+  alternates: { canonical: "/privacy/" },
 }
 
 export default function PrivacyPage() {

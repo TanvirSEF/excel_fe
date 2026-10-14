@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { permanentRedirect } from "next/navigation"
+import { notFound, permanentRedirect } from "next/navigation"
 import slugify from "slugify"
 
 import { Pagination } from "@/components/shared/pagination"
@@ -32,13 +32,21 @@ export async function generateMetadata({
       t.name.toLowerCase() === decoded.toLowerCase()
   )
 
+  const querySlug = target?.slug ?? (normalized || slug)
+  if (!target) {
+    const check = await getPosts({ page: 1, page_size: 1, tag: querySlug }).catch(() => null)
+    if (!check || check.total === 0) {
+      return {}
+    }
+  }
+
   const label = target?.name ?? decoded
   const canonicalSlug = target?.slug ?? (normalized || slug)
 
   return {
     title: `#${label}`,
     description: `Excel Insider articles tagged with ${label}.`,
-    alternates: { canonical: `/tags/${canonicalSlug}` },
+    alternates: { canonical: `/tags/${canonicalSlug}/` },
   }
 }
 
@@ -62,13 +70,17 @@ export default async function TagPage({
   )
 
   if (target && target.slug !== slug) {
-    permanentRedirect(`/tags/${target.slug}`)
+    permanentRedirect(`/tags/${target.slug}/`)
   }
 
   const querySlug = target?.slug ?? (normalized || slug)
   const label = target?.name ?? decoded
 
   const posts = await getPosts({ page, page_size: 12, tag: querySlug })
+
+  if (!target && posts.total === 0) {
+    notFound()
+  }
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:py-14">
@@ -93,7 +105,7 @@ export default async function TagPage({
         <Pagination
           page={page}
           totalPages={posts.total_pages}
-          pathname={`/tags/${querySlug}`}
+          pathname={`/tags/${querySlug}/`}
         />
       </div>
     </div>

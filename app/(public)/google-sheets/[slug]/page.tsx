@@ -53,12 +53,12 @@ export async function generateMetadata({
   return {
     title,
     description,
-    alternates: { canonical: `/google-sheets/${post.slug}` },
+    alternates: { canonical: `/google-sheets/${post.slug}/` },
     openGraph: {
       title,
       description,
       type: "article",
-      url: `${config.siteUrl}/google-sheets/${post.slug}`,
+      url: `${config.siteUrl}/google-sheets/${post.slug}/`,
       publishedTime: post.published_at ?? undefined,
       modifiedTime: post.updated_at,
       authors: [post.author_name],
@@ -83,7 +83,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
     !post.canonical_url?.startsWith("/google-sheets/") &&
     !post.canonical_url?.startsWith("/google-sheets-")
   ) {
-    redirect(`/blog/${post.slug}`)
+    redirect(`/blog/${post.slug}/`)
   }
 
   const [comments, modules, basicsPage] = await Promise.all([
@@ -101,7 +101,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
   const effectiveFeaturedImage =
     post.featured_image_url ?? getFeaturedImageFromBlocks(normalizedBlocks)
 
-  const lessonPath = `/google-sheets/${post.slug}`
+  const lessonPath = `/google-sheets/${post.slug}/`
 
   return (
     <>

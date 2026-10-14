@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   title: "Google Sheets Learning Track — Step-by-Step Course | Excel Insider",
   description:
     "Master Google Sheets with a structured learning track: basics, functions, formulas, intermediate skills, charts and Apps Script — in order, lesson by lesson.",
-  alternates: { canonical: "/google-sheets" },
+  alternates: { canonical: "/google-sheets/" },
 }
 
 function moduleIcon(slug: string, className: string) {

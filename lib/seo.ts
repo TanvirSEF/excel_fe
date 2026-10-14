@@ -3,6 +3,12 @@ import type { PostDetail, PostListItem, SeriesSummary } from "@/types/api"
 
 export function buildArticleJsonLd(post: PostDetail, path?: string) {
   const image = post.og_image_url ?? post.featured_image_url
+  const rawPath = path ?? `/blog/${post.slug}/`
+  const normalizedPath = rawPath.endsWith("/") ? rawPath : `${rawPath}/`
+  const mainEntityUrl = normalizedPath.startsWith("http")
+    ? normalizedPath
+    : `${config.siteUrl}${normalizedPath.startsWith("/") ? normalizedPath : `/${normalizedPath}`}`
+
   const data: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": post.schema_type || "TechArticle",
@@ -14,9 +20,9 @@ export function buildArticleJsonLd(post: PostDetail, path?: string) {
     publisher: {
       "@type": "Organization",
       name: "Excel Insider",
-      url: config.siteUrl,
+      url: `${config.siteUrl}/`,
     },
-    mainEntityOfPage: `${config.siteUrl}${path ?? `/blog/${post.slug}`}`,
+    mainEntityOfPage: mainEntityUrl,
   }
   if (image) data.image = [image]
 
@@ -28,14 +34,14 @@ export function buildSeriesJsonLd(series: SeriesSummary, posts: PostListItem[]) 
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: series.name,
-    url: `${config.siteUrl}/series/${series.slug}`,
+    url: `${config.siteUrl}/series/${series.slug}/`,
     mainEntity: {
       "@type": "ItemList",
       numberOfItems: posts.length,
       itemListElement: posts.map((post, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        url: `${config.siteUrl}/blog/${post.slug}`,
+        url: `${config.siteUrl}/blog/${post.slug}/`,
         name: post.title,
       })),
     },
@@ -55,9 +61,20 @@ export function buildBreadcrumbJsonLd(
       name: item.label,
     }
     if (item.href) {
-      entry.item = item.href.startsWith("http")
-        ? item.href
-        : `${config.siteUrl}${item.href}`
+      if (item.href.startsWith("http")) {
+        entry.item = item.href.endsWith("/") || item.href.includes("?")
+          ? item.href
+          : `${item.href}/`
+      } else {
+        const pathWithLeading = item.href.startsWith("/")
+          ? item.href
+          : `/${item.href}`
+        const pathWithTrailing =
+          pathWithLeading.endsWith("/") || pathWithLeading.includes("?")
+            ? pathWithLeading
+            : `${pathWithLeading}/`
+        entry.item = `${config.siteUrl}${pathWithTrailing}`
+      }
     }
     return entry
   })
