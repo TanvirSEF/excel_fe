@@ -116,34 +116,7 @@ export function normalizePostBlocks(blocks: Block[]): Block[] {
       continue
     }
 
-    // 2. Detect standalone numbered heading paragraphs: e.g. "1. Print Excel’s Rows and Columns Headings"
-    if (block.type === "paragraph" && block.text) {
-      const trimmed = block.text.trim()
-      const match = trimmed.match(/^(\d{1,3})[\.\)]\s+([A-Z][^\r\n]{3,120})$/)
-      if (match) {
-        const num = match[1]
-        const headingText = match[2].trim()
-        let content: InlineText[] | undefined = undefined
-        if (block.content && block.content.length > 0) {
-          const first = { ...block.content[0] }
-          first.text = first.text.replace(/^\s*\d{1,3}[\.\)]\s*/, "")
-          content = [first, ...block.content.slice(1)]
-        } else {
-          content = [{ text: headingText }]
-        }
-        result.push({
-          type: "heading",
-          level: 2,
-          num,
-          text: headingText,
-          content,
-        })
-        i++
-        continue
-      }
-    }
-
-    // 3. Detect step / method numbers before headings: e.g. "1" followed by H2
+    // 2. Detect step / method numbers before headings: e.g. "1" followed by H2
     if (
       block.type === "paragraph" &&
       /^\s*(\d+|step\s*\d+|method\s*\d+)\s*$/i.test(block.text?.trim() ?? "") &&
