@@ -150,7 +150,7 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
                     ].map((item) => (
                       <Link
                         key={item.slug}
-                        href={`/google-sheets#${item.slug}`}
+                        href={`/category/${item.slug}`}
                         onClick={handleLinkClick}
                         className="flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[15px] text-muted-foreground hover:bg-background hover:text-foreground"
                       >

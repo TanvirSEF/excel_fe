@@ -370,7 +370,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
                       return (
                         <Link
                           key={item.slug}
-                          href={`/google-sheets#${item.slug}`}
+                          href={`/category/${item.slug}`}
                           onClick={() => setActiveMenu(null)}
                           className="flex items-start gap-2.5 p-2 rounded-lg hover:bg-muted/60 transition-colors group"
                         >
