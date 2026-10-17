@@ -697,33 +697,42 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
         }
       }
 
-      if (Array.isArray(block.content) && block.content.length === 1) {
-        const run = block.content[0]
-        const linkMark = run.marks?.find((m) => m.type === "link")
-        if (linkMark?.href && isDownloadHref(linkMark.href, run.text)) {
-          return (
-            <div className="my-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border-2 border-emerald-500/30 bg-emerald-500/[0.04] p-4 sm:p-5 shadow-xs transition-colors dark:border-emerald-500/40 dark:bg-emerald-500/[0.08]">
-              <div className="flex items-center gap-3.5">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
-                  <IconFileSpreadsheet className="h-6 w-6" />
+      if (Array.isArray(block.content)) {
+        const meaningfulRuns = block.content.filter(
+          (r) => r.text && r.text.trim().length > 0
+        )
+        if (meaningfulRuns.length === 1) {
+          const run = meaningfulRuns[0]
+          const linkMark = run.marks?.find((m) => m.type === "link")
+          if (linkMark?.href && isDownloadHref(linkMark.href, run.text)) {
+            return (
+              <div className="my-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border-2 border-emerald-500/30 bg-emerald-500/[0.04] p-4 sm:p-5 shadow-xs transition-colors dark:border-emerald-500/40 dark:bg-emerald-500/[0.08]">
+                <div className="flex items-center gap-3.5">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+                    <IconFileSpreadsheet className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-foreground text-base sm:text-lg">
+                      {run.text.trim()}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Practice Workbook · Excel (.xlsx)
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-bold text-foreground text-base sm:text-lg">{run.text.trim()}</p>
-                  <p className="text-xs text-muted-foreground">Practice Workbook · Excel (.xlsx)</p>
-                </div>
+                <a
+                  href={linkMark.href}
+                  download=""
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white shadow-xs hover:bg-emerald-700 transition-colors shrink-0"
+                >
+                  <IconDownload className="h-4 w-4" />
+                  <span>Download File</span>
+                </a>
               </div>
-              <a
-                href={linkMark.href}
-                download=""
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white shadow-xs hover:bg-emerald-700 transition-colors shrink-0"
-              >
-                <IconDownload className="h-4 w-4" />
-                <span>Download File</span>
-              </a>
-            </div>
-          )
+            )
+          }
         }
       }
 
@@ -1091,7 +1100,36 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
       )
     }
 
-    case "button":
+    case "button": {
+      if (isDownloadHref(block.href, block.label)) {
+        return (
+          <div className="my-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border-2 border-emerald-500/30 bg-emerald-500/[0.04] p-4 sm:p-5 shadow-xs transition-colors dark:border-emerald-500/40 dark:bg-emerald-500/[0.08]">
+            <div className="flex items-center gap-3.5">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+                <IconFileSpreadsheet className="h-6 w-6" />
+              </div>
+              <div>
+                <p className="font-bold text-foreground text-base sm:text-lg">
+                  {block.label.trim()}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Practice Workbook · Excel (.xlsx)
+                </p>
+              </div>
+            </div>
+            <a
+              href={block.href}
+              download=""
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white shadow-xs hover:bg-emerald-700 transition-colors shrink-0"
+            >
+              <IconDownload className="h-4 w-4" />
+              <span>Download File</span>
+            </a>
+          </div>
+        )
+      }
       return (
         <div className="my-3">
           <a
@@ -1107,6 +1145,7 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
           </a>
         </div>
       )
+    }
 
     case "embed":
       return <VideoEmbed url={block.url} caption={block.caption} />
