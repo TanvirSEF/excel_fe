@@ -14,7 +14,7 @@ import {
 } from "@tabler/icons-react"
 
 import { parseVideoInfo } from "@/lib/embed"
-import { clampHeadingLevel, headingId } from "@/lib/blocks"
+import { clampHeadingLevel, headingId, isDownloadHref } from "@/lib/blocks"
 import { cn } from "@/lib/utils"
 import type {
   Block,
@@ -70,18 +70,6 @@ const CALLOUT_STYLES: Record<
     box: "border-red-500/30 bg-red-500/5",
     iconClass: "text-red-600 dark:text-red-400",
   },
-}
-
-const DOWNLOAD_REGEX = /\.(xlsx?|xlsm|xltx?|csv|zip|rar|pdf|7z)(\?.*)?$/i
-
-function isDownloadHref(href: string, text?: string): boolean {
-  if (DOWNLOAD_REGEX.test(href)) return true
-  if (href.includes("/downloads/") || href.includes("/api/v1/assets/")) return true
-  if (text) {
-    const trimmed = text.trim()
-    if (DOWNLOAD_REGEX.test(trimmed) || /\bdownload\b/i.test(trimmed)) return true
-  }
-  return false
 }
 
 function cleanRichText(value: RichText | undefined): RichText {

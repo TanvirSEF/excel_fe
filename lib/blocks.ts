@@ -61,6 +61,37 @@ export function getFeaturedImageFromBlocks(blocks: Block[]): string | null {
 
 const FORMULA_START_REGEX = /^\s*=[A-Z_]{2,}\s*\(/i
 
+export const DOWNLOAD_REGEX = /\.(xlsx?|xlsm|xltx?|csv|zip|rar|pdf|7z)(\?.*)?$/i
+
+export function isDownloadHref(href: string, text?: string): boolean {
+  if (DOWNLOAD_REGEX.test(href)) return true
+  if (href.includes("/downloads/") || href.includes("/api/v1/assets/")) return true
+  if (text) {
+    const trimmed = text.trim()
+    if (DOWNLOAD_REGEX.test(trimmed) || /\bdownload\b/i.test(trimmed)) return true
+  }
+  return false
+}
+
+export function isDownloadBlock(block: Block): boolean {
+  if (block.type === "button" && isDownloadHref(block.href, block.label)) {
+    return true
+  }
+  if (block.type === "paragraph" && Array.isArray(block.content)) {
+    const meaningfulRuns = block.content.filter(
+      (r) => r.text && r.text.trim().length > 0
+    )
+    if (meaningfulRuns.length === 1) {
+      const run = meaningfulRuns[0]
+      const linkMark = run.marks?.find((m) => m.type === "link")
+      if (linkMark?.href && isDownloadHref(linkMark.href, run.text)) {
+        return true
+      }
+    }
+  }
+  return false
+}
+
 export function normalizePostBlocks(blocks: Block[]): Block[] {
   const result: Block[] = []
   let i = 0
@@ -204,6 +235,57 @@ export function normalizePostBlocks(blocks: Block[]): Block[] {
 
     result.push(block)
     i++
+  }
+
+  // 6. Reposition practice workbook download block to right before FAQ / Conclusion
+  const downloadIndices: number[] = []
+  for (let idx = 0; idx < result.length; idx++) {
+    if (isDownloadBlock(result[idx])) {
+      downloadIndices.push(idx)
+    }
+  }
+
+  if (downloadIndices.length > 0) {
+    const faqIndex = result.findIndex(
+      (b) =>
+        b.type === "heading" &&
+        /^\s*(faq|frequently\s+asked\s+questions)\b/i.test(b.text?.trim() ?? "")
+    )
+    const conclusionIndex = result.findIndex(
+      (b) =>
+        b.type === "heading" &&
+        /^\s*(wrapping\s+up|conclusion|final\s+words|final\s+thoughts|summary)\b/i.test(
+          b.text?.trim() ?? ""
+        )
+    )
+
+    let targetIndex =
+      faqIndex !== -1
+        ? faqIndex
+        : conclusionIndex !== -1
+          ? conclusionIndex
+          : -1
+
+    if (targetIndex !== -1) {
+      // If an <hr> immediately precedes the target heading, place download card before <hr>
+      if (targetIndex > 0 && result[targetIndex - 1].type === "hr") {
+        targetIndex = targetIndex - 1
+      }
+
+      const blocksToMove: Block[] = []
+      for (let k = downloadIndices.length - 1; k >= 0; k--) {
+        const dIdx = downloadIndices[k]
+        if (dIdx < targetIndex) {
+          blocksToMove.unshift(result[dIdx])
+          result.splice(dIdx, 1)
+          targetIndex--
+        }
+      }
+
+      if (blocksToMove.length > 0) {
+        result.splice(targetIndex, 0, ...blocksToMove)
+      }
+    }
   }
 
   return result
