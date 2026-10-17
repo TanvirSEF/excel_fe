@@ -34,18 +34,22 @@ export function buildArticleJsonLd(post: PostDetail, path?: string) {
 }
 
 export function buildSeriesJsonLd(series: SeriesSummary, posts: PostListItem[]) {
+  const catSlug = series.category?.slug ?? "category"
+  const seriesUrl = `${config.siteUrl}/${catSlug}/${series.slug}/`
   const data: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: series.name,
-    url: `${config.siteUrl}/series/${series.slug}/`,
+    url: seriesUrl,
     mainEntity: {
       "@type": "ItemList",
       numberOfItems: posts.length,
       itemListElement: posts.map((post, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        url: `${config.siteUrl}/blog/${post.slug}/`,
+        url: post.canonical_url
+          ? `${config.siteUrl}${post.canonical_url.startsWith("/") ? post.canonical_url : `/${post.canonical_url}`}`
+          : `${config.siteUrl}/blog/${post.slug}/`,
         name: post.title,
       })),
     },
