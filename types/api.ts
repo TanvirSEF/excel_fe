@@ -82,6 +82,7 @@ export interface CurriculumLesson {
 
 export interface AuthorProfile {
   id: string
+  slug?: string | null
   name: string
   avatar_url: string | null
   bio: string | null
@@ -143,6 +144,7 @@ export interface PostDetail extends PostListItem {
   status: PostStatus
   author_id: string
   author_name: string
+  author_slug?: string | null
   category_id: string | null
   category_name: string | null
   category_slug: string | null

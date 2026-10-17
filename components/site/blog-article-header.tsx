@@ -32,7 +32,7 @@ export function BlogArticleHeader({ post }: { post: PostDetail }) {
           <span>Written by:</span>
           {post.author_id ? (
             <Link
-              href={`/authors/${post.author_id}`}
+              href={`/author/${post.author_slug || post.author_id}/`}
               className="font-medium text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
             >
               {post.author_name}

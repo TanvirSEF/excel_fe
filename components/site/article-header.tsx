@@ -30,7 +30,7 @@ export function ArticleHeader({ post }: { post: PostDetail }) {
         </h1>
         <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-[15px] sm:text-base text-muted-foreground">
           <Link
-            href={`/authors/${post.author_id}`}
+            href={`/author/${post.author_slug || post.author_id}/`}
             className="group flex items-center gap-2.5"
           >
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 text-sm font-bold text-primary transition-colors group-hover:bg-primary/25">

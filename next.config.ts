@@ -70,6 +70,10 @@ const nextConfig: NextConfig = {
         source: "/category-sitemap.xml",
         destination: `${apiUrl}/sitemap.xml`,
       },
+      {
+        source: "/author-sitemap.xml",
+        destination: `${apiUrl}/sitemap.xml`,
+      },
     ]
   },
   async redirects() {

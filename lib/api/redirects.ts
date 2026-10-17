@@ -31,6 +31,7 @@ const KNOWN_STATIC_PREFIXES = [
   "/terms",
   "/services",
   "/series",
+  "/author",
   "/authors",
   "/cookie-policy",
 ]

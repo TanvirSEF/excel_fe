@@ -16,7 +16,11 @@ export function buildArticleJsonLd(post: PostDetail, path?: string) {
     description: post.meta_description ?? post.excerpt,
     datePublished: post.published_at,
     dateModified: post.updated_at,
-    author: { "@type": "Person", name: post.author_name },
+    author: {
+      "@type": "Person",
+      name: post.author_name,
+      url: `${config.siteUrl}/author/${post.author_slug || post.author_id}/`,
+    },
     publisher: {
       "@type": "Organization",
       name: "Excel Insider",
