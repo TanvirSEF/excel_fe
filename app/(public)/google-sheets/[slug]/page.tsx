@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { notFound, redirect } from "next/navigation"
+import { notFound, permanentRedirect } from "next/navigation"
 
 import { BlockRenderer } from "@/components/blocks/block-renderer"
 import { InlineToc } from "@/components/blocks/inline-toc"
@@ -13,7 +13,6 @@ import { ArticleCtaBand } from "@/components/site/newsletter/article-cta-band"
 import { ApiClientError } from "@/lib/api/error"
 import { getCurriculum } from "@/lib/api/curriculum"
 import { getPostBySlug, getPostComments, getPosts } from "@/lib/api/posts"
-import { isGoogleSheetsCategory } from "@/lib/category-topics"
 import {
   extractToc,
   getFeaturedImageFromBlocks,
@@ -50,6 +49,17 @@ export async function generateMetadata({
   const description = post.meta_description ?? post.excerpt ?? undefined
   const image = post.og_image_url ?? post.featured_image_url ?? "/og-default.png"
 
+  if (!post.canonical_url?.startsWith("/google-sheets/")) {
+    const target = post.canonical_url ?? `/blog/${post.slug}/`
+    const finalTarget = target.startsWith("/") ? target : `/${target}`
+    const canonical = finalTarget.endsWith("/") ? finalTarget : `${finalTarget}/`
+    return {
+      title,
+      description,
+      alternates: { canonical },
+    }
+  }
+
   return {
     title,
     description,
@@ -78,12 +88,12 @@ export default async function LessonPage({ params }: LessonPageProps) {
   const { slug } = await params
   const post = await loadLesson(slug)
 
-  if (
-    !isGoogleSheetsCategory(post.category_slug) &&
-    !post.canonical_url?.startsWith("/google-sheets/") &&
-    !post.canonical_url?.startsWith("/google-sheets-")
-  ) {
-    redirect(`/blog/${post.slug}/`)
+  if (!post.canonical_url?.startsWith("/google-sheets/")) {
+    const target = post.canonical_url ?? `/blog/${post.slug}/`
+    const finalTarget = target.startsWith("/") ? target : `/${target}`
+    permanentRedirect(
+      finalTarget.endsWith("/") ? finalTarget : `${finalTarget}/`
+    )
   }
 
   const [comments, modules, basicsPage] = await Promise.all([

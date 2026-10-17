@@ -7,7 +7,6 @@ import {
 } from "@/components/site/blog-article-view"
 import { ApiClientError } from "@/lib/api/error"
 import { getPostBySlug } from "@/lib/api/posts"
-import { isGoogleSheetsCategory } from "@/lib/category-topics"
 import type { PostDetail } from "@/types/api"
 
 export const revalidate = 300
@@ -39,11 +38,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params
   const post = await loadPost(slug)
 
-  if (
-    isGoogleSheetsCategory(post.category_slug) ||
-    post.canonical_url?.startsWith("/google-sheets/") ||
-    post.canonical_url?.startsWith("/google-sheets-")
-  ) {
+  if (post.canonical_url?.startsWith("/google-sheets/")) {
     permanentRedirect(`/google-sheets/${post.slug}/`)
   }
 

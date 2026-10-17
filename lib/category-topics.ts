@@ -133,6 +133,12 @@ export function isGoogleSheetsCategory(
   return GOOGLE_TRACK_SLUGS.includes(slug)
 }
 
+export function isCurriculumLesson(
+  post: { canonical_url?: string | null } | null | undefined
+): boolean {
+  return Boolean(post?.canonical_url?.startsWith("/google-sheets/"))
+}
+
 function getExcelTopicIcon(slug: string): TablerIcon {
   const matched = EXCEL_CURATED_TOPICS.find((t) => t.slug === slug)
   if (matched) return matched.icon

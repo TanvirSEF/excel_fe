@@ -4,7 +4,6 @@ import { IconArrowUpRight, IconFlame } from "@tabler/icons-react"
 
 import { Time } from "@/components/shared/time"
 import { toCdnUrl } from "@/lib/blocks"
-import { isGoogleSheetsCategory } from "@/lib/category-topics"
 import { cn } from "@/lib/utils"
 import type { PostListItem } from "@/types/api"
 
@@ -21,12 +20,7 @@ export function postHref(
     canonical_url?: string | null
   }
 ) {
-  const categorySlug = post.category?.slug ?? post.category_slug
-  if (
-    isGoogleSheetsCategory(categorySlug) ||
-    post.canonical_url?.startsWith("/google-sheets/") ||
-    post.canonical_url?.startsWith("/google-sheets-")
-  ) {
+  if (post.canonical_url?.startsWith("/google-sheets/")) {
     return `/google-sheets/${post.slug}/`
   }
 

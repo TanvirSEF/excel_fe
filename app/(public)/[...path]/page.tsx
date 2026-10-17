@@ -9,7 +9,6 @@ import { SeriesView } from "@/components/site/series-view"
 import { getPostBySlug } from "@/lib/api/posts"
 import { getSeriesBySlug } from "@/lib/api/series"
 import { getWpRedirect, looksLikeWpPath } from "@/lib/api/redirects"
-import { isGoogleSheetsCategory } from "@/lib/category-topics"
 import { clamp, firstParam } from "@/lib/utils"
 import type { Page, PostDetail, PostListItem, SeriesSummary } from "@/types/api"
 
@@ -91,11 +90,7 @@ async function resolvePath(path: string[], page: number): Promise<ResolvedRoute>
       const slug = redirectRow.new_path.replace("/blog/", "").replace(/\/+$/, "")
       try {
         const post = await getPostBySlug(slug)
-        if (
-          isGoogleSheetsCategory(post.category_slug) ||
-          post.canonical_url?.startsWith("/google-sheets/") ||
-          post.canonical_url?.startsWith("/google-sheets-")
-        ) {
+        if (post.canonical_url?.startsWith("/google-sheets/")) {
           return {
             type: "redirect",
             target: `/google-sheets/${post.slug}/`,
@@ -135,14 +130,24 @@ async function resolvePath(path: string[], page: number): Promise<ResolvedRoute>
   if (path.length === 1) {
     try {
       const post = await getPostBySlug(path[0])
-      if (
-        isGoogleSheetsCategory(post.category_slug) ||
-        post.canonical_url?.startsWith("/google-sheets/") ||
-        post.canonical_url?.startsWith("/google-sheets-")
-      ) {
+      if (post.canonical_url?.startsWith("/google-sheets/")) {
         return {
           type: "redirect",
           target: `/google-sheets/${post.slug}/`,
+          isPermanent: true,
+        }
+      }
+      if (
+        post.canonical_url &&
+        post.canonical_url !== pathname &&
+        post.canonical_url !== `${pathname}/`
+      ) {
+        const target = post.canonical_url.endsWith("/")
+          ? post.canonical_url
+          : `${post.canonical_url}/`
+        return {
+          type: "redirect",
+          target,
           isPermanent: true,
         }
       }
