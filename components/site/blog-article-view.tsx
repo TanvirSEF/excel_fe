@@ -11,6 +11,7 @@ import { ArticleRelatedSidebar } from "@/components/site/article-related-sidebar
 import { ArticleTocSidebar } from "@/components/site/article-toc-sidebar"
 import { ReadingProgress } from "@/components/site/reading-progress"
 import { ShareButtons } from "@/components/site/share-buttons"
+import { getAuthor } from "@/lib/api/authors"
 import { getPostComments, getPosts } from "@/lib/api/posts"
 import {
   extractToc,
@@ -70,7 +71,14 @@ interface BlogArticleViewProps {
 }
 
 export async function BlogArticleView({ post }: BlogArticleViewProps) {
-  const comments = await getPostComments(post.id).catch(() => [])
+  const authorIdentifier = post.author_slug || post.author_id
+  const [comments, author] = await Promise.all([
+    getPostComments(post.id).catch(() => []),
+    authorIdentifier
+      ? getAuthor(authorIdentifier).catch(() => null)
+      : Promise.resolve(null),
+  ])
+  const authorAvatarUrl = author?.avatar_url ? toCdnUrl(author.avatar_url) : null
   const normalizedBlocks = normalizePostBlocks(post.content_json?.blocks ?? [])
   const toc = extractToc(normalizedBlocks)
   const effectiveFeaturedImage =
@@ -155,7 +163,10 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
 
           <article className="min-w-0 w-full max-w-[820px] flex-1">
             <Breadcrumb items={breadcrumbItems} />
-            <BlogArticleHeader post={post} />
+            <BlogArticleHeader
+              post={post}
+              authorAvatarUrl={authorAvatarUrl}
+            />
 
             <div className="border-y border-border/70 py-3 my-6 sm:my-8">
               <ShareButtons title={post.title} />

@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 import { format, isValid } from "date-fns"
 
@@ -10,7 +11,15 @@ function formatDate(dateStr: string | null | undefined): string | null {
   return format(parsed, "MMMM d, yyyy")
 }
 
-export function BlogArticleHeader({ post }: { post: PostDetail }) {
+interface BlogArticleHeaderProps {
+  post: PostDetail
+  authorAvatarUrl?: string | null
+}
+
+export function BlogArticleHeader({
+  post,
+  authorAvatarUrl,
+}: BlogArticleHeaderProps) {
   const dateStr = post.updated_at || post.published_at
   const lastUpdated = formatDate(dateStr)
 
@@ -27,18 +36,44 @@ export function BlogArticleHeader({ post }: { post: PostDetail }) {
       <h1 className="mt-4 text-balance text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl">
         {post.title}
       </h1>
-      <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[15px] sm:text-base text-muted-foreground sm:gap-x-6">
-        <div className="flex items-center gap-1.5">
+      <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-[15px] sm:text-base text-muted-foreground sm:gap-x-6">
+        <div className="flex items-center gap-2">
           <span>Written by:</span>
           {post.author_id ? (
             <Link
               href={`/author/${post.author_slug || post.author_id}/`}
-              className="font-medium text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
+              className="group inline-flex items-center gap-2 font-medium text-foreground transition-colors hover:text-primary"
             >
-              {post.author_name}
+              {authorAvatarUrl ? (
+                <span className="relative flex h-7 w-7 shrink-0 overflow-hidden rounded-full ring-1 ring-border/80 transition-all group-hover:ring-primary/60">
+                  <Image
+                    src={authorAvatarUrl}
+                    alt={post.author_name}
+                    width={28}
+                    height={28}
+                    className="h-full w-full object-cover"
+                  />
+                </span>
+              ) : null}
+              <span className="underline-offset-4 group-hover:underline">
+                {post.author_name}
+              </span>
             </Link>
           ) : (
-            <span className="font-medium text-foreground">{post.author_name}</span>
+            <span className="inline-flex items-center gap-2 font-medium text-foreground">
+              {authorAvatarUrl ? (
+                <span className="relative flex h-7 w-7 shrink-0 overflow-hidden rounded-full ring-1 ring-border/80">
+                  <Image
+                    src={authorAvatarUrl}
+                    alt={post.author_name}
+                    width={28}
+                    height={28}
+                    className="h-full w-full object-cover"
+                  />
+                </span>
+              ) : null}
+              <span>{post.author_name}</span>
+            </span>
           )}
         </div>
 
@@ -60,3 +95,4 @@ export function BlogArticleHeader({ post }: { post: PostDetail }) {
     </header>
   )
 }
+

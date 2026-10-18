@@ -74,11 +74,13 @@ export function PostPreviewModal({
     [categories, fields.categoryId]
   )
 
-  const authorName = useMemo(() => {
-    if (!fields.authorId) return currentUserName ?? "Editorial Team"
-    const author = authors?.find((a) => a.id === fields.authorId)
-    return author?.name ?? currentUserName ?? "Editorial Team"
-  }, [authors, fields.authorId, currentUserName])
+  const selectedAuthor = useMemo(() => {
+    if (!fields.authorId) return null
+    return authors?.find((a) => a.id === fields.authorId) ?? null
+  }, [authors, fields.authorId])
+
+  const authorName = selectedAuthor?.name ?? currentUserName ?? "Editorial Team"
+  const authorAvatarUrl = selectedAuthor?.avatar_url ?? null
 
   const previewPost: PostDetail = useMemo(
     () => ({
@@ -252,7 +254,10 @@ export function PostPreviewModal({
           ) : (
             <div className="px-5 py-8 sm:px-8 sm:py-10">
               <Breadcrumb items={breadcrumbItems} />
-              <BlogArticleHeader post={previewPost} />
+              <BlogArticleHeader
+                post={previewPost}
+                authorAvatarUrl={authorAvatarUrl}
+              />
 
               <article className="mt-8 w-full">
                 <div className="border-y border-border/70 py-3 mb-6 sm:mb-8">
