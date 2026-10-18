@@ -1,5 +1,7 @@
 import type { Metadata } from "next"
 import { Geist_Mono, Poppins } from "next/font/google"
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import "./globals.css"
 import { Providers } from "@/components/providers"
@@ -75,6 +77,8 @@ export default function RootLayout({
           </TooltipProvider>
         </ThemeProvider>
         <GoogleAnalytics measurementId={config.gaMeasurementId} />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
