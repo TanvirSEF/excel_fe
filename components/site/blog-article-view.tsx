@@ -151,12 +151,12 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
     <>
       <ReadingProgress />
 
-      <div className="single-post mx-auto w-full max-w-[1500px] px-4 pt-6 pb-16 sm:px-6 sm:pt-8 sm:pb-24 lg:pb-32">
+      <div className="single-post mx-auto w-full max-w-[1536px] px-4 pt-6 pb-16 sm:px-6 sm:pt-8 sm:pb-24 lg:pb-32">
         <div className="flex items-start justify-center gap-6 2xl:gap-8">
           <aside
             id="left-sidebar"
             aria-label="Table of contents"
-            className="hidden xl:block w-[300px] shrink-0 space-y-6"
+            className="hidden xl:block w-[320px] shrink-0 space-y-6"
           >
             {toc.length >= 2 ? <ArticleTocSidebar toc={toc} /> : null}
           </aside>
@@ -212,7 +212,7 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
 
           <aside
             id="sidebar"
-            className="sidebar sidebar-primary elementor-widget-sidebar hidden xl:block w-[300px] shrink-0 space-y-6"
+            className="sidebar sidebar-primary elementor-widget-sidebar hidden xl:block w-[320px] shrink-0 space-y-6"
           >
             {related.length > 0 ? (
               <ArticleRelatedSidebar

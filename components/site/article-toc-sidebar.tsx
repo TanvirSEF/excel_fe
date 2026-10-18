@@ -121,7 +121,7 @@ export function ArticleTocSidebar({ toc, className }: ArticleTocSidebarProps) {
     <nav
       aria-label="Table of contents"
       className={cn(
-        "w-[300px] overflow-hidden rounded-2xl border border-border/70 bg-card p-4 shadow-2xs",
+        "w-full overflow-hidden rounded-2xl border border-border/70 bg-card p-4 shadow-2xs",
         className
       )}
     >

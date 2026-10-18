@@ -155,7 +155,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
         <aside
           id="sidebar"
           aria-label="Table of contents"
-          className="sidebar sidebar-primary hidden xl:block w-[300px] shrink-0 space-y-6"
+          className="sidebar sidebar-primary hidden xl:block w-[320px] shrink-0 space-y-6"
         >
           {toc.length >= 2 ? <ArticleTocSidebar toc={toc} /> : null}
         </aside>
