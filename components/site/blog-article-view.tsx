@@ -8,6 +8,7 @@ import { Breadcrumb } from "@/components/site/breadcrumb"
 import { CommentsSection } from "@/components/site/comments-section"
 import { ArticleCtaBand } from "@/components/site/newsletter/article-cta-band"
 import { ArticleRelatedSidebar } from "@/components/site/article-related-sidebar"
+import { ArticleTocSidebar } from "@/components/site/article-toc-sidebar"
 import { ReadingProgress } from "@/components/site/reading-progress"
 import { ShareButtons } from "@/components/site/share-buttons"
 import { getPostComments, getPosts } from "@/lib/api/posts"
@@ -142,21 +143,28 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
     <>
       <ReadingProgress />
 
-      <div className="single-post mx-auto w-full max-w-[1340px] px-4 pt-8 pb-16 sm:px-6 sm:pt-10 sm:pb-24 lg:pb-32">
-        <div className="max-w-[860px] mx-auto xl:mx-0">
-          <Breadcrumb items={breadcrumbItems} />
-          <BlogArticleHeader post={post} />
-        </div>
+      <div className="single-post mx-auto w-full max-w-[1500px] px-4 pt-6 pb-16 sm:px-6 sm:pt-8 sm:pb-24 lg:pb-32">
+        <div className="flex items-start justify-center gap-6 2xl:gap-8">
+          <aside
+            id="left-sidebar"
+            aria-label="Table of contents"
+            className="hidden xl:block w-[300px] shrink-0 space-y-6"
+          >
+            {toc.length >= 2 ? <ArticleTocSidebar toc={toc} /> : null}
+          </aside>
 
-        <div className="mt-8 flex items-start justify-center xl:justify-start gap-10">
-          <article className="min-w-0 w-full max-w-[860px] mx-auto xl:mx-0">
-            <div className="border-y border-border/70 py-3 mb-6 sm:mb-8">
+          <article className="min-w-0 w-full max-w-[820px] flex-1">
+            <Breadcrumb items={breadcrumbItems} />
+            <BlogArticleHeader post={post} />
+
+            <div className="border-y border-border/70 py-3 my-6 sm:my-8">
               <ShareButtons title={post.title} />
             </div>
 
             <BlockRenderer
               blocks={normalizedBlocks}
               toc={toc}
+              hideInlineTocOnDesktop
             />
             <ArticleTags
               tags={post.tags}
@@ -191,9 +199,9 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
             />
           </article>
 
-          <div
+          <aside
             id="sidebar"
-            className="sidebar sidebar-primary elementor-widget-sidebar hidden xl:block w-[21rem] shrink-0 space-y-6"
+            className="sidebar sidebar-primary elementor-widget-sidebar hidden xl:block w-[300px] shrink-0 space-y-6"
           >
             {related.length > 0 ? (
               <ArticleRelatedSidebar
@@ -202,7 +210,7 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
                 categorySlug={post.category_slug}
               />
             ) : null}
-          </div>
+          </aside>
         </div>
       </div>
     </>

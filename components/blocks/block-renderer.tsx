@@ -36,6 +36,7 @@ interface BlockRendererProps {
   className?: string
   toc?: TocEntry[]
   tocDefaultCollapsed?: boolean
+  hideInlineTocOnDesktop?: boolean
 }
 
 const HEADING_CLASSES: Record<2 | 3 | 4, string> = {
@@ -1212,6 +1213,7 @@ export function BlockRenderer({
   className,
   toc,
   tocDefaultCollapsed = true,
+  hideInlineTocOnDesktop = false,
 }: BlockRendererProps) {
   const usedIds = new Set<string>()
   const hasToc = Boolean(toc && toc.length >= 2)
@@ -1269,7 +1271,11 @@ export function BlockRenderer({
       )}
     >
       {hasToc && takeawayIndex === -1 && toc ? (
-        <InlineToc entries={toc} defaultCollapsed={tocDefaultCollapsed} />
+        <InlineToc
+          entries={toc}
+          defaultCollapsed={tocDefaultCollapsed}
+          className={hideInlineTocOnDesktop ? "xl:hidden" : undefined}
+        />
       ) : null}
 
       {blocks.map((block, index) => {
@@ -1314,7 +1320,11 @@ export function BlockRenderer({
               takeawayImages={isTakeaway ? takeawayImages : undefined}
             />
             {hasToc && isTakeaway && toc ? (
-              <InlineToc entries={toc} defaultCollapsed={tocDefaultCollapsed} />
+              <InlineToc
+                entries={toc}
+                defaultCollapsed={tocDefaultCollapsed}
+                className={hideInlineTocOnDesktop ? "xl:hidden" : undefined}
+              />
             ) : null}
           </Fragment>
         )
