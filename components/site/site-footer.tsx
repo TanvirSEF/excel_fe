@@ -28,9 +28,9 @@ const EXPLORE_LINKS = [
 
 const COMPANY_LINKS = [
   { label: "Contact & Support", href: "/contact" },
-  { label: "Privacy Policy", href: "/privacy" },
-  { label: "Cookie Policy", href: "/cookie-policy" },
-  { label: "Terms of Service", href: "/terms" },
+  { label: "Privacy Policy", href: "/privacy-policy/" },
+  { label: "Cookie Policy", href: "/cookie-policy/" },
+  { label: "Terms of Service", href: "/terms-and-conditions/" },
 ]
 
 const SOCIAL_LINKS = [

@@ -899,7 +899,7 @@ export function ServiceRequestWizard({
                   />
                   <span>
                     I agree to the{" "}
-                    <Link href="/terms" target="_blank" className="font-semibold text-emerald-700 dark:text-emerald-400 hover:underline">
+                    <Link href="/terms-and-conditions/" target="_blank" className="font-semibold text-emerald-700 dark:text-emerald-400 hover:underline">
                       Terms & Conditions
                     </Link>{" "}
                     of Service for ExcelInsider.com <span className="text-red-500">*</span>

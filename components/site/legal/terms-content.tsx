@@ -213,7 +213,7 @@ export function TermsContent() {
       <LegalSection id="privacy-policy" num="8" title="Privacy Policy">
         <p>
           Your use of our services is also governed by our{" "}
-          <Link href="/privacy">Privacy Policy</Link>, which explains how we collect, use, and protect
+          <Link href="/privacy-policy/">Privacy Policy</Link>, which explains how we collect, use, and protect
           your personal information. Please review our Privacy Policy to understand your rights
           and obligations when using our website and services.
         </p>

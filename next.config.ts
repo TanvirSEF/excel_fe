@@ -82,13 +82,23 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: "/privacy-policy",
-        destination: "/privacy/",
+        source: "/privacy",
+        destination: "/privacy-policy/",
         permanent: true,
       },
       {
-        source: "/privacy-policy/:path*",
-        destination: "/privacy/",
+        source: "/privacy/:path*",
+        destination: "/privacy-policy/",
+        permanent: true,
+      },
+      {
+        source: "/terms",
+        destination: "/terms-and-conditions/",
+        permanent: true,
+      },
+      {
+        source: "/terms/:path*",
+        destination: "/terms-and-conditions/",
         permanent: true,
       },
       {
