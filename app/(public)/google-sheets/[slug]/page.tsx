@@ -10,6 +10,7 @@ import { CurriculumSidebar } from "@/components/site/learning-track/curriculum-s
 import { CurriculumDrawer } from "@/components/site/learning-track/curriculum-drawer"
 import { GoogleSheetsCarousel } from "@/components/site/learning-track/google-sheets-carousel"
 import { ArticleCtaBand } from "@/components/site/newsletter/article-cta-band"
+import { ArticleTocSidebar } from "@/components/site/article-toc-sidebar"
 import { ApiClientError } from "@/lib/api/error"
 import { getCurriculum } from "@/lib/api/curriculum"
 import { getPostBySlug, getPostComments, getPosts } from "@/lib/api/posts"
@@ -115,17 +116,19 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
   return (
     <>
-      <div className="single-post mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-8 px-4 py-10 sm:py-12 xl:grid-cols-[264px_minmax(0,1fr)]">
-        <aside className="hidden xl:block">
-          <div className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto pr-1">
+      <div className="single-post mx-auto flex w-full max-w-[1500px] items-start justify-center gap-6 2xl:gap-8 px-4 py-8 sm:py-10">
+        <aside className="hidden xl:block w-[264px] shrink-0">
+          <div className="max-h-[calc(100vh-6rem)] overflow-y-auto pr-1">
             <CurriculumSidebar modules={modules} activeLessonSlug={post.slug} />
           </div>
         </aside>
 
-        <article className="mx-auto w-full max-w-[860px] xl:mx-0">
+        <article className="min-w-0 w-full max-w-[820px] flex-1">
           <ArticleHeader post={post} />
 
-          <InlineToc entries={toc} className="mt-0 mb-8" />
+          {toc.length >= 2 ? (
+            <InlineToc entries={toc} className="mt-0 mb-8 xl:hidden" />
+          ) : null}
 
           <BlockRenderer blocks={normalizedBlocks} />
           <ArticleTags tags={post.tags} />
@@ -148,6 +151,14 @@ export default async function LessonPage({ params }: LessonPageProps) {
             }}
           />
         </article>
+
+        <aside
+          id="sidebar"
+          aria-label="Table of contents"
+          className="sidebar sidebar-primary hidden xl:block w-[300px] shrink-0 space-y-6"
+        >
+          {toc.length >= 2 ? <ArticleTocSidebar toc={toc} /> : null}
+        </aside>
       </div>
 
       <CurriculumDrawer modules={modules} activeLessonSlug={post.slug} />
