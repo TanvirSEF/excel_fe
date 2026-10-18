@@ -42,7 +42,10 @@ const nextConfig: NextConfig = {
     formats: ["image/webp", "image/avif"],
     minimumCacheTTL: 31536000,
     remotePatterns: mediaHosts.length
-      ? mediaHosts.map((hostname) => ({ protocol: "https" as const, hostname }))
+      ? [
+          { protocol: "https" as const, hostname: "pub-b39c974f4c124a36a2fb517be38076ec.r2.dev" },
+          ...mediaHosts.map((hostname) => ({ protocol: "https" as const, hostname })),
+        ]
       : [{ protocol: "https" as const, hostname: "**" }],
   },
   async headers() {
