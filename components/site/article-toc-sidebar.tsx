@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { IconChevronRight, IconListNumbers } from "@tabler/icons-react"
+import { IconListNumbers } from "@tabler/icons-react"
 
 import type { TocEntry } from "@/lib/blocks"
 import { cn } from "@/lib/utils"
@@ -11,27 +11,30 @@ interface ArticleTocSidebarProps {
   className?: string
 }
 
-interface TocSection {
-  entry: TocEntry
-  children: TocEntry[]
+interface FormattedTocEntry extends TocEntry {
+  isSub: boolean
+  numberPrefix: string
 }
 
-function buildSections(entries: TocEntry[]): TocSection[] {
-  const sections: TocSection[] = []
-  let current: TocSection | null = null
+function formatTocEntries(toc: TocEntry[]): FormattedTocEntry[] {
+  let count = 0
+  const result: FormattedTocEntry[] = []
 
-  for (const entry of entries) {
-    if (entry.level === 2) {
-      current = { entry, children: [] }
-      sections.push(current)
-    } else if (current) {
-      current.children.push(entry)
-    } else {
-      sections.push({ entry, children: [] })
+  for (const entry of toc) {
+    const isSub = entry.level >= 3
+    let numberPrefix = ""
+    if (!isSub) {
+      count += 1
+      numberPrefix = String(count).padStart(2, "0")
     }
+    result.push({
+      ...entry,
+      isSub,
+      numberPrefix,
+    })
   }
 
-  return sections
+  return result
 }
 
 export function ArticleTocSidebar({ toc, className }: ArticleTocSidebarProps) {
@@ -39,7 +42,7 @@ export function ArticleTocSidebar({ toc, className }: ArticleTocSidebarProps) {
   const isClickingRef = useRef(false)
   const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  const sections = useMemo(() => buildSections(toc), [toc])
+  const items = useMemo(() => formatTocEntries(toc), [toc])
   const entryIds = useMemo(() => toc.map((entry) => entry.id), [toc])
 
   useEffect(() => {
@@ -53,41 +56,44 @@ export function ArticleTocSidebar({ toc, className }: ArticleTocSidebarProps) {
 
     let rafId: number | null = null
 
-    function onScroll() {
+    function updateActiveHeading() {
       if (isClickingRef.current) return
       if (rafId !== null) return
 
       rafId = requestAnimationFrame(() => {
         rafId = null
 
-        const scrollPosition = window.scrollY + 140
-        let current = ""
+        const scrollThreshold = window.scrollY + 120
+        let current = headings[0].id
 
-        for (const heading of headings) {
-          if (heading.getBoundingClientRect().top + window.scrollY <= scrollPosition) {
-            current = heading.id
+        for (let i = 0; i < headings.length; i++) {
+          const top = headings[i].getBoundingClientRect().top + window.scrollY
+          if (top <= scrollThreshold) {
+            current = headings[i].id
+          } else {
+            break
           }
         }
 
         if (
           window.innerHeight + window.scrollY >=
-          document.documentElement.scrollHeight - 16
+          document.documentElement.scrollHeight - 30
         ) {
           current = headings[headings.length - 1].id
         }
 
-        if (current) {
-          setActiveId(current)
-        }
+        setActiveId(current)
       })
     }
 
-    onScroll()
-    window.addEventListener("scroll", onScroll, { passive: true })
+    updateActiveHeading()
+    window.addEventListener("scroll", updateActiveHeading, { passive: true })
+    window.addEventListener("resize", updateActiveHeading, { passive: true })
 
     return () => {
       if (rafId !== null) cancelAnimationFrame(rafId)
-      window.removeEventListener("scroll", onScroll)
+      window.removeEventListener("scroll", updateActiveHeading)
+      window.removeEventListener("resize", updateActiveHeading)
       if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current)
     }
   }, [entryIds])
@@ -106,117 +112,78 @@ export function ArticleTocSidebar({ toc, className }: ArticleTocSidebarProps) {
     if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current)
     clickTimeoutRef.current = setTimeout(() => {
       isClickingRef.current = false
-    }, 700)
+    }, 600)
   }
 
   if (toc.length < 2) return null
-
-  const activeSectionId =
-    sections.find(
-      (s) => s.entry.id === activeId || s.children.some((c) => c.id === activeId)
-    )?.entry.id ?? null
 
   return (
     <nav
       aria-label="Table of contents"
       className={cn(
-        "w-[300px] overflow-hidden rounded-2xl border border-border/70 bg-card shadow-2xs",
+        "w-[300px] overflow-hidden rounded-2xl border border-border/70 bg-card p-4 shadow-2xs",
         className
       )}
     >
-      <div className="flex items-center justify-between border-b border-border/60 bg-muted/40 px-4 py-3">
+      <div className="flex items-center justify-between border-b border-border/60 pb-3 mb-3">
         <div className="flex items-center gap-2">
           <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
             <IconListNumbers className="h-4 w-4" />
           </span>
-          <h2 className="text-sm font-bold tracking-tight text-foreground">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-foreground">
             Table of Contents
           </h2>
         </div>
-        <span className="rounded-full bg-background px-2 py-0.5 text-[11px] font-semibold text-muted-foreground border border-border/60">
-          {sections.length} {sections.length === 1 ? "section" : "sections"}
+        <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-semibold text-muted-foreground border border-border/50">
+          {toc.length}
         </span>
       </div>
 
-      <div className="max-h-[520px] overflow-y-auto overscroll-contain p-2.5 [scrollbar-width:thin] [scrollbar-color:var(--color-primary-30)_transparent] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border hover:[&::-webkit-scrollbar-thumb]:bg-primary/40">
-        <ol className="space-y-1">
-          {sections.map((section, index) => {
-            const isSectionActive = activeId === section.entry.id
-            const isChildActive = section.children.some((c) => c.id === activeId)
-            const isCurrentSection = activeSectionId === section.entry.id
-            const numberFormatted = String(index + 1).padStart(2, "0")
-            const hasChildren = section.children.length > 0
+      <div className="max-h-[500px] overflow-y-auto overscroll-contain pr-1 [scrollbar-width:thin] [scrollbar-color:var(--color-primary-30)_transparent] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border hover:[&::-webkit-scrollbar-thumb]:bg-primary/40">
+        <ul className="relative space-y-0.5 border-l-2 border-border/60 pl-0">
+          {items.map((entry) => {
+            const isActive = activeId === entry.id
 
             return (
-              <li key={section.entry.id} className="space-y-0.5">
+              <li key={entry.id} className="relative">
                 <a
-                  href={`#${section.entry.id}`}
-                  onClick={(e) => handleNavigate(e, section.entry.id)}
+                  href={`#${entry.id}`}
+                  onClick={(e) => handleNavigate(e, entry.id)}
                   className={cn(
-                    "group flex items-center gap-2 rounded-xl px-2.5 py-1.5 text-xs transition-colors",
-                    isSectionActive
-                      ? "bg-primary/10 font-bold text-primary"
-                      : isChildActive
-                        ? "bg-muted/70 font-semibold text-foreground"
-                        : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                    "group block -ml-[2px] border-l-2 py-1.5 transition-colors leading-snug",
+                    entry.isSub ? "pl-5 text-[12px]" : "pl-3 text-[13px]",
+                    isActive
+                      ? "border-primary font-semibold text-primary"
+                      : "border-transparent text-muted-foreground hover:border-primary/40 hover:text-foreground"
                   )}
                 >
-                  <span
-                    className={cn(
-                      "flex h-5 w-5 shrink-0 items-center justify-center rounded text-[10px] font-bold tabular-nums transition-colors",
-                      isSectionActive
-                        ? "bg-primary text-primary-foreground"
-                        : isChildActive
-                          ? "bg-primary/20 text-primary"
-                          : "bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary"
+                  <span className="flex items-baseline gap-2 min-w-0">
+                    {entry.numberPrefix ? (
+                      <span
+                        className={cn(
+                          "shrink-0 text-[10px] font-bold tabular-nums",
+                          isActive
+                            ? "text-primary"
+                            : "text-muted-foreground/60 group-hover:text-primary"
+                        )}
+                      >
+                        {entry.numberPrefix}
+                      </span>
+                    ) : (
+                      <span
+                        className={cn(
+                          "h-1 w-1 shrink-0 rounded-full my-auto",
+                          isActive ? "bg-primary" : "bg-muted-foreground/40"
+                        )}
+                      />
                     )}
-                  >
-                    {numberFormatted}
+                    <span className="truncate">{entry.text}</span>
                   </span>
-                  <span className="min-w-0 flex-1 truncate">{section.entry.text}</span>
-                  {hasChildren ? (
-                    <IconChevronRight
-                      className={cn(
-                        "h-3 w-3 shrink-0 text-muted-foreground/50 transition-transform duration-200",
-                        isCurrentSection && "rotate-90 text-primary"
-                      )}
-                    />
-                  ) : null}
                 </a>
-
-                {hasChildren && isCurrentSection ? (
-                  <ol className="ml-3.5 space-y-0.5 border-l-2 border-primary/20 pl-2.5 my-1">
-                    {section.children.map((child) => {
-                      const isChildSelected = activeId === child.id
-                      return (
-                        <li key={child.id}>
-                          <a
-                            href={`#${child.id}`}
-                            onClick={(e) => handleNavigate(e, child.id)}
-                            className={cn(
-                              "flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] leading-snug transition-colors",
-                              isChildSelected
-                                ? "bg-primary/10 font-bold text-primary"
-                                : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
-                            )}
-                          >
-                            <span
-                              className={cn(
-                                "h-1 w-1 shrink-0 rounded-full transition-colors",
-                                isChildSelected ? "bg-primary" : "bg-muted-foreground/40"
-                              )}
-                            />
-                            <span className="truncate">{child.text}</span>
-                          </a>
-                        </li>
-                      )
-                    })}
-                  </ol>
-                ) : null}
               </li>
             )
           })}
-        </ol>
+        </ul>
       </div>
     </nav>
   )

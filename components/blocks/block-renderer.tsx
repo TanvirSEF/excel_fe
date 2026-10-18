@@ -40,9 +40,9 @@ interface BlockRendererProps {
 }
 
 const HEADING_CLASSES: Record<2 | 3 | 4, string> = {
-  2: "mt-8 sm:mt-10 mb-2 sm:mb-3 text-2xl sm:text-[1.85rem] font-bold tracking-tight text-foreground leading-snug first:mt-0",
-  3: "mt-6 sm:mt-7 mb-1.5 sm:mb-2 text-xl sm:text-[1.4rem] font-semibold tracking-tight text-foreground leading-snug first:mt-0",
-  4: "mt-5 sm:mt-6 mb-1 text-lg sm:text-[1.2rem] font-semibold text-foreground leading-snug first:mt-0",
+  2: "mt-8 sm:mt-10 mb-2 sm:mb-3 text-2xl sm:text-[1.85rem] font-bold tracking-tight text-foreground leading-snug first:mt-0 scroll-mt-24",
+  3: "mt-6 sm:mt-7 mb-1.5 sm:mb-2 text-xl sm:text-[1.4rem] font-semibold tracking-tight text-foreground leading-snug first:mt-0 scroll-mt-24",
+  4: "mt-5 sm:mt-6 mb-1 text-lg sm:text-[1.2rem] font-semibold text-foreground leading-snug first:mt-0 scroll-mt-24",
 }
 
 const SAFE_HREF = /^(https?:\/\/|mailto:|\/|#)/i
