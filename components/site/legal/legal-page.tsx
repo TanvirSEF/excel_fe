@@ -24,7 +24,7 @@ export function LegalPage({
   children,
 }: LegalPageProps) {
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-10 sm:py-14">
+    <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-12 lg:py-14">
       <Breadcrumb items={[{ label: "Home", href: "/" }, { label: breadcrumbLabel }]} />
 
       <div className="mt-6">
@@ -36,14 +36,14 @@ export function LegalPage({
         />
       </div>
 
-      <div className="mt-10 grid gap-12 lg:grid-cols-[230px_minmax(0,1fr)]">
+      <div className="mt-8 sm:mt-10 grid gap-8 lg:gap-10 xl:gap-12 lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[300px_minmax(0,1fr)]">
         <aside className="hidden lg:block">
-          <div className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto pb-8">
+          <div className="sticky top-24 max-h-[calc(100vh-7.5rem)] overflow-y-auto overscroll-contain pb-8 pr-1.5 [scrollbar-width:thin] [scrollbar-color:var(--color-primary-30)_transparent] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border hover:[&::-webkit-scrollbar-thumb]:bg-primary/40">
             <Toc entries={toc} />
           </div>
         </aside>
 
-        <div className="legal-prose min-w-0 space-y-12">
+        <div className="legal-prose min-w-0 max-w-none space-y-10 sm:space-y-12">
           <div className="lg:hidden">
             <MobileToc entries={toc} />
           </div>

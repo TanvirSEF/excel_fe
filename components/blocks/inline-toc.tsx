@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { IconChevronDown, IconListNumbers } from "@tabler/icons-react"
 
 import type { TocEntry } from "@/lib/blocks"
@@ -48,6 +48,8 @@ export function InlineToc({
   const [openSectionId, setOpenSectionId] = useState<string | null>(null)
   const [prevActiveSectionId, setPrevActiveSectionId] = useState<string | null>(null)
   const [isCollapsed, setIsCollapsed] = useState<boolean>(defaultCollapsed)
+  const isClickingRef = useRef(false)
+  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const entryIds = entries.map((entry) => entry.id).join("|")
   const { sections, orphans } = useMemo(() => buildSections(entries), [entries])
@@ -62,23 +64,26 @@ export function InlineToc({
     let ticking = false
     function update() {
       ticking = false
+      if (isClickingRef.current) return
+
       const hash = window.location.hash.replace(/^#/, "")
-      if (hash && ids.includes(hash)) {
-        setActiveId(hash)
-        return
-      }
       const marker = window.scrollY + ACTIVE_MARKER_OFFSET
       let current: string | null = null
-      for (const heading of headings) {
-        if (heading.getBoundingClientRect().top + window.scrollY <= marker) {
-          current = heading.id
+
+      if (window.scrollY < 50 && hash && ids.includes(hash)) {
+        current = hash
+      } else {
+        for (const heading of headings) {
+          if (heading.getBoundingClientRect().top + window.scrollY <= marker) {
+            current = heading.id
+          }
         }
-      }
-      if (
-        window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight - 4
-      ) {
-        current = headings[headings.length - 1].id
+        if (
+          window.innerHeight + window.scrollY >=
+          document.documentElement.scrollHeight - 4
+        ) {
+          current = headings[headings.length - 1].id
+        }
       }
       setActiveId(current)
     }
@@ -95,6 +100,7 @@ export function InlineToc({
     return () => {
       window.removeEventListener("scroll", onScroll)
       window.removeEventListener("resize", onScroll)
+      if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current)
     }
   }, [entryIds])
 
@@ -121,10 +127,18 @@ export function InlineToc({
   ) {
     event.preventDefault()
     setActiveId(id)
-    document
-      .getElementById(id)
-      ?.scrollIntoView({ behavior: "smooth", block: "start" })
-    history.replaceState(null, "", `#${id}`)
+    isClickingRef.current = true
+
+    const el = document.getElementById(id)
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" })
+      history.replaceState(null, "", `#${id}`)
+    }
+
+    if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current)
+    clickTimeoutRef.current = setTimeout(() => {
+      isClickingRef.current = false
+    }, 600)
   }
 
   function toggleSection(
@@ -138,10 +152,18 @@ export function InlineToc({
     } else {
       setOpenSectionId(id)
       setActiveId(id)
-      document
-        .getElementById(id)
-        ?.scrollIntoView({ behavior: "smooth", block: "start" })
-      history.replaceState(null, "", `#${id}`)
+      isClickingRef.current = true
+
+      const el = document.getElementById(id)
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" })
+        history.replaceState(null, "", `#${id}`)
+      }
+
+      if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current)
+      clickTimeoutRef.current = setTimeout(() => {
+        isClickingRef.current = false
+      }, 600)
     }
   }
 
