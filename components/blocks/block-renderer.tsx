@@ -645,7 +645,8 @@ function InlineRuns({ value }: { value: RichText }) {
           return null
         }
 
-        const parts = item.text.split("\n").map((part, partIndex) => (
+        const normalizedText = item.text.replace(/\n{2,}/g, "\n")
+        const parts = normalizedText.split("\n").map((part, partIndex) => (
           <Fragment key={partIndex}>
             {partIndex > 0 ? <br /> : null}
             {part}
@@ -669,13 +670,52 @@ function alignClass(align: TextAlign | undefined) {
 
 type ImageBlock = Extract<Block, { type: "image" }>
 
+function extractLeadingArrow(content: RichText | undefined): {
+  isStep: boolean
+  cleaned: RichText
+} {
+  if (!content) return { isStep: false, cleaned: "" }
+
+  if (typeof content === "string") {
+    const trimmed = content.trimStart()
+    if (trimmed.startsWith("➤")) {
+      const withoutArrow = trimmed.replace(/^➤\s*/, "")
+      return { isStep: true, cleaned: withoutArrow }
+    }
+    return { isStep: false, cleaned: content }
+  }
+
+  if (Array.isArray(content) && content.length > 0) {
+    const firstText = content[0].text || ""
+    const trimmed = firstText.trimStart()
+    if (trimmed.startsWith("➤")) {
+      const withoutArrow = trimmed.replace(/^➤\s*/, "")
+      const newRuns = [...content]
+      if (withoutArrow) {
+        newRuns[0] = { ...newRuns[0], text: withoutArrow }
+      } else {
+        newRuns.shift()
+      }
+      return { isStep: true, cleaned: newRuns }
+    }
+  }
+
+  return { isStep: false, cleaned: content }
+}
+
 interface BlockNodeProps {
   block: Block
   usedIds: Set<string>
   takeawayImages?: ImageBlock[]
+  isFaqQuestion?: boolean
 }
 
-function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
+function BlockNode({
+  block,
+  usedIds,
+  takeawayImages,
+  isFaqQuestion,
+}: BlockNodeProps) {
   switch (block.type) {
     case "paragraph": {
       const trimmed = block.text?.trim()
@@ -737,6 +777,29 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
       }
 
       const content = block.content ?? block.text
+      const { isStep, cleaned } = extractLeadingArrow(content)
+
+      if (isStep) {
+        return (
+          <div
+            className={cn(
+              "group/step flex items-start gap-2.5 text-[17px] sm:text-[18px] font-normal leading-[1.75] text-foreground/90",
+              alignClass(block.align)
+            )}
+          >
+            <span
+              className="shrink-0 text-primary font-bold select-none text-[1.05em] leading-[1.75]"
+              aria-hidden="true"
+            >
+              ➤
+            </span>
+            <div className="flex-1 min-w-0">
+              <InlineRuns value={cleaned} />
+            </div>
+          </div>
+        )
+      }
+
       const Tag = hasCodeBlock(content) ? "div" : "p"
       return (
         <Tag
@@ -761,7 +824,9 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
             id={id}
             className={cn(
               "group flex scroll-mt-24 items-start gap-3 transition-colors",
-              HEADING_CLASSES[level]
+              isFaqQuestion
+                ? cn(HEADING_CLASSES[level], "mt-1 sm:mt-1.5")
+                : HEADING_CLASSES[level]
             )}
           >
             <span className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground shadow-xs transition-transform duration-200 group-hover:scale-105">
@@ -783,7 +848,12 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
         return (
           <div
             id={id}
-            className="group mt-6 sm:mt-7 mb-1.5 sm:mb-2 flex scroll-mt-24 items-start gap-2.5 first:mt-0"
+            className={cn(
+              "group flex scroll-mt-24 items-start gap-2.5 first:mt-0",
+              isFaqQuestion
+                ? "mt-1 sm:mt-1.5 mb-1 sm:mb-1.5"
+                : "mt-6 sm:mt-7 mb-1.5 sm:mb-2"
+            )}
           >
             <span
               aria-hidden="true"
@@ -860,7 +930,7 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
       const height = block.height ?? Math.round(width * 0.5625)
       const src = block.url ? toCdnUrl(encodeURI(decodeURI(block.url))) : ""
       return (
-        <figure className="my-6 flex flex-col items-center">
+        <figure className="my-2.5 sm:my-3.5 flex flex-col items-center">
           <Image
             src={src}
             alt={block.alt ?? ""}
@@ -1155,7 +1225,7 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
       )
 
     case "hr":
-      return <hr className="my-5 border-t border-border/60" />
+      return <hr className="my-4 border-t border-border/60" />
 
     default:
       return null
@@ -1191,6 +1261,9 @@ function parseFaqSection(faqBlocks: Block[]): FaqSectionGroup {
   let currentItem: FaqItem | null = null
 
   for (const b of content) {
+    if (b.type === "hr") {
+      continue
+    }
     if (b.type === "heading" && b.level >= 3) {
       if (currentItem) {
         items.push(currentItem)
@@ -1302,7 +1375,7 @@ export function BlockRenderer({
               ))}
               {faqGroup.items.map((item, itemIdx) => (
                 <div key={`faq-item-${itemIdx}`} className="faq-item space-y-2">
-                  <BlockNode block={item.question} usedIds={usedIds} />
+                  <BlockNode block={item.question} usedIds={usedIds} isFaqQuestion />
                   {item.answers.map((ans, ansIdx) => (
                     <BlockNode key={`faq-ans-${ansIdx}`} block={ans} usedIds={usedIds} />
                   ))}

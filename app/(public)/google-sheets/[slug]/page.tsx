@@ -4,6 +4,7 @@ import { notFound, permanentRedirect } from "next/navigation"
 import { BlockRenderer } from "@/components/blocks/block-renderer"
 import { InlineToc } from "@/components/blocks/inline-toc"
 import { ArticleHeader } from "@/components/site/article-header"
+import { Breadcrumb } from "@/components/site/breadcrumb"
 import { ArticleTags } from "@/components/site/article-tags"
 import { CommentsSection } from "@/components/site/comments-section"
 import { CurriculumSidebar } from "@/components/site/learning-track/curriculum-sidebar"
@@ -120,6 +121,14 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
   const lessonPath = `/google-sheets/${post.slug}/`
 
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "Google Sheets", href: "/google-sheets/" },
+    ...(post.category_name && post.category_slug
+      ? [{ label: post.category_name, href: `/category/${post.category_slug}/` }]
+      : []),
+  ]
+
   return (
     <>
       <div className="single-post mx-auto flex w-full max-w-[1500px] items-start justify-center gap-6 2xl:gap-8 px-4 py-8 sm:py-10">
@@ -130,6 +139,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
         </aside>
 
         <article className="min-w-0 w-full max-w-[820px] flex-1">
+          <Breadcrumb items={breadcrumbItems} />
           <ArticleHeader post={post} />
 
           {toc.length >= 2 ? (

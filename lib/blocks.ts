@@ -92,12 +92,127 @@ export function isDownloadBlock(block: Block): boolean {
   return false
 }
 
+function isEmptyParagraph(block: Block): boolean {
+  if (block.type !== "paragraph") return false
+  const text = block.text?.trim()
+  if (text) return false
+  if (Array.isArray(block.content)) {
+    return !block.content.some((r) => r.text && r.text.trim().length > 0)
+  }
+  return true
+}
+
+function splitArrowParagraph(
+  block: Extract<Block, { type: "paragraph" }>
+): Block[] {
+  if (Array.isArray(block.content) && block.content.length > 0) {
+    const runs = block.content
+    const groups: InlineText[][] = []
+    let currentGroup: InlineText[] = []
+
+    for (let i = 0; i < runs.length; i++) {
+      const r = runs[i]
+      const txt = r.text || ""
+
+      if (/^[\r\n\s]+$/.test(txt)) {
+        const next = runs[i + 1]
+        if (next && next.text && next.text.trimStart().startsWith("➤")) {
+          if (currentGroup.length > 0) {
+            groups.push(currentGroup)
+            currentGroup = []
+          }
+          continue
+        }
+      }
+
+      if (txt.includes("\n") && /\n+\s*➤/.test(txt)) {
+        const parts = txt.split(/(?=\n+\s*➤)/)
+        for (let pIdx = 0; pIdx < parts.length; pIdx++) {
+          const part = parts[pIdx]
+          if (/^\n+\s*➤/.test(part)) {
+            if (currentGroup.length > 0) {
+              groups.push(currentGroup)
+              currentGroup = []
+            }
+            const clean = part.replace(/^\n+\s*/, "")
+            if (clean) {
+              currentGroup.push({ ...r, text: clean })
+            }
+          } else {
+            const clean = part.replace(/[\r\n]+$/, "")
+            if (clean) {
+              currentGroup.push({ ...r, text: clean })
+            }
+          }
+        }
+        continue
+      }
+
+      currentGroup.push(r)
+    }
+
+    if (currentGroup.length > 0) groups.push(currentGroup)
+
+    if (groups.length > 1) {
+      return groups.map((g) => ({
+        ...block,
+        text: g.map((item) => item.text).join(""),
+        content: g,
+      }))
+    }
+  } else if (block.text && /\n+\s*➤/.test(block.text)) {
+    const parts = block.text.split(/\n+\s*(?=➤)/)
+    return parts.map((part) => ({
+      ...block,
+      text: part.trim(),
+      content: undefined,
+    }))
+  }
+
+  return [block]
+}
+
 export function normalizePostBlocks(blocks: Block[]): Block[] {
   const result: Block[] = []
+  const cloned = [...blocks]
   let i = 0
 
-  while (i < blocks.length) {
-    const block = blocks[i]
+  while (i < cloned.length) {
+    const block = cloned[i]
+
+    if (isEmptyParagraph(block)) {
+      i++
+      continue
+    }
+
+    if (block.type === "paragraph") {
+      const subBlocks = splitArrowParagraph(block)
+      if (subBlocks.length > 1) {
+        cloned.splice(i, 1, ...subBlocks)
+        continue
+      }
+    }
+
+    if (block.type === "hr") {
+      if (
+        result.length === 0 ||
+        result[result.length - 1]?.type === "hr" ||
+        result[result.length - 1]?.type === "heading"
+      ) {
+        i++
+        continue
+      }
+
+      let nextIdx = i + 1
+      while (nextIdx < cloned.length && isEmptyParagraph(cloned[nextIdx])) {
+        nextIdx++
+      }
+      const nextBlock = nextIdx < cloned.length ? cloned[nextIdx] : null
+      if (!nextBlock || nextBlock.type === "heading" || nextBlock.type === "hr") {
+        i++
+        continue
+      }
+    }
 
     if (block.type === "image") {
       result.push({
@@ -117,8 +232,8 @@ export function normalizePostBlocks(blocks: Block[]): Block[] {
       const combinedRuns: InlineText[] = []
       let j = i + 1
 
-      while (j < blocks.length) {
-        const nextBlock = blocks[j]
+      while (j < cloned.length) {
+        const nextBlock = cloned[j]
         if (nextBlock.type !== "paragraph") break
         const text = nextBlock.text?.trim() ?? ""
         if (
@@ -151,12 +266,12 @@ export function normalizePostBlocks(blocks: Block[]): Block[] {
     if (
       block.type === "paragraph" &&
       /^\s*(\d+|step\s*\d+|method\s*\d+)\s*$/i.test(block.text?.trim() ?? "") &&
-      i + 1 < blocks.length &&
-      blocks[i + 1].type === "heading"
+      i + 1 < cloned.length &&
+      cloned[i + 1].type === "heading"
     ) {
       const match = block.text.trim().match(/(\d+)/)
       const num = match ? match[1] : block.text.trim()
-      const nextHeading = blocks[i + 1]
+      const nextHeading = cloned[i + 1]
       if (nextHeading.type === "heading") {
         result.push({
           ...nextHeading,
@@ -186,10 +301,10 @@ export function normalizePostBlocks(blocks: Block[]): Block[] {
     if (
       block.type === "paragraph" &&
       /^\s*explanation:?\s*$/i.test(block.text?.trim() ?? "") &&
-      i + 1 < blocks.length &&
-      blocks[i + 1].type === "paragraph"
+      i + 1 < cloned.length &&
+      cloned[i + 1].type === "paragraph"
     ) {
-      const explP = blocks[i + 1]
+      const explP = cloned[i + 1]
       if (explP.type === "paragraph") {
         result.push({
           type: "callout",
@@ -286,6 +401,10 @@ export function normalizePostBlocks(blocks: Block[]): Block[] {
         result.splice(targetIndex, 0, ...blocksToMove)
       }
     }
+  }
+
+  while (result.length > 0 && result[result.length - 1].type === "hr") {
+    result.pop()
   }
 
   return result
