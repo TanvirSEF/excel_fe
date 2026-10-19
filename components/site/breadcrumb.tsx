@@ -1,17 +1,24 @@
+import type { ReactNode } from "react"
 import Link from "next/link"
+import { IconChevronRight } from "@tabler/icons-react"
 
 import { cn } from "@/lib/utils"
 
 interface BreadcrumbProps {
   items: { label: string; href?: string }[]
   className?: string
-  separator?: string
+  separator?: ReactNode
 }
 
 export function Breadcrumb({
   items,
   className,
-  separator = ">",
+  separator = (
+    <IconChevronRight
+      className="h-3.5 w-3.5 text-muted-foreground/60 shrink-0"
+      aria-hidden
+    />
+  ),
 }: BreadcrumbProps) {
   return (
     <nav
@@ -45,7 +52,7 @@ export function Breadcrumb({
               </span>
             )}
             {!last ? (
-              <span className="text-muted-foreground/50 select-none text-xs" aria-hidden>
+              <span className="inline-flex items-center text-muted-foreground/50 select-none" aria-hidden>
                 {separator}
               </span>
             ) : null}
