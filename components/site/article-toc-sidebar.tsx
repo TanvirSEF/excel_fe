@@ -134,13 +134,13 @@ export function ArticleTocSidebar({ toc, className }: ArticleTocSidebarProps) {
             Table of Contents
           </h2>
         </div>
-        <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-semibold text-muted-foreground border border-border/50">
+        <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground border border-border/50">
           {toc.length}
         </span>
       </div>
 
       <div className="max-h-[500px] overflow-y-auto overscroll-contain pr-1 [scrollbar-width:thin] [scrollbar-color:var(--color-primary-30)_transparent] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border hover:[&::-webkit-scrollbar-thumb]:bg-primary/40">
-        <ul className="relative space-y-0.5 border-l-2 border-border/60 pl-0">
+        <ul className="relative space-y-1 border-l-2 border-border/60 pl-0">
           {items.map((entry) => {
             const isActive = activeId === entry.id
 
@@ -150,21 +150,21 @@ export function ArticleTocSidebar({ toc, className }: ArticleTocSidebarProps) {
                   href={`#${entry.id}`}
                   onClick={(e) => handleNavigate(e, entry.id)}
                   className={cn(
-                    "group block -ml-[2px] border-l-2 py-1.5 transition-colors leading-snug",
-                    entry.isSub ? "pl-5 text-[12px]" : "pl-3 text-[13px]",
+                    "group block -ml-[2px] border-l-2 py-2 transition-colors leading-snug",
+                    entry.isSub ? "pl-5 text-[13px]" : "pl-3 text-sm font-medium",
                     isActive
                       ? "border-primary font-semibold text-primary"
                       : "border-transparent text-muted-foreground hover:border-primary/40 hover:text-foreground"
                   )}
                 >
-                  <span className="flex items-baseline gap-2 min-w-0">
+                  <span className="flex items-start gap-2.5 min-w-0">
                     {entry.numberPrefix ? (
                       <span
                         className={cn(
-                          "shrink-0 text-[10px] font-bold tabular-nums",
+                          "shrink-0 text-xs font-bold tabular-nums mt-0.5",
                           isActive
                             ? "text-primary"
-                            : "text-muted-foreground/60 group-hover:text-primary"
+                            : "text-muted-foreground/70 group-hover:text-primary"
                         )}
                       >
                         {entry.numberPrefix}
@@ -172,12 +172,12 @@ export function ArticleTocSidebar({ toc, className }: ArticleTocSidebarProps) {
                     ) : (
                       <span
                         className={cn(
-                          "h-1 w-1 shrink-0 rounded-full my-auto",
+                          "h-1.5 w-1.5 shrink-0 rounded-full mt-1.5",
                           isActive ? "bg-primary" : "bg-muted-foreground/40"
                         )}
                       />
                     )}
-                    <span className="truncate">{entry.text}</span>
+                    <span className="line-clamp-2 leading-snug">{entry.text}</span>
                   </span>
                 </a>
               </li>
