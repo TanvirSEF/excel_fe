@@ -39,6 +39,7 @@ const nextConfig: NextConfig = {
   output: "standalone",
   trailingSlash: true,
   images: {
+    unoptimized: true,
     formats: ["image/webp", "image/avif"],
     minimumCacheTTL: 31536000,
     remotePatterns: mediaHosts.length

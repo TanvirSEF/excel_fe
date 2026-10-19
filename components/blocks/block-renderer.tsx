@@ -14,7 +14,7 @@ import {
 } from "@tabler/icons-react"
 
 import { parseVideoInfo } from "@/lib/embed"
-import { clampHeadingLevel, headingId, isDownloadHref } from "@/lib/blocks"
+import { clampHeadingLevel, headingId, isDownloadHref, toCdnUrl } from "@/lib/blocks"
 import { cn } from "@/lib/utils"
 import type {
   Block,
@@ -858,10 +858,11 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
     case "image": {
       const width = block.width ?? 1200
       const height = block.height ?? Math.round(width * 0.5625)
+      const src = block.url ? toCdnUrl(encodeURI(decodeURI(block.url))) : ""
       return (
         <figure className="my-6 flex flex-col items-center">
           <Image
-            src={block.url}
+            src={src}
             alt={block.alt ?? ""}
             width={width}
             height={height}
@@ -960,10 +961,11 @@ function BlockNode({ block, usedIds, takeawayImages }: BlockNodeProps) {
                 {takeawayImages.map((img, i) => {
                   const width = img.width ?? 783
                   const height = img.height ?? Math.round(width * 0.5625)
+                  const src = img.url ? toCdnUrl(encodeURI(decodeURI(img.url))) : ""
                   return (
                     <figure key={i} className="flex flex-col items-center w-full">
                       <Image
-                        src={img.url}
+                        src={src}
                         alt={img.alt ?? ""}
                         width={width}
                         height={height}
