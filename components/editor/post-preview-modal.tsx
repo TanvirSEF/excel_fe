@@ -120,7 +120,6 @@ export function PostPreviewModal({
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },
-    { label: "Blog", href: "/blog" },
     ...(selectedCategory
       ? [
           {
@@ -128,8 +127,7 @@ export function PostPreviewModal({
             href: `/category/${selectedCategory.slug}`,
           },
         ]
-      : []),
-    { label: previewPost.title },
+      : [{ label: "Blog", href: "/blog" }]),
   ]
 
   const hasContent = blocks.length > 0 || fields.title.trim().length > 0

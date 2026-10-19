@@ -70,7 +70,10 @@ interface BlogArticleViewProps {
   currentPath?: string
 }
 
-export async function BlogArticleView({ post }: BlogArticleViewProps) {
+export async function BlogArticleView({
+  post,
+  currentPath,
+}: BlogArticleViewProps) {
   const authorIdentifier = post.author_slug || post.author_id
   const [comments, author] = await Promise.all([
     getPostComments(post.id).catch(() => []),
@@ -133,19 +136,49 @@ export async function BlogArticleView({ post }: BlogArticleViewProps) {
 
   related = related.slice(0, 50)
 
-  const breadcrumbItems = [
+  const canonicalParts = (currentPath || post.canonical_url || "")
+    .split("/")
+    .filter(Boolean)
+
+  const breadcrumbItems: { label: string; href?: string }[] = [
     { label: "Home", href: "/" },
-    { label: "Blog", href: "/blog/" },
-    ...(post.category_name && post.category_slug
-      ? [
-          {
-            label: post.category_name,
-            href: `/category/${post.category_slug}/`,
-          },
-        ]
-      : []),
-    { label: post.title },
   ]
+
+  if (post.category_name && post.category_slug) {
+    breadcrumbItems.push({
+      label: post.category_name,
+      href: `/category/${post.category_slug}/`,
+    })
+  } else if (!post.series?.slug) {
+    breadcrumbItems.push({
+      label: "Blog",
+      href: "/blog/",
+    })
+  }
+
+  if (post.series?.name && post.series?.slug) {
+    breadcrumbItems.push({
+      label: post.series.name,
+      href: post.category_slug
+        ? `/${post.category_slug}/${post.series.slug}/`
+        : `/series/${post.series.slug}/`,
+    })
+  } else if (
+    canonicalParts.length >= 3 &&
+    post.category_slug &&
+    canonicalParts[0] === post.category_slug &&
+    canonicalParts[1] !== post.slug
+  ) {
+    const topicSlug = canonicalParts[1]
+    const topicName = topicSlug
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ")
+    breadcrumbItems.push({
+      label: topicName,
+      href: `/${post.category_slug}/${topicSlug}/`,
+    })
+  }
 
   return (
     <>
