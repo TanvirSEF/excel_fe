@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { format, isValid } from "date-fns"
 
+import { toCdnUrl } from "@/lib/blocks"
 import type { PostDetail } from "@/types/api"
 
 function formatDate(dateStr: string | null | undefined): string | null {
@@ -22,6 +23,9 @@ export function BlogArticleHeader({
 }: BlogArticleHeaderProps) {
   const dateStr = post.updated_at || post.published_at
   const lastUpdated = formatDate(dateStr)
+  const avatarSrc = authorAvatarUrl
+    ? toCdnUrl(encodeURI(decodeURI(authorAvatarUrl)))
+    : null
 
   return (
     <header>
@@ -44,10 +48,10 @@ export function BlogArticleHeader({
               href={`/author/${post.author_slug || post.author_id}/`}
               className="group inline-flex items-center gap-2 font-medium text-foreground transition-colors hover:text-primary"
             >
-              {authorAvatarUrl ? (
+              {avatarSrc ? (
                 <span className="relative flex h-7 w-7 shrink-0 overflow-hidden rounded-full ring-1 ring-border/80 transition-all group-hover:ring-primary/60">
                   <Image
-                    src={authorAvatarUrl}
+                    src={avatarSrc}
                     alt={post.author_name}
                     width={28}
                     height={28}
@@ -61,10 +65,10 @@ export function BlogArticleHeader({
             </Link>
           ) : (
             <span className="inline-flex items-center gap-2 font-medium text-foreground">
-              {authorAvatarUrl ? (
+              {avatarSrc ? (
                 <span className="relative flex h-7 w-7 shrink-0 overflow-hidden rounded-full ring-1 ring-border/80">
                   <Image
-                    src={authorAvatarUrl}
+                    src={avatarSrc}
                     alt={post.author_name}
                     width={28}
                     height={28}

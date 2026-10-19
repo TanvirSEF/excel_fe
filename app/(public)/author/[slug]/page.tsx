@@ -22,6 +22,7 @@ import { Breadcrumb } from "@/components/site/breadcrumb"
 import { PostGrid } from "@/components/site/post-grid"
 import { getAuthor } from "@/lib/api/authors"
 import { getPosts } from "@/lib/api/posts"
+import { toCdnUrl } from "@/lib/blocks"
 import { ApiClientError } from "@/lib/api/error"
 import { clamp, cn, firstParam } from "@/lib/utils"
 import { config } from "@/lib/config"
@@ -204,7 +205,7 @@ export default async function AuthorPage({ params, searchParams }: AuthorPagePro
             <div className="relative group shrink-0">
               <div className="relative flex h-36 w-36 sm:h-44 sm:w-44 md:h-48 md:w-48 shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-primary/25 bg-gradient-to-br from-chart-2/20 to-primary/20 shadow-xl ring-4 ring-background transition-transform duration-300 group-hover:scale-[1.02]">
                 <Image
-                  src={author.avatar_url}
+                  src={toCdnUrl(encodeURI(decodeURI(author.avatar_url)))}
                   alt={author.name}
                   fill
                   priority

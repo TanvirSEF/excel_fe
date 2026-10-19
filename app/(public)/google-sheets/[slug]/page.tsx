@@ -18,6 +18,7 @@ import {
   extractToc,
   getFeaturedImageFromBlocks,
   normalizePostBlocks,
+  toCdnUrl,
 } from "@/lib/blocks"
 import { buildArticleJsonLd } from "@/lib/seo"
 import { config } from "@/lib/config"
@@ -48,7 +49,10 @@ export async function generateMetadata({
 
   const title = post.meta_title ?? post.title
   const description = post.meta_description ?? post.excerpt ?? undefined
-  const image = post.og_image_url ?? post.featured_image_url ?? "/og-default.png"
+  const image =
+    (post.og_image_url ? toCdnUrl(encodeURI(decodeURI(post.og_image_url))) : null) ||
+    (post.featured_image_url ? toCdnUrl(encodeURI(decodeURI(post.featured_image_url))) : null) ||
+    "/og-default.png"
 
   if (!post.canonical_url?.startsWith("/google-sheets/")) {
     const target = post.canonical_url ?? `/blog/${post.slug}/`
@@ -110,7 +114,9 @@ export default async function LessonPage({ params }: LessonPageProps) {
   const normalizedBlocks = normalizePostBlocks(post.content_json?.blocks ?? [])
   const toc = extractToc(normalizedBlocks)
   const effectiveFeaturedImage =
-    post.featured_image_url ?? getFeaturedImageFromBlocks(normalizedBlocks)
+    (post.featured_image_url
+      ? toCdnUrl(encodeURI(decodeURI(post.featured_image_url)))
+      : null) || getFeaturedImageFromBlocks(normalizedBlocks)
 
   const lessonPath = `/google-sheets/${post.slug}/`
 

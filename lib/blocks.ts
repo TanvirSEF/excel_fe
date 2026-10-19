@@ -53,7 +53,7 @@ export function toCdnUrl(url: string | null | undefined): string {
 export function getFeaturedImageFromBlocks(blocks: Block[]): string | null {
   for (const block of blocks) {
     if (block.type === "image" && block.url) {
-      return toCdnUrl(block.url)
+      return toCdnUrl(encodeURI(decodeURI(block.url)))
     }
   }
   return null
