@@ -109,12 +109,22 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/categories/:path*",
-        destination: "/category/:path*/",
+        destination: "/:path*/",
         permanent: true,
       },
       {
         source: "/blog/category/:path*",
-        destination: "/category/:path*/",
+        destination: "/:path*/",
+        permanent: true,
+      },
+      {
+        source: "/category/:slug/",
+        destination: "/:slug/",
+        permanent: true,
+      },
+      {
+        source: "/category/:slug",
+        destination: "/:slug/",
         permanent: true,
       },
       {

@@ -124,7 +124,7 @@ export function PostPreviewModal({
       ? [
           {
             label: selectedCategory.name,
-            href: `/category/${selectedCategory.slug}`,
+            href: `/${selectedCategory.slug}/`,
           },
         ]
       : [{ label: "Blog", href: "/blog" }]),

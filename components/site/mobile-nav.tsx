@@ -117,7 +117,7 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
                     {categories.filter(c => c.slug.includes("excel") || !c.slug.includes("google")).slice(0, 5).map((item) => (
                       <Link
                         key={item.slug}
-                        href={`/category/${item.slug}`}
+                        href={`/${item.slug}/`}
                         onClick={handleLinkClick}
                         className="flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[15px] text-muted-foreground hover:bg-background hover:text-foreground"
                       >
@@ -150,7 +150,7 @@ export function MobileNav({ categories = [] }: MobileNavProps) {
                     ].map((item) => (
                       <Link
                         key={item.slug}
-                        href={`/category/${item.slug}`}
+                        href={`/${item.slug}/`}
                         onClick={handleLinkClick}
                         className="flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[15px] text-muted-foreground hover:bg-background hover:text-foreground"
                       >

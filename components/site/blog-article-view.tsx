@@ -147,7 +147,7 @@ export async function BlogArticleView({
   if (post.category_name && post.category_slug) {
     breadcrumbItems.push({
       label: post.category_name,
-      href: `/category/${post.category_slug}/`,
+      href: `/${post.category_slug}/`,
     })
   } else if (!post.series?.slug) {
     breadcrumbItems.push({

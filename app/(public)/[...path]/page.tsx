@@ -5,12 +5,14 @@ import {
   BlogArticleView,
   buildPostMetadata,
 } from "@/components/site/blog-article-view"
+import { CategoryView } from "@/components/site/category-view"
 import { SeriesView } from "@/components/site/series-view"
+import { getCategoryWithPosts } from "@/lib/api/categories"
 import { getPostBySlug } from "@/lib/api/posts"
 import { getSeriesBySlug } from "@/lib/api/series"
 import { getWpRedirect, looksLikeWpPath } from "@/lib/api/redirects"
 import { clamp, firstParam } from "@/lib/utils"
-import type { Page, PostDetail, PostListItem, SeriesSummary } from "@/types/api"
+import type { Category, Page, PostDetail, PostListItem, SeriesSummary } from "@/types/api"
 
 export const revalidate = 300
 
@@ -21,6 +23,12 @@ interface CatchAllPageProps {
 
 type ResolvedRoute =
   | { type: "post"; post: PostDetail }
+  | {
+      type: "category"
+      category: Category
+      posts: Page<PostListItem>
+      page: number
+    }
   | {
       type: "series"
       series: SeriesSummary
@@ -47,10 +55,20 @@ async function resolvePath(path: string[], page: number): Promise<ResolvedRoute>
     }
   }
 
+  // Handle historical WordPress category pagination pattern /<cat>/page/<n>/
+  if (path.length === 3 && path[1] === "page") {
+    const p = Number(path[2]) || 1
+    return {
+      type: "redirect",
+      target: `/${path[0]}/?page=${p}`,
+      isPermanent: true,
+    }
+  }
+
   if (path.length === 1 && path[0] === "excel-functions-and-formulas") {
     return {
       type: "redirect",
-      target: "/category/excel-functions-formulas/",
+      target: "/excel-functions-formulas/",
       isPermanent: true,
     }
   }
@@ -126,10 +144,25 @@ async function resolvePath(path: string[], page: number): Promise<ResolvedRoute>
     }
   }
 
-  // 3. Fallback for 1 segment post slugs
+  // 3. Fallback for 1 segment: Category first, then Post slug
   if (path.length === 1) {
+    const slug = path[0]
     try {
-      const post = await getPostBySlug(path[0])
+      const catData = await getCategoryWithPosts(slug, { page, page_size: 12 })
+      if (catData?.category) {
+        return {
+          type: "category",
+          category: catData.category,
+          posts: catData.posts,
+          page,
+        }
+      }
+    } catch {
+      // not a category, continue to post check
+    }
+
+    try {
+      const post = await getPostBySlug(slug)
       if (post.canonical_url?.startsWith("/google-sheets/")) {
         return {
           type: "redirect",
@@ -171,6 +204,19 @@ export async function generateMetadata({
   const page = clamp(Number(firstParam(query.page) ?? 1) || 1, 1, 10_000)
   const resolved = await resolvePath(path, page)
 
+  if (resolved?.type === "category") {
+    return {
+      title: resolved.category.seo_title ?? resolved.category.name,
+      description:
+        resolved.category.seo_description ??
+        resolved.category.description ??
+        `Excel Insider articles in ${resolved.category.name}.`,
+      alternates: {
+        canonical: `/${resolved.category.slug}/`,
+      },
+    }
+  }
+
   if (resolved?.type === "post") {
     return buildPostMetadata(resolved.post, `/${path.join("/")}`)
   }
@@ -209,6 +255,16 @@ export default async function CatchAllPage({ params, searchParams }: CatchAllPag
       permanentRedirect(resolved.target)
     }
     redirect(resolved.target)
+  }
+
+  if (resolved.type === "category") {
+    return (
+      <CategoryView
+        category={resolved.category}
+        posts={resolved.posts}
+        page={resolved.page}
+      />
+    )
   }
 
   if (resolved.type === "series") {

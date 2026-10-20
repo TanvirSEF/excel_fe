@@ -21,7 +21,7 @@ export function SeriesView({ series, posts, page }: SeriesViewProps) {
       ? [
           {
             label: series.category.name,
-            href: `/category/${series.category.slug}/`,
+            href: `/${series.category.slug}/`,
           },
         ]
       : []),

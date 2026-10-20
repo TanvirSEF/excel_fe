@@ -11,10 +11,10 @@ import type { Category } from "@/types/api"
 import { Button } from "@/components/ui/button"
 
 const TOPIC_PILLS = [
-  { label: "Excel Formulas", href: "/category/excel-functions-formulas/", icon: IconMathFunction },
+  { label: "Excel Formulas", href: "/excel-functions-formulas/", icon: IconMathFunction },
   { label: "Google Sheets", href: "/google-sheets/", icon: IconTable },
-  { label: "VBA & Macros", href: "/category/excel-vba/", icon: IconCode },
-  { label: "Charts & Dashboards", href: "/category/excel-charts/", icon: IconChartBar },
+  { label: "VBA & Macros", href: "/excel-vba/", icon: IconCode },
+  { label: "Charts & Dashboards", href: "/excel-charts/", icon: IconChartBar },
 ]
 
 const SPREADSHEET_ROWS = [
@@ -104,7 +104,7 @@ export function HomeHero({ categories }: { categories?: Category[] } = {}) {
     categories && categories.length > 0
       ? categories.slice(0, 4).map((c) => ({
           label: c.name,
-          href: `/category/${c.slug}/`,
+          href: `/${c.slug}/`,
           icon: IconMathFunction,
         }))
       : TOPIC_PILLS

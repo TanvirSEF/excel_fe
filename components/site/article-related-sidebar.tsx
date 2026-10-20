@@ -45,7 +45,7 @@ export function ArticleRelatedSidebar({
           <p className="mt-2 text-[13px] text-primary-foreground/85">
             More articles from{" "}
             <Link
-              href={`/category/${categorySlug}`}
+              href={`/${categorySlug}/`}
               className="inline-flex items-center gap-1 font-semibold text-primary-foreground underline decoration-white/40 underline-offset-2 transition-colors hover:decoration-white hover:text-white"
             >
               <span>{categoryName}</span>
