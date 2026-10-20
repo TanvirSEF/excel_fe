@@ -82,14 +82,20 @@ export function CalculatorPage({
           ) : null}
         </div>
 
-        {/* Right Sidebar: 300px on desktop */}
+        {/* Right Sidebar: 300px on desktop (Mediavine ad compatible) */}
         {relatedCalculators.length > 0 ? (
-          <aside className="hidden lg:block w-[300px] shrink-0 sticky top-24">
-            <CalculatorRelatedSidebar
-              calculators={relatedCalculators}
-              categoryLabel={category.label}
-              categoryHref={category.href}
-            />
+          <aside
+            id="sidebar"
+            aria-label="Sidebar"
+            className="sidebar sidebar-primary elementor-widget-sidebar hidden lg:block w-[300px] shrink-0 space-y-6"
+          >
+            <div className="sticky top-24 space-y-6">
+              <CalculatorRelatedSidebar
+                calculators={relatedCalculators}
+                categoryLabel={category.label}
+                categoryHref={category.href}
+              />
+            </div>
           </aside>
         ) : null}
       </div>
