@@ -89,13 +89,11 @@ export function CalculatorPage({
             aria-label="Sidebar"
             className="sidebar sidebar-primary elementor-widget-sidebar hidden lg:block w-[300px] shrink-0 space-y-6"
           >
-            <div className="sticky top-24 space-y-6">
-              <CalculatorRelatedSidebar
-                calculators={relatedCalculators}
-                categoryLabel={category.label}
-                categoryHref={category.href}
-              />
-            </div>
+            <CalculatorRelatedSidebar
+              calculators={relatedCalculators}
+              categoryLabel={category.label}
+              categoryHref={category.href}
+            />
           </aside>
         ) : null}
       </div>
