@@ -21,6 +21,7 @@ import { B2bRoiCalculator } from "@/components/site/calculators/finance/b2b-roi-
 import { AccountingRateOfReturnCalculator } from "@/components/site/calculators/finance/accounting-rate-of-return-calculator"
 import { CalculatorPage } from "@/components/site/calculators/calculator-page"
 import {
+  FINANCE_CALCULATORS,
   getFinanceCalculator,
   getFinanceGroupForCalculator,
 } from "@/lib/calculators"
@@ -98,6 +99,9 @@ export default async function FinanceCalculatorPage({
 
   const group = getFinanceGroupForCalculator(canonicalSlug)
   const Calculator = CALCULATOR_COMPONENTS[canonicalSlug]
+  const relatedCalculators = FINANCE_CALCULATORS.filter(
+    (c) => c.slug !== canonicalSlug
+  ).slice(0, 5)
 
   return (
     <CalculatorPage
@@ -105,6 +109,7 @@ export default async function FinanceCalculatorPage({
       group={group}
       entry={entry}
       detail={detail}
+      relatedCalculators={relatedCalculators}
     >
       <Calculator />
     </CalculatorPage>

@@ -10,6 +10,52 @@ import {
 } from "@/components/ui/table"
 import type { CalculatorDetail } from "@/lib/calculator-content/types"
 
+const COUNTRY_NAME_PATTERNS = [
+  "united states",
+  "(usa)",
+  "united kingdom",
+  "(uk)",
+  "canada",
+  "(can)",
+  "australia",
+  "(aus)",
+  "india",
+  "(ind)",
+]
+
+function isCountryScenarioItem(title?: string): boolean {
+  if (!title) return false
+  const t = title.toLowerCase()
+  return COUNTRY_NAME_PATTERNS.some((pattern) => t.includes(pattern))
+}
+
+function isCountryScenarioGroup(
+  title?: string,
+  items?: { title: string }[]
+): boolean {
+  if (title) {
+    const t = title.toLowerCase()
+    if (
+      t.includes("by region") ||
+      t.includes("global investment facts") ||
+      t.includes("global investment context") ||
+      t.includes("global marketing insights") ||
+      t.includes("global retirement systems") ||
+      t.includes("global venture capital facts") ||
+      t.includes("worldwide")
+    ) {
+      return true
+    }
+  }
+  if (items && items.length > 0) {
+    const countryCount = items.filter((item) =>
+      isCountryScenarioItem(item.title)
+    ).length
+    if (countryCount >= 2) return true
+  }
+  return false
+}
+
 export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
   return (
     <section className="mt-12 rounded-2xl border border-primary/50 bg-card p-6 shadow-2xs sm:p-8">
@@ -158,7 +204,9 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
       ) : null}
 
       {detail.factGroups && detail.factGroups.length > 0 ? (
-        detail.factGroups.map((group, groupIndex) => (
+        detail.factGroups
+          .filter((group) => !isCountryScenarioGroup(group.title, group.items))
+          .map((group, groupIndex) => (
           <div
             key={group.title ?? `group-${groupIndex}`}
             className="mt-8 border-t border-border/60 pt-8"
@@ -190,7 +238,9 @@ export function CalculatorArticle({ detail }: { detail: CalculatorDetail }) {
             </div>
           </div>
         ))
-      ) : detail.facts && detail.facts.length > 0 ? (
+      ) : detail.facts &&
+        detail.facts.length > 0 &&
+        !isCountryScenarioGroup(detail.factsTitle, detail.facts) ? (
         <div className="mt-8 border-t border-border/60 pt-8">
           {detail.factsTitle ? (
             <h3 className="text-lg font-bold tracking-tight text-foreground">

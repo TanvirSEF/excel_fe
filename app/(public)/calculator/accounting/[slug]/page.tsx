@@ -19,6 +19,7 @@ import { SalespersonProfitabilityCalculator } from "@/components/site/calculator
 import { WholesaleMarginCalculator } from "@/components/site/calculators/accounting/wholesale-margin-calculator"
 import { CalculatorPage } from "@/components/site/calculators/calculator-page"
 import {
+  ACCOUNTING_CALCULATORS,
   getAccountingCalculator,
   getAccountingGroupForCalculator,
 } from "@/lib/calculators"
@@ -94,6 +95,9 @@ export default async function AccountingCalculatorPage({
 
   const group = getAccountingGroupForCalculator(canonicalSlug)
   const Calculator = CALCULATOR_COMPONENTS[canonicalSlug]
+  const relatedCalculators = ACCOUNTING_CALCULATORS.filter(
+    (c) => c.slug !== canonicalSlug
+  ).slice(0, 5)
 
   return (
     <CalculatorPage
@@ -101,6 +105,7 @@ export default async function AccountingCalculatorPage({
       group={group}
       entry={entry}
       detail={detail}
+      relatedCalculators={relatedCalculators}
     >
       <Calculator />
     </CalculatorPage>

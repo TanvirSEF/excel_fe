@@ -38,7 +38,11 @@ import {
   ZScoreToPercentileCalculator,
 } from "@/components/site/calculators/statistics/z-score-to-percentile-calculator"
 import { CalculatorPage } from "@/components/site/calculators/calculator-page"
-import { getStatsCalculator, getStatsGroupForCalculator } from "@/lib/calculators"
+import {
+  STATS_CALCULATORS,
+  getStatsCalculator,
+  getStatsGroupForCalculator,
+} from "@/lib/calculators"
 import { STATS_DETAILS, STATS_CANONICAL_SLUG_MAP, type StatisticsSlug } from "@/lib/calculator-content/statistics"
 import { calculatorMetadata } from "@/lib/calculator-content/metadata"
 
@@ -105,6 +109,9 @@ export default async function StatisticsCalculatorPage({
 
   const group = getStatsGroupForCalculator(canonicalSlug)
   const Calculator = CALCULATOR_COMPONENTS[canonicalSlug]
+  const relatedCalculators = STATS_CALCULATORS.filter(
+    (c) => c.slug !== canonicalSlug
+  ).slice(0, 5)
 
   return (
     <CalculatorPage
@@ -112,6 +119,7 @@ export default async function StatisticsCalculatorPage({
       group={group}
       entry={entry}
       detail={detail}
+      relatedCalculators={relatedCalculators}
     >
       <Calculator />
     </CalculatorPage>
