@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { IconAlertTriangle, IconCircleCheck, IconPlus, IconRotate, IconTarget, IconX } from "@tabler/icons-react"
+import { IconAlertTriangle, IconCircleCheck, IconPlus, IconRotateClockwise, IconTarget, IconX } from "@tabler/icons-react"
 
 import { NumberField } from "@/components/site/calculators/field"
 import {
@@ -94,8 +94,8 @@ export function WeightedAverageGradeCalculator() {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-6 lg:grid-cols-5">
-        <Card className="lg:col-span-2">
+      <div className="grid gap-6 lg:grid-cols-1 xl:grid-cols-12">
+        <Card className="xl:col-span-5">
           <CardHeader>
             <CardTitle>Enter grade &amp; weight data</CardTitle>
             <CardDescription>
@@ -117,24 +117,45 @@ export function WeightedAverageGradeCalculator() {
                 return (
                   <div
                     key={index}
-                    className="flex items-end gap-2 rounded-xl border border-border/70 bg-muted/20 p-3"
+                    className="space-y-2.5 rounded-xl border border-border/70 bg-muted/20 p-3"
                   >
-                    <div className="min-w-0 flex-1 space-y-1.5">
-                      <label
-                        htmlFor={`assignment-${index}`}
-                        className="text-xs font-medium text-muted-foreground"
-                      >
-                        Assignment
-                      </label>
-                      <Input
-                        id={`assignment-${index}`}
-                        value={row.name}
-                        onChange={(event) => updateRow(index, "name", event.target.value)}
-                        placeholder="e.g. Homeworks"
-                        className="h-9 bg-background text-sm"
-                      />
+                    <div className="flex items-center gap-2">
+                      <div className="min-w-0 flex-1">
+                        <label
+                          htmlFor={`assignment-${index}`}
+                          className="block text-xs font-medium text-muted-foreground"
+                        >
+                          Assignment
+                        </label>
+                        <Input
+                          id={`assignment-${index}`}
+                          value={row.name}
+                          onChange={(event) => updateRow(index, "name", event.target.value)}
+                          placeholder="e.g. Homeworks"
+                          className="mt-1 h-9 bg-background text-sm font-medium"
+                        />
+                      </div>
+                      {rows.length > 1 ? (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="mt-5 h-9 w-9 shrink-0 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors"
+                          onClick={() =>
+                            setRows((current) =>
+                              current.length > 1
+                                ? current.filter((_, i) => i !== index)
+                                : current
+                            )
+                          }
+                          aria-label={`Remove ${row.name || `row ${index + 1}`}`}
+                        >
+                          <IconX className="h-4 w-4" />
+                        </Button>
+                      ) : null}
                     </div>
-                    <div className="w-24">
+
+                    <div className="grid grid-cols-2 gap-2.5">
                       <NumberField
                         label="Grade"
                         value={row.grade}
@@ -143,8 +164,6 @@ export function WeightedAverageGradeCalculator() {
                         suffix="%"
                         placeholder="88"
                       />
-                    </div>
-                    <div className="w-24">
                       <NumberField
                         label="Weight"
                         value={row.weight}
@@ -154,55 +173,41 @@ export function WeightedAverageGradeCalculator() {
                         placeholder="20"
                       />
                     </div>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      className="mb-0.5 shrink-0 text-muted-foreground hover:text-destructive"
-                      onClick={() =>
-                        setRows((current) =>
-                          current.length > 1
-                            ? current.filter((_, i) => i !== index)
-                            : current
-                        )
-                      }
-                      aria-label={`Remove ${row.name || `row ${index + 1}`}`}
-                    >
-                      <IconX className="h-4 w-4" />
-                    </Button>
                   </div>
                 )
               })}
             </div>
 
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full"
-              onClick={() =>
-                setRows((current) => [...current, { name: "", grade: "", weight: "" }])
-              }
-            >
-              <IconPlus className="h-4 w-4" />
-              Add assignment
-            </Button>
+            <div className="grid grid-cols-2 gap-2 pt-1">
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full gap-2"
+                onClick={() =>
+                  setRows((current) => [...current, { name: "", grade: "", weight: "" }])
+                }
+              >
+                <IconPlus className="h-4 w-4" />
+                Add assignment
+              </Button>
 
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full"
-              onClick={() => {
-                setRows(DEFAULT_ROWS)
-                setPlan(DEFAULT_PLAN)
-              }}
-            >
-              <IconRotate className="h-4 w-4" />
-              Reset
-            </Button>
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full gap-2 text-muted-foreground hover:text-foreground"
+                onClick={() => {
+                  setRows(DEFAULT_ROWS)
+                  setPlan(DEFAULT_PLAN)
+                }}
+              >
+                <IconRotateClockwise className="h-4 w-4" />
+                Reset
+              </Button>
+            </div>
           </CardContent>
         </Card>
 
-        <div className="space-y-4 lg:col-span-3">
+        <div className="space-y-4 xl:col-span-7">
           {valid && currentAvg !== null ? (
             <ResultsRegion>
               <GradientHeroMetric
