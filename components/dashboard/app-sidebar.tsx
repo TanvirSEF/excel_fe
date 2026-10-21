@@ -3,6 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import {
+  IconActivity,
   IconChartBar,
   IconDashboard,
   IconFileText,
@@ -43,6 +44,7 @@ const CONTENT_ITEMS: NavItem[] = [
 
 const INSIGHT_ITEMS: NavItem[] = [
   { title: "Analytics", url: "/dashboard/analytics", icon: IconChartBar, permission: "analytics:view" },
+  { title: "Live Traffic", url: "/dashboard/traffic", icon: IconActivity, permission: "analytics:view" },
 ]
 
 const ADMIN_ITEMS: NavItem[] = [

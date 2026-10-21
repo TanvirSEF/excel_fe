@@ -411,6 +411,39 @@ export interface PermissionGroup {
   permissions: PermissionDefinition[]
 }
 
+export interface TrafficLogItem {
+  id: number
+  viewed_at: string
+  post_id: string
+  post_title: string
+  post_slug: string
+  ip_address: string | null
+  country: string | null
+  country_code: string | null
+  city: string | null
+  device_type: "desktop" | "mobile" | "tablet" | string | null
+  browser: string | null
+  os: string | null
+  referrer: string | null
+}
+
+export interface LiveTrafficStats {
+  active_30m: number
+  today_views: number
+  top_country: string | null
+  top_country_code: string | null
+  top_device: string | null
+}
+
+export interface TrafficFeedResponse {
+  items: TrafficLogItem[]
+  total: number
+  page: number
+  page_size: number
+  total_pages: number
+  stats: LiveTrafficStats
+}
+
 export interface RolePermissionsUpdateInput {
   permissions: string[]
 }

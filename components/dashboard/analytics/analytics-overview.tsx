@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { IconActivity } from "@tabler/icons-react"
 
 import { OverviewChart } from "@/components/dashboard/analytics/overview-chart"
 import {
@@ -51,6 +52,19 @@ export function AnalyticsOverview() {
 
   return (
     <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b pb-4">
+        <div>
+          <h2 className="text-xl font-bold tracking-tight text-foreground">Content Analytics</h2>
+          <p className="text-xs text-muted-foreground mt-0.5">Aggregate metrics and reach across all published guides.</p>
+        </div>
+        <Button variant="outline" size="sm" asChild className="gap-1.5 text-xs self-start sm:self-auto">
+          <Link href="/dashboard/traffic">
+            <IconActivity className="h-3.5 w-3.5 text-emerald-500 animate-pulse" />
+            <span>Open Live Traffic Feed →</span>
+          </Link>
+        </Button>
+      </div>
+
       <StatTiles
         tiles={[
           {
