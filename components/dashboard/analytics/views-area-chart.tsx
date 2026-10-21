@@ -25,14 +25,18 @@ const chartConfig = {
 
 export function ViewsAreaChart({
   data,
+  title = "Views, last 7 days",
+  description = "Daily views for this post",
 }: {
   data: { date: string; views: number }[]
+  title?: string
+  description?: string
 }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Views, last 7 days</CardTitle>
-        <CardDescription>Daily views for this post</CardDescription>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <ChartContainer

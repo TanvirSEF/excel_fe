@@ -447,3 +447,33 @@ export interface TrafficFeedResponse {
 export interface RolePermissionsUpdateInput {
   permissions: string[]
 }
+
+export interface LabelCount {
+  label: string
+  count: number
+}
+
+export interface RealtimeAnalytics {
+  active_users: number
+  views_per_minute: { minute: string; views: number }[]
+  top_pages: LabelCount[]
+  top_sources: LabelCount[]
+  countries: LabelCount[]
+  devices: LabelCount[]
+}
+
+export interface TrafficOverview {
+  days: number
+  humans_only: boolean
+  users: number
+  sessions: number
+  pageviews: number
+  avg_session_seconds: number
+  pages_per_session: number
+  engagement_rate: number
+  daily: { date: string; users: number; sessions: number; pageviews: number }[]
+  top_pages: { path: string; views: number; avg_engaged_seconds: number }[]
+  sources: LabelCount[]
+  devices: LabelCount[]
+  countries: LabelCount[]
+}

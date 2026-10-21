@@ -12,6 +12,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useTrafficFeed } from "@/lib/queries/analytics"
+import { RealtimePanel } from "./realtime-panel"
+import { SessionOverview } from "./session-overview"
 import { TrafficKpiCards } from "./traffic-kpi-cards"
 import { TrafficTable } from "./traffic-table"
 
@@ -90,6 +92,10 @@ export function TrafficView() {
           </Button>
         </div>
       </div>
+
+      <RealtimePanel />
+
+      <SessionOverview />
 
       {/* Real-time KPI summary cards */}
       <TrafficKpiCards stats={data?.stats} />

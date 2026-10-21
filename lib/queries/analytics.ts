@@ -4,7 +4,9 @@ import { apiFetch } from "@/lib/api/api-fetch"
 import type {
   OverviewAnalytics,
   PostAnalytics,
+  RealtimeAnalytics,
   TrafficFeedResponse,
+  TrafficOverview,
 } from "@/types/api"
 
 export function useAnalyticsOverview() {
@@ -88,5 +90,23 @@ export function useAssistantAnalytics() {
     queryKey: ["analytics", "assistant"],
     queryFn: () => apiFetch<AssistantAnalyticsResponse>("/analytics/assistant"),
     refetchInterval: 30_000,
+  })
+}
+
+export function useRealtimeAnalytics() {
+  return useQuery({
+    queryKey: ["analytics", "realtime"],
+    queryFn: () => apiFetch<RealtimeAnalytics>("/analytics/realtime"),
+    refetchInterval: 10_000,
+  })
+}
+
+export function useTrafficOverview(days: number, humansOnly: boolean) {
+  return useQuery({
+    queryKey: ["analytics", "traffic-overview", days, humansOnly],
+    queryFn: () =>
+      apiFetch<TrafficOverview>("/analytics/traffic-overview", {
+        searchParams: { days, humans_only: humansOnly },
+      }),
   })
 }
