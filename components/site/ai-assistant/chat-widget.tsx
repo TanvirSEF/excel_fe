@@ -266,11 +266,11 @@ export function ChatWidget() {
         {/* Floating Mascot & Trigger */}
         {!isOpen ? (
           <div className="group relative flex items-center gap-2 select-none">
-            {/* Friendly Speech Bubble / Prompt Pill */}
+            {/* Friendly Speech Bubble / Prompt Pill (Desktop only; hidden on mobile) */}
             <button
               type="button"
               onClick={() => setIsOpen(true)}
-              className="flex items-center gap-2 rounded-2xl border border-border/80 bg-card/95 px-3.5 py-2 text-foreground shadow-lg backdrop-blur-md transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:-translate-x-0.5 cursor-pointer"
+              className="hidden sm:flex items-center gap-2 rounded-2xl border border-border/80 bg-card/95 px-3.5 py-2 text-foreground shadow-lg backdrop-blur-md transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:-translate-x-0.5 cursor-pointer"
               aria-label="Open Cellie Assistant"
             >
               <span className="relative flex h-2 w-2 shrink-0">
