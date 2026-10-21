@@ -2,8 +2,6 @@
 
 import { useState } from "react"
 import {
-  IconPlayerPause,
-  IconPlayerPlay,
   IconRefresh,
   IconSearch,
   IconX,
@@ -52,32 +50,13 @@ export function TrafficView() {
 
   return (
     <div className="space-y-6">
-      {/* Header with live control */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              Live Traffic & Real-Time Visitors
-            </h1>
-            <span
-              className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold ${
-                autoRefresh
-                  ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30"
-                  : "bg-muted text-muted-foreground border border-border"
-              }`}
-            >
-              {autoRefresh ? (
-                <>
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  Live Stream
-                </>
-              ) : (
-                "Paused"
-              )}
-            </span>
-          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">
+            Traffic Analytics
+          </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Monitor real-time reader requests, geographic locations, and devices across all published Excel guides.
+            Real-time reader activity, geographic distribution, and device metrics across all published Excel guides.
           </p>
         </div>
 
@@ -86,19 +65,14 @@ export function TrafficView() {
             variant="outline"
             size="sm"
             onClick={() => setAutoRefresh(!autoRefresh)}
-            className="gap-1.5 text-xs"
+            className="gap-2 text-xs font-medium"
           >
-            {autoRefresh ? (
-              <>
-                <IconPlayerPause className="h-3.5 w-3.5 text-muted-foreground" />
-                <span>Pause stream</span>
-              </>
-            ) : (
-              <>
-                <IconPlayerPlay className="h-3.5 w-3.5 text-emerald-500" />
-                <span>Resume stream</span>
-              </>
-            )}
+            <span
+              className={`h-2 w-2 rounded-full transition-colors ${
+                autoRefresh ? "bg-emerald-500" : "bg-muted-foreground/40"
+              }`}
+            />
+            <span>{autoRefresh ? "Live update on" : "Live update paused"}</span>
           </Button>
 
           <Button
@@ -106,7 +80,7 @@ export function TrafficView() {
             size="sm"
             onClick={() => refetch()}
             disabled={isFetching}
-            className="gap-1.5 text-xs"
+            className="gap-1.5 text-xs font-medium"
             title="Refresh now"
           >
             <IconRefresh
@@ -118,7 +92,7 @@ export function TrafficView() {
       </div>
 
       {/* Real-time KPI summary cards */}
-      <TrafficKpiCards stats={data?.stats} isLive={autoRefresh} />
+      <TrafficKpiCards stats={data?.stats} />
 
       {/* Filter and Search Bar */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 rounded-2xl border border-border/80 bg-card p-3 shadow-xs">

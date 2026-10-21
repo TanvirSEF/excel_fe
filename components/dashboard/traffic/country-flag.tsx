@@ -33,13 +33,13 @@ export function CountryBadge({
         className={`inline-flex items-center gap-1.5 text-xs text-muted-foreground ${className}`}
       >
         <IconWorld className="h-4 w-4 shrink-0 text-muted-foreground/60" />
-        <span>Unknown location</span>
+        <span>Global / Direct</span>
       </span>
     )
   }
 
   const flag = getCountryFlag(code)
-  const displayName = country || code || "Unknown"
+  const displayName = country || code || "Global"
 
   return (
     <div className={`inline-flex items-center gap-1.5 text-xs ${className}`}>

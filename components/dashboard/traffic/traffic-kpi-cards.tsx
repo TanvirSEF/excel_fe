@@ -13,10 +13,9 @@ import { getCountryFlag } from "./country-flag"
 
 interface TrafficKpiCardsProps {
   stats?: LiveTrafficStats
-  isLive?: boolean
 }
 
-export function TrafficKpiCards({ stats, isLive = true }: TrafficKpiCardsProps) {
+export function TrafficKpiCards({ stats }: TrafficKpiCardsProps) {
   const active30m = stats?.active_30m ?? 0
   const todayViews = stats?.today_views ?? 0
   const topCountry = stats?.top_country ?? "None"
@@ -33,15 +32,7 @@ export function TrafficKpiCards({ stats, isLive = true }: TrafficKpiCardsProps) 
           <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
             Active Now (30m)
           </CardTitle>
-          <div className="flex items-center gap-1.5">
-            {isLive ? (
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
-              </span>
-            ) : null}
-            <IconActivity className="h-4 w-4 text-emerald-500" />
-          </div>
+          <IconActivity className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold tracking-tight text-foreground">

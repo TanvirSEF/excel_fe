@@ -3,6 +3,7 @@ import slugify from "slugify"
 
 import { BlockRenderer } from "@/components/blocks/block-renderer"
 import { ArticleTags } from "@/components/site/article-tags"
+import { ArticleViewTracker } from "@/components/site/article-view-tracker"
 import { BlogArticleHeader } from "@/components/site/blog-article-header"
 import { Breadcrumb } from "@/components/site/breadcrumb"
 import { CommentsSection } from "@/components/site/comments-section"
@@ -195,6 +196,7 @@ export async function BlogArticleView({
           </aside>
 
           <article className="min-w-0 w-full max-w-[820px] flex-1">
+            <ArticleViewTracker slug={post.slug} />
             <Breadcrumb items={breadcrumbItems} />
             <BlogArticleHeader
               post={post}

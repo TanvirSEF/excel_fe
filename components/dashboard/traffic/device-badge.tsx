@@ -54,6 +54,16 @@ export function DeviceBadge({ deviceType, browser, os }: DeviceBadgeProps) {
     return <IconWorld className="h-3.5 w-3.5 text-muted-foreground" />
   }
 
+  const formatBrowser = (b?: string | null) => {
+    if (!b || b.toLowerCase() === "other") return "Web Browser"
+    return b
+  }
+
+  const formatOs = (o?: string | null, fallbackDevice = "Desktop") => {
+    if (!o || o.toLowerCase() === "other") return fallbackDevice
+    return o
+  }
+
   const deviceLabel = deviceType
     ? deviceType.charAt(0).toUpperCase() + deviceType.slice(1)
     : "Desktop"
@@ -66,11 +76,11 @@ export function DeviceBadge({ deviceType, browser, os }: DeviceBadgeProps) {
       <div className="flex flex-col min-w-0">
         <div className="flex items-center gap-1 font-medium text-foreground">
           {getBrowserIcon()}
-          <span className="truncate max-w-28">{browser || "Unknown"}</span>
+          <span className="truncate max-w-28">{formatBrowser(browser)}</span>
         </div>
         <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
           {getOsIcon()}
-          <span className="truncate max-w-28">{os || deviceLabel}</span>
+          <span className="truncate max-w-28">{formatOs(os, deviceLabel)}</span>
         </div>
       </div>
     </div>
