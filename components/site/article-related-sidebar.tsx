@@ -46,6 +46,7 @@ export function ArticleRelatedSidebar({
             More articles from{" "}
             <Link
               href={`/${categorySlug}/`}
+              prefetch={false}
               className="inline-flex items-center gap-1 font-semibold text-primary-foreground underline decoration-white/40 underline-offset-2 transition-colors hover:decoration-white hover:text-white"
             >
               <span>{categoryName}</span>
@@ -65,6 +66,7 @@ export function ArticleRelatedSidebar({
           <li key={post.id}>
             <Link
               href={postHref(post)}
+              prefetch={false}
               className="group flex items-start gap-3 p-3.5 transition-colors hover:bg-muted/50"
             >
               <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-lg border border-border/50 bg-muted">

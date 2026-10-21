@@ -6,6 +6,7 @@ export function CategoryCard({ category }: { category: Category }) {
   return (
     <Link
       href={`/${category.slug}/`}
+      prefetch={false}
       className="group flex flex-col gap-3 rounded-xl border bg-card p-5 transition-colors hover:border-primary/40"
     >
       <div className="flex items-center gap-2.5">

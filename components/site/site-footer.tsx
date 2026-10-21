@@ -130,6 +130,7 @@ export function SiteFooter() {
           <div className="space-y-6 lg:col-span-5">
             <Link
               href="/"
+              prefetch={false}
               className="inline-flex items-center transition-transform hover:opacity-90 active:scale-95"
             >
               <Image
@@ -196,6 +197,7 @@ export function SiteFooter() {
                 <li key={link.label}>
                   <Link
                     href={link.href}
+                    prefetch={false}
                     className="group inline-flex items-center gap-1 text-primary-foreground/80 transition-colors hover:text-primary-foreground hover:translate-x-0.5 duration-200"
                   >
                     <span>{link.label}</span>
@@ -216,6 +218,7 @@ export function SiteFooter() {
                 <li key={link.label}>
                   <Link
                     href={link.href}
+                    prefetch={false}
                     className="group inline-flex items-center gap-1 text-primary-foreground/80 transition-colors hover:text-primary-foreground hover:translate-x-0.5 duration-200"
                   >
                     <span>{link.label}</span>
@@ -230,6 +233,7 @@ export function SiteFooter() {
           <div className="space-y-4 lg:col-span-2">
             <Link
               href="/about"
+              prefetch={false}
               className="text-[13px] font-bold uppercase tracking-wider text-primary-foreground transition-opacity hover:opacity-85 inline-block"
             >
               About Excel Insider
@@ -239,6 +243,7 @@ export function SiteFooter() {
                 <li key={link.label}>
                   <Link
                     href={link.href}
+                    prefetch={false}
                     className="text-primary-foreground/80 transition-colors hover:text-primary-foreground hover:translate-x-0.5 duration-200 inline-block"
                   >
                     {link.label}

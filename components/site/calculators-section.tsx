@@ -182,6 +182,7 @@ export function CalculatorsSection() {
                     <Link
                       key={tool.slug}
                       href={`${card.hubHref}/${tool.slug}/`}
+                      prefetch={false}
                       className="flex items-center justify-between p-2 rounded-lg text-[13px] sm:text-sm font-medium text-foreground hover:bg-muted/70 hover:text-primary transition-colors group/item"
                     >
                       <span className="truncate group-hover/item:translate-x-0.5 transition-transform">
@@ -196,6 +197,7 @@ export function CalculatorsSection() {
               <div className="mt-5 pt-4 border-t border-border/50">
                 <Link
                   href={`${card.hubHref}/`}
+                  prefetch={false}
                   className={`inline-flex items-center gap-1.5 text-[13px] sm:text-sm font-semibold ${card.accentText} hover:underline`}
                 >
                   <span>Explore all {card.title} tools</span>

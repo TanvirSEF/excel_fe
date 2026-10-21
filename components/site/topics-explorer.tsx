@@ -346,6 +346,7 @@ export function TopicsExplorer({
 
             <Link
               href={`/${activeCategory.slug}/`}
+              prefetch={false}
               className="group inline-flex items-center gap-1 text-xs font-semibold text-primary hover:text-primary/80"
             >
               <span>View full archive</span>
@@ -386,7 +387,7 @@ export function TopicsExplorer({
                 We are currently writing fresh tutorials for this topic. Check back soon or explore other categories.
               </p>
               <Button asChild size="sm" variant="outline" className="mt-5 rounded-full">
-                <Link href="/blog">Browse All Articles</Link>
+                <Link href="/blog" prefetch={false}>Browse All Articles</Link>
               </Button>
             </div>
           )}

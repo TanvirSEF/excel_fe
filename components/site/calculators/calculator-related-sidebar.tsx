@@ -53,6 +53,7 @@ export function CalculatorRelatedSidebar({
           <li key={calc.slug}>
             <Link
               href={`${categoryHref}${calc.slug}/`}
+              prefetch={false}
               className="group flex items-start gap-3 p-3.5 transition-colors hover:bg-muted/50"
             >
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground mt-0.5">

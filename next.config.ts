@@ -50,7 +50,21 @@ const nextConfig: NextConfig = {
       : [{ protocol: "https" as const, hostname: "**" }],
   },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }]
+    return [
+      {
+        source: "/:path*",
+        headers: securityHeaders,
+      },
+      {
+        source: "/:path*.(svg|jpg|jpeg|png|webp|ico|woff2)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+    ]
   },
   async rewrites() {
     return [

@@ -99,6 +99,7 @@ export function CurriculumSidebar({
                           ? `/google-sheets/${firstLesson.slug}`
                           : "/google-sheets"
                       }
+                      prefetch={false}
                       aria-current={topicActive ? "page" : undefined}
                       className={cn(
                         "block rounded-lg px-2.5 py-2 text-sm leading-snug transition-all duration-150",

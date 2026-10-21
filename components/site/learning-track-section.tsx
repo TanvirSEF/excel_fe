@@ -71,6 +71,7 @@ export function LearningTrackSection({ modules }: LearningTrackSectionProps) {
             {firstLesson ? (
               <Link
                 href={`/google-sheets/${firstLesson.slug}`}
+                prefetch={false}
                 className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-teal-600 px-5 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-teal-700"
               >
                 Start Learning
@@ -79,6 +80,7 @@ export function LearningTrackSection({ modules }: LearningTrackSectionProps) {
             ) : null}
             <Link
               href="/google-sheets"
+              prefetch={false}
               className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-teal-500/40 bg-background px-5 text-sm font-semibold text-teal-700 transition-colors hover:bg-teal-500/10 dark:text-teal-300"
             >
               View Full Track
@@ -94,6 +96,7 @@ export function LearningTrackSection({ modules }: LearningTrackSectionProps) {
             <Link
               key={module.slug}
               href={`/google-sheets#${module.slug}`}
+              prefetch={false}
               className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/70 bg-card p-6 shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:border-teal-500/60 hover:shadow-lg"
             >
               <span

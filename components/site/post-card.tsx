@@ -48,7 +48,7 @@ export function PostCard({ post, className, priority = false }: PostCardProps) {
         className
       )}
     >
-      <Link href={postHref(post)} className="flex h-full flex-col">
+      <Link href={postHref(post)} prefetch={false} className="flex h-full flex-col">
         {/* Featured Image or Gradient Fallback */}
         <div className="relative aspect-16/10 w-full overflow-hidden rounded-xl border border-border/40 bg-muted">
           {imageUrl ? (

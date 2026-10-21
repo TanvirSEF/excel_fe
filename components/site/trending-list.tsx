@@ -31,6 +31,7 @@ export function TrendingSection({ posts, className }: TrendingSectionProps) {
           <li key={post.slug}>
             <Link
               href={postHref(post)}
+              prefetch={false}
               className="group -mx-3 flex items-center gap-4 rounded-xl px-3 py-5 transition-colors hover:bg-primary/4 sm:gap-6"
             >
               <span className="w-10 shrink-0 text-right font-mono text-2xl font-bold tabular-nums text-primary/25 transition-colors group-hover:text-primary sm:text-3xl">
