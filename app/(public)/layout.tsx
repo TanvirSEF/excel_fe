@@ -1,5 +1,6 @@
 import { ChatWidget } from "@/components/site/ai-assistant/chat-widget"
 import { MediavineRouteListener } from "@/components/site/mediavine-route-listener"
+import { SiteAnalyticsTracker } from "@/components/site/site-analytics-tracker"
 import { SiteFooter } from "@/components/site/site-footer"
 import { SiteHeader } from "@/components/site/site-header"
 
@@ -15,6 +16,7 @@ export default function PublicLayout({
       <SiteFooter />
       <ChatWidget />
       <MediavineRouteListener />
+      <SiteAnalyticsTracker />
     </div>
   )
 }
