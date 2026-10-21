@@ -8,7 +8,6 @@ import {
   IconCalculator,
   IconChevronRight,
   IconHelp,
-  IconMessage2,
   IconRefresh,
   IconX,
 } from "@tabler/icons-react"
@@ -16,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { API_BASE_PATH, config } from "@/lib/config"
 import { cn } from "@/lib/utils"
+import { AssistantAvatar } from "./assistant-avatar"
 import { MessageRenderer } from "./message-renderer"
 
 interface RecommendedArticle {
@@ -215,15 +215,13 @@ export function ChatWidget() {
             className="group flex items-center gap-2.5 rounded-full border border-primary/25 bg-card/95 px-4 py-2.5 text-foreground shadow-lg backdrop-blur-md transition-all duration-200 hover:border-primary/60 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
             aria-label="Open Spreadsheet Assistant"
           >
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-              <IconMessage2 className="h-4 w-4" />
-            </div>
+            <AssistantAvatar className="h-8 w-8" />
             <div className="flex flex-col text-left">
-              <span className="text-xs font-semibold leading-tight text-foreground">
-                Formula Help
+              <span className="text-xs font-bold leading-tight text-foreground">
+                SheetBuddy
               </span>
               <span className="text-[10px] text-muted-foreground leading-tight">
-                Excel &amp; Sheets
+                Formula &amp; Sheets Help
               </span>
             </div>
           </button>
@@ -235,15 +233,13 @@ export function ChatWidget() {
           {/* Header */}
           <div className="flex items-center justify-between border-b border-border/80 bg-muted/40 px-4 py-3">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/15 text-primary">
-                <IconMessage2 className="h-4.5 w-4.5" />
-              </div>
+              <AssistantAvatar className="h-8 w-8" />
               <div className="flex flex-col">
                 <h3 className="text-sm font-bold text-foreground leading-tight">
-                  Spreadsheet Assistant
+                  SheetBuddy
                 </h3>
                 <span className="text-[11px] text-muted-foreground leading-tight mt-0.5">
-                  Formulas, errors &amp; workbook solutions
+                  Formula &amp; workbook helper
                 </span>
               </div>
             </div>
