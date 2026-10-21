@@ -205,32 +205,33 @@ export function ChatWidget() {
   }
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end">
-      {/* Floating Trigger Button */}
-      {!isOpen ? (
-        <button
-          type="button"
-          onClick={() => setIsOpen(true)}
-          className="group flex items-center gap-2.5 rounded-full border border-primary/25 bg-card/95 px-4 py-2.5 text-foreground shadow-lg backdrop-blur-md transition-all duration-200 hover:border-primary/60 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
-          aria-label="Open Spreadsheet Assistant"
-        >
-          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-            <IconMessage2 className="h-4 w-4" />
-          </div>
-          <div className="flex flex-col text-left">
-            <span className="text-xs font-semibold leading-tight text-foreground">
-              Formula Help
-            </span>
-            <span className="text-[10px] text-muted-foreground leading-tight">
-              Excel &amp; Sheets
-            </span>
-          </div>
-        </button>
-      ) : null}
+    <div className="fixed bottom-26 sm:bottom-28 right-4 sm:right-6 z-[2147483647] flex flex-col items-end pointer-events-none">
+      <div className="pointer-events-auto flex flex-col items-end">
+        {/* Floating Trigger Button */}
+        {!isOpen ? (
+          <button
+            type="button"
+            onClick={() => setIsOpen(true)}
+            className="group flex items-center gap-2.5 rounded-full border border-primary/25 bg-card/95 px-4 py-2.5 text-foreground shadow-lg backdrop-blur-md transition-all duration-200 hover:border-primary/60 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+            aria-label="Open Spreadsheet Assistant"
+          >
+            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+              <IconMessage2 className="h-4 w-4" />
+            </div>
+            <div className="flex flex-col text-left">
+              <span className="text-xs font-semibold leading-tight text-foreground">
+                Formula Help
+              </span>
+              <span className="text-[10px] text-muted-foreground leading-tight">
+                Excel &amp; Sheets
+              </span>
+            </div>
+          </button>
+        ) : null}
 
-      {/* Modern Chat Window Panel */}
-      {isOpen ? (
-        <div className="flex flex-col w-[410px] max-w-[calc(100vw-2rem)] h-[570px] max-h-[85vh] rounded-2xl border border-border/90 bg-card shadow-2xl overflow-hidden animate-in fade-in-50 zoom-in-95 duration-200">
+        {/* Modern Chat Window Panel */}
+        {isOpen ? (
+          <div className="flex flex-col w-[410px] max-w-[calc(100vw-2rem)] h-[520px] max-h-[calc(100vh-140px)] rounded-2xl border border-border/90 bg-card shadow-2xl overflow-hidden animate-in fade-in-50 zoom-in-95 duration-200">
           {/* Header */}
           <div className="flex items-center justify-between border-b border-border/80 bg-muted/40 px-4 py-3">
             <div className="flex items-center gap-2.5">
@@ -418,6 +419,7 @@ export function ChatWidget() {
           </div>
         </div>
       ) : null}
+      </div>
     </div>
   )
 }
