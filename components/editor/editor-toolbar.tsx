@@ -9,6 +9,7 @@ import {
   IconArrowBackUp,
   IconArrowForwardUp,
   IconBold,
+  IconBook,
   IconCode,
   IconEraser,
   IconHighlight,
@@ -30,6 +31,7 @@ import {
   type BlockPanel,
 } from "@/components/editor/block-commands"
 import { EditorGuide } from "@/components/editor/editor-guide"
+import { InterlinkPanel } from "@/components/editor/interlink-panel"
 import { MediaPicker } from "@/components/editor/media-picker"
 import { Button } from "@/components/ui/button"
 import {
@@ -453,6 +455,16 @@ export function EditorToolbar({ editor, panel, onPanelChange }: EditorToolbarPro
           </DropdownMenuContent>
         </DropdownMenu>
 
+        <ToolbarButton
+          active={panel === "interlink"}
+          onClick={() =>
+            onPanelChange(panel === "interlink" ? null : "interlink")
+          }
+          title="Insert Read More / Interlink (Internal post link)"
+        >
+          <IconBook className="h-4 w-4" />
+        </ToolbarButton>
+
         {inCodeBlock ? (
           <>
             <Divider />
@@ -720,6 +732,13 @@ export function EditorToolbar({ editor, panel, onPanelChange }: EditorToolbarPro
             Remove highlight
           </Button>
         </div>
+      ) : null}
+
+      {panel === "interlink" ? (
+        <InterlinkPanel
+          editor={editor}
+          onClose={() => onPanelChange(null)}
+        />
       ) : null}
 
       {panel === "button" ? (

@@ -3,6 +3,7 @@ import type { Editor } from "@tiptap/react"
 import {
   IconAlertOctagon,
   IconAlertTriangle,
+  IconBook,
   IconBrandHtml5,
   IconBulb,
   IconCaretRight,
@@ -29,7 +30,7 @@ import {
 import type { CalloutVariant } from "@/types/api"
 
 export type BlockGroupId = "callouts" | "structure" | "media" | "advanced"
-export type BlockPanel = "image" | "button" | "embed" | "html" | "keys"
+export type BlockPanel = "image" | "button" | "embed" | "html" | "keys" | "interlink"
 
 export interface BlockCommand {
   id: string
@@ -332,6 +333,15 @@ export const BLOCK_COMMANDS: BlockCommand[] = [
     keywords: ["video", "youtube", "vimeo", "iframe", "embed"],
     group: "media",
     panel: "embed",
+  },
+  {
+    id: "interlink",
+    label: "Read More / Interlink…",
+    description: "Post link card with auto title & thumbnail",
+    icon: IconBook,
+    keywords: ["readmore", "interlink", "related", "link", "post", "read", "internal"],
+    group: "advanced",
+    panel: "interlink",
   },
   {
     id: "button",

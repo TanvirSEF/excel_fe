@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 import { Fragment, type ReactNode } from "react"
 import {
   IconAlertTriangle,
@@ -9,6 +10,8 @@ import {
   IconDownload,
   IconFileSpreadsheet,
   IconListNumbers,
+  IconArrowRight,
+  IconBook,
   IconNotes,
   IconPaperclip,
 } from "@tabler/icons-react"
@@ -1158,6 +1161,54 @@ function BlockNode({
             </div>
           </div>
         </div>
+      )
+    }
+
+    case "interlink": {
+      const href =
+        block.url.startsWith("http://") ||
+        block.url.startsWith("https://") ||
+        block.url.startsWith("/")
+          ? block.url
+          : `/${block.url}`
+      const prefix = block.prefix?.trim() || "Read More"
+
+      return (
+        <aside className="not-prose my-6 overflow-hidden rounded-2xl border border-primary/20 bg-linear-to-r from-primary/[0.04] via-primary/[0.02] to-transparent p-3.5 sm:p-4 transition-all duration-200 hover:border-primary/40 hover:bg-primary/[0.06] hover:shadow-xs dark:border-primary/30 dark:from-primary/[0.08] dark:to-transparent">
+          <Link
+            href={href}
+            className="group flex items-center justify-between gap-3.5 text-inherit no-underline"
+          >
+            <div className="flex items-center gap-3.5 min-w-0 flex-1">
+              {block.image_url ? (
+                <div className="relative h-16 w-20 sm:h-18 sm:w-26 shrink-0 overflow-hidden rounded-xl border border-border/60 bg-muted">
+                  <Image
+                    src={block.image_url}
+                    alt={block.title}
+                    fill
+                    sizes="(max-width: 640px) 80px, 104px"
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+              ) : (
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-200 group-hover:scale-105">
+                  <IconBook className="h-5 w-5" />
+                </div>
+              )}
+              <div className="min-w-0 flex-1">
+                <span className="inline-block text-xs font-bold uppercase tracking-wider text-primary mr-2">
+                  {prefix}:
+                </span>
+                <span className="font-semibold text-foreground text-sm sm:text-base leading-snug group-hover:text-primary transition-colors underline-offset-4 group-hover:underline">
+                  {block.title}
+                </span>
+              </div>
+            </div>
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-background/80 text-muted-foreground shadow-2xs transition-all duration-200 group-hover:translate-x-1 group-hover:bg-primary group-hover:text-primary-foreground">
+              <IconArrowRight className="h-4 w-4" />
+            </div>
+          </Link>
+        </aside>
       )
     }
 

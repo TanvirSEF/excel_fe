@@ -172,6 +172,7 @@ export interface PostAdminItem {
   rejection_reason: string | null
   is_trending?: boolean
   is_trending_pinned?: boolean
+  featured_image_url?: string | null
   updated_at: string
   published_at: string | null
 }
@@ -251,6 +252,7 @@ export type Block =
   | { type: "button"; label: string; href: string; variant: ButtonVariant }
   | { type: "embed"; url: string; caption?: string }
   | { type: "accordion"; title: string; text: string; content?: RichText }
+  | { type: "interlink"; url: string; title: string; prefix?: string; image_url?: string | null }
   | { type: "hr" }
 
 export interface Category {

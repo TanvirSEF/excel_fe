@@ -214,6 +214,16 @@ export function blocksToDoc(blocks: Block[]): JSONContent {
             ],
           }
         }
+        case "interlink":
+          return {
+            type: "interlink",
+            attrs: {
+              url: block.url,
+              title: block.title,
+              prefix: block.prefix ?? "Read More",
+              ...(block.image_url ? { imageUrl: block.image_url } : {}),
+            },
+          }
         case "button":
           return {
             type: "ctaButton",
@@ -349,6 +359,22 @@ export function docToBlocks(doc: JSONContent | null | undefined): Block[] {
             title,
             text,
             ...(content ? { content } : {}),
+          })
+        }
+        break
+      }
+      case "interlink": {
+        const url = stringAttr(node.attrs?.url)
+        const title = stringAttr(node.attrs?.title)
+        if (url && title) {
+          const prefix = stringAttr(node.attrs?.prefix) || "Read More"
+          const imageUrl = stringAttr(node.attrs?.imageUrl)
+          blocks.push({
+            type: "interlink",
+            url,
+            title,
+            prefix,
+            ...(imageUrl ? { image_url: imageUrl } : {}),
           })
         }
         break

@@ -73,6 +73,16 @@ function blockToHtml(block: Block): string {
         block.content ?? block.text
       )}</p></div>`
 
+    case "interlink": {
+      const prefix = escapeHtml(block.prefix || "Read More")
+      const title = escapeHtml(block.title)
+      const url = escapeHtml(block.url)
+      const img = block.image_url
+        ? `<img src="${escapeHtml(block.image_url)}" alt="${title}" loading="lazy" />`
+        : ""
+      return `<p class="interlink">${img}<strong>${prefix}:</strong> <a href="${url}">${title}</a></p>`
+    }
+
     case "button":
       return `<p><a href="${escapeHtml(block.href)}">${escapeHtml(block.label)}</a></p>`
 

@@ -17,6 +17,7 @@ import {
 } from "@tiptap/extension-table"
 
 import { AccordionNode } from "@/components/editor/accordion-node"
+import { InterlinkNode } from "@/components/editor/interlink-node"
 import { CtaButtonNode } from "@/components/editor/button-node"
 import { CalloutNode } from "@/components/editor/callout-node"
 import { CodeBlockLanguage } from "@/components/editor/code-block-language"
@@ -79,6 +80,7 @@ export function PostEditor({ initialDoc, onDocChange }: PostEditorProps) {
       CtaButtonNode,
       EmbedNode,
       AccordionNode,
+      InterlinkNode,
       HeadingNum,
       KbdMark,
       ListMarker,
