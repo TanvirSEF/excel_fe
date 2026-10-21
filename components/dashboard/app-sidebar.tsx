@@ -9,6 +9,7 @@ import {
   IconFileText,
   IconHistory,
   IconMessage,
+  IconMessageQuestion,
   IconPhoto,
   IconSettings,
   IconShieldLock,
@@ -45,6 +46,7 @@ const CONTENT_ITEMS: NavItem[] = [
 const INSIGHT_ITEMS: NavItem[] = [
   { title: "Analytics", url: "/dashboard/analytics", icon: IconChartBar, permission: "analytics:view" },
   { title: "Live Traffic", url: "/dashboard/traffic", icon: IconActivity, permission: "analytics:view" },
+  { title: "AI Assistant", url: "/dashboard/assistant", icon: IconMessageQuestion, permission: "analytics:view" },
 ]
 
 const ADMIN_ITEMS: NavItem[] = [

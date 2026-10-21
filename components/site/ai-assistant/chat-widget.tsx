@@ -8,6 +8,8 @@ import {
   IconCalculator,
   IconChevronRight,
   IconRefresh,
+  IconThumbDown,
+  IconThumbUp,
   IconX,
 } from "@tabler/icons-react"
 
@@ -33,6 +35,8 @@ interface ChatMessage {
   id: string
   role: "user" | "assistant"
   content: string
+  queryId?: string
+  rating?: "up" | "down"
   articles?: RecommendedArticle[]
   calculators?: RecommendedCalculator[]
 }
@@ -52,6 +56,7 @@ function generateMessageId(prefix: string): string {
 }
 
 export function ChatWidget() {
+  const STORAGE_KEY = "excel_insider_cellie_chat_v1"
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [input, setInput] = useState("")
@@ -64,12 +69,58 @@ export function ChatWidget() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }
 
+  // Load persisted chat on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY)
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setTimeout(() => {
+            setMessages(parsed)
+          }, 0)
+        }
+      }
+    } catch {}
+  }, [])
+
+  // Auto-save messages to localStorage (capped at 20)
+  useEffect(() => {
+    if (messages.length > 0) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(messages.slice(-20)))
+      } catch {}
+    }
+  }, [messages])
+
   useEffect(() => {
     if (isOpen) {
       scrollToBottom()
       setTimeout(() => inputRef.current?.focus(), 100)
     }
   }, [isOpen, messages, isGenerating])
+
+  const handleFeedback = async (messageId: string, rating: "up" | "down") => {
+    const target = messages.find((m) => m.id === messageId)
+    if (!target || target.rating === rating) return
+
+    setMessages((prev) =>
+      prev.map((m) => (m.id === messageId ? { ...m, rating } : m))
+    )
+
+    if (target.queryId) {
+      try {
+        await fetch(`${config.publicApiUrl}${API_BASE_PATH}/assistant/feedback`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            query_id: target.queryId,
+            rating,
+          }),
+        })
+      } catch {}
+    }
+  }
 
   const handleSendMessage = async (textToSend?: string) => {
     const text = (textToSend ?? input).trim()
@@ -114,6 +165,7 @@ export function ChatWidget() {
       const decoder = new TextDecoder()
       let metaArticles: RecommendedArticle[] = []
       let metaCalculators: RecommendedCalculator[] = []
+      let receivedQueryId: string | undefined = undefined
 
       while (true) {
         const { value, done } = await reader.read()
@@ -142,6 +194,7 @@ export function ChatWidget() {
               } else if (data.type === "done") {
                 if (data.articles) metaArticles = data.articles
                 if (data.calculators) metaCalculators = data.calculators
+                if (data.query_id) receivedQueryId = data.query_id
               } else if (data.error) {
                 streamAccumulatorRef.current = data.error
                 const errText = streamAccumulatorRef.current
@@ -167,6 +220,7 @@ export function ChatWidget() {
             ? {
                 ...m,
                 content: finalContent,
+                queryId: receivedQueryId,
                 articles: metaArticles.length > 0 ? metaArticles : undefined,
                 calculators:
                   metaCalculators.length > 0 ? metaCalculators : undefined,
@@ -201,6 +255,9 @@ export function ChatWidget() {
   const handleClearChat = () => {
     setMessages([])
     setInput("")
+    try {
+      localStorage.removeItem(STORAGE_KEY)
+    } catch {}
   }
 
   return (
@@ -399,6 +456,44 @@ export function ChatWidget() {
                         </Link>
                       ))}
                     </div>
+                  </div>
+                ) : null}
+
+                {/* Feedback Toolbar for Assistant Messages */}
+                {m.role === "assistant" && m.content && !isGenerating ? (
+                  <div className="mt-1.5 flex items-center gap-1.5 px-1 text-[11px] text-muted-foreground select-none">
+                    <span className="text-[10px] text-muted-foreground/75">Was this helpful?</span>
+                    <button
+                      type="button"
+                      onClick={() => handleFeedback(m.id, "up")}
+                      title="Helpful"
+                      className={cn(
+                        "flex h-6 w-6 items-center justify-center rounded-md transition-colors hover:bg-muted cursor-pointer",
+                        m.rating === "up"
+                          ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-bold"
+                          : "text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      <IconThumbUp className="h-3.5 w-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleFeedback(m.id, "down")}
+                      title="Not helpful"
+                      className={cn(
+                        "flex h-6 w-6 items-center justify-center rounded-md transition-colors hover:bg-muted cursor-pointer",
+                        m.rating === "down"
+                          ? "bg-rose-500/15 text-rose-600 dark:text-rose-400 font-bold"
+                          : "text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      <IconThumbDown className="h-3.5 w-3.5" />
+                    </button>
+                    {m.rating ? (
+                      <span className="text-[10px] text-emerald-600 dark:text-emerald-400 animate-in fade-in duration-200">
+                        Thanks!
+                      </span>
+                    ) : null}
                   </div>
                 ) : null}
               </div>
