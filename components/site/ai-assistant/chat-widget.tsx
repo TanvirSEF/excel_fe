@@ -7,7 +7,6 @@ import {
   IconArrowUp,
   IconCalculator,
   IconChevronRight,
-  IconHelp,
   IconRefresh,
   IconX,
 } from "@tabler/icons-react"
@@ -207,24 +206,40 @@ export function ChatWidget() {
   return (
     <div className="fixed bottom-26 sm:bottom-28 right-4 sm:right-6 z-[2147483647] flex flex-col items-end pointer-events-none">
       <div className="pointer-events-auto flex flex-col items-end">
-        {/* Floating Trigger Button */}
+        {/* Floating Mascot & Trigger */}
         {!isOpen ? (
-          <button
-            type="button"
-            onClick={() => setIsOpen(true)}
-            className="group flex items-center gap-2.5 rounded-full border border-primary/25 bg-card/95 px-4 py-2.5 text-foreground shadow-lg backdrop-blur-md transition-all duration-200 hover:border-primary/60 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
-            aria-label="Open Spreadsheet Assistant"
-          >
-            <AssistantAvatar className="h-8 w-8" />
-            <div className="flex flex-col text-left">
-              <span className="text-xs font-bold leading-tight text-foreground">
-                SheetBuddy
+          <div className="group relative flex items-center gap-2 select-none">
+            {/* Friendly Speech Bubble / Prompt Pill */}
+            <button
+              type="button"
+              onClick={() => setIsOpen(true)}
+              className="flex items-center gap-2 rounded-2xl border border-border/80 bg-card/95 px-3.5 py-2 text-foreground shadow-lg backdrop-blur-md transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:-translate-x-0.5 cursor-pointer"
+              aria-label="Open Cellie Assistant"
+            >
+              <span className="relative flex h-2 w-2 shrink-0">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
               </span>
-              <span className="text-[10px] text-muted-foreground leading-tight">
-                Formula &amp; Sheets Help
-              </span>
-            </div>
-          </button>
+              <div className="flex flex-col text-left pr-0.5">
+                <span className="text-xs font-bold leading-tight text-foreground">
+                  Need Excel help?
+                </span>
+                <span className="text-[10px] text-muted-foreground leading-tight mt-0.5">
+                  Ask Cellie &bull; Formulas &amp; Guides
+                </span>
+              </div>
+            </button>
+
+            {/* Completely Free Floating Mascot Character */}
+            <button
+              type="button"
+              onClick={() => setIsOpen(true)}
+              aria-label="Open Cellie Assistant"
+              className="relative flex items-center justify-center transition-transform duration-300 hover:scale-115 active:scale-95 cursor-pointer focus:outline-none"
+            >
+              <AssistantAvatar className="h-14 w-14 sm:h-16 sm:w-16 drop-shadow-lg" />
+            </button>
+          </div>
         ) : null}
 
         {/* Modern Chat Window Panel */}
@@ -233,13 +248,18 @@ export function ChatWidget() {
           {/* Header */}
           <div className="flex items-center justify-between border-b border-border/80 bg-muted/40 px-4 py-3">
             <div className="flex items-center gap-2.5">
-              <AssistantAvatar className="h-8 w-8" />
+              <AssistantAvatar className="h-10 w-10 drop-shadow-sm" />
               <div className="flex flex-col">
-                <h3 className="text-sm font-bold text-foreground leading-tight">
-                  SheetBuddy
-                </h3>
+                <div className="flex items-center gap-1.5">
+                  <h3 className="text-sm font-bold text-foreground leading-tight">
+                    Cellie
+                  </h3>
+                  <span className="inline-flex items-center rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
+                    Online
+                  </span>
+                </div>
                 <span className="text-[11px] text-muted-foreground leading-tight mt-0.5">
-                  Formula &amp; workbook helper
+                  Spreadsheet &amp; formula assistant
                 </span>
               </div>
             </div>
@@ -269,16 +289,14 @@ export function ChatWidget() {
           {/* Messages Body */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4 [scrollbar-width:thin]">
             {messages.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-center py-6 px-2 space-y-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                  <IconHelp className="h-6 w-6 text-primary" />
-                </div>
-                <div className="space-y-1.5">
+              <div className="flex flex-col items-center justify-center h-full text-center py-4 px-2 space-y-3.5">
+                <AssistantAvatar className="h-16 w-16 drop-shadow-md" />
+                <div className="space-y-1">
                   <h4 className="text-sm font-bold text-foreground">
-                    How can I help with your spreadsheet?
+                    Hi! I&apos;m Cellie. How can I help today?
                   </h4>
                   <p className="text-xs text-muted-foreground leading-relaxed max-w-xs">
-                    Ask how to build any formula, troubleshoot errors like #N/A or #VALUE!, or explore step-by-step Excel guides.
+                    Ask how to build any formula, troubleshoot errors like #N/A or #VALUE!, or explore Excel tutorials.
                   </p>
                 </div>
 
