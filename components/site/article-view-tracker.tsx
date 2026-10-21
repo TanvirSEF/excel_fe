@@ -2,6 +2,8 @@
 
 import { useEffect } from "react"
 
+import { API_BASE_PATH, config } from "@/lib/config"
+
 interface ArticleViewTrackerProps {
   slug: string
 }
@@ -18,7 +20,7 @@ export function ArticleViewTracker({ slug }: ArticleViewTrackerProps) {
       // Ignore sessionStorage exceptions (private mode, etc.)
     }
 
-    const endpoint = `/api/views/${encodeURIComponent(slug)}`
+    const endpoint = `${config.publicApiUrl}${API_BASE_PATH}/posts/${encodeURIComponent(slug)}/view`
     if (typeof navigator !== "undefined" && typeof navigator.sendBeacon === "function") {
       const beaconSent = navigator.sendBeacon(endpoint)
       if (beaconSent) return
@@ -26,6 +28,7 @@ export function ArticleViewTracker({ slug }: ArticleViewTrackerProps) {
 
     fetch(endpoint, {
       method: "POST",
+      mode: "no-cors",
       keepalive: true,
     }).catch(() => {
       // Ignore background network failure silently
