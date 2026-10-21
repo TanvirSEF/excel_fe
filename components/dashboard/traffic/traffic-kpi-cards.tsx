@@ -30,7 +30,7 @@ export function TrafficKpiCards({ stats }: TrafficKpiCardsProps) {
       <Card className="relative overflow-hidden border-border/80 shadow-xs">
         <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
           <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-            Active Now (30m)
+            Article Views (30m)
           </CardTitle>
           <IconActivity className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
         </CardHeader>
@@ -39,7 +39,7 @@ export function TrafficKpiCards({ stats }: TrafficKpiCardsProps) {
             {active30m.toLocaleString()}
           </div>
           <p className="text-xs text-muted-foreground mt-1">
-            Real-time readers in last 30 mins
+            Article page views in the last 30 minutes
           </p>
         </CardContent>
       </Card>
