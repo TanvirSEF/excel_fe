@@ -1,12 +1,15 @@
 "use client"
 
-import type { ReactNode } from "react"
+import { useEffect, type ReactNode } from "react"
 
 import { AppSidebar } from "@/components/dashboard/app-sidebar"
 import { SiteHeader } from "@/components/dashboard/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { markInternalBrowser } from "@/lib/analytics-tracker"
 
 export function DashboardShell({ children }: { children: ReactNode }) {
+  useEffect(markInternalBrowser, [])
+
   return (
     <SidebarProvider
       style={

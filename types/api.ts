@@ -453,27 +453,147 @@ export interface LabelCount {
   count: number
 }
 
+export type TrafficFilter = "clean" | "human" | "all"
+export type BreakdownDimension =
+  | "source"
+  | "referrer"
+  | "device"
+  | "browser"
+  | "os"
+  | "country"
+  | "landing"
+
+export interface RecentVisit {
+  at: string
+  visitor: string
+  path: string
+  country: string | null
+  device: string
+  browser: string
+  os: string
+  source: string
+  returning: boolean
+}
+
 export interface RealtimeAnalytics {
-  active_users: number
+  active_5m: number
+  active_30m: number
+  pageviews_5m: number
+  pageviews_30m: number
+  new_visitors: number
+  returning_visitors: number
   views_per_minute: { minute: string; views: number }[]
   top_pages: LabelCount[]
   top_sources: LabelCount[]
   countries: LabelCount[]
   devices: LabelCount[]
+  browsers: LabelCount[]
+  systems: LabelCount[]
+  recent: RecentVisit[]
+  window_seconds: number
+  note: string
 }
 
-export interface TrafficOverview {
-  days: number
-  humans_only: boolean
-  users: number
+export interface TrafficSummary {
   sessions: number
+  users: number
+  new_users: number
+  returning_users: number
   pageviews: number
-  avg_session_seconds: number
-  pages_per_session: number
+  engaged_sessions: number
+  single_page_sessions: number
   engagement_rate: number
-  daily: { date: string; users: number; sessions: number; pageviews: number }[]
-  top_pages: { path: string; views: number; avg_engaged_seconds: number }[]
-  sources: LabelCount[]
-  devices: LabelCount[]
-  countries: LabelCount[]
+  bounce_rate: number
+  returning_rate: number
+  pages_per_session: number
+  avg_engagement_seconds: number
+  avg_session_seconds: number | null
+  median_session_seconds: number | null
+  duration_sessions: number
+  duration_excluded_sessions: number
+}
+
+export interface OverviewReport {
+  period: {
+    from_date: string
+    to_date: string
+    days: number
+    tz: string
+    granularity: "hour" | "day"
+  }
+  traffic: TrafficFilter
+  summary: TrafficSummary
+  previous: TrafficSummary | null
+  series: { bucket: string; users: number; sessions: number; pageviews: number }[]
+  duration_distribution: { label: string; sessions: number }[]
+  methodology: { metric: string; definition: string }[]
+}
+
+export interface BreakdownRow {
+  label: string
+  secondary: string | null
+  sessions: number
+  users: number
+  engagement_rate: number
+  bounce_rate: number
+}
+
+export interface BreakdownReport {
+  dimension: BreakdownDimension
+  rows: BreakdownRow[]
+}
+
+export interface PageRow {
+  path: string
+  views: number
+  users: number
+  avg_engaged_seconds: number
+  avg_scroll: number
+  exits: number
+  exit_rate: number
+}
+
+export interface PagesReport {
+  rows: PageRow[]
+  total: number
+  page: number
+  page_size: number
+}
+
+export interface QualityReport {
+  observed_sessions: number
+  estimated_human_sessions: number
+  excluded_sessions: number
+  classes: { traffic_class: string; sessions: number; pageviews: number; share: number }[]
+  reasons: { traffic_class: string; reason: string; confidence: string; sessions: number }[]
+  limitations: string[]
+}
+
+export interface SessionRow {
+  id: string
+  started_at: string
+  duration_seconds: number | null
+  engaged_seconds: number
+  pages: number
+  landing_path: string
+  exit_path: string | null
+  source: string
+  medium: string
+  device: string
+  country: string | null
+  traffic_class: string
+  confidence: string | null
+  reason: string | null
+}
+
+export interface SessionsReport {
+  rows: SessionRow[]
+  total: number
+  page: number
+  page_size: number
+}
+
+export interface EventsReport {
+  rows: { name: string; count: number; sessions: number }[]
+  targets: { name: string; target: string; count: number }[]
 }

@@ -4,9 +4,16 @@ import { apiFetch } from "@/lib/api/api-fetch"
 import type {
   OverviewAnalytics,
   PostAnalytics,
+  BreakdownDimension,
+  BreakdownReport,
+  EventsReport,
+  OverviewReport,
+  PagesReport,
+  QualityReport,
   RealtimeAnalytics,
+  SessionsReport,
   TrafficFeedResponse,
-  TrafficOverview,
+  TrafficFilter,
 } from "@/types/api"
 
 export function useAnalyticsOverview() {
@@ -93,6 +100,24 @@ export function useAssistantAnalytics() {
   })
 }
 
+export interface ReportParams {
+  from: string
+  to: string
+  tz: string
+  traffic: TrafficFilter
+  compare: boolean
+}
+
+function reportSearchParams(params: ReportParams) {
+  return {
+    from: params.from,
+    to: params.to,
+    tz: params.tz,
+    traffic: params.traffic,
+    compare: params.compare,
+  }
+}
+
 export function useRealtimeAnalytics() {
   return useQuery({
     queryKey: ["analytics", "realtime"],
@@ -101,12 +126,66 @@ export function useRealtimeAnalytics() {
   })
 }
 
-export function useTrafficOverview(days: number, humansOnly: boolean) {
+export function useOverviewReport(params: ReportParams) {
   return useQuery({
-    queryKey: ["analytics", "traffic-overview", days, humansOnly],
+    queryKey: ["analytics", "report", "overview", params],
     queryFn: () =>
-      apiFetch<TrafficOverview>("/analytics/traffic-overview", {
-        searchParams: { days, humans_only: humansOnly },
+      apiFetch<OverviewReport>("/analytics/reports/overview", {
+        searchParams: reportSearchParams(params),
+      }),
+  })
+}
+
+export function useBreakdownReport(
+  dimension: BreakdownDimension,
+  params: ReportParams,
+  limit = 10
+) {
+  return useQuery({
+    queryKey: ["analytics", "report", "breakdown", dimension, limit, params],
+    queryFn: () =>
+      apiFetch<BreakdownReport>("/analytics/reports/breakdown", {
+        searchParams: { ...reportSearchParams(params), dimension, limit },
+      }),
+  })
+}
+
+export function usePagesReport(params: ReportParams, page: number) {
+  return useQuery({
+    queryKey: ["analytics", "report", "pages", page, params],
+    queryFn: () =>
+      apiFetch<PagesReport>("/analytics/reports/pages", {
+        searchParams: { ...reportSearchParams(params), page, page_size: 15 },
+      }),
+  })
+}
+
+export function useQualityReport(params: ReportParams) {
+  return useQuery({
+    queryKey: ["analytics", "report", "quality", params],
+    queryFn: () =>
+      apiFetch<QualityReport>("/analytics/reports/quality", {
+        searchParams: reportSearchParams(params),
+      }),
+  })
+}
+
+export function useSessionsReport(params: ReportParams, page: number) {
+  return useQuery({
+    queryKey: ["analytics", "report", "sessions", page, params],
+    queryFn: () =>
+      apiFetch<SessionsReport>("/analytics/reports/sessions", {
+        searchParams: { ...reportSearchParams(params), page, page_size: 15 },
+      }),
+  })
+}
+
+export function useEventsReport(params: ReportParams) {
+  return useQuery({
+    queryKey: ["analytics", "report", "events", params],
+    queryFn: () =>
+      apiFetch<EventsReport>("/analytics/reports/events", {
+        searchParams: reportSearchParams(params),
       }),
   })
 }
