@@ -190,7 +190,7 @@ export async function BlogArticleView({
           <aside
             id="left-sidebar"
             aria-label="Table of contents"
-            className="hidden xl:block w-[320px] shrink-0 space-y-6"
+            className="hidden xl:block xl:self-stretch w-[320px] shrink-0 space-y-6"
           >
             {toc.length >= 2 ? <ArticleTocSidebar toc={toc} /> : null}
           </aside>

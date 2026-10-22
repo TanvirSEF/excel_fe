@@ -447,3 +447,15 @@ article kbd,
 .dark .tiptap kbd {
   box-shadow: 0 2.5px 0 0 var(--primary), 0 3px 6px rgba(0, 0, 0, 0.35);
 }
+
+
+/* Mediavine Left Sidebar Fix */
+@media only screen and (min-width: 1280px) {
+  #left-sidebar {
+    align-self: stretch;
+  }
+  #left-sidebar .mv-ad-box[data-slotid="sidebar_atf"] {
+    position: sticky;
+    top: 85px;
+  }
+}
