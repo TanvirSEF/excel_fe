@@ -5,14 +5,10 @@ import {
   IconAward,
   IconBrandLinkedin,
   IconBriefcase,
-  IconCalendar,
   IconCheck,
   IconExternalLink,
-  IconFileSpreadsheet,
   IconMail,
-  IconRocket,
   IconSchool,
-  IconUsers,
 } from "@tabler/icons-react"
 
 import { Breadcrumb } from "@/components/site/breadcrumb"
@@ -32,6 +28,7 @@ export const metadata: Metadata = {
   },
 }
 
+/*
 const STATS = [
   {
     value: "15+ Years",
@@ -58,6 +55,7 @@ const STATS = [
     description: "Reached worldwide on Excel Insider",
   },
 ]
+*/
 
 const EXPERTISE_AREAS = [
   "Advanced Spreadsheet Formulas",
@@ -157,7 +155,7 @@ export default function NehadUlfatProfilePage() {
         </div>
       </header>
 
-      {/* Key Stats Showcase */}
+      {/* Key Stats Showcase (Hidden / Commented out per request)
       <section className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {STATS.map((stat) => {
           const Icon = stat.icon
@@ -182,6 +180,7 @@ export default function NehadUlfatProfilePage() {
           )
         })}
       </section>
+      */}
 
       {/* Main Biography & Vision */}
       <section className="mt-10 grid gap-8 lg:grid-cols-3">
