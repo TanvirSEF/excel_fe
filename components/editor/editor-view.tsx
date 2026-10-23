@@ -6,10 +6,11 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import type { JSONContent } from "@tiptap/react"
 import { toast } from "sonner"
 
-import { IconEye } from "@tabler/icons-react"
+import { IconEye, IconExternalLink } from "@tabler/icons-react"
+import type { LivePreviewPayload } from "@/components/site/live-article-preview"
+import type { Category } from "@/types/api"
 
 import { PostStatusBadge } from "@/components/dashboard/post-status-badge"
-import { postHref } from "@/components/site/post-card"
 import { AssetsTab } from "@/components/editor/assets-tab"
 import { PostEditor } from "@/components/editor/post-editor"
 import {
@@ -58,6 +59,21 @@ const EMPTY_SEO: SeoFormFields = {
 }
 
 const DEFAULT_SCHEMA_TYPE = "TechArticle"
+
+function findCategory(
+  categories: Category[] | undefined,
+  id: string
+): Category | undefined {
+  if (!categories || !id) return undefined
+  for (const cat of categories) {
+    if (cat.id === id) return cat
+    if (cat.children?.length) {
+      const match = findCategory(cat.children, id)
+      if (match) return match
+    }
+  }
+  return undefined
+}
 
 interface EditorViewProps {
   postId?: string
@@ -167,6 +183,64 @@ export function EditorView({ postId }: EditorViewProps) {
     },
     [markDirty]
   )
+
+  const buildLivePreviewPayload = useCallback((): LivePreviewPayload => {
+    const blocks = docToBlocks(doc)
+    const selectedAuthor = fields.authorId
+      ? authors?.find((a) => a.id === fields.authorId)
+      : null
+    const authorName = selectedAuthor?.name ?? user?.name ?? "Editorial Team"
+    const authorAvatarUrl = selectedAuthor?.avatar_url ?? null
+    const selectedCategory = findCategory(categories, fields.categoryId)
+
+    return {
+      title: fields.title,
+      slug: fields.slug,
+      excerpt: fields.excerpt,
+      blocks,
+      featuredImageUrl: fields.featuredImageUrl,
+      isTrending: fields.isTrending,
+      tags: fields.tags,
+      authorId: fields.authorId,
+      authorName,
+      authorAvatarUrl,
+      categoryId: fields.categoryId,
+      categoryName: selectedCategory?.name ?? null,
+      categorySlug: selectedCategory?.slug ?? null,
+      originalPostId: postId,
+      originalPostStatus: post?.status,
+      updatedAt: new Date().toISOString(),
+    }
+  }, [authors, categories, doc, fields, post?.status, postId, user?.name])
+
+  const openLivePreview = useCallback(() => {
+    const payload = buildLivePreviewPayload()
+    try {
+      localStorage.setItem("ei_live_preview_post", JSON.stringify(payload))
+      if (typeof BroadcastChannel !== "undefined") {
+        const channel = new BroadcastChannel("ei_live_preview")
+        channel.postMessage(payload)
+        channel.close()
+      }
+    } catch {
+      // ignore
+    }
+    window.open("/preview", "_blank")
+  }, [buildLivePreviewPayload])
+
+  useEffect(() => {
+    if (!doc && !fields.title) return
+    if (typeof BroadcastChannel === "undefined") return
+    try {
+      const payload = buildLivePreviewPayload()
+      localStorage.setItem("ei_live_preview_post", JSON.stringify(payload))
+      const channel = new BroadcastChannel("ei_live_preview")
+      channel.postMessage(payload)
+      channel.close()
+    } catch {
+      // ignore
+    }
+  }, [buildLivePreviewPayload, doc, fields])
 
   const onSchemaTypeChange = useCallback((value: string) => {
     setSchemaType(value)
@@ -370,13 +444,16 @@ export function EditorView({ postId }: EditorViewProps) {
           ) : null}
         </div>
         <div className="flex items-center gap-2">
-          {postId && post && post.status === "published" ? (
-            <Button asChild variant="outline" size="sm">
-              <Link href={postHref(post)} target="_blank">
-                View live
-              </Link>
-            </Button>
-          ) : null}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={openLivePreview}
+            title="Open real website preview in a new tab without saving"
+          >
+            <IconExternalLink className="mr-1.5 h-4 w-4" />
+            View Live ↗
+          </Button>
           <Button
             type="button"
             variant="outline"
