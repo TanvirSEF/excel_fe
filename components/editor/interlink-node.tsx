@@ -12,7 +12,6 @@ import {
   IconArrowRight,
   IconBook,
   IconExternalLink,
-  IconPhoto,
   IconTrash,
 } from "@tabler/icons-react"
 
@@ -26,7 +25,7 @@ function InterlinkView({
 }: ReactNodeViewProps) {
   const url = (node.attrs.url as string) ?? ""
   const title = (node.attrs.title as string) ?? ""
-  const prefix = (node.attrs.prefix as string) ?? "Read More"
+  const prefix = (node.attrs.prefix as string) ?? "Similar Reading"
   const imageUrl = (node.attrs.imageUrl as string) ?? ""
 
   return (
@@ -63,8 +62,8 @@ function InterlinkView({
               <input
                 value={prefix}
                 onChange={(e) => updateAttributes({ prefix: e.target.value })}
-                placeholder="Read More"
-                className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs outline-none focus:border-primary"
+                placeholder="Similar Reading"
+                className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs outline-none focus:border-primary font-medium"
               />
             </div>
             <div className="space-y-1 sm:col-span-3">
@@ -121,22 +120,10 @@ function InterlinkView({
         </div>
       ) : (
         <div className="flex items-center justify-between gap-3.5 p-3.5 sm:p-4 cursor-pointer">
-          <div className="flex items-center gap-3.5 min-w-0 flex-1">
-            {imageUrl ? (
-              <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-xl border border-border/60 bg-muted">
-                <Image
-                  src={imageUrl}
-                  alt={title}
-                  fill
-                  unoptimized
-                  className="object-cover"
-                />
-              </div>
-            ) : (
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <IconBook className="h-5 w-5" />
-              </div>
-            )}
+          <div className="flex items-center gap-3 sm:gap-3.5 min-w-0 flex-1">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <IconBook className="h-5 w-5" />
+            </div>
             <div className="min-w-0 flex-1">
               <span className="text-xs font-bold uppercase tracking-wider text-primary mr-2">
                 {prefix}:
@@ -149,15 +136,17 @@ function InterlinkView({
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-1.5 shrink-0">
+          <div className="flex items-center gap-2.5 shrink-0">
             {imageUrl ? (
-              <span
-                className="hidden sm:inline-flex items-center gap-1 text-[11px] text-muted-foreground bg-muted px-2 py-0.5 rounded-md"
-                title="Has featured image"
-              >
-                <IconPhoto className="h-3.5 w-3.5" />
-                Thumb
-              </span>
+              <div className="relative h-12 w-16 sm:h-14 sm:w-20 shrink-0 overflow-hidden rounded-xl border border-border/60 bg-muted">
+                <Image
+                  src={imageUrl}
+                  alt={title}
+                  fill
+                  unoptimized
+                  className="object-cover"
+                />
+              </div>
             ) : null}
             {url ? (
               <a

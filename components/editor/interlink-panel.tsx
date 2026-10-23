@@ -16,20 +16,12 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { apiFetch } from "@/lib/api/api-fetch"
-import type { Page, PostAdminItem, PostDetail } from "@/types/api"
+import type { Page, PostDetail, PostListItem } from "@/types/api"
 
 interface InterlinkPanelProps {
   editor: Editor
   onClose: () => void
 }
-
-const PREFIX_OPTIONS = [
-  "Read More",
-  "Also Read",
-  "Related Guide",
-  "Recommended",
-  "Further Reading",
-]
 
 function extractSlug(input: string): string {
   const trimmed = input.trim()
@@ -41,12 +33,12 @@ function extractSlug(input: string): string {
 
 export function InterlinkPanel({ editor, onClose }: InterlinkPanelProps) {
   const [searchTerm, setSearchTerm] = useState("")
-  const [searchResults, setSearchResults] = useState<PostAdminItem[]>([])
+  const [searchResults, setSearchResults] = useState<PostListItem[]>([])
   const [isSearching, setIsSearching] = useState(false)
 
   const [url, setUrl] = useState("")
   const [title, setTitle] = useState("")
-  const [prefix, setPrefix] = useState("Read More")
+  const [prefix, setPrefix] = useState("Similar Reading")
   const [imageUrl, setImageUrl] = useState("")
   const [isFetchingInfo, setIsFetchingInfo] = useState(false)
 
@@ -54,7 +46,7 @@ export function InterlinkPanel({ editor, onClose }: InterlinkPanelProps) {
 
   const handleSearchChange = (value: string) => {
     setSearchTerm(value)
-    if (!value.trim()) {
+    if (!value.trim() || value.trim().length < 2) {
       setSearchResults([])
       setIsSearching(false)
       if (searchTimerRef.current) {
@@ -65,7 +57,9 @@ export function InterlinkPanel({ editor, onClose }: InterlinkPanelProps) {
 
   useEffect(() => {
     const query = searchTerm.trim()
-    if (!query) return
+    if (!query || query.length < 2) {
+      return
+    }
 
     if (searchTimerRef.current) {
       clearTimeout(searchTimerRef.current)
@@ -74,11 +68,10 @@ export function InterlinkPanel({ editor, onClose }: InterlinkPanelProps) {
     searchTimerRef.current = setTimeout(async () => {
       setIsSearching(true)
       try {
-        const response = await apiFetch<Page<PostAdminItem>>("/posts/admin", {
+        const response = await apiFetch<Page<PostListItem>>("/search", {
           searchParams: {
-            search: query,
-            status: "published",
-            page_size: 6,
+            q: query,
+            page_size: 8,
           },
         })
         setSearchResults(response.items || [])
@@ -96,12 +89,13 @@ export function InterlinkPanel({ editor, onClose }: InterlinkPanelProps) {
     }
   }, [searchTerm])
 
-  const handleSelectPost = (post: PostAdminItem) => {
+  const handleSelectPost = (post: PostListItem) => {
     setUrl(`/${post.slug}`)
     setTitle(post.title)
     if (post.featured_image_url) {
       setImageUrl(post.featured_image_url)
     }
+    setPrefix("Similar Reading")
     setSearchResults([])
     setSearchTerm("")
   }
@@ -146,7 +140,7 @@ export function InterlinkPanel({ editor, onClose }: InterlinkPanelProps) {
         attrs: {
           url: normalizedUrl,
           title: title.trim(),
-          prefix: prefix.trim() || "Read More",
+          prefix: prefix.trim() || "Similar Reading",
           imageUrl: imageUrl.trim() || undefined,
         },
       })
@@ -162,7 +156,7 @@ export function InterlinkPanel({ editor, onClose }: InterlinkPanelProps) {
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
             <IconBook className="h-4 w-4" />
           </div>
-          <span>Insert Interlink / Read More</span>
+          <span>Insert Interlink / Similar Reading</span>
         </div>
         <button
           type="button"
@@ -178,7 +172,7 @@ export function InterlinkPanel({ editor, onClose }: InterlinkPanelProps) {
         <label className="text-xs font-semibold text-foreground flex items-center justify-between">
           <span>Search Published Articles</span>
           <span className="text-[11px] font-normal text-muted-foreground">
-            Type keyword to auto-fill
+            Type keyword to search all articles (e.g. VLOOKUP, INDEX MATCH)
           </span>
         </label>
         <div className="relative">
@@ -200,7 +194,7 @@ export function InterlinkPanel({ editor, onClose }: InterlinkPanelProps) {
 
         {/* Search Results Dropdown */}
         {searchResults.length > 0 ? (
-          <div className="max-h-52 overflow-y-auto rounded-xl border bg-popover p-1 shadow-md space-y-1">
+          <div className="max-h-56 overflow-y-auto rounded-xl border bg-popover p-1 shadow-md space-y-1">
             {searchResults.map((post) => (
               <button
                 key={post.id}
@@ -209,7 +203,7 @@ export function InterlinkPanel({ editor, onClose }: InterlinkPanelProps) {
                 className="w-full text-left flex items-center gap-2.5 rounded-lg p-2 hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer group"
               >
                 {post.featured_image_url ? (
-                  <div className="relative h-10 w-12 shrink-0 overflow-hidden rounded-md border border-border/60 bg-muted">
+                  <div className="relative h-10 w-14 shrink-0 overflow-hidden rounded-md border border-border/60 bg-muted">
                     <Image
                       src={post.featured_image_url}
                       alt={post.title}
@@ -228,9 +222,9 @@ export function InterlinkPanel({ editor, onClose }: InterlinkPanelProps) {
                     {post.title}
                   </p>
                   <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
-                    {post.category_name ? (
+                    {post.category?.name ? (
                       <span className="rounded bg-muted px-1.5 py-0.2 font-medium">
-                        {post.category_name}
+                        {post.category.name}
                       </span>
                     ) : null}
                     <span className="font-mono">/{post.slug}</span>
@@ -239,6 +233,10 @@ export function InterlinkPanel({ editor, onClose }: InterlinkPanelProps) {
                 <IconCheck className="h-4 w-4 opacity-0 group-hover:opacity-100 text-primary shrink-0" />
               </button>
             ))}
+          </div>
+        ) : searchTerm.trim().length >= 2 && !isSearching ? (
+          <div className="rounded-xl border border-dashed border-border/80 bg-muted/30 p-3 text-center text-xs text-muted-foreground">
+            No published articles found for &ldquo;{searchTerm.trim()}&rdquo;. You can enter the title & URL manually below.
           </div>
         ) : null}
       </div>
@@ -296,34 +294,12 @@ export function InterlinkPanel({ editor, onClose }: InterlinkPanelProps) {
           <label className="text-xs font-semibold text-foreground">
             Prefix
           </label>
-          <div className="space-y-1">
-            <select
-              value={
-                PREFIX_OPTIONS.includes(prefix) ? prefix : "__custom__"
-              }
-              onChange={(e) => {
-                if (e.target.value !== "__custom__") {
-                  setPrefix(e.target.value)
-                }
-              }}
-              className="h-9 w-full rounded-md border border-input bg-background px-2 text-xs font-medium"
-            >
-              {PREFIX_OPTIONS.map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt}:
-                </option>
-              ))}
-              <option value="__custom__">Custom prefix...</option>
-            </select>
-            {!PREFIX_OPTIONS.includes(prefix) ? (
-              <Input
-                value={prefix}
-                onChange={(e) => setPrefix(e.target.value)}
-                placeholder="Prefix text"
-                className="h-8 text-xs"
-              />
-            ) : null}
-          </div>
+          <Input
+            value={prefix}
+            onChange={(e) => setPrefix(e.target.value)}
+            placeholder="Similar Reading"
+            className="h-9 text-xs font-medium"
+          />
         </div>
 
         <div className="space-y-1.5 sm:col-span-2">
@@ -389,7 +365,7 @@ export function InterlinkPanel({ editor, onClose }: InterlinkPanelProps) {
           onClick={handleInsert}
           className="gap-1.5"
         >
-          <span>Insert Read More</span>
+          <span>Insert Similar Reading</span>
           <IconArrowRight className="h-3.5 w-3.5" />
         </Button>
       </div>
