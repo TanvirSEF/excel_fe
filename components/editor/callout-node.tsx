@@ -15,6 +15,8 @@ import {
   IconSparkles,
   IconNotes,
   IconPaperclip,
+  IconCornerDownLeft,
+  IconPlus,
 } from "@tabler/icons-react"
 
 import { cn } from "@/lib/utils"
@@ -50,11 +52,30 @@ export const CALLOUT_VARIANTS: Record<
   },
 }
 
-function CalloutView({ node, updateAttributes, selected }: ReactNodeViewProps) {
+function CalloutView({
+  editor,
+  node,
+  getPos,
+  updateAttributes,
+  selected,
+}: ReactNodeViewProps) {
   const variant = (node.attrs.variant as CalloutVariant) ?? "info"
   const title = (node.attrs.title as string) ?? ""
   const meta = CALLOUT_VARIANTS[variant] ?? CALLOUT_VARIANTS.info
   const Icon = meta.icon
+
+  const insertParagraphBelow = () => {
+    if (typeof getPos !== "function") return
+    const pos = getPos()
+    if (typeof pos !== "number") return
+    const afterPos = pos + node.nodeSize
+    editor
+      .chain()
+      .insertContentAt(afterPos, { type: "paragraph" })
+      .setTextSelection(afterPos + 1)
+      .focus()
+      .run()
+  }
 
   const isTakeaway =
     Boolean(title && /takeaway/i.test(title)) ||
@@ -162,6 +183,31 @@ function CalloutView({ node, updateAttributes, selected }: ReactNodeViewProps) {
           )
         })}
       </span>
+
+      {/* Quick Text Below Button */}
+      <button
+        type="button"
+        title="Insert paragraph below (Ctrl+Enter)"
+        onClick={insertParagraphBelow}
+        className="flex h-6 items-center gap-1 rounded-md border border-primary/30 bg-primary/10 px-2 text-[11px] font-semibold text-primary shadow-xs transition-colors hover:bg-primary hover:text-primary-foreground cursor-pointer"
+      >
+        <IconCornerDownLeft className="h-3 w-3" />
+        <span>Text Below</span>
+      </button>
+    </div>
+  )
+
+  const bottomInsertBar = (
+    <div className="absolute -bottom-3 left-0 right-0 flex justify-center opacity-0 transition-opacity group-hover/callout:opacity-100 z-10 pointer-events-none">
+      <button
+        type="button"
+        onClick={insertParagraphBelow}
+        title="Insert paragraph below (Ctrl+Enter)"
+        className="pointer-events-auto inline-flex items-center gap-1 rounded-full border border-primary/30 bg-background px-2.5 py-0.5 text-[11px] font-medium text-primary shadow-md hover:bg-primary hover:text-primary-foreground cursor-pointer transition-colors"
+      >
+        <IconPlus className="h-3 w-3" />
+        <span>Insert text here</span>
+      </button>
     </div>
   )
 
@@ -169,7 +215,7 @@ function CalloutView({ node, updateAttributes, selected }: ReactNodeViewProps) {
     return (
       <NodeViewWrapper
         className={cn(
-          "relative my-4 rounded-2xl border-2 border-primary/35 bg-gradient-to-b from-primary/[0.06] via-primary/[0.02] to-transparent p-4 sm:p-5 pt-6 shadow-xs transition-colors",
+          "group/callout relative my-4 rounded-2xl border-2 border-primary/35 bg-gradient-to-b from-primary/[0.06] via-primary/[0.02] to-transparent p-4 sm:p-5 pt-6 shadow-xs transition-colors",
           selected && "ring-2 ring-primary/40"
         )}
       >
@@ -189,6 +235,7 @@ function CalloutView({ node, updateAttributes, selected }: ReactNodeViewProps) {
           {presetButtons}
         </div>
         <NodeViewContent className="callout-content text-sm leading-6" />
+        {bottomInsertBar}
       </NodeViewWrapper>
     )
   }
@@ -197,7 +244,7 @@ function CalloutView({ node, updateAttributes, selected }: ReactNodeViewProps) {
     return (
       <NodeViewWrapper
         className={cn(
-          "relative my-4 rounded-xl border border-[#30363d] bg-[#0d1117] p-3 sm:p-4 shadow-md transition-colors",
+          "group/callout relative my-4 rounded-xl border border-[#30363d] bg-[#0d1117] p-3 sm:p-4 shadow-md transition-colors",
           selected && "ring-2 ring-primary/40"
         )}
       >
@@ -218,6 +265,7 @@ function CalloutView({ node, updateAttributes, selected }: ReactNodeViewProps) {
         <div className="rounded-lg border border-[#30363d]/80 bg-[#161b22] px-3.5 py-2.5">
           <NodeViewContent className="callout-content font-mono text-[14px] sm:text-[15px] font-normal leading-relaxed text-[#e6edf3] selection:bg-emerald-500/30 break-all [overflow-wrap:anywhere]" />
         </div>
+        {bottomInsertBar}
       </NodeViewWrapper>
     )
   }
@@ -226,7 +274,7 @@ function CalloutView({ node, updateAttributes, selected }: ReactNodeViewProps) {
     return (
       <NodeViewWrapper
         className={cn(
-          "relative my-4 rounded-2xl border-2 border-primary/50 bg-gradient-to-b from-primary/[0.04] to-transparent p-4 sm:p-5 pt-5 shadow-xs transition-colors",
+          "group/callout relative my-4 rounded-2xl border-2 border-primary/50 bg-gradient-to-b from-primary/[0.04] to-transparent p-4 sm:p-5 pt-5 shadow-xs transition-colors",
           selected && "ring-2 ring-primary/40"
         )}
       >
@@ -243,6 +291,7 @@ function CalloutView({ node, updateAttributes, selected }: ReactNodeViewProps) {
           {presetButtons}
         </div>
         <NodeViewContent className="callout-content text-sm leading-6" />
+        {bottomInsertBar}
       </NodeViewWrapper>
     )
   }
@@ -251,7 +300,7 @@ function CalloutView({ node, updateAttributes, selected }: ReactNodeViewProps) {
     return (
       <NodeViewWrapper
         className={cn(
-          "relative my-4 rounded-r-2xl border-l-[5px] border-primary bg-primary/[0.08] p-4 shadow-xs transition-colors dark:bg-primary/[0.14]",
+          "group/callout relative my-4 rounded-r-2xl border-l-[5px] border-primary bg-primary/[0.08] p-4 shadow-xs transition-colors dark:bg-primary/[0.14]",
           selected && "ring-2 ring-primary/40"
         )}
       >
@@ -268,6 +317,7 @@ function CalloutView({ node, updateAttributes, selected }: ReactNodeViewProps) {
           {presetButtons}
         </div>
         <NodeViewContent className="callout-content text-sm leading-6" />
+        {bottomInsertBar}
       </NodeViewWrapper>
     )
   }
@@ -275,7 +325,7 @@ function CalloutView({ node, updateAttributes, selected }: ReactNodeViewProps) {
   return (
     <NodeViewWrapper
       className={cn(
-        "rounded-xl border p-4 transition-colors",
+        "group/callout relative rounded-xl border p-4 transition-colors",
         meta.box,
         selected && "ring-2 ring-primary/40"
       )}
@@ -293,6 +343,7 @@ function CalloutView({ node, updateAttributes, selected }: ReactNodeViewProps) {
         {presetButtons}
       </div>
       <NodeViewContent className="callout-content text-sm leading-6" />
+      {bottomInsertBar}
     </NodeViewWrapper>
   )
 }

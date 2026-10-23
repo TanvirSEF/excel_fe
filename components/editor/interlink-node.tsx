@@ -12,13 +12,16 @@ import {
   IconArrowRight,
   IconBook,
   IconExternalLink,
+  IconPlus,
   IconTrash,
 } from "@tabler/icons-react"
 
 import { cn } from "@/lib/utils"
 
 function InterlinkView({
+  editor,
   node,
+  getPos,
   updateAttributes,
   deleteNode,
   selected,
@@ -28,15 +31,53 @@ function InterlinkView({
   const prefix = (node.attrs.prefix as string) ?? "Similar Reading"
   const imageUrl = (node.attrs.imageUrl as string) ?? ""
 
+  const insertParagraphAbove = () => {
+    if (typeof getPos !== "function") return
+    const pos = getPos()
+    if (typeof pos !== "number") return
+    editor
+      .chain()
+      .insertContentAt(pos, { type: "paragraph" })
+      .setTextSelection(pos + 1)
+      .focus()
+      .run()
+  }
+
+  const insertParagraphBelow = () => {
+    if (typeof getPos !== "function") return
+    const pos = getPos()
+    if (typeof pos !== "number") return
+    const afterPos = pos + node.nodeSize
+    editor
+      .chain()
+      .insertContentAt(afterPos, { type: "paragraph" })
+      .setTextSelection(afterPos + 1)
+      .focus()
+      .run()
+  }
+
   return (
     <NodeViewWrapper
       className={cn(
-        "my-3 rounded-2xl border transition-all select-none",
+        "group/interlink relative my-3 rounded-2xl border transition-all select-none",
         selected
           ? "border-primary bg-primary/[0.04] ring-2 ring-primary/20"
           : "border-border/80 bg-card hover:border-primary/40"
       )}
     >
+      {/* Top hover insert bar */}
+      <div className="absolute -top-3 left-0 right-0 flex justify-center opacity-0 transition-opacity group-hover/interlink:opacity-100 z-10 pointer-events-none">
+        <button
+          type="button"
+          onClick={insertParagraphAbove}
+          title="Insert paragraph above (Shift+Enter)"
+          className="pointer-events-auto inline-flex items-center gap-1 rounded-full border border-primary/30 bg-background px-2.5 py-0.5 text-[11px] font-medium text-primary shadow-md hover:bg-primary hover:text-primary-foreground cursor-pointer transition-colors"
+        >
+          <IconPlus className="h-3 w-3" />
+          <span>Insert text above</span>
+        </button>
+      </div>
+
       {selected ? (
         <div className="space-y-3 p-4 select-text">
           <div className="flex items-center justify-between border-b pb-2 text-xs font-semibold text-muted-foreground">
@@ -63,18 +104,18 @@ function InterlinkView({
                 value={prefix}
                 onChange={(e) => updateAttributes({ prefix: e.target.value })}
                 placeholder="Similar Reading"
-                className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs outline-none focus:border-primary font-medium"
+                className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs font-semibold"
               />
             </div>
             <div className="space-y-1 sm:col-span-3">
               <label className="text-[11px] font-medium text-muted-foreground">
-                Post Title
+                Article Title
               </label>
               <input
                 value={title}
                 onChange={(e) => updateAttributes({ title: e.target.value })}
-                placeholder="Target article title"
-                className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs outline-none focus:border-primary"
+                placeholder="Target article title..."
+                className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs font-medium"
               />
             </div>
           </div>
@@ -82,39 +123,25 @@ function InterlinkView({
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             <div className="space-y-1">
               <label className="text-[11px] font-medium text-muted-foreground">
-                Target URL / Slug
+                Target URL
               </label>
               <input
                 value={url}
                 onChange={(e) => updateAttributes({ url: e.target.value })}
-                placeholder="/post-slug or https://..."
-                className="h-8 w-full rounded-md border border-input bg-background px-2 font-mono text-xs outline-none focus:border-primary"
+                placeholder="https://excelinsider.com/blog/..."
+                className="h-8 w-full rounded-md border border-input bg-background px-2 font-mono text-xs"
               />
             </div>
             <div className="space-y-1">
               <label className="text-[11px] font-medium text-muted-foreground">
-                Featured Thumbnail URL (optional)
+                Image URL (optional)
               </label>
-              <div className="flex gap-2">
-                <input
-                  value={imageUrl}
-                  onChange={(e) =>
-                    updateAttributes({ imageUrl: e.target.value })
-                  }
-                  placeholder="https://... (image URL)"
-                  className="h-8 flex-1 rounded-md border border-input bg-background px-2 text-xs outline-none focus:border-primary"
-                />
-                {imageUrl ? (
-                  <button
-                    type="button"
-                    onClick={() => updateAttributes({ imageUrl: "" })}
-                    className="h-8 rounded-md border px-2 text-xs text-muted-foreground hover:text-foreground"
-                    title="Remove image"
-                  >
-                    Clear
-                  </button>
-                ) : null}
-              </div>
+              <input
+                value={imageUrl}
+                onChange={(e) => updateAttributes({ imageUrl: e.target.value })}
+                placeholder="https://..."
+                className="h-8 w-full rounded-md border border-input bg-background px-2 font-mono text-xs"
+              />
             </div>
           </div>
         </div>
@@ -166,6 +193,19 @@ function InterlinkView({
           </div>
         </div>
       )}
+
+      {/* Bottom hover insert bar */}
+      <div className="absolute -bottom-3 left-0 right-0 flex justify-center opacity-0 transition-opacity group-hover/interlink:opacity-100 z-10 pointer-events-none">
+        <button
+          type="button"
+          onClick={insertParagraphBelow}
+          title="Insert paragraph below (Enter)"
+          className="pointer-events-auto inline-flex items-center gap-1 rounded-full border border-primary/30 bg-background px-2.5 py-0.5 text-[11px] font-medium text-primary shadow-md hover:bg-primary hover:text-primary-foreground cursor-pointer transition-colors"
+        >
+          <IconPlus className="h-3 w-3" />
+          <span>Insert text below</span>
+        </button>
+      </div>
     </NodeViewWrapper>
   )
 }

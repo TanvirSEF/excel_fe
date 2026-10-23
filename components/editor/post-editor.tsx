@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react"
 import { EditorContent, useEditor, useEditorState, type JSONContent } from "@tiptap/react"
 import Color from "@tiptap/extension-color"
 import Highlight from "@tiptap/extension-highlight"
-import Image from "@tiptap/extension-image"
 import Placeholder from "@tiptap/extension-placeholder"
 import StarterKit from "@tiptap/starter-kit"
 import TextAlign from "@tiptap/extension-text-align"
@@ -17,6 +16,7 @@ import {
 } from "@tiptap/extension-table"
 
 import { AccordionNode } from "@/components/editor/accordion-node"
+import { BlockNavigation } from "@/components/editor/block-navigation"
 import { InterlinkNode } from "@/components/editor/interlink-node"
 import { CtaButtonNode } from "@/components/editor/button-node"
 import { CalloutNode } from "@/components/editor/callout-node"
@@ -25,6 +25,7 @@ import { EditorToolbar } from "@/components/editor/editor-toolbar"
 import { EmbedNode } from "@/components/editor/embed-node"
 import { HeadingNum } from "@/components/editor/heading-num"
 import { HtmlBlock } from "@/components/editor/html-block"
+import { SizedImage } from "@/components/editor/image-node"
 import { KbdMark } from "@/components/editor/kbd-mark"
 import { ListMarker } from "@/components/editor/list-marker"
 import { SlashMenu } from "@/components/editor/slash-menu"
@@ -34,16 +35,6 @@ interface PostEditorProps {
   initialDoc: JSONContent | null
   onDocChange: (doc: JSONContent) => void
 }
-
-const SizedImage = Image.extend({
-  addAttributes() {
-    return {
-      ...this.parent?.(),
-      width: { default: null },
-      height: { default: null },
-    }
-  },
-})
 
 function countWords(text: string) {
   const trimmed = text.trim()
@@ -61,6 +52,7 @@ export function PostEditor({ initialDoc, onDocChange }: PostEditorProps) {
         codeBlock: false,
         link: { openOnClick: false, autolink: true, defaultProtocol: "https" },
       }),
+      BlockNavigation,
       CodeBlockLanguage,
       SizedImage.configure({ inline: false }),
       Placeholder.configure({
