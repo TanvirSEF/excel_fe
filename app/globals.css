@@ -280,6 +280,18 @@
   margin: 1.5em 0;
 }
 
+.post-content hr,
+.entry-content hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 2.25rem 0 2rem;
+}
+
+.dark .post-content hr,
+.dark .entry-content hr {
+  border-top-color: rgba(255, 255, 255, 0.15);
+}
+
 .post-editor .tiptap pre {
   font-family: var(--font-mono);
   font-size: 0.85rem;

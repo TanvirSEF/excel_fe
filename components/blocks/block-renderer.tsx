@@ -1276,7 +1276,9 @@ function BlockNode({
       )
 
     case "hr":
-      return <hr className="my-4 border-t border-border/60" />
+      return (
+        <hr className="my-8 sm:my-10 border-0 border-t border-border dark:border-white/15" />
+      )
 
     default:
       return null
@@ -1409,37 +1411,56 @@ export function BlockRenderer({
           return null
         }
 
+        if (block.type === "hr" && index > 0 && blocks[index - 1]?.type === "hr") {
+          return null
+        }
+
         if (faqBlockIndices.has(index)) {
           if (index !== faqStartIndex || !faqGroup) {
             return null
           }
 
+          const showFaqDivider =
+            faqStartIndex > 0 && blocks[faqStartIndex - 1]?.type !== "hr"
+
           return (
-            <div
-              key="faq-section-container"
-              id="faq-section"
-              className="faq-block faq-section my-6 sm:my-8 space-y-4"
-            >
-              <BlockNode block={faqGroup.heading} usedIds={usedIds} />
-              {faqGroup.introBlocks.map((b, i) => (
-                <BlockNode key={`faq-intro-${i}`} block={b} usedIds={usedIds} />
-              ))}
-              {faqGroup.items.map((item, itemIdx) => (
-                <div key={`faq-item-${itemIdx}`} className="faq-item space-y-2">
-                  <BlockNode block={item.question} usedIds={usedIds} isFaqQuestion />
-                  {item.answers.map((ans, ansIdx) => (
-                    <BlockNode key={`faq-ans-${ansIdx}`} block={ans} usedIds={usedIds} />
-                  ))}
-                </div>
-              ))}
-            </div>
+            <Fragment key="faq-section-container">
+              {showFaqDivider ? (
+                <hr className="my-8 sm:my-10 border-0 border-t border-border dark:border-white/15" />
+              ) : null}
+              <div
+                id="faq-section"
+                className="faq-block faq-section my-6 sm:my-8 space-y-4"
+              >
+                <BlockNode block={faqGroup.heading} usedIds={usedIds} />
+                {faqGroup.introBlocks.map((b, i) => (
+                  <BlockNode key={`faq-intro-${i}`} block={b} usedIds={usedIds} />
+                ))}
+                {faqGroup.items.map((item, itemIdx) => (
+                  <div key={`faq-item-${itemIdx}`} className="faq-item space-y-2">
+                    <BlockNode block={item.question} usedIds={usedIds} isFaqQuestion />
+                    {item.answers.map((ans, ansIdx) => (
+                      <BlockNode key={`faq-ans-${ansIdx}`} block={ans} usedIds={usedIds} />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </Fragment>
           )
         }
 
         const isTakeaway = index === takeawayIndex
+        const isH2WithoutHr =
+          block.type === "heading" &&
+          block.level === 2 &&
+          index > 0 &&
+          blocks[index - 1]?.type !== "hr"
 
         return (
           <Fragment key={index}>
+            {isH2WithoutHr ? (
+              <hr className="my-8 sm:my-10 border-0 border-t border-border dark:border-white/15" />
+            ) : null}
             <BlockNode
               block={block}
               usedIds={usedIds}
