@@ -11,6 +11,15 @@ export type PostStatus =
   | "rejected"
   | "scheduled"
 
+export interface PostStatusCounts {
+  all: number
+  draft: number
+  pending_review: number
+  published: number
+  rejected: number
+  scheduled: number
+}
+
 export type CommentStatus = "pending" | "approved" | "spam" | "rejected"
 
 export interface Page<T> {

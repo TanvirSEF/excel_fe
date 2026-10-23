@@ -13,6 +13,7 @@ import type {
   PostDetail,
   PostListItem,
   PostStatus,
+  PostStatusCounts,
   PostUpdateInput,
   SeoUpdateInput,
 } from "@/types/api"
@@ -52,6 +53,33 @@ export function useAdminPosts(params: AdminPostsParams = {}) {
   })
 }
 
+export interface AdminPostCountsParams {
+  categoryId?: string
+  authorId?: string
+  search?: string
+}
+
+export function useAdminPostCounts(params: AdminPostCountsParams = {}) {
+  return useQuery({
+    queryKey: [
+      "admin-post-counts",
+      {
+        categoryId: params.categoryId,
+        authorId: params.authorId,
+        search: params.search,
+      },
+    ],
+    queryFn: () =>
+      apiFetch<PostStatusCounts>("/posts/admin/counts", {
+        searchParams: {
+          category_id: params.categoryId || undefined,
+          author_id: params.authorId || undefined,
+          search: params.search || undefined,
+        },
+      }),
+  })
+}
+
 export function usePost(postId: string | undefined) {
   return useQuery({
     queryKey: ["post", "edit", postId],
@@ -68,6 +96,7 @@ export function useCreatePost() {
       apiFetch<PostDetail>("/posts", { method: "POST", body: input }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-posts"] })
+      queryClient.invalidateQueries({ queryKey: ["admin-post-counts"] })
     },
   })
 }
@@ -89,6 +118,7 @@ export function useUpdatePost() {
       }),
     onSuccess: (post) => {
       queryClient.invalidateQueries({ queryKey: ["admin-posts"] })
+      queryClient.invalidateQueries({ queryKey: ["admin-post-counts"] })
       queryClient.invalidateQueries({
         queryKey: ["post", "edit", post.id],
       })
@@ -104,6 +134,7 @@ export function useDeletePost() {
       apiFetch<{ message: string }>(`/posts/${postId}`, { method: "DELETE" }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-posts"] })
+      queryClient.invalidateQueries({ queryKey: ["admin-post-counts"] })
     },
   })
 }
@@ -128,6 +159,7 @@ function useInvalidatePost(postId: string) {
   const queryClient = useQueryClient()
   return () => {
     queryClient.invalidateQueries({ queryKey: ["admin-posts"] })
+    queryClient.invalidateQueries({ queryKey: ["admin-post-counts"] })
     queryClient.invalidateQueries({ queryKey: ["posts"] })
     queryClient.invalidateQueries({ queryKey: ["post", "edit", postId] })
   }

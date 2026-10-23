@@ -15,18 +15,23 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { can, useAuthStore } from "@/lib/auth"
 import { flattenCategories } from "@/lib/category-tree"
 import { useCategories } from "@/lib/queries/categories"
-import { useAdminPosts, useDeletePost, useSetTrendingPin } from "@/lib/queries/posts"
+import { useAdminPostCounts, useAdminPosts, useDeletePost, useSetTrendingPin } from "@/lib/queries/posts"
 import { useAuthorOptions } from "@/lib/queries/users"
 import { ApiClientError } from "@/lib/api/error"
-import type { PostAdminItem, PostStatus } from "@/types/api"
+import { cn } from "@/lib/utils"
+import type { PostAdminItem, PostStatus, PostStatusCounts } from "@/types/api"
 
-const STATUS_TABS: { value: PostStatus | undefined; label: string }[] = [
-  { value: undefined, label: "All" },
-  { value: "draft", label: "Drafts" },
-  { value: "pending_review", label: "In review" },
-  { value: "published", label: "Published" },
-  { value: "rejected", label: "Rejected" },
-  { value: "scheduled", label: "Scheduled" },
+const STATUS_TABS: {
+  value: PostStatus | undefined
+  label: string
+  countKey: keyof PostStatusCounts
+}[] = [
+  { value: undefined, label: "All", countKey: "all" },
+  { value: "draft", label: "Drafts", countKey: "draft" },
+  { value: "pending_review", label: "In review", countKey: "pending_review" },
+  { value: "published", label: "Published", countKey: "published" },
+  { value: "rejected", label: "Rejected", countKey: "rejected" },
+  { value: "scheduled", label: "Scheduled", countKey: "scheduled" },
 ]
 
 const PAGE_SIZE = 10
@@ -67,6 +72,12 @@ export function PostsView() {
     search: debouncedSearch || undefined,
     page,
     page_size: PAGE_SIZE,
+  })
+
+  const { data: counts } = useAdminPostCounts({
+    categoryId,
+    authorId,
+    search: debouncedSearch || undefined,
   })
 
   const deletePost = useDeletePost()
@@ -124,23 +135,41 @@ export function PostsView() {
       <div className="flex flex-col gap-3">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-1">
-            {STATUS_TABS.map((tab) => (
-              <button
-                key={tab.label}
-                type="button"
-                onClick={() => {
-                  setStatus(tab.value)
-                  setPage(1)
-                }}
-                className={
-                  status === tab.value
-                    ? "rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground"
-                    : "rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-                }
-              >
-                {tab.label}
-              </button>
-            ))}
+            {STATUS_TABS.map((tab) => {
+              const count = counts ? counts[tab.countKey] : undefined
+              const isActive = status === tab.value
+
+              return (
+                <button
+                  key={tab.label}
+                  type="button"
+                  onClick={() => {
+                    setStatus(tab.value)
+                    setPage(1)
+                  }}
+                  className={cn(
+                    "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+                    isActive
+                      ? "bg-primary text-primary-foreground shadow-xs"
+                      : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                  )}
+                >
+                  <span>{tab.label}</span>
+                  {count !== undefined ? (
+                    <span
+                      className={cn(
+                        "rounded-full px-1.5 py-0.5 text-xs font-semibold tabular-nums leading-none",
+                        isActive
+                          ? "bg-primary-foreground/20 text-primary-foreground"
+                          : "bg-muted text-muted-foreground"
+                      )}
+                    >
+                      {count.toLocaleString()}
+                    </span>
+                  ) : null}
+                </button>
+              )
+            })}
           </div>
 
           {canCreate ? (
