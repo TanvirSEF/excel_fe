@@ -190,7 +190,7 @@ export function SettingsView() {
       })
       toast.success("Password changed — signing you out.")
       await logout()
-      router.replace("/login")
+      router.replace("/insider-studio")
     } catch (error) {
       toast.error(
         error instanceof ApiClientError

@@ -91,12 +91,12 @@ export async function apiFetch<T>(
       useAuthStore.getState().clear()
       if (
         typeof window !== "undefined" &&
-        window.location.pathname !== "/login"
+        window.location.pathname !== "/insider-studio"
       ) {
         const next = encodeURIComponent(
           window.location.pathname + window.location.search
         )
-        window.location.assign(`/login?next=${next}`)
+        window.location.assign(`/insider-studio?next=${next}`)
       }
       throw new ApiClientError(
         401,

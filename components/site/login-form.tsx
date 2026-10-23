@@ -50,7 +50,8 @@ export function LoginForm() {
     nextParam !== null &&
     nextParam.startsWith("/") &&
     !nextParam.startsWith("//") &&
-    !nextParam.startsWith("/login")
+    !nextParam.startsWith("/login") &&
+    !nextParam.startsWith("/insider-studio")
   const redirectTo = isSafeRedirect ? nextParam : "/dashboard"
 
   async function onSubmit(values: LoginForm) {

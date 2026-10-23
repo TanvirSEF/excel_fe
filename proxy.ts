@@ -5,7 +5,7 @@ const REFRESH_COOKIE = "ei_refresh"
 
 export function proxy(request: NextRequest) {
   if (!request.cookies.has(REFRESH_COOKIE)) {
-    const loginUrl = new URL("/login", request.url)
+    const loginUrl = new URL("/insider-studio", request.url)
     loginUrl.searchParams.set("next", request.nextUrl.pathname)
     return NextResponse.redirect(loginUrl)
   }

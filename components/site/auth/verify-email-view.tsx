@@ -42,7 +42,7 @@ export function VerifyEmailView({ token }: { token: string }) {
       <div className="space-y-3">
         <p className="text-sm">Your email is verified — welcome aboard.</p>
         <Link
-          href="/login"
+          href="/insider-studio"
           className="inline-flex h-9 items-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground"
         >
           Sign in
@@ -57,7 +57,7 @@ export function VerifyEmailView({ token }: { token: string }) {
         This verification link is invalid or has expired.
       </p>
       <Link
-        href="/login"
+        href="/insider-studio"
         className="text-sm text-primary underline-offset-4 hover:underline"
       >
         Back to sign in

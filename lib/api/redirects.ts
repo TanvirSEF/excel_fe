@@ -18,6 +18,7 @@ const KNOWN_STATIC_PREFIXES = [
   "/contact",
   "/dashboard",
   "/login",
+  "/insider-studio",
   "/register",
   "/forgot-password",
   "/reset-password",

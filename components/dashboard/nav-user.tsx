@@ -42,7 +42,7 @@ export function NavUser() {
 
   async function onSignOut() {
     await logout()
-    router.push("/login")
+    router.push("/insider-studio")
     router.refresh()
   }
 
