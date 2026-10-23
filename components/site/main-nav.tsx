@@ -180,6 +180,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
     <nav className="hidden lg:flex items-center gap-1 xl:gap-2.5 text-[0.9375rem] xl:text-[0.96875rem] font-medium" aria-label="Main Navigation">
       {/* About Us */}
       <Link
+        prefetch={false}
         href="/about"
         className={cn(
           "rounded-lg px-3.5 py-2 text-muted-foreground transition-colors hover:text-foreground hover:bg-muted/50",
@@ -221,6 +222,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
           >
             <div className="w-72 p-2 rounded-xl shadow-xl border border-border/70 backdrop-blur-md bg-background/95">
               <Link
+                prefetch={false}
                 href="/spreadsheet-solutions/"
                 onClick={() => setActiveMenu(null)}
                 className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-muted/60 transition-colors"
@@ -235,6 +237,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
               </Link>
 
               <Link
+                prefetch={false}
                 href="/custom-templates/"
                 onClick={() => setActiveMenu(null)}
                 className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-muted/60 transition-colors"
@@ -249,6 +252,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
               </Link>
 
               <Link
+                prefetch={false}
                 href="/custom-tools/"
                 onClick={() => setActiveMenu(null)}
                 className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-muted/60 transition-colors"
@@ -317,6 +321,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
                       const Icon = item.icon
                       return (
                         <Link
+                          prefetch={false}
                           key={item.slug}
                           href={`/${item.slug}/`}
                           onClick={() => setActiveMenu(null)}
@@ -354,6 +359,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
                   </div>
 
                   <Link
+                    prefetch={false}
                     href="/google-sheets"
                     onClick={() => setActiveMenu(null)}
                     className="flex items-center justify-between gap-2 rounded-lg border border-teal-500/30 bg-teal-500/10 p-2 transition-colors hover:bg-teal-500/20"
@@ -369,6 +375,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
                       const Icon = item.icon
                       return (
                         <Link
+                          prefetch={false}
                           key={item.slug}
                           href={`/${item.slug}/`}
                           onClick={() => setActiveMenu(null)}
@@ -399,6 +406,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
                   <span>Looking for more? Explore all 1,600+ spreadsheet articles.</span>
                 </p>
                 <Link
+                  prefetch={false}
                   href="/category"
                   onClick={() => setActiveMenu(null)}
                   className="inline-flex items-center gap-1 text-[13px] font-semibold text-primary hover:text-primary/80 transition-colors px-2.5 py-1 rounded-md hover:bg-primary/10"
@@ -444,6 +452,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
           >
             <div className="w-72 p-2 rounded-xl shadow-xl border border-border/70 backdrop-blur-md bg-background/95">
               <Link
+                prefetch={false}
                 href="/calculator/statistics/"
                 onClick={() => setActiveMenu(null)}
                 className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-muted/60 transition-colors"
@@ -458,6 +467,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
               </Link>
 
               <Link
+                prefetch={false}
                 href="/calculator/finance/"
                 onClick={() => setActiveMenu(null)}
                 className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-muted/60 transition-colors"
@@ -472,6 +482,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
               </Link>
 
               <Link
+                prefetch={false}
                 href="/calculator/accounting/"
                 onClick={() => setActiveMenu(null)}
                 className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-muted/60 transition-colors"
@@ -488,6 +499,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
               <div className="my-1.5 h-px bg-border/60" />
 
               <Link
+                prefetch={false}
                 href="/calculator/"
                 onClick={() => setActiveMenu(null)}
                 className="flex items-center justify-between p-2 rounded-lg text-xs font-medium text-primary hover:text-primary hover:bg-muted/40 transition-colors"
@@ -502,6 +514,7 @@ export function MainNav({ categories = [] }: MainNavProps) {
 
       {/* Contact Us */}
       <Link
+        prefetch={false}
         href="/contact"
         className={cn(
           "rounded-lg px-3.5 py-2 text-muted-foreground transition-colors hover:text-foreground hover:bg-muted/50",
