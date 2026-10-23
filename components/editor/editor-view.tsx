@@ -335,7 +335,7 @@ export function EditorView({ postId }: EditorViewProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-4">
+      <div className="sticky top-0 z-30 -mx-4 -mt-4 flex flex-wrap items-center justify-between gap-3 border-b border-border/80 bg-background/95 px-4 py-3 shadow-2xs backdrop-blur-md md:-mt-6 lg:-mx-6 lg:px-6">
         <div className="flex flex-wrap items-center gap-3">
           {postId && post ? (
             <PostStatusBadge
@@ -422,7 +422,7 @@ export function EditorView({ postId }: EditorViewProps) {
           />
         </div>
 
-        <aside className="space-y-6">
+        <aside className="space-y-6 lg:sticky lg:top-[3.75rem] lg:self-start lg:max-h-[calc(100vh-4.5rem)] lg:overflow-y-auto lg:pr-1">
           {postId ? (
             <Tabs defaultValue="post">
               <TabsList className="w-full">

@@ -196,7 +196,7 @@ export function EditorToolbar({ editor, panel, onPanelChange }: EditorToolbarPro
   }
 
   return (
-    <div className="space-y-2 rounded-xl border bg-muted/30 p-2">
+    <div className="sticky top-[3.75rem] z-20 space-y-2 rounded-xl border border-border/80 bg-background/95 p-2 shadow-xs backdrop-blur-md transition-shadow">
       <div className="flex flex-wrap items-center gap-1">
         <ToolbarButton
           active={false}
