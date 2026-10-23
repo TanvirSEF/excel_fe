@@ -133,7 +133,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
     <>
       <div className="single-post mx-auto flex w-full max-w-[1500px] items-start justify-center gap-6 2xl:gap-8 px-4 py-8 sm:py-10">
         <aside className="hidden xl:block w-[264px] shrink-0">
-          <div className="max-h-[calc(100vh-6rem)] overflow-y-auto pr-1">
+          <div className="sticky top-[85px] max-h-[calc(100vh-85px-1.5rem)] overflow-y-auto overscroll-contain pr-1">
             <CurriculumSidebar modules={modules} activeLessonSlug={post.slug} />
           </div>
         </aside>
