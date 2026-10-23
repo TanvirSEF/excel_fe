@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import { IconAlertTriangle, IconPlus, IconRotate, IconX } from "@tabler/icons-react"
 
 import { CopyTableButton } from "@/components/site/calculators/copy-table-button"
@@ -37,13 +37,8 @@ export function OneWayAnovaCalculator() {
 
   const parsed = groups.map((raw) => parseDataSet(raw))
   const usable = parsed.filter((g) => g.invalid.length === 0 && g.values.length >= 2)
-  const groupsKey = groups.join("|")
 
-  const result = useMemo(
-    () => (usable.length >= 2 ? oneWayAnova(usable.map((g) => g.values)) : null),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [groupsKey]
-  )
+  const result = usable.length >= 2 ? oneWayAnova(usable.map((g) => g.values)) : null
 
   const invalidGroups = parsed.some((g) => g.invalid.length > 0)
   const smallGroups = parsed.filter((g) => g.invalid.length === 0 && g.values.length < 2)

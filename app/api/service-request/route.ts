@@ -158,11 +158,6 @@ export async function POST(request: NextRequest) {
       } catch (webhookErr) {
         console.error("[Discord Webhook] Exception during dispatch:", webhookErr)
       }
-    } else {
-      console.log(
-        "[Discord Webhook] DISCORD_WEBHOOK_URL is not set. Payload preview:\n",
-        JSON.stringify(discordEmbed, null, 2)
-      )
     }
 
     // 3. Forward to backend database for audit/contact persistence if reachable

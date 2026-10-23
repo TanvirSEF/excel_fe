@@ -4,6 +4,7 @@ import { useState } from "react"
 import { IconCircleCheck, IconRotate, IconX } from "@tabler/icons-react"
 
 import { NumberField } from "@/components/site/calculators/field"
+import { NormalCurveChart } from "@/components/site/calculators/normal-curve-chart"
 import {
   GradientHeroMetric,
   MetricTile,
@@ -31,167 +32,6 @@ import { formatDecimal, formatPValue } from "@/lib/format"
 import { pValueFromZ } from "@/lib/stats"
 
 type TailType = "two" | "left" | "right"
-
-const W = 520
-const H = 200
-const PAD_X = 20
-const PAD_TOP = 22
-const PAD_BOTTOM = 45
-const Z_RANGE = 4
-
-function round2(value: number): number {
-  return Math.round(value * 100) / 100
-}
-
-function normalPdf(z: number): number {
-  return Math.exp(-0.5 * z * z) / Math.sqrt(2 * Math.PI)
-}
-
-function zToX(z: number): number {
-  return round2(PAD_X + ((z + Z_RANGE) / (2 * Z_RANGE)) * (W - 2 * PAD_X))
-}
-
-function pdfToY(pdf: number): number {
-  const maxPdf = normalPdf(0)
-  return round2(H - PAD_BOTTOM - (pdf / maxPdf) * (H - PAD_BOTTOM - PAD_TOP))
-}
-
-interface PValueCurveProps {
-  z: number
-  tail: TailType
-}
-
-function PValueCurve({ z, tail }: PValueCurveProps) {
-  const clampedZ = Math.max(-Z_RANGE, Math.min(Z_RANGE, z))
-  const steps = 120
-  const allPts: string[] = []
-  for (let i = 0; i <= steps; i++) {
-    const zVal = -Z_RANGE + (i / steps) * 2 * Z_RANGE
-    allPts.push(`${zToX(zVal)},${pdfToY(normalPdf(zVal))}`)
-  }
-
-  const absZ = Math.abs(clampedZ)
-
-  const leftTailPts = allPts.filter((_, i) => {
-    const zVal = -Z_RANGE + (i / steps) * 2 * Z_RANGE
-    return tail === "two"
-      ? zVal <= -absZ
-      : tail === "left"
-        ? zVal <= clampedZ
-        : false
-  })
-
-  const rightTailPts = allPts.filter((_, i) => {
-    const zVal = -Z_RANGE + (i / steps) * 2 * Z_RANGE
-    return tail === "two"
-      ? zVal >= absZ
-      : tail === "right"
-        ? zVal >= clampedZ
-        : false
-  })
-
-  return (
-    <svg
-      viewBox={`0 0 ${W} ${H}`}
-      className="w-full"
-      role="img"
-      aria-label="Normal distribution with shaded p-value regions"
-    >
-      {[-3, -2, -1, 0, 1, 2, 3].map((tick) => (
-        <line
-          key={`v-${tick}`}
-          y1={PAD_TOP}
-          y2={H - PAD_BOTTOM}
-          x1={zToX(tick)}
-          x2={zToX(tick)}
-          stroke="currentColor"
-          strokeOpacity="0.05"
-        />
-      ))}
-      {[0.33, 0.66].map((frac) => (
-        <line
-          key={`h-${frac}`}
-          x1={PAD_X}
-          x2={W - PAD_X}
-          y1={PAD_TOP + frac * (H - PAD_BOTTOM - PAD_TOP)}
-          y2={PAD_TOP + frac * (H - PAD_BOTTOM - PAD_TOP)}
-          stroke="currentColor"
-          strokeOpacity="0.05"
-        />
-      ))}
-      <line
-        x1={PAD_X}
-        x2={W - PAD_X}
-        y1={H - PAD_BOTTOM}
-        y2={H - PAD_BOTTOM}
-        stroke="currentColor"
-        strokeOpacity="0.15"
-      />
-
-      {leftTailPts.length > 2 ? (
-        <polygon
-          points={`${zToX(-Z_RANGE)},${H - PAD_BOTTOM} ${leftTailPts.join(" ")} ${
-            tail === "two"
-              ? `${zToX(-absZ)},${H - PAD_BOTTOM}`
-              : `${zToX(clampedZ)},${H - PAD_BOTTOM}`
-          }`}
-          fill="var(--destructive)"
-          fillOpacity="0.25"
-        />
-      ) : null}
-
-      {rightTailPts.length > 2 ? (
-        <polygon
-          points={`${rightTailPts.join(" ")} ${zToX(Z_RANGE)},${H - PAD_BOTTOM} ${
-            tail === "two"
-              ? `${zToX(absZ)},${H - PAD_BOTTOM}`
-              : `${zToX(clampedZ)},${H - PAD_BOTTOM}`
-          }`}
-          fill="var(--destructive)"
-          fillOpacity="0.25"
-        />
-      ) : null}
-
-      <polyline
-        points={allPts.join(" ")}
-        fill="none"
-        stroke="var(--chart-2)"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-      />
-
-      {tail === "two" ? (
-        <>
-          <line x1={zToX(-absZ)} x2={zToX(-absZ)} y1={PAD_TOP - 2} y2={H - PAD_BOTTOM} stroke="var(--destructive)" strokeWidth="1.5" strokeDasharray="5 4" />
-          <text x={zToX(-absZ)} y={PAD_TOP + 2} textAnchor="middle" fill="currentColor" fontSize="11" fontWeight="700" className="font-mono">
-            {formatDecimal(-absZ, 2)}
-          </text>
-          <line x1={zToX(absZ)} x2={zToX(absZ)} y1={PAD_TOP - 2} y2={H - PAD_BOTTOM} stroke="var(--destructive)" strokeWidth="1.5" strokeDasharray="5 4" />
-          <text x={zToX(absZ)} y={PAD_TOP + 2} textAnchor="middle" fill="currentColor" fontSize="11" fontWeight="700" className="font-mono">
-            {formatDecimal(absZ, 2)}
-          </text>
-        </>
-      ) : (
-        <>
-          <line x1={zToX(clampedZ)} x2={zToX(clampedZ)} y1={PAD_TOP - 2} y2={H - PAD_BOTTOM} stroke="var(--destructive)" strokeWidth="1.5" strokeDasharray="5 4" />
-          <text x={zToX(clampedZ)} y={PAD_TOP + 2} textAnchor="middle" fill="currentColor" fontSize="11" fontWeight="700" className="font-mono">
-            {formatDecimal(clampedZ, 2)}
-          </text>
-        </>
-      )}
-
-      {[-3, -2, -1, 0, 1, 2, 3].map((tick) => (
-        <text key={`label-${tick}`} x={zToX(tick)} y={H - PAD_BOTTOM + 14} textAnchor="middle" fill="currentColor" fontSize="10" opacity="0.5" className="font-mono">
-          {tick > 0 ? `+${tick}` : tick}
-        </text>
-      ))}
-
-      <text x={W - PAD_X} y={H - PAD_BOTTOM + 28} textAnchor="end" fontSize="10" fill="var(--destructive)" fontWeight="600">
-        Red Area = P-Value
-      </text>
-    </svg>
-  )
-}
 
 export function PValueFromZScoreCalculator() {
   const [z, setZ] = useState("1.96")
@@ -304,7 +144,21 @@ export function PValueFromZScoreCalculator() {
             </div>
 
             <div className="rounded-2xl border border-primary/50 bg-card p-4 shadow-2xs">
-              <PValueCurve z={zValue} tail={tail} />
+              <NormalCurveChart
+                label="Normal distribution with shaded p-value regions"
+                shade={(point) =>
+                  tail === "two"
+                    ? Math.abs(point) >= Math.abs(zValue)
+                    : tail === "left"
+                      ? point <= zValue
+                      : point >= zValue
+                }
+                markers={(tail === "two"
+                  ? [-Math.abs(zValue), Math.abs(zValue)]
+                  : [zValue]
+                ).map((point) => ({ z: point, digits: 2 }))}
+                caption="Red Area = P-Value"
+              />
             </div>
 
             <div className="grid gap-3 sm:grid-cols-3">

@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { IconAlertTriangle, IconRotate } from "@tabler/icons-react"
 
+import { NormalCurveChart } from "@/components/site/calculators/normal-curve-chart"
 import {
   GradientHeroMetric,
   MetricTile,
@@ -29,201 +30,6 @@ import { formatDecimal, formatPercent } from "@/lib/format"
 import { inverseNormalCdf } from "@/lib/stats"
 
 type TailType = "two" | "left" | "right"
-
-function normalPdf(z: number): number {
-  return Math.exp(-0.5 * z * z) / Math.sqrt(2 * Math.PI)
-}
-
-const W = 520
-const H = 200
-const PAD_X = 20
-const PAD_TOP = 22
-const PAD_BOTTOM = 45
-const Z_RANGE = 4
-
-function round2(value: number): number {
-  return Math.round(value * 100) / 100
-}
-
-function zToX(z: number): number {
-  return round2(PAD_X + ((z + Z_RANGE) / (2 * Z_RANGE)) * (W - 2 * PAD_X))
-}
-
-function pdfToY(pdf: number): number {
-  const maxPdf = normalPdf(0)
-  return round2(H - PAD_BOTTOM - (pdf / maxPdf) * (H - PAD_BOTTOM - PAD_TOP))
-}
-
-function curvePoints(): string[] {
-  const pts: string[] = []
-  const steps = 120
-  for (let i = 0; i <= steps; i++) {
-    const z = -Z_RANGE + (i / steps) * 2 * Z_RANGE
-    pts.push(`${zToX(z)},${pdfToY(normalPdf(z))}`)
-  }
-  return pts
-}
-
-interface RejectionCurveProps {
-  criticalPos: number
-  criticalNeg: number | null
-  alpha: number
-  tail: TailType
-}
-
-function RejectionCurve({ criticalPos, criticalNeg, tail }: RejectionCurveProps) {
-  const pts = curvePoints()
-  const steps = 120
-
-  const leftTail: string[] = []
-  const rightTail: string[] = []
-  for (let i = 0; i <= steps; i++) {
-    const z = -Z_RANGE + (i / steps) * 2 * Z_RANGE
-    const point = `${zToX(z)},${pdfToY(normalPdf(z))}`
-    if (criticalNeg !== null && z <= criticalNeg) leftTail.push(point)
-    if (z >= criticalPos) rightTail.push(point)
-  }
-
-  return (
-    <svg
-      viewBox={`0 0 ${W} ${H}`}
-      className="w-full"
-      role="img"
-      aria-label="Normal distribution with shaded rejection regions"
-    >
-      {[-3, -2, -1, 0, 1, 2, 3].map((tick) => (
-        <line
-          key={`v-${tick}`}
-          y1={PAD_TOP}
-          y2={H - PAD_BOTTOM}
-          x1={zToX(tick)}
-          x2={zToX(tick)}
-          stroke="currentColor"
-          strokeOpacity="0.05"
-        />
-      ))}
-      {[0.33, 0.66].map((frac) => (
-        <line
-          key={`h-${frac}`}
-          x1={PAD_X}
-          x2={W - PAD_X}
-          y1={PAD_TOP + frac * (H - PAD_BOTTOM - PAD_TOP)}
-          y2={PAD_TOP + frac * (H - PAD_BOTTOM - PAD_TOP)}
-          stroke="currentColor"
-          strokeOpacity="0.05"
-        />
-      ))}
-      <line
-        x1={PAD_X}
-        x2={W - PAD_X}
-        y1={H - PAD_BOTTOM}
-        y2={H - PAD_BOTTOM}
-        stroke="currentColor"
-        strokeOpacity="0.15"
-      />
-
-      {leftTail.length > 2 && tail !== "right" ? (
-        <polygon
-          points={`${zToX(-Z_RANGE)},${H - PAD_BOTTOM} ${leftTail.join(" ")}`}
-          fill="var(--destructive)"
-          fillOpacity="0.25"
-        />
-      ) : null}
-
-      {rightTail.length > 2 && tail !== "left" ? (
-        <polygon
-          points={`${rightTail.join(" ")} ${zToX(Z_RANGE)},${H - PAD_BOTTOM}`}
-          fill="var(--destructive)"
-          fillOpacity="0.25"
-        />
-      ) : null}
-
-      <polyline
-        points={pts.join(" ")}
-        fill="none"
-        stroke="var(--chart-2)"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-      />
-
-      {criticalNeg !== null ? (
-        <>
-          <line
-            x1={zToX(criticalNeg)}
-            x2={zToX(criticalNeg)}
-            y1={PAD_TOP - 2}
-            y2={H - PAD_BOTTOM}
-            stroke="var(--destructive)"
-            strokeWidth="1.5"
-            strokeDasharray="5 4"
-          />
-          <text
-            x={zToX(criticalNeg)}
-            y={PAD_TOP + 2}
-            textAnchor="middle"
-            fill="currentColor"
-            fontSize="11"
-            fontWeight="700"
-            className="font-mono"
-          >
-            {formatDecimal(criticalNeg, 3)}
-          </text>
-        </>
-      ) : null}
-
-      {criticalPos !== null && (tail === "two" || tail === "right") ? (
-        <>
-          <line
-            x1={zToX(criticalPos)}
-            x2={zToX(criticalPos)}
-            y1={PAD_TOP - 2}
-            y2={H - PAD_BOTTOM}
-            stroke="var(--destructive)"
-            strokeWidth="1.5"
-            strokeDasharray="5 4"
-          />
-          <text
-            x={zToX(criticalPos)}
-            y={PAD_TOP + 2}
-            textAnchor="middle"
-            fill="currentColor"
-            fontSize="11"
-            fontWeight="700"
-            className="font-mono"
-          >
-            {formatDecimal(criticalPos, 3)}
-          </text>
-        </>
-      ) : null}
-
-      {[-3, -2, -1, 0, 1, 2, 3].map((tick) => (
-        <text
-          key={`label-${tick}`}
-          x={zToX(tick)}
-          y={H - PAD_BOTTOM + 14}
-          textAnchor="middle"
-          fill="currentColor"
-          fontSize="10"
-          opacity="0.5"
-          className="font-mono"
-        >
-          {tick > 0 ? `+${tick}` : tick}
-        </text>
-      ))}
-
-      <text
-        x={W - PAD_X}
-        y={H - PAD_BOTTOM + 28}
-        textAnchor="end"
-        fontSize="10"
-        fill="var(--destructive)"
-        fontWeight="600"
-      >
-        Red Area = Rejection Region
-      </text>
-    </svg>
-  )
-}
 
 export function CriticalZValueCalculator() {
   const [alpha, setAlpha] = useState(0.05)
@@ -318,11 +124,19 @@ export function CriticalZValueCalculator() {
             </div>
 
             <div className="rounded-2xl border border-primary/50 bg-card p-4 shadow-2xs">
-              <RejectionCurve
-                criticalPos={tail === "left" ? 0 : upper}
-                criticalNeg={tail === "two" ? lower : tail === "left" ? upper : null}
-                alpha={alpha}
-                tail={tail}
+              <NormalCurveChart
+                label="Normal distribution with shaded rejection regions"
+                shade={(point) =>
+                  tail === "right"
+                    ? point >= upper
+                    : tail === "left"
+                      ? point <= upper
+                      : point >= upper || (lower !== null && point <= lower)
+                }
+                markers={[upper, lower]
+                  .filter((point) => point !== null)
+                  .map((point) => ({ z: point, digits: 3 }))}
+                caption="Red Area = Rejection Region"
               />
             </div>
 

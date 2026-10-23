@@ -4,6 +4,7 @@ import { useState } from "react"
 import { IconRotate } from "@tabler/icons-react"
 
 import { NumberField } from "@/components/site/calculators/field"
+import { NormalCurveChart } from "@/components/site/calculators/normal-curve-chart"
 import {
   GradientHeroMetric,
   MetricTile,
@@ -22,155 +23,6 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { parseNumericInput } from "@/lib/calculators"
 import { formatDecimal, formatPercent } from "@/lib/format"
 import { normalCdf } from "@/lib/stats"
-
-const W = 520
-const H = 200
-const PAD_X = 20
-const PAD_TOP = 20
-const PAD_BOTTOM = 50
-const Z_RANGE = 4
-
-function normalPdf(z: number): number {
-  return Math.exp(-0.5 * z * z) / Math.sqrt(2 * Math.PI)
-}
-
-function round2(value: number): number {
-  return Math.round(value * 100) / 100
-}
-
-function zToX(z: number): number {
-  return round2(PAD_X + ((z + Z_RANGE) / (2 * Z_RANGE)) * (W - 2 * PAD_X))
-}
-
-function pdfToY(pdf: number): number {
-  const maxPdf = normalPdf(0)
-  return round2(
-    H -
-      PAD_BOTTOM -
-      (pdf / maxPdf) * (H - PAD_BOTTOM - PAD_TOP)
-  )
-}
-
-function BellCurve({ z }: { z: number }) {
-  const clampedZ = Math.max(-Z_RANGE, Math.min(Z_RANGE, z))
-  const points: string[] = []
-  const steps = 120
-  for (let i = 0; i <= steps; i++) {
-    const zVal = -Z_RANGE + (i / steps) * 2 * Z_RANGE
-    points.push(`${zToX(zVal)},${pdfToY(normalPdf(zVal))}`)
-  }
-
-  const shadePoints = points.filter((_, i) => {
-    const zVal = -Z_RANGE + (i / steps) * 2 * Z_RANGE
-    return zVal <= clampedZ
-  })
-  const lastZ = -Z_RANGE + ((shadePoints.length - 1) / steps) * 2 * Z_RANGE
-  shadePoints.push(`${zToX(lastZ)},${H - PAD_BOTTOM}`)
-
-  return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label="Normal distribution curve with shaded area up to z">
-      <defs>
-        <linearGradient id="bellFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="var(--chart-1)" stopOpacity="0.5" />
-          <stop offset="100%" stopColor="var(--chart-1)" stopOpacity="0.03" />
-        </linearGradient>
-      </defs>
-
-      {[0.25, 0.5, 0.75].map((frac) => (
-        <line
-          key={frac}
-          x1={PAD_X}
-          x2={W - PAD_X}
-          y1={PAD_TOP + frac * (H - PAD_BOTTOM - PAD_TOP)}
-          y2={PAD_TOP + frac * (H - PAD_BOTTOM - PAD_TOP)}
-          stroke="currentColor"
-          strokeOpacity="0.06"
-        />
-      ))}
-      {[-3, -2, -1, 0, 1, 2, 3].map((tick) => (
-        <line
-          key={tick}
-          y1={PAD_TOP}
-          y2={H - PAD_BOTTOM}
-          x1={zToX(tick)}
-          x2={zToX(tick)}
-          stroke="currentColor"
-          strokeOpacity="0.06"
-        />
-      ))}
-      <line
-        x1={PAD_X}
-        x2={W - PAD_X}
-        y1={H - PAD_BOTTOM}
-        y2={H - PAD_BOTTOM}
-        stroke="currentColor"
-        strokeOpacity="0.15"
-      />
-
-      {shadePoints.length > 2 ? (
-        <polygon
-          points={`${zToX(-Z_RANGE)},${H - PAD_BOTTOM} ${shadePoints.join(" ")}`}
-          fill="url(#bellFill)"
-        />
-      ) : null}
-
-      <polyline
-        points={points.join(" ")}
-        fill="none"
-        stroke="var(--chart-2)"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-      />
-
-      <line
-        x1={zToX(clampedZ)}
-        x2={zToX(clampedZ)}
-        y1={PAD_TOP - 4}
-        y2={H - PAD_BOTTOM}
-        stroke="var(--destructive)"
-        strokeWidth="2"
-        strokeDasharray="6 4"
-      />
-
-      <text
-        x={zToX(clampedZ) + (clampedZ >= 0 ? -8 : 8)}
-        y={PAD_TOP + 6}
-        textAnchor={clampedZ >= 0 ? "end" : "start"}
-        fill="currentColor"
-        fontSize="12"
-        fontWeight="700"
-        className="font-mono"
-      >
-        z = {formatDecimal(z, 3)}
-      </text>
-
-      {[-3, -2, -1, 0, 1, 2, 3].map((tick) => (
-        <text
-          key={`label-${tick}`}
-          x={zToX(tick)}
-          y={H - PAD_BOTTOM + 16}
-          textAnchor="middle"
-          fill="currentColor"
-          fontSize="10"
-          opacity="0.5"
-          className="font-mono"
-        >
-          {tick > 0 ? `+${tick}` : tick}
-        </text>
-      ))}
-      <text
-        x={zToX(-1)}
-        y={H - PAD_BOTTOM + 32}
-        textAnchor="middle"
-        fill="currentColor"
-        fontSize="10"
-        opacity="0.5"
-      >
-        standard deviations
-      </text>
-    </svg>
-  )
-}
 
 export function ZScoreToPercentileCalculator() {
   const [mode, setMode] = useState<"direct" | "raw">("direct")
@@ -303,7 +155,13 @@ export function ZScoreToPercentileCalculator() {
               </div>
 
               <div className="rounded-2xl border border-primary/50 bg-card p-4 shadow-2xs">
-                <BellCurve z={zValue} />
+                <NormalCurveChart
+                  label="Normal distribution curve with shaded area up to z"
+                  shade={(point) => point <= zValue}
+                  markers={[{ z: Math.max(-4, Math.min(4, zValue)), digits: 3 }]}
+                  caption="Standard deviations"
+                  shadeColor="primary"
+                />
               </div>
             </ResultsRegion>
           ) : (
