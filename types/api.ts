@@ -195,7 +195,6 @@ export interface PostCreateInput {
   category_id?: string | null
   author_id?: string | null
   tags?: string[]
-  is_trending?: boolean
   meta_title?: string
   meta_description?: string
   focus_keyphrase?: string | null

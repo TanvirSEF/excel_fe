@@ -31,6 +31,7 @@ interface PostFormProps {
   existingTags: string[]
   authors?: User[]
   canChangeAuthor?: boolean
+  canPin?: boolean
 }
 
 const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/
@@ -52,6 +53,7 @@ export function PostForm({
   existingTags,
   authors,
   canChangeAuthor,
+  canPin = true,
 }: PostFormProps) {
   const { data: categories } = useCategories()
   const [pickerOpen, setPickerOpen] = useState(false)
@@ -232,6 +234,7 @@ export function PostForm({
         <Checkbox
           id="post-trending"
           checked={fields.isTrending}
+          disabled={!canPin}
           onCheckedChange={(checked) =>
             onChange({ isTrending: checked === true })
           }

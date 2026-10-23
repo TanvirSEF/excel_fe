@@ -33,6 +33,7 @@ import { can, useAuthStore } from "@/lib/auth"
 import {
   useCreatePost,
   usePost,
+  useSetTrendingPin,
   useUpdatePost,
   useUpdateSeo,
 } from "@/lib/queries/posts"
@@ -82,6 +83,7 @@ interface EditorViewProps {
 export function EditorView({ postId }: EditorViewProps) {
   const router = useRouter()
   const user = useAuthStore((state) => state.user)
+  const canPublish = can(user, "posts:publish")
   const canChangeAuthor =
     can(user, "posts:publish") ||
     user?.role === "super_admin" ||
@@ -94,6 +96,7 @@ export function EditorView({ postId }: EditorViewProps) {
   const createPost = useCreatePost()
   const updatePost = useUpdatePost()
   const updateSeo = useUpdateSeo(postId ?? "")
+  const setTrendingPin = useSetTrendingPin()
 
   const [fields, setFields] = useState<PostFormFields>(() => ({
     ...EMPTY_FIELDS,
@@ -268,18 +271,37 @@ export function EditorView({ postId }: EditorViewProps) {
           category_id: fields.categoryId || null,
           author_id: fields.authorId || undefined,
           tags: fields.tags,
-          is_trending: fields.isTrending,
           focus_keyphrase: keyphrase.trim() || null,
         }
 
-        if (postId) {
-          await updatePost.mutateAsync({ postId, input })
-          if (!options.silent) toast.success("Post saved.")
+        let targetPostId = postId
+        if (targetPostId) {
+          await updatePost.mutateAsync({ postId: targetPostId, input })
         } else {
           const created = await createPost.mutateAsync(input)
+          targetPostId = created.id
+        }
+
+        if (canPublish && targetPostId) {
+          const originalTrending = post?.is_trending ?? false
+          if (postId ? fields.isTrending !== originalTrending : fields.isTrending) {
+            try {
+              await setTrendingPin.mutateAsync({
+                postId: targetPostId,
+                pinned: fields.isTrending,
+              })
+            } catch {
+              // Non-blocking so the post itself stays successfully saved
+            }
+          }
+        }
+
+        if (postId) {
+          if (!options.silent) toast.success("Post saved.")
+        } else {
           if (!options.silent) toast.success("Draft created.")
           dirtyRef.current = false
-          router.replace(`/dashboard/posts/${created.id}`)
+          router.replace(`/dashboard/posts/${targetPostId}`)
           return true
         }
 
@@ -307,12 +329,15 @@ export function EditorView({ postId }: EditorViewProps) {
       }
     },
     [
+      canPublish,
       createPost,
       doc,
       fields,
       keyphrase,
+      post,
       postId,
       router,
+      setTrendingPin,
       updatePost,
     ]
   )
@@ -403,7 +428,6 @@ export function EditorView({ postId }: EditorViewProps) {
     )
   }
 
-  const canPublish = can(user, "posts:publish")
   const canEditSeo = can(user, "seo:edit")
   const isOwner = Boolean(postId && post && user && post.author_id === user.id)
 
@@ -522,6 +546,7 @@ export function EditorView({ postId }: EditorViewProps) {
                     existingTags={(allTags ?? []).map((tag) => tag.name)}
                     authors={authors}
                     canChangeAuthor={canChangeAuthor}
+                    canPin={canPublish}
                   />
                 </div>
               </TabsContent>
@@ -566,6 +591,7 @@ export function EditorView({ postId }: EditorViewProps) {
                 existingTags={(allTags ?? []).map((tag) => tag.name)}
                 authors={authors}
                 canChangeAuthor={canChangeAuthor}
+                canPin={canPublish}
               />
             </div>
           )}
