@@ -70,6 +70,8 @@ function PixelHint({ text, limit }: { text: string; limit: number }) {
 
 interface SeoFieldsProps {
   fields: SeoFormFields
+  focusKeyphrase?: string
+  onFocusKeyphraseChange?: (value: string) => void
   schemaType?: string
   onSchemaTypeChange?: (value: string) => void
   disabled?: boolean
@@ -78,6 +80,8 @@ interface SeoFieldsProps {
 
 export function SeoFields({
   fields,
+  focusKeyphrase,
+  onFocusKeyphraseChange,
   schemaType,
   onSchemaTypeChange,
   disabled,
@@ -87,6 +91,26 @@ export function SeoFields({
 
   return (
     <div className="space-y-5">
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Label htmlFor="seo-focus-keyphrase">Focus keyphrase</Label>
+          <span className="text-xs text-muted-foreground">
+            {(focusKeyphrase ?? "").length}/100
+          </span>
+        </div>
+        <Input
+          id="seo-focus-keyphrase"
+          value={focusKeyphrase ?? ""}
+          disabled={disabled}
+          onChange={(event) => onFocusKeyphraseChange?.(event.target.value)}
+          placeholder="e.g. how to use vlookup in excel"
+          maxLength={100}
+        />
+        <p className="text-xs text-muted-foreground">
+          Primary keyword used for content SEO analysis.
+        </p>
+      </div>
+
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <Label htmlFor="seo-meta-title">Meta title</Label>

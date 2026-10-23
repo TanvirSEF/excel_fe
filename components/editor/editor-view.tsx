@@ -352,10 +352,17 @@ export function EditorView({ postId }: EditorViewProps) {
         canonical_url: seo.canonicalUrl || null,
         og_image_url: seo.ogImageUrl || null,
       })
+      const patchInput: Record<string, unknown> = {}
       if (schemaType !== (post?.schema_type || DEFAULT_SCHEMA_TYPE)) {
+        patchInput.schema_type = schemaType
+      }
+      if (keyphrase.trim() !== (post?.focus_keyphrase || "")) {
+        patchInput.focus_keyphrase = keyphrase.trim() || null
+      }
+      if (Object.keys(patchInput).length > 0) {
         await updatePost.mutateAsync({
           postId,
-          input: { schema_type: schemaType },
+          input: patchInput,
         })
       }
       toast.success("SEO saved.")
@@ -370,7 +377,7 @@ export function EditorView({ postId }: EditorViewProps) {
     } finally {
       setSeoSaving(false)
     }
-  }, [postId, seoSaving, seo, schemaType, post, updateSeo, updatePost])
+  }, [postId, seoSaving, seo, schemaType, keyphrase, post, updateSeo, updatePost])
 
   const saveBeforeAction = useCallback(async () => {
     if (!dirtyRef.current) return true
@@ -559,6 +566,8 @@ export function EditorView({ postId }: EditorViewProps) {
                   )}
                   <SeoFields
                     fields={seo}
+                    focusKeyphrase={keyphrase}
+                    onFocusKeyphraseChange={onKeyphraseChange}
                     schemaType={schemaType}
                     onSchemaTypeChange={onSchemaTypeChange}
                     disabled={!canEditSeo}
