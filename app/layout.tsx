@@ -66,7 +66,10 @@ export default function RootLayout({
       className={cn("antialiased", poppins.variable, fontMono.variable, "font-sans")}
     >
       <head>
-        <MediavineTag tagId={config.mediavineTagId} />
+        <link rel="dns-prefetch" href="https://scripts.mediavine.com" />
+        <link rel="preconnect" href="https://scripts.mediavine.com" crossOrigin="" />
+        <link rel="preconnect" href="https://securepubads.g.doubleclick.net" crossOrigin="" />
+        <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="" />
       </head>
       <body suppressHydrationWarning>
         <ThemeProvider>
@@ -75,6 +78,7 @@ export default function RootLayout({
           </TooltipProvider>
         </ThemeProvider>
         <GoogleAnalytics measurementId={config.gaMeasurementId} />
+        <MediavineTag tagId={config.mediavineTagId} />
       </body>
     </html>
   )
