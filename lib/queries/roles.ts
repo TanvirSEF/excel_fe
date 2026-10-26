@@ -338,6 +338,7 @@ export function useUpdateRolePermissions() {
       }
     },
     onSuccess: (updatedRole) => {
+      storeRolePermissions(updatedRole.role, updatedRole.permissions)
       queryClient.setQueryData<RoleDetail[]>(["roles"], (current) => {
         if (!current) return [updatedRole]
         return current.map((r) =>

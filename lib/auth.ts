@@ -98,12 +98,25 @@ const PERMISSIONS: Record<UserRole, readonly string[]> = {
 }
 
 export function can(
-  user: Pick<User, "role"> | null,
+  user: (Pick<User, "role"> & { permissions?: string[] }) | null,
   permission: string
 ): boolean {
   if (!user) return false
   if (user.role === "super_admin") return true
+
+  // 1. Prioritize live dynamic permissions attached to the user session
+  if (user.permissions && Array.isArray(user.permissions) && user.permissions.length > 0) {
+    return user.permissions.includes("*") || user.permissions.includes(permission)
+  }
+
+  // 2. Check localStorage custom role overrides (synced from roles management)
   const stored = getStoredRolePermissions()
-  const granted = (stored?.[user.role] as readonly string[] | undefined) ?? PERMISSIONS[user.role] ?? []
+  const custom = stored?.[user.role]
+  if (custom && Array.isArray(custom)) {
+    return custom.includes("*") || custom.includes(permission)
+  }
+
+  // 3. Fallback to default static permissions
+  const granted = PERMISSIONS[user.role] ?? []
   return granted.includes("*") || granted.includes(permission)
 }
