@@ -4,11 +4,11 @@
 
 ## Core Tutorials & Knowledge Base
 
-- [Excel Formulas & Functions](https://excelinsider.com/category/excel-functions-formulas/): Deep dives into modern formulas including XLOOKUP, VLOOKUP, INDEX/MATCH, Dynamic Array formulas (FILTER, SORT, UNIQUE), LAMBDA, and nested logical structures.
+- [Excel Formulas & Functions](https://excelinsider.com/excel-functions-formulas/): Deep dives into modern formulas including XLOOKUP, VLOOKUP, INDEX/MATCH, Dynamic Array formulas (FILTER, SORT, UNIQUE), LAMBDA, and nested logical structures.
 - [Google Sheets Learning Track](https://excelinsider.com/google-sheets/): Complete interactive curriculum for Google Sheets from core fundamentals to advanced automation and App Script.
-- [Power Query & ETL](https://excelinsider.com/category/power-query/): Data transformation pipelines, automated importing, unpivoting, merging queries, and advanced M code recipes.
-- [VBA & Automation](https://excelinsider.com/category/vba-macros/): Writing robust Excel Visual Basic for Applications (VBA) macros, event handlers, and user-defined functions (UDFs).
-- [Dashboards & Data Visualization](https://excelinsider.com/category/charts-dashboards/): Dynamic business dashboards, interactive charts, KPI trackers, and executive report design.
+- [Power Query & ETL](https://excelinsider.com/power-query/): Data transformation pipelines, automated importing, unpivoting, merging queries, and advanced M code recipes.
+- [VBA & Automation](https://excelinsider.com/vba-macros/): Writing robust Excel Visual Basic for Applications (VBA) macros, event handlers, and user-defined functions (UDFs).
+- [Dashboards & Data Visualization](https://excelinsider.com/charts-dashboards/): Dynamic business dashboards, interactive charts, KPI trackers, and executive report design.
 
 ## Interactive Calculators (45 Web Tools)
 
@@ -44,6 +44,5 @@ Excel Insider provides 45 zero-tracking, instant web calculators with transparen
 
 ## Machine-Readable Feeds & Discovery
 
-- XML Sitemap Index: https://excelinsider.com/sitemap_index.xml
-- Unified Post Sitemap: https://excelinsider.com/sitemap.xml
+- XML Sitemap: https://excelinsider.com/sitemap.xml
 - Robots Directive: https://excelinsider.com/robots.txt

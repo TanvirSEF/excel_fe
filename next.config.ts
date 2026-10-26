@@ -52,8 +52,42 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: "/:path*",
+        source: "/((?!api/|_next/static|_next/image|favicon.ico|robots.txt|llms.txt|sitemap.xml|sitemap_index.xml).*)",
         headers: securityHeaders,
+      },
+      {
+        source: "/(robots.txt|llms.txt)",
+        headers: [
+          {
+            key: "Content-Type",
+            value: "text/plain; charset=utf-8",
+          },
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "*",
+          },
+          {
+            key: "Cache-Control",
+            value: "public, max-age=3600, stale-while-revalidate=86400",
+          },
+        ],
+      },
+      {
+        source: "/(sitemap.xml|sitemap_index.xml)",
+        headers: [
+          {
+            key: "Content-Type",
+            value: "application/xml; charset=utf-8",
+          },
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "*",
+          },
+          {
+            key: "Cache-Control",
+            value: "public, max-age=3600, stale-while-revalidate=86400",
+          },
+        ],
       },
       {
         source: "/:path*.(svg|jpg|jpeg|png|webp|ico|woff2)",
