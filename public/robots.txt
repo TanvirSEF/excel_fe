@@ -1,0 +1,22 @@
+User-Agent: *
+Allow: /
+Disallow: /dashboard/
+Disallow: /dashboard
+Disallow: /api/
+Disallow: /api
+Disallow: /preview/
+Disallow: /preview
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /verify-email
+Disallow: /search
+Disallow: /newsletter/unsubscribe
+
+User-Agent: GPTBot
+User-Agent: CCBot
+User-Agent: ClaudeBot
+User-Agent: Bytespider
+Allow: /llms.txt
+Disallow: /
+
+Sitemap: https://excelinsider.com/sitemap.xml
