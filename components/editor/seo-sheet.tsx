@@ -46,12 +46,14 @@ function seoFromPost(post: {
   meta_description: string | null
   canonical_url: string | null
   og_image_url: string | null
+  excerpt?: string | null
+  featured_image_url?: string | null
 }): SeoFormFields {
   return {
     metaTitle: post.meta_title ?? "",
-    metaDescription: post.meta_description ?? "",
+    metaDescription: post.meta_description ?? post.excerpt ?? "",
     canonicalUrl: post.canonical_url ?? "",
-    ogImageUrl: post.og_image_url ?? "",
+    ogImageUrl: post.og_image_url ?? post.featured_image_url ?? "",
   }
 }
 
@@ -77,8 +79,10 @@ function SeoSheetForm({
       ? seoFromPost({
           meta_title: post.meta_title,
           meta_description: post.meta_description,
+          excerpt: post.excerpt,
           canonical_url: post.canonical_url,
           og_image_url: post.og_image_url,
+          featured_image_url: post.featured_image_url,
         })
       : null)
 
