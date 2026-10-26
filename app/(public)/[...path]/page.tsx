@@ -11,14 +11,17 @@ import { getCategoryWithPosts } from "@/lib/api/categories"
 import { getPostBySlug } from "@/lib/api/posts"
 import { getSeriesBySlug } from "@/lib/api/series"
 import { getWpRedirect, looksLikeWpPath } from "@/lib/api/redirects"
-import { clamp, firstParam } from "@/lib/utils"
+import { clamp } from "@/lib/utils"
 import type { Category, Page, PostDetail, PostListItem, SeriesSummary } from "@/types/api"
 
 export const revalidate = 300
 
+export function generateStaticParams() {
+  return []
+}
+
 interface CatchAllPageProps {
   params: Promise<{ path: string[] }>
-  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 type ResolvedRoute =
@@ -38,31 +41,32 @@ type ResolvedRoute =
   | { type: "redirect"; target: string; isPermanent: boolean }
   | null
 
-async function resolvePath(path: string[], page: number): Promise<ResolvedRoute> {
+function splitPagination(segments: string[]) {
+  const [number, keyword] = [segments.at(-1), segments.at(-2)]
+  if (segments.length >= 3 && keyword === "page" && number && /^\d+$/.test(number)) {
+    return {
+      path: segments.slice(0, -2),
+      page: clamp(Number(number), 1, 10_000),
+      paginated: true,
+    }
+  }
+  return { path: segments, page: 1, paginated: false }
+}
+
+async function resolvePath(
+  segments: string[],
+  page: number,
+  paginated: boolean
+): Promise<ResolvedRoute> {
+  const path = segments
   const pathname = `/${path.join("/")}`
 
   if (!looksLikeWpPath(pathname)) {
     return null
   }
 
-  // Handle historical WordPress pagination pattern /<cat>/<topic>/page/<n>/
-  if (path.length === 4 && path[2] === "page") {
-    const p = Number(path[3]) || 1
-    return {
-      type: "redirect",
-      target: `/${path[0]}/${path[1]}/?page=${p}`,
-      isPermanent: true,
-    }
-  }
-
-  // Handle historical WordPress category pagination pattern /<cat>/page/<n>/
-  if (path.length === 3 && path[1] === "page") {
-    const p = Number(path[2]) || 1
-    return {
-      type: "redirect",
-      target: `/${path[0]}/?page=${p}`,
-      isPermanent: true,
-    }
+  if (paginated && page === 1) {
+    return { type: "redirect", target: `${pathname}/`, isPermanent: true }
   }
 
   if (path.length === 1 && path[0] === "excel-functions-and-formulas") {
@@ -195,14 +199,10 @@ async function resolvePath(path: string[], page: number): Promise<ResolvedRoute>
 
 export async function generateMetadata({
   params,
-  searchParams,
 }: CatchAllPageProps): Promise<Metadata> {
-  const [{ path }, query] = await Promise.all([
-    params,
-    searchParams ?? Promise.resolve<Record<string, string | string[] | undefined>>({}),
-  ])
-  const page = clamp(Number(firstParam(query.page) ?? 1) || 1, 1, 10_000)
-  const resolved = await resolvePath(path, page)
+  const { path: segments } = await params
+  const { path, page, paginated } = splitPagination(segments)
+  const resolved = await resolvePath(path, page, paginated)
 
   if (resolved?.type === "category") {
     return {
@@ -238,15 +238,12 @@ export async function generateMetadata({
   return {}
 }
 
-export default async function CatchAllPage({ params, searchParams }: CatchAllPageProps) {
-  const [{ path }, query] = await Promise.all([
-    params,
-    searchParams ?? Promise.resolve<Record<string, string | string[] | undefined>>({}),
-  ])
-  const page = clamp(Number(firstParam(query.page) ?? 1) || 1, 1, 10_000)
-  const resolved = await resolvePath(path, page)
+export default async function CatchAllPage({ params }: CatchAllPageProps) {
+  const { path: segments } = await params
+  const { path, page, paginated } = splitPagination(segments)
+  const resolved = await resolvePath(path, page, paginated)
 
-  if (!resolved) {
+  if (!resolved || (paginated && resolved.type === "post")) {
     notFound()
   }
 

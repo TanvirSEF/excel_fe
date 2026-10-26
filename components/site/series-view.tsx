@@ -54,6 +54,7 @@ export function SeriesView({ series, posts, page }: SeriesViewProps) {
           page={page}
           totalPages={posts.total_pages}
           pathname={canonicalPath}
+          pathBased
         />
       </div>
     </div>
