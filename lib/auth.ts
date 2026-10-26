@@ -88,7 +88,10 @@ const PERMISSIONS: Record<UserRole, readonly string[]> = {
   ],
   seo_specialist: [
     "overview:view",
+    "posts:view",
     "seo:edit",
+    "media:view",
+    "media:upload",
     "analytics:view",
     "settings:view",
   ],

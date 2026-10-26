@@ -233,7 +233,10 @@ export const DEFAULT_ROLES: RoleDetail[] = [
     is_editable: true,
     permissions: [
       "overview:view",
+      "posts:view",
       "seo:edit",
+      "media:view",
+      "media:upload",
       "analytics:view",
       "settings:view",
     ],

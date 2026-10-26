@@ -209,6 +209,8 @@ export interface SeoUpdateInput {
   meta_description?: string
   canonical_url?: string | null
   og_image_url?: string | null
+  focus_keyphrase?: string | null
+  schema_type?: string
 }
 
 export interface ContentDoc {

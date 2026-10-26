@@ -7,6 +7,7 @@ import {
   SeoFields,
   type SeoFormFields,
 } from "@/components/editor/seo-fields"
+import { ErrorState } from "@/components/shared/error-state"
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
@@ -61,9 +62,14 @@ function SeoSheetForm({
   postId: string
   onDone: () => void
 }) {
-  const { data: post, isPending } = usePost(postId)
+  const { data: post, isPending, isError, error, refetch } = usePost(postId)
   const updateSeo = useUpdateSeo(postId)
   const [edited, setEdited] = useState<SeoFormFields | null>(null)
+  const [keyphrase, setKeyphrase] = useState<string | null>(null)
+  const [schemaType, setSchemaType] = useState<string | null>(null)
+
+  const activeKeyphrase = keyphrase ?? post?.focus_keyphrase ?? ""
+  const activeSchemaType = schemaType ?? post?.schema_type ?? "TechArticle"
 
   const values =
     edited ??
@@ -84,13 +90,15 @@ function SeoSheetForm({
         meta_description: values.metaDescription || undefined,
         canonical_url: values.canonicalUrl || null,
         og_image_url: values.ogImageUrl || null,
+        focus_keyphrase: activeKeyphrase.trim() || null,
+        schema_type: activeSchemaType || undefined,
       })
       toast.success("SEO saved.")
       onDone()
-    } catch (error) {
+    } catch (saveError) {
       toast.error(
-        error instanceof ApiClientError
-          ? error.message
+        saveError instanceof ApiClientError
+          ? saveError.message
           : "Could not save SEO. Please try again."
       )
     }
@@ -107,7 +115,27 @@ function SeoSheetForm({
         </SheetDescription>
       </SheetHeader>
       <div className="space-y-4 px-4 pb-6">
-        {isPending || !values ? (
+        {isPending ? (
+          <div className="space-y-4">
+            <Skeleton className="h-10" />
+            <Skeleton className="h-24" />
+            <Skeleton className="h-10" />
+          </div>
+        ) : isError ? (
+          <ErrorState
+            title="Could not load post"
+            message={
+              error instanceof ApiClientError
+                ? error.message
+                : "The post details could not be retrieved."
+            }
+            action={
+              <Button variant="outline" size="sm" onClick={() => refetch()}>
+                Try again
+              </Button>
+            }
+          />
+        ) : !values ? (
           <div className="space-y-4">
             <Skeleton className="h-10" />
             <Skeleton className="h-24" />
@@ -117,6 +145,10 @@ function SeoSheetForm({
           <>
             <SeoFields
               fields={values}
+              focusKeyphrase={activeKeyphrase}
+              onFocusKeyphraseChange={setKeyphrase}
+              schemaType={activeSchemaType}
+              onSchemaTypeChange={setSchemaType}
               onChange={(patch) =>
                 setEdited({ ...values, ...patch })
               }

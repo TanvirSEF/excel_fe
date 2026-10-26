@@ -351,20 +351,9 @@ export function EditorView({ postId }: EditorViewProps) {
         meta_description: seo.metaDescription || undefined,
         canonical_url: seo.canonicalUrl || null,
         og_image_url: seo.ogImageUrl || null,
+        schema_type: schemaType || undefined,
+        focus_keyphrase: keyphrase.trim() || null,
       })
-      const patchInput: Record<string, unknown> = {}
-      if (schemaType !== (post?.schema_type || DEFAULT_SCHEMA_TYPE)) {
-        patchInput.schema_type = schemaType
-      }
-      if (keyphrase.trim() !== (post?.focus_keyphrase || "")) {
-        patchInput.focus_keyphrase = keyphrase.trim() || null
-      }
-      if (Object.keys(patchInput).length > 0) {
-        await updatePost.mutateAsync({
-          postId,
-          input: patchInput,
-        })
-      }
       toast.success("SEO saved.")
       seoDirtyRef.current = false
       setSeoDirty(false)
@@ -377,7 +366,7 @@ export function EditorView({ postId }: EditorViewProps) {
     } finally {
       setSeoSaving(false)
     }
-  }, [postId, seoSaving, seo, schemaType, keyphrase, post, updateSeo, updatePost])
+  }, [postId, seoSaving, seo, schemaType, keyphrase, updateSeo])
 
   const saveBeforeAction = useCallback(async () => {
     if (!dirtyRef.current) return true
