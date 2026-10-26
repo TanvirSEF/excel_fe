@@ -25,7 +25,6 @@ export function AssistantAvatar({
         width={96}
         height={96}
         unoptimized
-        priority
         className="h-full w-full object-contain drop-shadow-md select-none pointer-events-none"
       />
     </div>

@@ -1,4 +1,4 @@
-User-Agent: *
+User-agent: *
 Allow: /
 Disallow: /dashboard/
 Disallow: /dashboard
@@ -12,10 +12,10 @@ Disallow: /verify-email
 Disallow: /search
 Disallow: /newsletter/unsubscribe
 
-User-Agent: GPTBot
-User-Agent: CCBot
-User-Agent: ClaudeBot
-User-Agent: Bytespider
+User-agent: GPTBot
+User-agent: CCBot
+User-agent: ClaudeBot
+User-agent: Bytespider
 Allow: /llms.txt
 Disallow: /
 

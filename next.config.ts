@@ -19,7 +19,7 @@ const cspValue = [
   `frame-src 'self' https: data: blob:`,
   `worker-src 'self' blob: https:`,
   `child-src 'self' blob: https:`,
-  `connect-src 'self' https: wss:${isDev ? " http://localhost:* ws://localhost:* webpack://" : ""}`,
+  `connect-src 'self' https: http: data: blob: wss:${isDev ? " http://localhost:* ws://localhost:* webpack://" : ""}`,
   `object-src 'none'`,
   `base-uri 'self'`,
   `form-action 'self'`,
@@ -67,8 +67,16 @@ const nextConfig: NextConfig = {
             value: "*",
           },
           {
+            key: "Access-Control-Allow-Methods",
+            value: "GET, HEAD, OPTIONS",
+          },
+          {
+            key: "Access-Control-Allow-Headers",
+            value: "*",
+          },
+          {
             key: "Cache-Control",
-            value: "public, max-age=3600, stale-while-revalidate=86400",
+            value: "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
           },
         ],
       },
