@@ -7,18 +7,13 @@ interface PaginationProps {
   totalPages: number
   pathname: string
   searchParams?: Record<string, string | undefined>
-  pathBased?: boolean
 }
 
 function buildHref(
   pathname: string,
   searchParams: Record<string, string | undefined> | undefined,
-  page: number,
-  pathBased: boolean | undefined
+  page: number
 ) {
-  if (pathBased) {
-    return page > 1 ? `${pathname}page/${page}/` : pathname
-  }
   const params = new URLSearchParams()
   for (const [key, value] of Object.entries(searchParams ?? {})) {
     if (value) params.set(key, value)
@@ -49,7 +44,6 @@ export function Pagination({
   totalPages,
   pathname,
   searchParams,
-  pathBased,
 }: PaginationProps) {
   if (totalPages <= 1) return null
 
@@ -62,7 +56,7 @@ export function Pagination({
   return (
     <nav aria-label="Pagination" className="flex flex-wrap items-center gap-1.5">
       <Link
-        href={buildHref(pathname, searchParams, page - 1, pathBased)}
+        href={buildHref(pathname, searchParams, page - 1)}
         rel="prev"
         aria-label="Previous page"
         aria-disabled={page <= 1}
@@ -75,7 +69,7 @@ export function Pagination({
         typeof part === "number" ? (
           <Link
             key={part}
-            href={buildHref(pathname, searchParams, part, pathBased)}
+            href={buildHref(pathname, searchParams, part)}
             aria-current={part === page ? "page" : undefined}
             className={cn(linkClass, part === page ? active : idle)}
           >
@@ -89,7 +83,7 @@ export function Pagination({
       )}
 
       <Link
-        href={buildHref(pathname, searchParams, page + 1, pathBased)}
+        href={buildHref(pathname, searchParams, page + 1)}
         rel="next"
         aria-label="Next page"
         aria-disabled={page >= totalPages}

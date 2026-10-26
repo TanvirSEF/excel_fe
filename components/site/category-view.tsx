@@ -49,7 +49,6 @@ export function CategoryView({ category, posts, page }: CategoryViewProps) {
           page={page}
           totalPages={posts.total_pages}
           pathname={`/${category.slug}/`}
-          pathBased
         />
       </div>
     </div>
