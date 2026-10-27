@@ -6,7 +6,6 @@ import { Providers } from "@/components/providers"
 import { GoogleAnalytics } from "@/components/shared/google-analytics"
 import { ThemeProvider } from "@/components/theme-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import { MediavineTag } from "@/components/site/mediavine-tag"
 import { config } from "@/lib/config"
 import { cn } from "@/lib/utils"
 
@@ -78,7 +77,6 @@ export default function RootLayout({
           </TooltipProvider>
         </ThemeProvider>
         <GoogleAnalytics measurementId={config.gaMeasurementId} />
-        <MediavineTag tagId={config.mediavineTagId} />
       </body>
     </html>
   )
