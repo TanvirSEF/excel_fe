@@ -107,11 +107,6 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: "/:path((?!blog|author|tags|search|dashboard|api).+)/",
-        has: [{ type: "query", key: "page", value: "(?<page>[2-9]|[1-9]\\d+)" }],
-        destination: "/:path/page/:page/",
-      },
-      {
         source: "/sitemap_index.xml",
         destination: `${apiUrl}/sitemap.xml`,
       },
