@@ -52,7 +52,7 @@ export function CategoriesView() {
   const [editing, setEditing] = useState<Category | null>(null)
   const [deleting, setDeleting] = useState<Category | null>(null)
 
-  const canDelete = can(user, "categories:delete")
+  const canDelete = can(user, "categories:manage")
 
   const signature = (categories ?? [])
     .flatMap((parent) => [

@@ -51,7 +51,7 @@ export function PostsView() {
   const canDelete = can(user, "posts:delete")
   const canCreate = can(user, "posts:manage")
   const canPin = can(user, "posts:publish")
-  const isTechnicalWriter = user?.role === "technical_writer"
+  const seesOwnPostsOnly = !can(user, "posts:publish") && !can(user, "seo:edit")
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -62,7 +62,7 @@ export function PostsView() {
   }, [search])
 
   const { data: categories } = useCategories()
-  const { data: authors } = useAuthorOptions(!isTechnicalWriter)
+  const { data: authors } = useAuthorOptions(!seesOwnPostsOnly)
   const flatCategories = categories ? flattenCategories(categories) : []
 
   const { data, isPending, isError, error, refetch } = useAdminPosts({
@@ -209,7 +209,7 @@ export function PostsView() {
             ))}
           </select>
 
-          {!isTechnicalWriter ? (
+          {!seesOwnPostsOnly ? (
             <select
               aria-label="Filter by author"
               value={authorId ?? ""}

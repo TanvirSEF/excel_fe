@@ -10,12 +10,7 @@ import { UsersNav } from "@/components/dashboard/users/users-nav"
 import { ErrorState } from "@/components/shared/error-state"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import {
-  DEFAULT_PERMISSION_GROUPS,
-  DEFAULT_ROLES,
-  usePermissionGroups,
-  useRoles,
-} from "@/lib/queries/roles"
+import { usePermissionGroups, useRoles } from "@/lib/queries/roles"
 import type { RoleDetail } from "@/types/api"
 
 export function RolesView() {
@@ -23,10 +18,11 @@ export function RolesView() {
 
   const { data: roles, isPending: rolesPending, isError: rolesError, refetch } =
     useRoles()
-  const { data: groups, isPending: groupsPending } = usePermissionGroups()
+  const { data: groups, isPending: groupsPending, isError: groupsError } =
+    usePermissionGroups()
 
-  const roleList = roles ?? DEFAULT_ROLES
-  const groupList = groups ?? DEFAULT_PERMISSION_GROUPS
+  const roleList = roles ?? []
+  const groupList = groups ?? []
   const isPending = rolesPending || groupsPending
 
   return (
@@ -46,7 +42,7 @@ export function RolesView() {
 
       <UsersNav />
 
-      {rolesError ? (
+      {rolesError || groupsError ? (
         <ErrorState
           title="Could not load role definitions"
           message="The roles service encountered a problem. Try again."

@@ -26,7 +26,7 @@ export function OverviewView() {
   }
 
   const firstName = user?.name.split(" ")[0] ?? "there"
-  const isSeoRole = user?.role === "seo_specialist"
+  const isSeoRole = can(user, "seo:edit") && !can(user, "posts:manage")
   const analyticsView = can(user, "analytics:view")
 
   return (

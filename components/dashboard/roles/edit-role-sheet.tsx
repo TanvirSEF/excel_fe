@@ -16,10 +16,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet"
 import { ApiClientError } from "@/lib/api/error"
-import {
-  DEFAULT_ROLES,
-  useUpdateRolePermissions,
-} from "@/lib/queries/roles"
+import { useUpdateRolePermissions } from "@/lib/queries/roles"
 import type { PermissionGroup, RoleDetail } from "@/types/api"
 
 interface EditRoleSheetProps {
@@ -74,11 +71,8 @@ function EditRoleForm({
   }
 
   const resetToDefault = () => {
-    const defaultMeta = DEFAULT_ROLES.find((r) => r.role === role.role)
-    if (defaultMeta) {
-      setSelectedPerms(new Set(defaultMeta.permissions))
-      toast.info(`Permissions reset to standard defaults for ${role.name}.`)
-    }
+    setSelectedPerms(new Set(role.default_permissions))
+    toast.info(`Permissions reset to standard defaults for ${role.name}.`)
   }
 
   const onSave = async () => {

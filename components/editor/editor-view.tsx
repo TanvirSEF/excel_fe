@@ -84,10 +84,7 @@ export function EditorView({ postId }: EditorViewProps) {
   const router = useRouter()
   const user = useAuthStore((state) => state.user)
   const canPublish = can(user, "posts:publish")
-  const canChangeAuthor =
-    can(user, "posts:publish") ||
-    user?.role === "super_admin" ||
-    user?.role === "senior_editor"
+  const canChangeAuthor = can(user, "posts:publish")
 
   const { data: post, isPending, isError, error, refetch } = usePost(postId)
   const { data: authors } = useAuthorOptions(Boolean(canChangeAuthor))

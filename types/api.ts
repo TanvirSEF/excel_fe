@@ -407,6 +407,7 @@ export interface RoleDetail {
   is_system: boolean
   is_editable: boolean
   permissions: string[]
+  default_permissions: string[]
 }
 
 export interface PermissionDefinition {
