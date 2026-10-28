@@ -75,7 +75,7 @@ export function NewsletterBand({
         <div className="relative flex items-center justify-center lg:col-span-5">
           <div className="group relative aspect-square w-full max-w-sm overflow-hidden rounded-2xl border border-primary-foreground/20 bg-primary-foreground/10 p-3 shadow-2xl backdrop-blur-xs transition-transform duration-500 hover:scale-102">
             <Image
-              src="/images/newsletter-ebook.png"
+              src="/images/newsletter-ebook.webp"
               alt="50+ Essential Excel Formulas Free PDF Guide"
               fill
               sizes="(max-width: 640px) 100vw, 400px"

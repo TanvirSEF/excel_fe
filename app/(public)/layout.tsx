@@ -1,4 +1,4 @@
-import { ChatWidget } from "@/components/site/ai-assistant/chat-widget"
+import { ChatWidgetLazy } from "@/components/site/ai-assistant/chat-widget-lazy"
 import { MediavineTag } from "@/components/site/mediavine-tag"
 import { MediavineRouteListener } from "@/components/site/mediavine-route-listener"
 import { SiteAnalyticsTracker } from "@/components/site/site-analytics-tracker"
@@ -16,7 +16,7 @@ export default function PublicLayout({
       <SiteHeader />
       <main className="flex-1">{children}</main>
       <SiteFooter />
-      <ChatWidget />
+      <ChatWidgetLazy />
       <MediavineTag tagId={config.mediavineTagId} />
       <MediavineRouteListener />
       <SiteAnalyticsTracker />

@@ -33,7 +33,7 @@ export async function SiteHeader() {
             aria-label="Excel Insider Home"
           >
             <Image
-              src="/logo-3x.png"
+              src="/logo-3x.webp"
               alt="Excel Insider"
               width={185}
               height={48}

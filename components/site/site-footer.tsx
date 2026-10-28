@@ -134,7 +134,7 @@ export function SiteFooter() {
               className="inline-flex items-center transition-transform hover:opacity-90 active:scale-95"
             >
               <Image
-                src="/logo-footer-3x.png"
+                src="/logo-footer-3x.webp"
                 alt="Excel Insider"
                 width={200}
                 height={52}
