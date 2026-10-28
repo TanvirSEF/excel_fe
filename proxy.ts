@@ -6,6 +6,10 @@ const REFRESH_COOKIE = "ei_refresh"
 export function proxy(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl
 
+  if (pathname.startsWith("/wp-content/")) {
+    return new NextResponse(null, { status: 410 })
+  }
+
   if (!pathname.startsWith("/dashboard")) {
     const page = Number(searchParams.get("page"))
     if (!Number.isInteger(page) || page < 2) return NextResponse.next()
@@ -29,6 +33,7 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     "/dashboard/:path*",
+    "/wp-content/:path*",
     {
       source: "/((?!(?:blog|author|tags|search|dashboard|api|_next)(?:/|$)).+)",
       has: [{ type: "query", key: "page" }],
