@@ -106,24 +106,42 @@ function cleanRichText(value: RichText | undefined): RichText {
     runs.pop()
   }
 
-  // Collapse 3+ newlines within runs to at most 2 newlines (\n\n)
-  for (let i = 0; i < runs.length; i++) {
-    runs[i].text = runs[i].text.replace(/\n{3,}/g, "\n\n")
-  }
-
-  // Collapse newlines across adjacent run boundaries so combined newlines never exceed \n\n
-  for (let i = 0; i < runs.length - 1; i++) {
-    const trailingMatch = runs[i].text.match(/\n+$/)
-    if (trailingMatch) {
-      if (trailingMatch[0].length >= 2) {
-        runs[i + 1].text = runs[i + 1].text.replace(/^\n+/, "")
-      } else if (/^\n+/.test(runs[i + 1].text)) {
-        runs[i + 1].text = runs[i + 1].text.replace(/^\n+/, "\n")
-      }
+  // Merge adjacent runs with identical marks
+  const merged: InlineText[] = []
+  for (const r of runs) {
+    if (!r.text) continue
+    const prev = merged[merged.length - 1]
+    const rMarks = r.marks ?? []
+    const prevMarks = prev?.marks ?? []
+    const isSameMarks =
+      Boolean(prev) &&
+      rMarks.length === prevMarks.length &&
+      rMarks.every(
+        (m, idx) =>
+          m.type === prevMarks[idx]?.type &&
+          m.color === prevMarks[idx]?.color &&
+          m.href === prevMarks[idx]?.href
+      )
+    if (isSameMarks && prev) {
+      prev.text += r.text
+    } else {
+      merged.push({ ...r, marks: r.marks ? [...r.marks] : undefined })
     }
   }
 
-  return runs
+  // Collapse 2+ newlines within any run to at most 1 newline
+  for (let i = 0; i < merged.length; i++) {
+    merged[i].text = merged[i].text.replace(/\n{2,}/g, "\n")
+  }
+
+  // Collapse newlines across adjacent run boundaries so combined newlines never exceed \n
+  for (let i = 0; i < merged.length - 1; i++) {
+    if (merged[i].text.endsWith("\n") && merged[i + 1].text.startsWith("\n")) {
+      merged[i + 1].text = merged[i + 1].text.replace(/^\n+/, "")
+    }
+  }
+
+  return merged
 }
 
 function cleanNoteContent(
@@ -612,7 +630,33 @@ function processRichTextItems(runs: InlineText[]): ProcessedRunItem[] {
     }
   }
 
-  return items
+  const mergedItems: ProcessedRunItem[] = []
+  for (const item of items) {
+    if (item.type !== "inline") {
+      mergedItems.push(item)
+      continue
+    }
+    const prev = mergedItems[mergedItems.length - 1]
+    if (prev && prev.type === "inline") {
+      const prevMarks = prev.marks ?? []
+      const itemMarks = item.marks ?? []
+      const isSameMarks =
+        prevMarks.length === itemMarks.length &&
+        prevMarks.every(
+          (m, idx) =>
+            m.type === itemMarks[idx]?.type &&
+            m.color === itemMarks[idx]?.color &&
+            m.href === itemMarks[idx]?.href
+        )
+      if (isSameMarks) {
+        prev.text += item.text
+        continue
+      }
+    }
+    mergedItems.push({ ...item })
+  }
+
+  return mergedItems
 }
 
 function hasCodeBlock(value: RichText | undefined): boolean {
