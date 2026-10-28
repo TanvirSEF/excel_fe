@@ -1,6 +1,6 @@
 import slugify from "slugify"
 
-import type { Block, InlineText } from "@/types/api"
+import type { Block, InlineText, TextAlign } from "@/types/api"
 
 export interface TocEntry {
   id: string
@@ -65,10 +65,12 @@ export const DOWNLOAD_REGEX = /\.(xlsx?|xlsm|xltx?|csv|zip|rar|pdf|7z)(\?.*)?$/i
 
 export function isDownloadHref(href: string, text?: string): boolean {
   if (DOWNLOAD_REGEX.test(href)) return true
-  if (href.includes("/downloads/") || href.includes("/api/v1/assets/")) return true
+  if (href.includes("/downloads/") || href.includes("/api/v1/assets/"))
+    return true
   if (text) {
     const trimmed = text.trim()
-    if (DOWNLOAD_REGEX.test(trimmed) || /\bdownload\b/i.test(trimmed)) return true
+    if (DOWNLOAD_REGEX.test(trimmed) || /\bdownload\b/i.test(trimmed))
+      return true
   }
   return false
 }
@@ -208,7 +210,11 @@ export function normalizePostBlocks(blocks: Block[]): Block[] {
         nextIdx++
       }
       const nextBlock = nextIdx < cloned.length ? cloned[nextIdx] : null
-      if (!nextBlock || nextBlock.type === "heading" || nextBlock.type === "hr") {
+      if (
+        !nextBlock ||
+        nextBlock.type === "heading" ||
+        nextBlock.type === "hr"
+      ) {
         i++
         continue
       }
@@ -375,11 +381,7 @@ export function normalizePostBlocks(blocks: Block[]): Block[] {
     )
 
     let targetIndex =
-      faqIndex !== -1
-        ? faqIndex
-        : conclusionIndex !== -1
-          ? conclusionIndex
-          : -1
+      faqIndex !== -1 ? faqIndex : conclusionIndex !== -1 ? conclusionIndex : -1
 
     if (targetIndex !== -1) {
       // If an <hr> immediately precedes the target heading, place download card before <hr>
@@ -408,4 +410,22 @@ export function normalizePostBlocks(blocks: Block[]): Block[] {
   }
 
   return result
+}
+
+export type ImageBlock = Extract<Block, { type: "image" }>
+
+export function alignClass(align: TextAlign | undefined) {
+  if (align === "center") return "text-center"
+  if (align === "right") return "text-right"
+  return null
+}
+
+export function isTakeawayCallout(block: Block): boolean {
+  return (
+    block.type === "callout" &&
+    Boolean(
+      (block.title && /takeaway/i.test(block.title)) ||
+      (block.variant === "tip" && block.title)
+    )
+  )
 }
