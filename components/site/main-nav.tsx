@@ -512,17 +512,6 @@ export function MainNav({ categories = [] }: MainNavProps) {
         )}
       </div>
 
-            {/* Courses */}
-      <Link
-        prefetch={false}
-        href="/courses"
-        className={cn(
-          "rounded-lg px-3.5 py-2 text-muted-foreground transition-colors hover:text-foreground hover:bg-muted/50",
-          pathname?.startsWith("/courses") && "text-foreground font-semibold bg-muted/40"
-        )}
-      >
-        Courses
-      </Link>
 
 {/* Contact Us */}
       <Link
