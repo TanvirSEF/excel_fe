@@ -36,10 +36,39 @@ function ThemedToaster() {
 
 function SessionHydration() {
   const hydrate = useAuthStore((state) => state.hydrate)
+  const status = useAuthStore((state) => state.status)
 
   React.useEffect(() => {
     hydrate()
   }, [hydrate])
+
+  React.useEffect(() => {
+    if (status !== "authenticated") return
+
+    const interval = setInterval(() => {
+      hydrate()
+    }, 15 * 60 * 1000)
+
+    return () => clearInterval(interval)
+  }, [status, hydrate])
+
+  React.useEffect(() => {
+    if (status !== "authenticated") return
+
+    let lastRefreshed = Date.now()
+    function onVisibilityChange() {
+      if (document.visibilityState === "visible") {
+        const elapsed = Date.now() - lastRefreshed
+        if (elapsed > 10 * 60 * 1000) {
+          lastRefreshed = Date.now()
+          hydrate()
+        }
+      }
+    }
+
+    document.addEventListener("visibilitychange", onVisibilityChange)
+    return () => document.removeEventListener("visibilitychange", onVisibilityChange)
+  }, [status, hydrate])
 
   return null
 }

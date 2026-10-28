@@ -38,8 +38,14 @@ export function login(email: string, password: string) {
   return request<LoginResponse>("/api/auth/login", { email, password })
 }
 
-export function refreshSession() {
-  return request<SessionResponse>("/api/auth/session")
+let inFlightSession: Promise<SessionResponse> | null = null
+
+export function refreshSession(): Promise<SessionResponse> {
+  if (inFlightSession) return inFlightSession
+  inFlightSession = request<SessionResponse>("/api/auth/session").finally(() => {
+    inFlightSession = null
+  })
+  return inFlightSession
 }
 
 export function logout() {

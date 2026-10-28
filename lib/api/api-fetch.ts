@@ -91,7 +91,7 @@ export async function apiFetch<T>(
       useAuthStore.getState().clear()
       if (
         typeof window !== "undefined" &&
-        window.location.pathname !== "/insider-studio"
+        window.location.pathname.startsWith("/dashboard")
       ) {
         const next = encodeURIComponent(
           window.location.pathname + window.location.search
@@ -111,8 +111,9 @@ export async function apiFetch<T>(
   }
 
   if (response.status === 204) {
-    return undefined as T
+    return undefined as unknown as T
   }
+
   return (await response.json()) as T
 }
 
