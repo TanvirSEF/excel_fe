@@ -1221,6 +1221,8 @@ function BlockNode({
         <aside className="not-prose my-6 overflow-hidden rounded-2xl border border-primary/20 bg-linear-to-r from-primary/[0.04] via-primary/[0.02] to-transparent p-3.5 sm:p-4 transition-all duration-200 hover:border-primary/40 hover:bg-primary/[0.06] hover:shadow-xs dark:border-primary/30 dark:from-primary/[0.08] dark:to-transparent">
           <Link
             href={href}
+            target="_blank"
+            rel="noopener noreferrer"
             className="group flex items-center justify-between gap-3.5 sm:gap-4 text-inherit no-underline"
           >
             <div className="flex items-center gap-3 sm:gap-3.5 min-w-0 flex-1">
