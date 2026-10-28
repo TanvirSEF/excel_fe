@@ -8,7 +8,7 @@ import { CategorySection } from "@/components/site/category-section"
 import { getCategories } from "@/lib/api/categories"
 import { partitionCategories } from "@/lib/category-topics"
 
-export const revalidate = 300
+export const revalidate = 86400
 
 export const metadata: Metadata = {
   title: "Spreadsheet Categories & Learning Tracks | Excel Insider",

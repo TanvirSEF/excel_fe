@@ -8,7 +8,7 @@ import { getCategories } from "@/lib/api/categories"
 import { getPosts } from "@/lib/api/posts"
 import { clamp, firstParam } from "@/lib/utils"
 
-export const revalidate = 300
+export const revalidate = 3600
 
 export async function generateMetadata({
   searchParams,

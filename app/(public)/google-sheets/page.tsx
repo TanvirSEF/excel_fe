@@ -13,7 +13,7 @@ import { GOOGLE_CURATED_TOPICS } from "@/lib/category-topics"
 import { curatedTopics } from "@/lib/curriculum-curation"
 import type { CurriculumModule } from "@/types/api"
 
-export const revalidate = 300
+export const revalidate = 86400
 
 export const metadata: Metadata = {
   title: "Google Sheets Learning Track — Step-by-Step Course | Excel Insider",

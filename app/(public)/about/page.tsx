@@ -14,7 +14,7 @@ import {
 import { SectionHeading } from "@/components/site/section-heading"
 import { Button } from "@/components/ui/button"
 
-export const revalidate = 300
+export const revalidate = 86400
 
 export const metadata: Metadata = {
   title: "About Us | Excel Insider",

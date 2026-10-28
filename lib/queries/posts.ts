@@ -27,6 +27,27 @@ export interface AdminPostsParams {
   page_size?: number
 }
 
+async function revalidatePostCache(
+  post?: Partial<PostDetail> | null,
+  revalidateHome = false
+) {
+  if (typeof window === "undefined" || !post) return
+  try {
+    await fetch("/api/revalidate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        slug: post.slug,
+        categorySlug: post.category?.slug,
+        path: post.slug ? `/${post.slug}` : undefined,
+        revalidateHome,
+      }),
+    })
+  } catch {
+    // Non-blocking
+  }
+}
+
 export function useAdminPosts(params: AdminPostsParams = {}) {
   return useQuery({
     queryKey: [
@@ -94,9 +115,12 @@ export function useCreatePost() {
   return useMutation({
     mutationFn: (input: PostCreateInput) =>
       apiFetch<PostDetail>("/posts", { method: "POST", body: input }),
-    onSuccess: () => {
+    onSuccess: (post) => {
       queryClient.invalidateQueries({ queryKey: ["admin-posts"] })
       queryClient.invalidateQueries({ queryKey: ["admin-post-counts"] })
+      if (post?.status === "published") {
+        revalidatePostCache(post, true)
+      }
     },
   })
 }
@@ -122,6 +146,7 @@ export function useUpdatePost() {
       queryClient.invalidateQueries({
         queryKey: ["post", "edit", post.id],
       })
+      revalidatePostCache(post, post?.status === "published")
     },
   })
 }
@@ -135,6 +160,7 @@ export function useDeletePost() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-posts"] })
       queryClient.invalidateQueries({ queryKey: ["admin-post-counts"] })
+      revalidatePostCache({ slug: "" }, true)
     },
   })
 }
@@ -151,6 +177,7 @@ export function useSetTrendingPin() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-posts"] })
       queryClient.invalidateQueries({ queryKey: ["posts"] })
+      revalidatePostCache({ slug: "" }, true)
     },
   })
 }
@@ -183,7 +210,10 @@ export function usePublishPost(postId: string) {
   return useMutation({
     mutationFn: () =>
       apiFetch<PostDetail>(`/posts/${postId}/publish`, { method: "POST" }),
-    onSuccess: invalidate,
+    onSuccess: (post) => {
+      invalidate()
+      revalidatePostCache(post, true)
+    },
   })
 }
 
@@ -222,7 +252,10 @@ export function useUpdateSeo(postId: string) {
         method: "PATCH",
         body: input,
       }),
-    onSuccess: invalidate,
+    onSuccess: (post) => {
+      invalidate()
+      revalidatePostCache(post, post?.status === "published")
+    },
   })
 }
 

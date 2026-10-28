@@ -10,7 +10,7 @@ export interface PostListParams {
   author?: string
 }
 
-export function getPosts(params: PostListParams = {}, revalidate = 60) {
+export function getPosts(params: PostListParams = {}, revalidate = 3600) {
   return serverFetch<Page<PostListItem>>("/posts", {
     revalidate,
     searchParams: {
@@ -24,14 +24,14 @@ export function getPosts(params: PostListParams = {}, revalidate = 60) {
   })
 }
 
-export function getPostBySlug(slug: string, revalidate = 60) {
+export function getPostBySlug(slug: string, revalidate = 86400) {
   return serverFetch<PostDetail>(`/posts/${encodeURIComponent(slug)}`, {
     revalidate,
     tags: ["post", slug],
   })
 }
 
-export function getPostComments(postId: string, revalidate = 60) {
+export function getPostComments(postId: string, revalidate = 300) {
   return serverFetch<Comment[]>(`/posts/${postId}/comments`, {
     revalidate,
     tags: ["post", postId, "comments"],

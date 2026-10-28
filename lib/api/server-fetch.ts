@@ -12,7 +12,7 @@ export async function serverFetch<T>(
   path: string,
   options: ServerFetchOptions = {}
 ): Promise<T> {
-  const { revalidate = 60, tags, searchParams } = options
+  const { revalidate = 86400, tags, searchParams } = options
 
   const url = new URL(`${config.apiUrl}${API_BASE_PATH}${path}`)
   if (searchParams) {

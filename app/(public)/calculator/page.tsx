@@ -5,7 +5,7 @@ import { IconArrowRight } from "@tabler/icons-react"
 import { SectionHeading } from "@/components/site/section-heading"
 import { ACCOUNTING_HUB, FINANCE_HUB, STATS_HUB } from "@/lib/calculators"
 
-export const revalidate = 300
+export const revalidate = 86400
 
 const HUBS = [STATS_HUB, FINANCE_HUB, ACCOUNTING_HUB]
 

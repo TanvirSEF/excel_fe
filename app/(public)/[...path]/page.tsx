@@ -14,7 +14,7 @@ import { getWpRedirect, looksLikeWpPath } from "@/lib/api/redirects"
 import { clamp } from "@/lib/utils"
 import type { Category, Page, PostDetail, PostListItem, SeriesSummary } from "@/types/api"
 
-export const revalidate = 300
+export const revalidate = 86400
 
 export function generateStaticParams() {
   return []
