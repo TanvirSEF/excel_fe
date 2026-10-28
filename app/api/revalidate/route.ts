@@ -55,12 +55,41 @@ export async function POST(request: NextRequest) {
   const purge = (rawPath: string) => {
     if (!rawPath) return
     const normalized = rawPath.startsWith("/") ? rawPath : `/${rawPath}`
-    revalidatePath(normalized)
+    try {
+      revalidatePath(normalized, "page")
+    } catch {
+      // Non-blocking
+    }
+    try {
+      revalidatePath(normalized)
+    } catch {
+      // Non-blocking
+    }
     if (normalized.endsWith("/")) {
       const trimmed = normalized.replace(/\/+$/, "")
-      if (trimmed) revalidatePath(trimmed)
+      if (trimmed) {
+        try {
+          revalidatePath(trimmed, "page")
+        } catch {
+          // Non-blocking
+        }
+        try {
+          revalidatePath(trimmed)
+        } catch {
+          // Non-blocking
+        }
+      }
     } else {
-      revalidatePath(`${normalized}/`)
+      try {
+        revalidatePath(`${normalized}/`, "page")
+      } catch {
+        // Non-blocking
+      }
+      try {
+        revalidatePath(`${normalized}/`)
+      } catch {
+        // Non-blocking
+      }
     }
   }
 
