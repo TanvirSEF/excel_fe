@@ -1,3 +1,4 @@
+import { cache } from "react"
 import type { Metadata } from "next"
 import { notFound, permanentRedirect, redirect } from "next/navigation"
 
@@ -53,11 +54,12 @@ function splitPagination(segments: string[]) {
   return { path: segments, page: 1, paginated: false }
 }
 
-async function resolvePath(
-  segments: string[],
-  page: number,
-  paginated: boolean
-): Promise<ResolvedRoute> {
+const resolvePath = cache(
+  async (
+    segments: string[],
+    page: number,
+    paginated: boolean
+  ): Promise<ResolvedRoute> => {
   const path = segments
   const pathname = `/${path.join("/")}`
 
@@ -195,7 +197,7 @@ async function resolvePath(
   }
 
   return null
-}
+})
 
 export async function generateMetadata({
   params,
