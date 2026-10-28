@@ -11,6 +11,7 @@ import {
   IconMessage,
   IconMessageQuestion,
   IconPhoto,
+  IconSchool,
   IconSettings,
   IconShieldLock,
   IconTags,
@@ -37,6 +38,7 @@ import { can, useAuthStore } from "@/lib/auth"
 const CONTENT_ITEMS: NavItem[] = [
   { title: "Overview", url: "/dashboard", icon: IconDashboard, permission: "overview:view" },
   { title: "Posts", url: "/dashboard/posts", icon: IconFileText, permission: "posts:view" },
+  { title: "Courses", url: "/dashboard/courses", icon: IconSchool, permission: "courses:view" },
   { title: "Comments", url: "/dashboard/comments", icon: IconMessage, permission: "comments:moderate" },
   { title: "Media", url: "/dashboard/media", icon: IconPhoto, permission: "media:view" },
   { title: "Categories", url: "/dashboard/categories", icon: IconTags, permission: "categories:manage" },

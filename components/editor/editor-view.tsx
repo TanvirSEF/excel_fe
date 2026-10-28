@@ -30,6 +30,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ApiClientError } from "@/lib/api/error"
 import { blocksToDoc, docToBlocks } from "@/lib/editor-serialize"
 import { can, useAuthStore } from "@/lib/auth"
+import type { PostCreateInput, PostUpdateInput } from "@/types/api"
 import {
   useCreatePost,
   usePost,
@@ -85,6 +86,8 @@ export function EditorView({ postId }: EditorViewProps) {
   const user = useAuthStore((state) => state.user)
   const canPublish = can(user, "posts:publish")
   const canChangeAuthor = can(user, "posts:publish")
+  const canEditSeo = can(user, "seo:edit")
+
 
   const { data: post, isPending, isError, error, refetch } = usePost(postId)
   const { data: authors } = useAuthorOptions(Boolean(canChangeAuthor))
@@ -259,7 +262,7 @@ export function EditorView({ postId }: EditorViewProps) {
       setSaving(true)
       savingRef.current = true
       try {
-        const input = {
+        const input: PostUpdateInput = {
           title: fields.title.trim(),
           slug: fields.slug || undefined,
           excerpt: fields.excerpt || undefined,
@@ -269,13 +272,24 @@ export function EditorView({ postId }: EditorViewProps) {
           author_id: fields.authorId || undefined,
           tags: fields.tags,
           focus_keyphrase: keyphrase.trim() || null,
+          ...(canEditSeo && {
+            meta_title: seo.metaTitle || undefined,
+            meta_description: seo.metaDescription || undefined,
+            canonical_url: seo.canonicalUrl || null,
+            og_image_url: seo.ogImageUrl || null,
+            schema_type: schemaType || undefined,
+          }),
         }
 
         let targetPostId = postId
         if (targetPostId) {
-          await updatePost.mutateAsync({ postId: targetPostId, input })
+          await updatePost.mutateAsync({
+            postId: targetPostId,
+            input,
+            previousSlug: post?.slug !== fields.slug ? post?.slug : undefined,
+          })
         } else {
-          const created = await createPost.mutateAsync(input)
+          const created = await createPost.mutateAsync(input as PostCreateInput)
           targetPostId = created.id
         }
 
@@ -298,12 +312,15 @@ export function EditorView({ postId }: EditorViewProps) {
         } else {
           if (!options.silent) toast.success("Draft created.")
           dirtyRef.current = false
+          seoDirtyRef.current = false
           router.replace(`/dashboard/posts/${targetPostId}`)
           return true
         }
 
         dirtyRef.current = false
         setDirty(false)
+        seoDirtyRef.current = false
+        setSeoDirty(false)
         setSlugError(null)
         setLastSavedAt(new Date())
         return true
@@ -326,6 +343,7 @@ export function EditorView({ postId }: EditorViewProps) {
       }
     },
     [
+      canEditSeo,
       canPublish,
       createPost,
       doc,
@@ -334,6 +352,8 @@ export function EditorView({ postId }: EditorViewProps) {
       post,
       postId,
       router,
+      schemaType,
+      seo,
       setTrendingPin,
       updatePost,
     ]
@@ -421,7 +441,7 @@ export function EditorView({ postId }: EditorViewProps) {
     )
   }
 
-  const canEditSeo = can(user, "seo:edit")
+
   const isOwner = Boolean(postId && post && user && post.author_id === user.id)
 
   return (

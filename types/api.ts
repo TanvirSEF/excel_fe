@@ -609,3 +609,150 @@ export interface EventsReport {
   rows: { name: string; count: number; sessions: number }[]
   targets: { name: string; target: string; count: number }[]
 }
+
+// --- Courses & LMS Types ---
+export type CourseLevel = "all_levels" | "beginner" | "intermediate" | "advanced"
+export type CourseStatus = "draft" | "published" | "archived"
+export type LessonType = "video" | "article" | "exercise" | "quiz"
+
+export interface LessonAttachment {
+  id: string
+  lesson_id: string
+  file_name: string
+  file_url: string
+  file_size_bytes: number
+  file_type: string
+  download_count: number
+  created_at: string
+}
+
+export interface CourseLesson {
+  id: string
+  section_id: string
+  course_id: string
+  title: string
+  slug: string
+  lesson_type: LessonType
+  video_url: string | null
+  video_duration_seconds: number
+  content_json: Record<string, unknown> | null
+  content_html: string | null
+  is_preview: boolean
+  order_index: number
+  created_at: string
+  updated_at: string
+  attachments: LessonAttachment[]
+}
+
+export interface LessonPublicListItem {
+  id: string
+  section_id: string
+  course_id: string
+  title: string
+  slug: string
+  lesson_type: LessonType
+  video_duration_seconds: number
+  is_preview: boolean
+  order_index: number
+  is_completed?: boolean
+}
+
+export interface ClassroomLesson {
+  id: string
+  section_id: string
+  course_id: string
+  title: string
+  slug: string
+  lesson_type: LessonType
+  video_url: string | null
+  video_duration_seconds: number
+  content_json: Record<string, unknown> | null
+  content_html: string | null
+  is_preview: boolean
+  order_index: number
+  is_completed: boolean
+  last_watched_second: number
+  attachments: LessonAttachment[]
+  prev_lesson_id: string | null
+  next_lesson_id: string | null
+}
+
+export interface CourseSection {
+  id: string
+  course_id: string
+  title: string
+  description: string | null
+  order_index: number
+  created_at: string
+  updated_at: string
+  lessons: CourseLesson[]
+}
+
+export interface CourseSectionPublic {
+  id: string
+  course_id: string
+  title: string
+  description: string | null
+  order_index: number
+  lessons: LessonPublicListItem[]
+}
+
+export interface CourseListItem {
+  id: string
+  title: string
+  slug: string
+  headline: string | null
+  thumbnail_url: string | null
+  promo_video_url: string | null
+  level: CourseLevel
+  status: CourseStatus
+  is_free: boolean
+  price: number
+  total_duration_seconds: number
+  total_lessons_count: number
+  published_at: string | null
+  created_at: string
+  updated_at: string
+  category?: { id: string; name: string; slug: string } | null
+  instructor?: { id: string; name: string; avatar_url: string | null; bio: string | null } | null
+}
+
+export interface CourseDetail extends CourseListItem {
+  description: string | null
+  learning_outcomes: string[]
+  requirements: string[]
+  sections: CourseSection[]
+}
+
+export interface CoursePublicDetail extends CourseListItem {
+  description: string | null
+  learning_outcomes: string[]
+  requirements: string[]
+  sections: CourseSectionPublic[]
+  is_enrolled: boolean
+  progress_percent: number
+}
+
+export interface CourseEnrollment {
+  id: string
+  user_id: string
+  course_id: string
+  progress_percent: number
+  enrolled_at: string
+  completed_at: string | null
+}
+
+export interface DirectUploadIntentRequest {
+  file_name: string
+  file_size_bytes: number
+  content_type: string
+  asset_type: "video" | "attachment" | "thumbnail" | "asset"
+  course_id: string
+  lesson_id?: string
+}
+
+export interface DirectUploadIntentResponse {
+  upload_url: string
+  public_url: string
+  file_key: string
+}

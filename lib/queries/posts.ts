@@ -5,6 +5,7 @@ import {
 } from "@tanstack/react-query"
 
 import { apiFetch, apiUpload } from "@/lib/api/api-fetch"
+import { useAuthStore } from "@/lib/auth"
 import type {
   DownloadableAsset,
   Page,
@@ -29,17 +30,28 @@ export interface AdminPostsParams {
 
 async function revalidatePostCache(
   post?: Partial<PostDetail> | null,
-  revalidateHome = false
+  revalidateHome = false,
+  previousSlug?: string
 ) {
   if (typeof window === "undefined" || !post) return
   try {
-    await fetch("/api/revalidate", {
+    const accessToken = useAuthStore.getState().accessToken
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    }
+    if (accessToken) {
+      headers.Authorization = `Bearer ${accessToken}`
+    }
+    await fetch("/api/revalidate/", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
+      credentials: "include",
       body: JSON.stringify({
         slug: post.slug,
+        previousSlug,
         categorySlug: post.category?.slug,
-        path: post.slug ? `/${post.slug}` : undefined,
+        canonicalUrl: post.canonical_url,
+        path: post.canonical_url || (post.slug ? `/blog/${post.slug}` : undefined),
         revalidateHome,
       }),
     })
@@ -135,18 +147,23 @@ export function useUpdatePost() {
     }: {
       postId: string
       input: PostUpdateInput
+      previousSlug?: string
     }) =>
       apiFetch<PostDetail>(`/posts/${postId}`, {
         method: "PATCH",
         body: input,
       }),
-    onSuccess: (post) => {
+    onSuccess: (post, variables) => {
       queryClient.invalidateQueries({ queryKey: ["admin-posts"] })
       queryClient.invalidateQueries({ queryKey: ["admin-post-counts"] })
       queryClient.invalidateQueries({
         queryKey: ["post", "edit", post.id],
       })
-      revalidatePostCache(post, post?.status === "published")
+      revalidatePostCache(
+        post,
+        post?.status === "published",
+        variables.previousSlug
+      )
     },
   })
 }
