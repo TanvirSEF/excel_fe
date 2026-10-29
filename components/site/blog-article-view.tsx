@@ -76,11 +76,22 @@ export async function BlogArticleView({
   currentPath,
 }: BlogArticleViewProps) {
   const authorIdentifier = post.author_slug || post.author_id
-  const [comments, author] = await Promise.all([
+  const tagSlugs = (post.tags ?? [])
+    .map((tag) => slugify(tag, { lower: true, strict: true, trim: true }))
+    .filter(Boolean)
+
+  const [comments, author, tagResults] = await Promise.all([
     getPostComments(post.id).catch(() => []),
     authorIdentifier
       ? getAuthor(authorIdentifier).catch(() => null)
       : Promise.resolve(null),
+    Promise.all(
+      tagSlugs.map((tagSlug) =>
+        getPosts({ tag: tagSlug, page_size: 50 }, 300).catch(() => ({
+          items: [] as PostListItem[],
+        }))
+      )
+    ),
   ])
   const authorAvatarUrl = author?.avatar_url ? toCdnUrl(author.avatar_url) : null
   const normalizedBlocks = normalizePostBlocks(post.content_json?.blocks ?? [])
@@ -89,35 +100,13 @@ export async function BlogArticleView({
     toCdnUrl(post.featured_image_url) ||
     getFeaturedImageFromBlocks(normalizedBlocks)
 
-  // Fetch related articles based on tags first
   let related: PostListItem[] = []
-
-  if (post.tags && post.tags.length > 0) {
-    const tagSlugs = post.tags
-      .map((tag) => slugify(tag, { lower: true, strict: true, trim: true }))
-      .filter(Boolean)
-
-    if (tagSlugs.length > 0) {
-      try {
-        const results = await Promise.all(
-          tagSlugs.map((tagSlug) =>
-            getPosts({ tag: tagSlug, page_size: 50 }, 300).catch(() => ({
-              items: [],
-            }))
-          )
-        )
-
-        const seenIds = new Set<string>([post.id])
-        for (const res of results) {
-          for (const item of res.items) {
-            if (!seenIds.has(item.id)) {
-              seenIds.add(item.id)
-              related.push(item)
-            }
-          }
-        }
-      } catch {
-        related = []
+  const seenIds = new Set<string>([post.id])
+  for (const result of tagResults) {
+    for (const item of result.items) {
+      if (!seenIds.has(item.id)) {
+        seenIds.add(item.id)
+        related.push(item)
       }
     }
   }

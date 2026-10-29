@@ -59,7 +59,10 @@ export async function getWpRedirect(
   try {
     const response = await fetch(
       `${config.apiUrl}/api/v1/redirects/${clean}`,
-      { headers: { Accept: "application/json" } }
+      {
+        headers: { Accept: "application/json" },
+        next: { revalidate: 3600, tags: ["redirects"] },
+      }
     )
     if (!response.ok) return null
     return (await response.json()) as WpRedirect
