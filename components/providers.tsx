@@ -1,12 +1,17 @@
 "use client"
 
 import * as React from "react"
+import dynamic from "next/dynamic"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { useTheme } from "next-themes"
-import { Toaster, type ToasterProps } from "sonner"
+import type { ToasterProps } from "sonner"
 
 import { useAuthStore } from "@/lib/auth"
+
+const Toaster = dynamic(() => import("sonner").then((mod) => mod.Toaster), {
+  ssr: false,
+})
 
 let browserQueryClient: QueryClient | undefined
 
