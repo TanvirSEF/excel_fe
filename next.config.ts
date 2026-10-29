@@ -38,9 +38,6 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   output: "standalone",
   trailingSlash: true,
-  experimental: {
-    inlineCss: true,
-  },
   images: {
     formats: ["image/webp"],
     minimumCacheTTL: 31536000,
