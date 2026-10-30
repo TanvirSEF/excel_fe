@@ -2,11 +2,6 @@ import type { NextConfig } from "next"
 
 const apiUrl = process.env.API_URL ?? "https://api.excelinsider.com"
 
-const mediaHosts = (process.env.NEXT_PUBLIC_MEDIA_HOSTS ?? "")
-  .split(",")
-  .map((host) => host.trim())
-  .filter(Boolean)
-
 const isDev = process.env.NODE_ENV === "development"
 
 const cspValue = [
@@ -39,14 +34,7 @@ const nextConfig: NextConfig = {
   output: "standalone",
   trailingSlash: true,
   images: {
-    formats: ["image/webp"],
-    minimumCacheTTL: 31536000,
-    remotePatterns: mediaHosts.length
-      ? [
-          { protocol: "https" as const, hostname: "pub-b39c974f4c124a36a2fb517be38076ec.r2.dev" },
-          ...mediaHosts.map((hostname) => ({ protocol: "https" as const, hostname })),
-        ]
-      : [{ protocol: "https" as const, hostname: "**" }],
+    unoptimized: true,
   },
   async headers() {
     return [
