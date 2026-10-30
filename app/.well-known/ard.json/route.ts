@@ -1,0 +1,49 @@
+import { NextResponse } from "next/server"
+
+export const dynamic = "force-static"
+export const revalidate = 86400
+
+const ardManifest = {
+  $schema: "https://agenticresourcediscovery.org/schema/v0.91/manifest.json",
+  version: "0.91",
+  entries: [
+    {
+      identifier: "urn:air:excelinsider.com:knowledge:excel-guides",
+      displayName: "Excel Insider Knowledge Base & Formulas Hub",
+      type: "text/markdown",
+      url: "https://excelinsider.com/llms.txt",
+      capabilities: [
+        "ExcelFormulas",
+        "FinancialModeling",
+        "GoogleSheets",
+        "Calculators",
+      ],
+      description:
+        "Authoritative technical knowledge base for Microsoft Excel, Google Sheets, Financial Modeling, and 45 specialized interactive web calculators.",
+      representativeQueries: [
+        "how to use XLOOKUP in Excel",
+        "VLOOKUP vs INDEX MATCH comparison",
+        "financial modeling CAGR formula",
+        "how to calculate WACC in Excel",
+      ],
+      tags: [
+        "excel",
+        "formulas",
+        "financial-modeling",
+        "spreadsheets",
+        "calculators",
+      ],
+    },
+  ],
+}
+
+export function GET() {
+  return NextResponse.json(ardManifest, {
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS",
+      "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800",
+    },
+  })
+}

@@ -39,7 +39,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: "/((?!api/|_next/static|_next/image|favicon.ico|robots.txt|llms.txt|sitemap.xml|sitemap_index.xml).*)",
+        source: "/((?!api/|_next/static|_next/image|favicon.ico|robots.txt|llms.txt|sitemap.xml|\.well-known/ard\.json|sitemap_index.xml).*)",
         headers: securityHeaders,
       },
       {

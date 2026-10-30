@@ -65,6 +65,7 @@ export default function RootLayout({
       className={cn("antialiased", poppins.variable, fontMono.variable, "font-sans")}
     >
       <head>
+        <link rel="ard" href="/.well-known/ard.json" />
         <link rel="dns-prefetch" href="https://scripts.mediavine.com" />
         <link rel="preconnect" href="https://scripts.mediavine.com" crossOrigin="" />
         <link rel="preconnect" href="https://securepubads.g.doubleclick.net" crossOrigin="" />

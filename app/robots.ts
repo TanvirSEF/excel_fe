@@ -24,7 +24,7 @@ export default function robots(): MetadataRoute.Robots {
       },
       {
         userAgent: ["GPTBot", "CCBot", "ClaudeBot", "Bytespider"],
-        allow: ["/llms.txt"],
+        allow: ["/llms.txt", "/.well-known/ard.json"],
         disallow: ["/"],
       },
     ],
