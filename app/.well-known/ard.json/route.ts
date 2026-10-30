@@ -4,8 +4,6 @@ export const dynamic = "force-static"
 export const revalidate = 86400
 
 const ardManifest = {
-  $schema: "https://agenticresourcediscovery.org/schema/v0.91/manifest.json",
-  version: "0.91",
   entries: [
     {
       identifier: "urn:air:excelinsider.com:knowledge:excel-guides",
