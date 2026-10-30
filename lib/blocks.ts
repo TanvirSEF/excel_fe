@@ -47,7 +47,7 @@ const MEDIA_CDN_HOST = "media.excelinsider.com"
 
 export function toCdnUrl(url: string | null | undefined): string {
   if (!url) return ""
-  return url.replace(MEDIA_CDN_HOST, R2_DEV_HOST)
+  return url.replace(R2_DEV_HOST, MEDIA_CDN_HOST)
 }
 
 export function getFeaturedImageFromBlocks(blocks: Block[]): string | null {
